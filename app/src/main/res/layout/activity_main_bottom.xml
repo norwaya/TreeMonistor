@@ -21,7 +21,7 @@
         android:orientation="horizontal"
         android:theme="@style/AlertDialog.AppCompat.Light">
 
-        <com.xabaizhong.treemonistor.myview.MyRadio
+        <com.xabaizhong.treemonitor.myview.MyRadio
             android:id="@+id/tab_news"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -34,7 +34,7 @@
             myradio:drawableSize="@dimen/main_menu_buttom_size"
             myradio:drawableTop="@drawable/ic_menu_news_selector" />
 
-        <com.xabaizhong.treemonistor.myview.MyRadio
+        <com.xabaizhong.treemonitor.myview.MyRadio
             android:id="@+id/tab_function"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -47,7 +47,7 @@
             myradio:drawableSize="@dimen/main_menu_buttom_size"
             myradio:drawableTop="@drawable/ic_menu_function_selector" />
 
-        <com.xabaizhong.treemonistor.myview.MyRadio
+        <com.xabaizhong.treemonitor.myview.MyRadio
             android:id="@+id/tab_expert"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -60,7 +60,7 @@
             myradio:drawableSize="@dimen/main_menu_buttom_size"
             myradio:drawableTop="@drawable/ic_menu_expert_selector" />
 
-        <com.xabaizhong.treemonistor.myview.MyRadio
+        <com.xabaizhong.treemonitor.myview.MyRadio
             android:id="@+id/tab_setting"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
