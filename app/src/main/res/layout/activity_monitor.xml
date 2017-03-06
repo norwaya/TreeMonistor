@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="50dp"
+        android:layout_marginTop="50dp">
+
+        <RelativeLayout
+            android:id="@+id/layout_top"
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+            <Button
+                android:id="@+id/btn"
+                android:layout_width="150dp"
+                android:layout_height="@dimen/button_height_normal"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginEnd="20dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginStart="5dp"
+                android:background="@drawable/button_style_circle"
+                android:gravity="center"
+                android:text="@string/obtain_tree_id"
+
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"
+                android:textColor="@android:color/black"/>
+
+            <TextView
+                android:id="@+id/tree_code"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/textview_height_normal"
+                android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_toLeftOf="@+id/btn"
+                android:layout_toStartOf="@+id/btn"
+                android:gravity="center_vertical"
+                android:text="43243242424242"/>
+
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/submit"
+            android:layout_width="150dp"
+            android:layout_height="@dimen/button_height_normal"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/button_style_circle"
+            android:text="submit"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Widget.Button"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/submit"
+            android:layout_below="@id/layout_top"
+            android:layout_marginBottom="8dp"/>
+    </RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>

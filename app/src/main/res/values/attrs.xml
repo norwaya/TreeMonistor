@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- custom-item-->
+    <declare-styleable name="C_info_gather_item">
+        <!--item1-->
+        <attr name="left_text" format="string"/>
+        <attr name="left_width" format="dimension"/>
+        <attr name="left_font_size" format="dimension"/>
+        <attr name="left_font_color" format="color"/>
+        <attr name="input_type" format="enum">
+            <enum name="number" value="0x002"/>
+            <enum name="decimal" value="0x003"/>
+        </attr>
+        <attr name="right_type" format="enum">
+            <enum name="button" value="0x001001"/>
+            <enum name="clear" value="0x001002"/>
+        </attr>
+        <attr name="right_icon" format="reference"/>
+        <attr name="mid_type" format="enum">
+            <enum name="read" value="0x001"/>
+            <enum name="writer" value="0x002"/>
+        </attr>
+        <!--item2-->
+        <attr name="mid_text_hint" format="string"/>
+        <attr name="mid_font_size" format="dimension"/>
+        <attr name="mid_font_color" format="color"/>
+        <attr name="right_src" format="reference"/>
+    </declare-styleable>
+    <!--custom radio -->
+    <declare-styleable name="MyRadio">
+        <attr name="drawableSize" format="dimension"/>
+        <attr name="drawableTop" format="reference"/>
+        <attr name="drawableLeft" format="reference"/>
+        <attr name="drawableRight" format="reference"/>
+        <attr name="drawableBottom" format="reference"/>
+    </declare-styleable>
+
+</resources>

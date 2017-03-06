@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="function_array">
+        <item>增加古树信息</item>
+        <item>查询古树信息</item>
+        <item>古树监管上报</item>
+    </array>
+</resources>
