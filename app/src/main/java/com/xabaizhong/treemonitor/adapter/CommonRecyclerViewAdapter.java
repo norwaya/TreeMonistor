@@ -14,9 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author norwaya
  * @param <T> 需要RecyclerView.ViewHolder 的子类
  * @param <U> List 的泛型 的实际类型
+ * @author norwaya
  */
 
 public abstract class CommonRecyclerViewAdapter<T extends RecyclerView.ViewHolder, U> extends RecyclerView.Adapter<T> {
@@ -53,9 +53,18 @@ public abstract class CommonRecyclerViewAdapter<T extends RecyclerView.ViewHolde
     }
 
     @Override
-    public void onBindViewHolder(T holder, int position) {
-        if (callBack != null)
+    public void onBindViewHolder(final T holder, final int position) {
+        if (callBack != null) {
             callBack.bindView(holder, position, list);
+            holder.itemView.setOnClickListener(
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            callBack.onItemClickListener(holder.itemView, position);
+                        }
+                    }
+            );
+        }
     }
 
     @Override
@@ -64,17 +73,18 @@ public abstract class CommonRecyclerViewAdapter<T extends RecyclerView.ViewHolde
     }
 
     private CallBack<T, U> callBack;
+
     public void setCallBack(CallBack<T, U> callBack) {
         this.callBack = callBack;
     }
 
     /**
-     *
      * @param <T>
      * @param <U>
      */
     public interface CallBack<T, U> {
         void bindView(T holder, int position, List<U> list);
-    }
 
+        void onItemClickListener(View view, int position);
+    }
 }

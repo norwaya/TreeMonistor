@@ -41,8 +41,10 @@
                 app:mid_text_hint="调查日期"/>
 
             <com.xabaizhong.treemonitor.myview.C_info_gather_item1
+                android:id="@+id/cname"
                 style="@style/custom_edit_text_style"
                 app:left_text="中文名"
+                app:mid_type="read"
                 app:mid_text_hint="中文名称"/>
 
             <com.xabaizhong.treemonitor.myview.C_info_gather_item1
@@ -85,8 +87,7 @@
             <com.xabaizhong.treemonitor.myview.C_info_gather_item1
                 style="@style/custom_edit_text_style"
                 app:left_text="详细信息"
-                app:mid_text_hint="镇/村/街道"
-                app:mid_type="read"/>
+                app:mid_text_hint="[乡镇][村]街道"/>
 
             <com.xabaizhong.treemonitor.myview.C_info_gather_item1
                 style="@style/custom_edit_text_style"

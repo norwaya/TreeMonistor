@@ -90,18 +90,6 @@ public class Fragment_expert extends Fragment_base {
         xRecyclerView.setAdapter(adapter);
         xRecyclerView.setPullRefreshEnabled(true);
         xRecyclerView.setLoadingMoreEnabled(true);
-        xRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-            }
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                Log.d(TAG, "onScrolled: x:" + "\t" + dx + "\t y:" + dy);
-            }
-        });
 
 
         xRecyclerView.setLoadingListener(

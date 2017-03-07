@@ -20,7 +20,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class RetrofitUtil {
     private static Retrofit retrofit;
-
+    private final static String url = "http://v.juhe.cn/";
     public static Retrofit instance() {
         if (retrofit == null)
             synchronized (RetrofitUtil.class) {
@@ -30,8 +30,12 @@ public class RetrofitUtil {
         return retrofit;
     }
 
+    /**
+     * "http://117.34.115.230:8080/spring/"
+     * @return
+     */
     private static Retrofit getRetrofit() {
-        Retrofit.Builder builder = new Retrofit.Builder().baseUrl("http://117.34.115.230:8080/spring/")
+        Retrofit.Builder builder = new Retrofit.Builder().baseUrl(url)
                 .client(client().build())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())

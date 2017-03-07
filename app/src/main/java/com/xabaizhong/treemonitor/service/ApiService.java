@@ -1,6 +1,7 @@
 package com.xabaizhong.treemonitor.service;
 
 import com.xabaizhong.treemonitor.entity.HttpResult;
+import com.xabaizhong.treemonitor.service.entity.Response_news;
 
 import io.reactivex.Observable;
 import okhttp3.RequestBody;
@@ -23,4 +24,11 @@ public interface ApiService {
     @Multipart
     @POST
     Observable<String> uploads(@Url String url, @Body RequestBody body, @Part("part2") RequestBody body2);
+
+    /**
+     * news request
+     */
+    @GET("toutiao/index")
+    Observable<Response_news> obtainNews(@Query("type") String type, @Query("key") String key);
+
 }

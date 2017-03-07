@@ -4,17 +4,26 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.xabaizhong.treemonitor.R;
 import com.xabaizhong.treemonitor.base.Activity_base;
+import com.xabaizhong.treemonitor.myview.C_dialog_radio;
+import com.xabaizhong.treemonitor.myview.C_info_gather_item1;
+import com.xabaizhong.treemonitor.utils.MessageEvent;
+import com.xabaizhong.treemonitor.utils.RxBus;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 
 /**
@@ -29,13 +38,46 @@ public class Activity_add_tree extends Activity_base {
     CoordinatorLayout layout;
     @BindView(R.id.btn)
     Button btn;
+    @BindView(R.id.cname)
+    C_info_gather_item1 cName;
+
+    Disposable disposable;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
         ButterKnife.bind(this);
+        init();
+
+
     }
+
+    private void init() {
+
+        cName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new C_dialog_radio(Activity_add_tree.this).show();
+                disposable = RxBus.getDefault()
+                        .toObservable(MessageEvent.class)
+                        .subscribe(new Consumer<MessageEvent>() {
+                            @Override
+                            public void accept(MessageEvent event) throws Exception {
+                                cName.setText(event.getText());
+                                disposable.dispose();
+                            }
+                        });
+
+
+            }
+        });
+    }
+
+    private void initCNameDialog() {
+
+    }
+
 
     @OnClick(R.id.btn)
     public void onClick() {

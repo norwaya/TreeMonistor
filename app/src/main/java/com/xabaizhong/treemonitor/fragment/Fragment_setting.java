@@ -58,6 +58,11 @@ public class Fragment_setting extends Fragment_base {
                         .into(holder.iv);
                 holder.tv.setText(list.get(position));
             }
+
+            @Override
+            public void onItemClickListener(View view, int position) {
+
+            }
         });
         rv.setAdapter(adapter);
         adapter.setSource(getList());

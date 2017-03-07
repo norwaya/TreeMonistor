@@ -64,7 +64,7 @@ public class C_info_gather_item1 extends LinearLayout {
         left_font_color = ta.getColor(R.styleable.C_info_gather_item_left_font_color, Color.BLACK);
         mid_text_hint = ta.getString(R.styleable.C_info_gather_item_mid_text_hint);
         mid_color = ta.getColor(R.styleable.C_info_gather_item_mid_font_color, Color.BLACK);
-        mid_font_size = ta.getDimension(R.styleable.C_info_gather_item_mid_font_size, 24f);
+        mid_font_size = ta.getDimension(R.styleable.C_info_gather_item_mid_font_size, 18f);
         mid_input_type = ta.getInt(R.styleable.C_info_gather_item_input_type, 0);
         right_type = ta.getInt(R.styleable.C_info_gather_item_right_type, 0);
         right_icon = ta.getResourceId(R.styleable.C_info_gather_item_right_icon, android.R.drawable.ic_menu_close_clear_cancel);
