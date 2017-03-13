@@ -13,7 +13,8 @@
 
     <string name="tree_unknow">未知树木鉴别</string>
     <string name="tree_weakness">病害树木上报</string>
-    <string name="menu_add">新增</string>
+    <string name="menu_add_tree">新增古树</string>
+    <string name="menu_add_treegsq">新增古树群</string>
     <string name="image_selector">选择图片</string>
     <string name="obtain_tree_id">获取古树编号</string>
     <string name="title_activity_settings">Settings</string>

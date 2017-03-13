@@ -1,8 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <array name="function_array">
-        <item>增加古树信息</item>
-        <item>查询古树信息</item>
-        <item>古树监管上报</item>
-    </array>
+    <string-array name="function_array">
+        <item>古树信息上传</item>
+        <item>古树信息查询</item>
+        <item>古树实时监管</item>
+        <item>基础数据库</item>
+        <item>应急通讯</item>
+        <item>通知公告</item>
+        <item>使用说明</item>
+    </string-array>
+    <!-- == -->
+    <string-array name="grown_space">
+        <item>远郊野外</item>
+        <item>乡村街道</item>
+        <item>城区</item>
+        <item>历史文化街区</item>
+        <item>风景名胜古区</item>
+    </string-array>
+    <!-- s:1 -->
+    <string-array name="owner">
+        <item>个人</item>
+        <item>集体</item>
+        <item>国家</item>
+    </string-array>
+    <!-- s:1 -->
+    <string-array name="growth">
+        <item>正常株</item>
+        <item>衰弱株</item>
+        <item>濒危株</item>
+        <item>死亡株</item>
+    </string-array>
+    <!-- s:1 -->
+    <string-array name="status">
+        <item>正常</item>
+        <item>移植</item>
+        <item>伤残</item>
+        <item>新增</item>
+    </string-array>
+    <!-- s:1 -->
+    <string-array name="level">
+        <item>特级</item>
+        <item>一级</item>
+        <item>二级</item>
+        <item>三级</item>
+    </string-array>
+    <!-- s:1 -->
+    <string-array name="environment">
+        <item>良好</item>
+        <item>差</item>
+        <item>极差</item>
+    </string-array>
+    <!-- s:1 -->
+    <string-array name="treetype">
+        <item>古树</item>
+        <item>名木</item>
+        <item>古树名木</item>
+
+    </string-array>
+    <!-- s:1  append:BH -->
+    <string-array name="protect">
+        <item>护栏</item>
+        <item>支撑</item>
+        <item>封堵树洞</item>
+        <item>砌树池</item>
+        <item>包树箍</item>
+        <item>树池透气铺装</item>
+        <item>其他</item>
+    </string-array>
+    <!-- s:1 append:YH -->
+    <string-array name="recovery">
+        <item>复壮沟</item>
+        <item>勇气管</item>
+        <item>渗井</item>
+        <item>幼树靠接</item>
+        <item>叶面施肥</item>
+        <item>土壤改良</item>
+        <item>其他</item>
+    </string-array>
+    <!-- s:0 -->
+    <string-array name="aspect">
+        <item>无坡</item>
+        <item>北坡</item>
+        <item>东北坡</item>
+        <item>东南坡</item>
+        <item>南坡</item>
+        <item>西南坡</item>
+        <item>西坡</item>
+        <item>西北坡</item>
+    </string-array>
+    <string-array name="slope">
+        <item>平坡</item>
+        <item>缓坡</item>
+        <item>斜坡</item>
+        <item>陡坡</item>
+        <item>急坡</item>
+        <item>险坡</item>
+    </string-array>
+    <string-array name="slope_pos">
+        <item>脊部</item>
+        <item>上坡</item>
+        <item>中坡</item>
+        <item>下坡</item>
+        <item>山谷</item>
+        <item>平地</item>
+        <item>提坎</item>
+    </string-array>
+    <string-array name="soil">
+        <item>黄壤</item>
+        <item>黄棕壤</item>
+        <item>棕壤</item>
+        <item>黄褐土</item>
+        <item>褐土</item>
+        <item>沼泽土</item>
+        <item>水稻土</item>
+        <item>潮土</item>
+        <item>砂姜黑土</item>
+        <item>盐土</item>
+        <item>紫色土</item>
+        <item>石灰土</item>
+        <item>基性岩土</item>
+    </string-array>
 </resources>

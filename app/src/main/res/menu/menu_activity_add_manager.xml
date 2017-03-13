@@ -4,7 +4,19 @@
     <item
         android:id="@+id/activity_add_manager_add"
         android:icon="@drawable/fab_add"
-        android:showAsAction="ifRoom|withText"
-        android:title="@string/menu_add"
-        app:showAsAction="ifRoom|withText"/>
+        android:showAsAction="never"
+        android:title="@string/menu_add_tree"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/activity_add_manager_add_gsq"
+        android:icon="@drawable/fab_add"
+        android:showAsAction="never"
+        android:title="@string/menu_add_treegsq"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/activity_add_manager_upload"
+        android:icon="@drawable/fab_add"
+        android:showAsAction="never"
+        android:title="信息上传"
+        app:showAsAction="never"/>
 </menu>
