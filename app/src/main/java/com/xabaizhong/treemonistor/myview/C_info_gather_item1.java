@@ -270,11 +270,13 @@ public class C_info_gather_item1 extends LinearLayout {
     public int dpToPx(Context context, float dpValue) {//dp转换为px
         float scale = context.getResources().getDisplayMetrics().density;//获得当前屏幕密度
         return (int) (dpValue * scale + 0.5f);
+//        return (int) dpValue;
     }
 
     public static int spToPx(Context context, float spValue) {
-        final float fontScale = context.getResources().getDisplayMetrics().scaledDensity;
-        return (int) (spValue * fontScale + 0.5f);
+//        final float fontScale = context.getResources().getDisplayMetrics().scaledDensity;
+//        return (int) (spValue * fontScale + 0.5f);
+        return (int) spValue;
     }
 
     public interface Mid_CallBack {

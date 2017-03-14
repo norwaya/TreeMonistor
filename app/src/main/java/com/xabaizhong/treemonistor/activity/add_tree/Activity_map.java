@@ -1,4 +1,4 @@
-package com.xabaizhong.treemonistor.activity;
+package com.xabaizhong.treemonistor.activity.add_tree;
 
 import android.Manifest;
 import android.content.Intent;
@@ -40,8 +40,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
-import static com.xabaizhong.treemonistor.activity.Activity_add_tree.ResultCode.REQUEST_CODE_REGION;
 
 /**
  * Created by admin on 2017/3/7.

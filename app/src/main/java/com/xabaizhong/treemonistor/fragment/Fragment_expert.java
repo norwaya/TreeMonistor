@@ -16,7 +16,7 @@ import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.xabaizhong.treemonistor.R;
-import com.xabaizhong.treemonistor.activity.Activity_map;
+import com.xabaizhong.treemonistor.activity.add_tree.Activity_map;
 import com.xabaizhong.treemonistor.adapter.Fragment_expert_adapter;
 import com.xabaizhong.treemonistor.base.Fragment_base;
 import com.xabaizhong.treemonistor.entity.ResultOfExpert;

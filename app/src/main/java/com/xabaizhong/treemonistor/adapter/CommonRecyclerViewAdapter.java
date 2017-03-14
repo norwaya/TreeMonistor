@@ -27,7 +27,7 @@ public abstract class CommonRecyclerViewAdapter<T extends RecyclerView.ViewHolde
     private LayoutInflater layoutInflater;
     private int layout;
 
-    CommonRecyclerViewAdapter(Context context, int layout) {
+   public  CommonRecyclerViewAdapter(Context context, int layout) {
         TAG = getClass().getSimpleName();
         layoutInflater = LayoutInflater.from(context);
         this.layout = layout;

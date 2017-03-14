@@ -67,7 +67,7 @@ public class C_dialog_radio {
         RadioButton rb;
         for (int i = 0; i < mList.size(); i++) {
             rb = new RadioButton(context);
-            rb.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 50));
+            rb.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             rb.setText(mList.get(i));
             rb.setTextSize(18);
             rb.setTextAlignment(View.TEXT_ALIGNMENT_GRAVITY);

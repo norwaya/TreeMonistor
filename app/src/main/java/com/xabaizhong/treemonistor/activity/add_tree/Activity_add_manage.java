@@ -1,10 +1,8 @@
-package com.xabaizhong.treemonistor.activity;
+package com.xabaizhong.treemonistor.activity.add_tree;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;

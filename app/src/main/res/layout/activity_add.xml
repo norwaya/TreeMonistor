@@ -65,11 +65,11 @@
                 app:mid_text_hint="中文名称"
                 app:mid_type="read"/>
 
-            <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+           <!-- <com.xabaizhong.treemonistor.myview.C_info_gather_item1
                 android:id="@+id/special_code"
                 style="@style/custom_edit_text_style"
                 app:left_text="树种代码"
-                app:mid_text_hint="树种代码"/>
+                app:mid_text_hint="树种代码"/>-->
 
             <com.xabaizhong.treemonistor.myview.C_info_gather_item1
                 android:id="@+id/alias"
@@ -77,23 +77,23 @@
                 app:left_text="别名"
                 app:mid_text_hint="别名"/>
 
-            <com.xabaizhong.treemonistor.myview.C_info_gather_item1
-                android:id="@+id/latin"
-                style="@style/custom_edit_text_style"
-                app:left_text="拉丁名"
-                app:mid_text_hint="拉丁名"/>
+            <!--  <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+                 android:id="@+id/latin"
+                 style="@style/custom_edit_text_style"
+                 app:left_text="拉丁名"
+                 app:mid_text_hint="拉丁名"/>
 
             <com.xabaizhong.treemonistor.myview.C_info_gather_item1
-                android:id="@+id/family"
-                style="@style/custom_edit_text_style"
-                app:left_text="科"
-                app:mid_text_hint="科"/>
+                 android:id="@+id/family"
+                 style="@style/custom_edit_text_style"
+                 app:left_text="科"
+                 app:mid_text_hint="科"/>
 
-            <com.xabaizhong.treemonistor.myview.C_info_gather_item1
-                android:id="@+id/belong"
-                style="@style/custom_edit_text_style"
-                app:left_text="属"
-                app:mid_text_hint="属"/>
+             <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+                 android:id="@+id/belong"
+                 style="@style/custom_edit_text_style"
+                 app:left_text="属"
+                 app:mid_text_hint="属"/>-->
 
             <com.xabaizhong.treemonistor.myview.C_info_gather_item1
                 android:id="@+id/height"

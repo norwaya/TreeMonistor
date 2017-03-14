@@ -1,4 +1,4 @@
-package com.xabaizhong.treemonistor.activity;
+package com.xabaizhong.treemonistor.activity.add_tree;
 
 import android.content.Intent;
 import android.os.Bundle;

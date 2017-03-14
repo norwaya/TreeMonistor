@@ -45,12 +45,12 @@
 
         </activity>
         <activity
-            android:name="com.xabaizhong.treemonistor.activity.Activity_add_manage"
+            android:name="com.xabaizhong.treemonistor.activity.add_tree.Activity_add_manage"
             android:label="addTreeManger"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name="com.xabaizhong.treemonistor.activity.Activity_add_tree"
+            android:name="com.xabaizhong.treemonistor.activity.add_tree.Activity_add_tree"
             android:label="tree_add"
             android:screenOrientation="portrait"/>
         <activity
@@ -96,10 +96,14 @@
             android:label=""
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.xabaizhong.treemonistor.activity.Activity_map"
+            android:name="com.xabaizhong.treemonistor.activity.add_tree.Activity_map"
             android:label=""
             android:screenOrientation="portrait"/>
-
+        <activity
+            android:name=".activity.add_tree.Activity_tree_cname"
+            android:label="选择树种"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
 
         <!--service-->
         <service

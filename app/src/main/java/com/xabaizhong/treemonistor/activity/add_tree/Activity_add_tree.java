@@ -1,4 +1,4 @@
-package com.xabaizhong.treemonistor.activity;
+package com.xabaizhong.treemonistor.activity.add_tree;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,18 +7,20 @@ import android.support.design.widget.CoordinatorLayout;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 
 import com.xabaizhong.treemonistor.R;
 import com.xabaizhong.treemonistor.base.Activity_base;
 import com.xabaizhong.treemonistor.base.App;
 import com.xabaizhong.treemonistor.entity.Tree;
 import com.xabaizhong.treemonistor.entity.TreeDao;
+import com.xabaizhong.treemonistor.entity.TreeSpecial;
+import com.xabaizhong.treemonistor.myview.C_dialog_radio;
 import com.xabaizhong.treemonistor.myview.C_info_gather_item1;
 import com.xabaizhong.treemonistor.utils.MessageEvent;
 import com.xabaizhong.treemonistor.utils.RxBus;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,7 +29,11 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 
-import static com.xabaizhong.treemonistor.activity.Activity_add_tree.ResultCode.REQUEST_CODE_REGION;
+import static com.xabaizhong.treemonistor.activity.add_tree.Activity_add_tree.ResultCode.REQUEST_CODE_CNAME;
+import static com.xabaizhong.treemonistor.activity.add_tree.Activity_add_tree.ResultCode.REQUEST_CODE_CNAME_RESULT;
+import static com.xabaizhong.treemonistor.activity.add_tree.Activity_add_tree.ResultCode.REQUEST_CODE_ENVIRONMENT;
+import static com.xabaizhong.treemonistor.activity.add_tree.Activity_add_tree.ResultCode.REQUEST_CODE_GROWTH;
+import static com.xabaizhong.treemonistor.activity.add_tree.Activity_add_tree.ResultCode.REQUEST_CODE_REGION;
 
 /**
  * Created by admin on 2017/2/28.
@@ -49,16 +55,8 @@ public class Activity_add_tree extends Activity_base implements View.OnClickList
     C_info_gather_item1 detailAddress;
     @BindView(R.id.cname)
     C_info_gather_item1 cname;
-    @BindView(R.id.special_code)
-    C_info_gather_item1 specialCode;
     @BindView(R.id.alias)
     C_info_gather_item1 alias;
-    @BindView(R.id.latin)
-    C_info_gather_item1 latin;
-    @BindView(R.id.family)
-    C_info_gather_item1 family;
-    @BindView(R.id.belong)
-    C_info_gather_item1 belong;
     @BindView(R.id.height)
     C_info_gather_item1 height;
     @BindView(R.id.dbh)
@@ -127,10 +125,28 @@ public class Activity_add_tree extends Activity_base implements View.OnClickList
 
     private void init() {
         treeDao = ((App) getApplicationContext()).getDaoSession().getTreeDao();
-        initRegion();
+        initCallBack();
     }
 
-    private void initRegion() {
+    private void initCallBack() {
+        cname.setCallback_mid(new C_info_gather_item1.Mid_CallBack() {
+            @Override
+            public void onClickListener(View et) {
+                startActivityForResult(new Intent(Activity_add_tree.this, Activity_tree_cname.class), REQUEST_CODE_CNAME);
+            }
+        });
+        growth.setCallback_mid(new C_info_gather_item1.Mid_CallBack() {
+            @Override
+            public void onClickListener(View et) {
+               showRadioDialog(REQUEST_CODE_GROWTH);
+            }
+        });
+        environment.setCallback_mid(new C_info_gather_item1.Mid_CallBack() {
+            @Override
+            public void onClickListener(View et) {
+                showRadioDialog(REQUEST_CODE_ENVIRONMENT);
+            }
+        });
         region.setCallback_mid(new C_info_gather_item1.Mid_CallBack() {
             @Override
             public void onClickListener(View et) {
@@ -188,6 +204,14 @@ public class Activity_add_tree extends Activity_base implements View.OnClickList
                 }
 
                 break;
+            case REQUEST_CODE_CNAME:
+                if(resultCode == REQUEST_CODE_CNAME_RESULT){
+                    TreeSpecial treeSpecial = data.getParcelableExtra("special");
+                    tree.setTreeSpeID(treeSpecial.getCode()+"");
+                    cname.setText(treeSpecial.getCname());
+                    alias.setText(treeSpecial.getAlias());
+                }
+                break;
             default:
                 break;
         }
@@ -195,16 +219,24 @@ public class Activity_add_tree extends Activity_base implements View.OnClickList
     }
 
     public interface ResultCode {
+        int REQUEST_CODE_CNAME = 0x103;
+        int REQUEST_CODE_CNAME_RESULT = 103;
+
 
         int REQUEST_CODE_REGION = 0x100;
         int REQUEST_CODE_REGION_RESULT = 100;
 
 
-
-
-
-
-
+        int REQUEST_CODE_GROWTH = 104;
+        int REQUEST_CODE_ENVIRONMENT = 105;
+        int REQUEST_CODE_ENVIRONMENT2 = 106;
+        int REQUEST_CODE_ENVIRONMENT3 = 107;
+        int REQUEST_CODE_ENVIRONMENT4 = 108;
+        int REQUEST_CODE_ENVIRONMENT5 = 109;
+        int REQUEST_CODE_ENVIRONMENT6 = 110;
+        int REQUEST_CODE_ENVIRONMENT7 = 111;
+        int REQUEST_CODE_ENVIRONMENT8 = 112;
+        int REQUEST_CODE_ENVIRONMENT9 = 113;
 
 
         int REQUEST_IMAGE = 0x123;
@@ -213,17 +245,38 @@ public class Activity_add_tree extends Activity_base implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
+        /*switch (v.getId()) {
             case R.id.tree_code:
                 // 古树编号
+                break;
+            case R.id.cname:
+                startActivityForResult(new Intent(this, Activity_map.class), REQUEST_CODE_REGION);
                 break;
             case R.id.region:
                 //地区信息
                 startActivityForResult(new Intent(this, Activity_map.class), REQUEST_CODE_REGION);
                 break;
+        }*/
+    }
 
+    String[] array;
+    public void showRadioDialog(int Request) {
+        switch (Request) {
+            case REQUEST_CODE_GROWTH:
+                array = getResources().getStringArray(R.array.growth);
+                new C_dialog_radio(this, "生长势", Arrays.asList(array), REQUEST_CODE_GROWTH);
+                break;
+            case REQUEST_CODE_ENVIRONMENT:
+                array = getResources().getStringArray(R.array.environment);
+                new C_dialog_radio(this, "生长环境", Arrays.asList(array), REQUEST_CODE_ENVIRONMENT);
+                break;
         }
     }
+
+    public void showgrowth() {
+
+    }
+
 
     Disposable disposable;
 
@@ -234,8 +287,14 @@ public class Activity_add_tree extends Activity_base implements View.OnClickList
             public void accept(MessageEvent messageEvent) throws Exception {
                 Log.d(TAG, "accept: " + messageEvent.getId() + "\t" + messageEvent.getText());
                 switch (messageEvent.getCode()) {
-
-
+                    case REQUEST_CODE_GROWTH:
+                        growth.setText(array[messageEvent.getId()]);
+                        tree.setGrowth((messageEvent.getId() + 1) + "");
+                        break;
+                    case REQUEST_CODE_ENVIRONMENT:
+                        environment.setText(array[messageEvent.getId()]);
+                        tree.setEnviorFactor((messageEvent.getId() + 1) + "");
+                        break;
                 }
             }
         });

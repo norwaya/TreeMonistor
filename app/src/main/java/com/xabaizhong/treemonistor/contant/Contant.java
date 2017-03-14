@@ -10,5 +10,7 @@ public interface Contant {
         public static String APP_KEY = "b5e882c74dbcfe8aba88412519948ff1";
          public final static int LOADING_NEWS_SIZE = 20;
     }
-
+    class KV{
+        public static String FIRST_INIT = "first_init";
+    }
 }

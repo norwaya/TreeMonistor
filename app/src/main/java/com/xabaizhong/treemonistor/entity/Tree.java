@@ -10,466 +10,380 @@ import org.greenrobot.greendao.annotation.Generated;
  * Created by admin on 2017/3/2.
  */
 @Entity(indexes = {
-        @Index(value = "id, TreeId DESC", unique = true)
+        @Index(value = "id, treeId DESC", unique = true)
 })
 public class Tree {
     @Id
     private long id;
-    @Unique
-    private String TreeId;     //古树编号  -----unique
-    private String Ivst;     //调查号
-    private String CHName;     //中文名
-    private String Alias;     //别名
-    private String LatinName;     //拉丁名
-    private String Family;     //科
-    private String Belong;     //属
-    private String Town;     //乡镇
-    private String Village;     //村
-    private String SmallName;     //小地名
-    private double Ordinate;     //纵坐标
-    private double Abscissa;     //横坐标
-    private String SpecialCode;     //特征代码
-    private double TreeHeight;     //树高
-    private double TreeDBH;     //胸径
-    private double CrownAvg;     //冠幅平均
-    private double CrownEW;     //冠幅东西
-    private double CrownNS;     //冠幅南北
-    private String ManagementUnit;     //管护单位
-    private String ManagementPersion;     //管护人
-    private String TreeHistory;     //古树历史
-    private String GrownSpace;     //生长场所
-    private String Special;     //特点
-    private String bzdm; //标志代码
-    private String Owner;     //权属
-    private String Level;     //古树等级
-    private String Growth;     //生长势
-    private String Environment;     //生长环境
-    private String Status;     //现存状态
-    private double RealAge;     //真实树龄
-    private double GuessAge;     //估测树龄
-    private double Evevation;     //海拔
-    private String Aspect;     //坡向
-    private String Slope;     //坡度
-    private String SlopePos;     //坡位
-    private String Soil;     //土壤名称
-    private String EnviorFactor;     //影响生长环境因素
-    private String SpecStatDesc;     //树木特殊状况描述
-    private String SpecDesc;     //树种鉴定记载
-    private String Explain;     //照片及说明
-    private String Protected;     //地上保护现状
-    private String Recovery;     //养护复壮现状
-    private String Remark;  //备注
 
-    @Generated(hash = 735815924)
-    public Tree(long id, String TreeId, String Ivst, String CHName, String Alias,
-            String LatinName, String Family, String Belong, String Town, String Village,
-            String SmallName, double Ordinate, double Abscissa, String SpecialCode,
-            double TreeHeight, double TreeDBH, double CrownAvg, double CrownEW,
-            double CrownNS, String ManagementUnit, String ManagementPersion,
-            String TreeHistory, String GrownSpace, String Special, String bzdm, String Owner,
-            String Level, String Growth, String Environment, String Status, double RealAge,
-            double GuessAge, double Evevation, String Aspect, String Slope, String SlopePos,
-            String Soil, String EnviorFactor, String SpecStatDesc, String SpecDesc,
-            String Explain, String Protected, String Recovery, String Remark) {
-        this.id = id;
-        this.TreeId = TreeId;
-        this.Ivst = Ivst;
-        this.CHName = CHName;
-        this.Alias = Alias;
-        this.LatinName = LatinName;
-        this.Family = Family;
-        this.Belong = Belong;
-        this.Town = Town;
-        this.Village = Village;
-        this.SmallName = SmallName;
-        this.Ordinate = Ordinate;
-        this.Abscissa = Abscissa;
-        this.SpecialCode = SpecialCode;
-        this.TreeHeight = TreeHeight;
-        this.TreeDBH = TreeDBH;
-        this.CrownAvg = CrownAvg;
-        this.CrownEW = CrownEW;
-        this.CrownNS = CrownNS;
-        this.ManagementUnit = ManagementUnit;
-        this.ManagementPersion = ManagementPersion;
-        this.TreeHistory = TreeHistory;
-        this.GrownSpace = GrownSpace;
-        this.Special = Special;
-        this.bzdm = bzdm;
-        this.Owner = Owner;
-        this.Level = Level;
-        this.Growth = Growth;
-        this.Environment = Environment;
-        this.Status = Status;
-        this.RealAge = RealAge;
-        this.GuessAge = GuessAge;
-        this.Evevation = Evevation;
-        this.Aspect = Aspect;
-        this.Slope = Slope;
-        this.SlopePos = SlopePos;
-        this.Soil = Soil;
-        this.EnviorFactor = EnviorFactor;
-        this.SpecStatDesc = SpecStatDesc;
-        this.SpecDesc = SpecDesc;
-        this.Explain = Explain;
-        this.Protected = Protected;
-        this.Recovery = Recovery;
-        this.Remark = Remark;
-    }
+    /* private String TreeId;     //古树编号  -----unique
+     private String Ivst;     //调查号
+     private String CHName;     //中文名
+     private String Alias;     //别名
+     private String LatinName;     //拉丁名
+     private String Family;     //科
+     private String Belong;     //属
+     private String Town;     //乡镇
+     private String Village;     //村
+     private String SmallName;     //小地名
+     private double Ordinate;     //纵坐标
+     private double Abscissa;     //横坐标
+     private String SpecialCode;     //特征代码
+     private double TreeHeight;     //树高
+     private double TreeDBH;     //胸径
+     private double CrownAvg;     //冠幅平均
+     private double CrownEW;     //冠幅东西
+     private double CrownNS;     //冠幅南北
+     private String ManagementUnit;     //管护单位
+     private String ManagementPersion;     //管护人
+     private String TreeHistory;     //古树历史
+     private String GrownSpace;     //生长场所
+     private String Special;     //特点
+     private String bzdm; //标志代码
+     private String Owner;     //权属
+     private String Level;     //古树等级
+     private String Growth;     //生长势
+     private String Environment;     //生长环境
+     private String Status;     //现存状态
+     private double RealAge;     //真实树龄
+     private double GuessAge;     //估测树龄
+     private double Evevation;     //海拔
+     private String Aspect;     //坡向
+     private String Slope;     //坡度
+     private String SlopePos;     //坡位
+     private String Soil;     //土壤名称
+     private String EnviorFactor;     //影响生长环境因素
+     private String SpecStatDesc;     //树木特殊状况描述
+     private String SpecDesc;     //树种鉴定记载
+     private String Explain;     //照片及说明
+     private String Protected;     //地上保护现状
+     private String Recovery;     //养护复壮现状
+     private String Remark;  //备注*/
+    private String treeId;
+    private String treeType;
+    private String treeArea;
+    private String treeSpeID;
+    private String town;
+    private String village;
+    private String smallName;
+    private String ordinate;
+    private String abscissa;
+    private String specialCode;
+    private String treeHeight;
+    private String treeDBH;
+    private String crownAvg;
+    private String crownEW;
+    private String crownNS;
+    private String managementUnit;
+    private String managementPersion;
+    private String treeHistory;
+    private String grownSpace;
+    private String special;
+    private String growth;
+    private String enviorment;
+    private String realAge;
+    private String guessAge;
+    private String evevation;
+    private String Aspect;
+    private String Slope;
+    private String SlopePos;
+    private String Soil;
+    private String enviorFactor;
+    private String specStatDesc;
+    private String specDesc;
+    private String explain;
+    private String protecte;
+    private String recovery;
+    private String owner;
+    private String treeLevel;
+    private String treeStatus;
+@Generated(hash = 1655488908)
+public Tree(long id, String treeId, String treeType, String treeArea,
+        String treeSpeID, String town, String village, String smallName,
+        String ordinate, String abscissa, String specialCode, String treeHeight,
+        String treeDBH, String crownAvg, String crownEW, String crownNS,
+        String managementUnit, String managementPersion, String treeHistory,
+        String grownSpace, String special, String growth, String enviorment,
+        String realAge, String guessAge, String evevation, String Aspect,
+        String Slope, String SlopePos, String Soil, String enviorFactor,
+        String specStatDesc, String specDesc, String explain, String protecte,
+        String recovery, String owner, String treeLevel, String treeStatus) {
+    this.id = id;
+    this.treeId = treeId;
+    this.treeType = treeType;
+    this.treeArea = treeArea;
+    this.treeSpeID = treeSpeID;
+    this.town = town;
+    this.village = village;
+    this.smallName = smallName;
+    this.ordinate = ordinate;
+    this.abscissa = abscissa;
+    this.specialCode = specialCode;
+    this.treeHeight = treeHeight;
+    this.treeDBH = treeDBH;
+    this.crownAvg = crownAvg;
+    this.crownEW = crownEW;
+    this.crownNS = crownNS;
+    this.managementUnit = managementUnit;
+    this.managementPersion = managementPersion;
+    this.treeHistory = treeHistory;
+    this.grownSpace = grownSpace;
+    this.special = special;
+    this.growth = growth;
+    this.enviorment = enviorment;
+    this.realAge = realAge;
+    this.guessAge = guessAge;
+    this.evevation = evevation;
+    this.Aspect = Aspect;
+    this.Slope = Slope;
+    this.SlopePos = SlopePos;
+    this.Soil = Soil;
+    this.enviorFactor = enviorFactor;
+    this.specStatDesc = specStatDesc;
+    this.specDesc = specDesc;
+    this.explain = explain;
+    this.protecte = protecte;
+    this.recovery = recovery;
+    this.owner = owner;
+    this.treeLevel = treeLevel;
+    this.treeStatus = treeStatus;
+}
+@Generated(hash = 439989092)
+public Tree() {
+}
+public long getId() {
+    return this.id;
+}
+public void setId(long id) {
+    this.id = id;
+}
+public String getTreeId() {
+    return this.treeId;
+}
+public void setTreeId(String treeId) {
+    this.treeId = treeId;
+}
+public String getTreeType() {
+    return this.treeType;
+}
+public void setTreeType(String treeType) {
+    this.treeType = treeType;
+}
+public String getTreeArea() {
+    return this.treeArea;
+}
+public void setTreeArea(String treeArea) {
+    this.treeArea = treeArea;
+}
+public String getTreeSpeID() {
+    return this.treeSpeID;
+}
+public void setTreeSpeID(String treeSpeID) {
+    this.treeSpeID = treeSpeID;
+}
+public String getTown() {
+    return this.town;
+}
+public void setTown(String town) {
+    this.town = town;
+}
+public String getVillage() {
+    return this.village;
+}
+public void setVillage(String village) {
+    this.village = village;
+}
+public String getSmallName() {
+    return this.smallName;
+}
+public void setSmallName(String smallName) {
+    this.smallName = smallName;
+}
+public String getOrdinate() {
+    return this.ordinate;
+}
+public void setOrdinate(String ordinate) {
+    this.ordinate = ordinate;
+}
+public String getAbscissa() {
+    return this.abscissa;
+}
+public void setAbscissa(String abscissa) {
+    this.abscissa = abscissa;
+}
+public String getSpecialCode() {
+    return this.specialCode;
+}
+public void setSpecialCode(String specialCode) {
+    this.specialCode = specialCode;
+}
+public String getTreeHeight() {
+    return this.treeHeight;
+}
+public void setTreeHeight(String treeHeight) {
+    this.treeHeight = treeHeight;
+}
+public String getTreeDBH() {
+    return this.treeDBH;
+}
+public void setTreeDBH(String treeDBH) {
+    this.treeDBH = treeDBH;
+}
+public String getCrownAvg() {
+    return this.crownAvg;
+}
+public void setCrownAvg(String crownAvg) {
+    this.crownAvg = crownAvg;
+}
+public String getCrownEW() {
+    return this.crownEW;
+}
+public void setCrownEW(String crownEW) {
+    this.crownEW = crownEW;
+}
+public String getCrownNS() {
+    return this.crownNS;
+}
+public void setCrownNS(String crownNS) {
+    this.crownNS = crownNS;
+}
+public String getManagementUnit() {
+    return this.managementUnit;
+}
+public void setManagementUnit(String managementUnit) {
+    this.managementUnit = managementUnit;
+}
+public String getManagementPersion() {
+    return this.managementPersion;
+}
+public void setManagementPersion(String managementPersion) {
+    this.managementPersion = managementPersion;
+}
+public String getTreeHistory() {
+    return this.treeHistory;
+}
+public void setTreeHistory(String treeHistory) {
+    this.treeHistory = treeHistory;
+}
+public String getGrownSpace() {
+    return this.grownSpace;
+}
+public void setGrownSpace(String grownSpace) {
+    this.grownSpace = grownSpace;
+}
+public String getSpecial() {
+    return this.special;
+}
+public void setSpecial(String special) {
+    this.special = special;
+}
+public String getGrowth() {
+    return this.growth;
+}
+public void setGrowth(String growth) {
+    this.growth = growth;
+}
+public String getEnviorment() {
+    return this.enviorment;
+}
+public void setEnviorment(String enviorment) {
+    this.enviorment = enviorment;
+}
+public String getRealAge() {
+    return this.realAge;
+}
+public void setRealAge(String realAge) {
+    this.realAge = realAge;
+}
+public String getGuessAge() {
+    return this.guessAge;
+}
+public void setGuessAge(String guessAge) {
+    this.guessAge = guessAge;
+}
+public String getEvevation() {
+    return this.evevation;
+}
+public void setEvevation(String evevation) {
+    this.evevation = evevation;
+}
+public String getAspect() {
+    return this.Aspect;
+}
+public void setAspect(String Aspect) {
+    this.Aspect = Aspect;
+}
+public String getSlope() {
+    return this.Slope;
+}
+public void setSlope(String Slope) {
+    this.Slope = Slope;
+}
+public String getSlopePos() {
+    return this.SlopePos;
+}
+public void setSlopePos(String SlopePos) {
+    this.SlopePos = SlopePos;
+}
+public String getSoil() {
+    return this.Soil;
+}
+public void setSoil(String Soil) {
+    this.Soil = Soil;
+}
+public String getEnviorFactor() {
+    return this.enviorFactor;
+}
+public void setEnviorFactor(String enviorFactor) {
+    this.enviorFactor = enviorFactor;
+}
+public String getSpecStatDesc() {
+    return this.specStatDesc;
+}
+public void setSpecStatDesc(String specStatDesc) {
+    this.specStatDesc = specStatDesc;
+}
+public String getSpecDesc() {
+    return this.specDesc;
+}
+public void setSpecDesc(String specDesc) {
+    this.specDesc = specDesc;
+}
+public String getExplain() {
+    return this.explain;
+}
+public void setExplain(String explain) {
+    this.explain = explain;
+}
+public String getProtecte() {
+    return this.protecte;
+}
+public void setProtecte(String protecte) {
+    this.protecte = protecte;
+}
+public String getRecovery() {
+    return this.recovery;
+}
+public void setRecovery(String recovery) {
+    this.recovery = recovery;
+}
+public String getOwner() {
+    return this.owner;
+}
+public void setOwner(String owner) {
+    this.owner = owner;
+}
+public String getTreeLevel() {
+    return this.treeLevel;
+}
+public void setTreeLevel(String treeLevel) {
+    this.treeLevel = treeLevel;
+}
+public String getTreeStatus() {
+    return this.treeStatus;
+}
+public void setTreeStatus(String treeStatus) {
+    this.treeStatus = treeStatus;
+}
 
-    @Generated(hash = 439989092)
-    public Tree() {
-    }
-
-    public long getId() {
-        return this.id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getTreeId() {
-        return this.TreeId;
-    }
-
-    public void setTreeId(String TreeId) {
-        this.TreeId = TreeId;
-    }
-
-    public String getIvst() {
-        return this.Ivst;
-    }
-
-    public void setIvst(String Ivst) {
-        this.Ivst = Ivst;
-    }
-
-    public String getCHName() {
-        return this.CHName;
-    }
-
-    public void setCHName(String CHName) {
-        this.CHName = CHName;
-    }
-
-    public String getAlias() {
-        return this.Alias;
-    }
-
-    public void setAlias(String Alias) {
-        this.Alias = Alias;
-    }
-
-    public String getLatinName() {
-        return this.LatinName;
-    }
-
-    public void setLatinName(String LatinName) {
-        this.LatinName = LatinName;
-    }
-
-    public String getFamily() {
-        return this.Family;
-    }
-
-    public void setFamily(String Family) {
-        this.Family = Family;
-    }
-
-    public String getBelong() {
-        return this.Belong;
-    }
-
-    public void setBelong(String Belong) {
-        this.Belong = Belong;
-    }
-
-    public String getTown() {
-        return this.Town;
-    }
-
-    public void setTown(String Town) {
-        this.Town = Town;
-    }
-
-    public String getVillage() {
-        return this.Village;
-    }
-
-    public void setVillage(String Village) {
-        this.Village = Village;
-    }
-
-    public String getSmallName() {
-        return this.SmallName;
-    }
-
-    public void setSmallName(String SmallName) {
-        this.SmallName = SmallName;
-    }
-
-    public double getOrdinate() {
-        return this.Ordinate;
-    }
-
-    public void setOrdinate(double Ordinate) {
-        this.Ordinate = Ordinate;
-    }
-
-    public double getAbscissa() {
-        return this.Abscissa;
-    }
-
-    public void setAbscissa(double Abscissa) {
-        this.Abscissa = Abscissa;
-    }
-
-    public String getSpecialCode() {
-        return this.SpecialCode;
-    }
-
-    public void setSpecialCode(String SpecialCode) {
-        this.SpecialCode = SpecialCode;
-    }
-
-    public double getTreeHeight() {
-        return this.TreeHeight;
-    }
-
-    public void setTreeHeight(double TreeHeight) {
-        this.TreeHeight = TreeHeight;
-    }
-
-    public double getTreeDBH() {
-        return this.TreeDBH;
-    }
-
-    public void setTreeDBH(double TreeDBH) {
-        this.TreeDBH = TreeDBH;
-    }
-
-    public double getCrownAvg() {
-        return this.CrownAvg;
-    }
-
-    public void setCrownAvg(double CrownAvg) {
-        this.CrownAvg = CrownAvg;
-    }
-
-    public double getCrownEW() {
-        return this.CrownEW;
-    }
-
-    public void setCrownEW(double CrownEW) {
-        this.CrownEW = CrownEW;
-    }
-
-    public double getCrownNS() {
-        return this.CrownNS;
-    }
-
-    public void setCrownNS(double CrownNS) {
-        this.CrownNS = CrownNS;
-    }
-
-    public String getManagementUnit() {
-        return this.ManagementUnit;
-    }
-
-    public void setManagementUnit(String ManagementUnit) {
-        this.ManagementUnit = ManagementUnit;
-    }
-
-    public String getManagementPersion() {
-        return this.ManagementPersion;
-    }
-
-    public void setManagementPersion(String ManagementPersion) {
-        this.ManagementPersion = ManagementPersion;
-    }
-
-    public String getTreeHistory() {
-        return this.TreeHistory;
-    }
-
-    public void setTreeHistory(String TreeHistory) {
-        this.TreeHistory = TreeHistory;
-    }
-
-    public String getGrownSpace() {
-        return this.GrownSpace;
-    }
-
-    public void setGrownSpace(String GrownSpace) {
-        this.GrownSpace = GrownSpace;
-    }
-
-    public String getSpecial() {
-        return this.Special;
-    }
-
-    public void setSpecial(String Special) {
-        this.Special = Special;
-    }
-
-    public String getOwner() {
-        return this.Owner;
-    }
-
-    public void setOwner(String Owner) {
-        this.Owner = Owner;
-    }
-
-    public String getLevel() {
-        return this.Level;
-    }
-
-    public void setLevel(String Level) {
-        this.Level = Level;
-    }
-
-    public String getGrowth() {
-        return this.Growth;
-    }
-
-    public void setGrowth(String Growth) {
-        this.Growth = Growth;
-    }
-
-    public String getEnvironment() {
-        return this.Environment;
-    }
-
-    public void setEnvironment(String Environment) {
-        this.Environment = Environment;
-    }
-
-    public String getStatus() {
-        return this.Status;
-    }
-
-    public void setStatus(String Status) {
-        this.Status = Status;
-    }
-
-    public double getRealAge() {
-        return this.RealAge;
-    }
-
-    public void setRealAge(double RealAge) {
-        this.RealAge = RealAge;
-    }
-
-    public double getGuessAge() {
-        return this.GuessAge;
-    }
-
-    public void setGuessAge(double GuessAge) {
-        this.GuessAge = GuessAge;
-    }
-
-    public double getEvevation() {
-        return this.Evevation;
-    }
-
-    public void setEvevation(double Evevation) {
-        this.Evevation = Evevation;
-    }
-
-    public String getAspect() {
-        return this.Aspect;
-    }
-
-    public void setAspect(String Aspect) {
-        this.Aspect = Aspect;
-    }
-
-    public String getSlope() {
-        return this.Slope;
-    }
-
-    public void setSlope(String Slope) {
-        this.Slope = Slope;
-    }
-
-    public String getSlopePos() {
-        return this.SlopePos;
-    }
-
-    public void setSlopePos(String SlopePos) {
-        this.SlopePos = SlopePos;
-    }
-
-    public String getSoil() {
-        return this.Soil;
-    }
-
-    public void setSoil(String Soil) {
-        this.Soil = Soil;
-    }
-
-    public String getEnviorFactor() {
-        return this.EnviorFactor;
-    }
-
-    public void setEnviorFactor(String EnviorFactor) {
-        this.EnviorFactor = EnviorFactor;
-    }
-
-    public String getSpecStatDesc() {
-        return this.SpecStatDesc;
-    }
-
-    public void setSpecStatDesc(String SpecStatDesc) {
-        this.SpecStatDesc = SpecStatDesc;
-    }
-
-    public String getSpecDesc() {
-        return this.SpecDesc;
-    }
-
-    public void setSpecDesc(String SpecDesc) {
-        this.SpecDesc = SpecDesc;
-    }
-
-    public String getExplain() {
-        return this.Explain;
-    }
-
-    public void setExplain(String Explain) {
-        this.Explain = Explain;
-    }
-
-    public String getProtected() {
-        return this.Protected;
-    }
-
-    public void setProtected(String Protected) {
-        this.Protected = Protected;
-    }
-
-    public String getRecovery() {
-        return this.Recovery;
-    }
-
-    public void setRecovery(String Recovery) {
-        this.Recovery = Recovery;
-    }
-
-    public String getRemark() {
-        return this.Remark;
-    }
-
-    public void setRemark(String Remark) {
-        this.Remark = Remark;
-    }
-
-    public String getBzdm() {
-        return this.bzdm;
-    }
-
-    public void setBzdm(String bzdm) {
-        this.bzdm = bzdm;
-    }
 }
