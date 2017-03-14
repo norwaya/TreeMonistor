@@ -9,6 +9,12 @@
         <item>通知公告</item>
         <item>使用说明</item>
     </string-array>
+
+    <string-array name="data_base">
+        <item>树种基本信息</item>
+        <item>树木病虫分类</item>
+        <item>树木常见病</item>
+    </string-array>
     <!-- == -->
     <string-array name="grown_space">
         <item>远郊野外</item>
@@ -24,6 +30,7 @@
         <item>国家</item>
     </string-array>
     <!-- s:1 -->
+
     <string-array name="growth">
         <item>正常株</item>
         <item>衰弱株</item>
@@ -36,6 +43,11 @@
         <item>移植</item>
         <item>伤残</item>
         <item>新增</item>
+    </string-array>
+    <!-- s:1 -->
+    <string-array name="special">
+        <item>散生</item>
+        <item>群状</item>
     </string-array>
     <!-- s:1 -->
     <string-array name="level">
@@ -51,12 +63,17 @@
         <item>极差</item>
     </string-array>
     <!-- s:1 -->
-    <string-array name="treetype">
+    <string-array name="gsbz">
         <item>古树</item>
         <item>名木</item>
         <item>古树名木</item>
-
     </string-array>
+    <!-- s:0 -->
+    <string-array name="tree_area">
+        <item>农村</item>
+        <item>城市</item>
+    </string-array>
+
     <!-- s:1  append:BH -->
     <string-array name="protect">
         <item>护栏</item>

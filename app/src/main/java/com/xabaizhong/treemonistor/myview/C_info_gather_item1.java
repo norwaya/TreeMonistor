@@ -250,14 +250,16 @@ public class C_info_gather_item1 extends LinearLayout {
     }
 
     final static int INPUT_TYPE_NUMBER = 0x002;
-    final static int INTPU_TYPE_TEXT = 0x003;
-
+    final static int INPUT_TYPE_DECIMAL = 0x003;
+    final static int INTPU_TYPE_TEXT = 0x004;
     private void setInputType() {
 
         switch (mid_input_type) {
             case INPUT_TYPE_NUMBER:
-                Log.d(TAG, "setInputType: number");
                 mid.setInputType(InputType.TYPE_CLASS_NUMBER);
+                break;
+            case INPUT_TYPE_DECIMAL:
+                mid.setInputType(InputType.TYPE_CLASS_NUMBER|InputType.TYPE_NUMBER_FLAG_DECIMAL);
                 break;
             case INTPU_TYPE_TEXT:
                 mid.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);

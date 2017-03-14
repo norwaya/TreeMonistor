@@ -17,7 +17,10 @@ import com.google.gson.Gson;
 import com.xabaizhong.treemonistor.R;
 import com.xabaizhong.treemonistor.base.Activity_base;
 import com.xabaizhong.treemonistor.base.App;
+import com.xabaizhong.treemonistor.dbhelper.AreaCodeHelper;
 import com.xabaizhong.treemonistor.dbhelper.TreeSpecialHelper;
+import com.xabaizhong.treemonistor.entity.AreaCode;
+import com.xabaizhong.treemonistor.entity.AreaCodeDao;
 import com.xabaizhong.treemonistor.entity.TreeSpecial;
 import com.xabaizhong.treemonistor.entity.TreeSpecialDao;
 
@@ -54,7 +57,7 @@ public class Activity_welcome extends Activity_base {
     final static int SECOND = 1;
 
     TreeSpecialDao treeSpecialDao;
-
+    AreaCodeDao areaCodeDao;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,8 +70,8 @@ public class Activity_welcome extends Activity_base {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Log.i(TAG, "requestPermission: ");
             request();
-        }else{
-           initAll();
+        } else {
+            initAll();
         }
 
     }
@@ -80,27 +83,29 @@ public class Activity_welcome extends Activity_base {
                 != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQEUST_CODE_WRITER);
 
-        }else{
+        } else {
             initAll();
         }
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == REQEUST_CODE_WRITER && grantResults[0] == 0) {
             Log.i(TAG, "onRequestPermissionsResult: ");
             initAll();
-        }else{
+        } else {
             finish();
         }
 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
-    void initAll(){
+
+    void initAll() {
         initImage();
         long stat = System.nanoTime();
         initDB();
         long end = System.nanoTime();
-        Log.i(TAG, "initAll: "+(end-stat));
+        Log.i(TAG, "initAll: " + (end - stat));
     }
 
 
@@ -114,7 +119,7 @@ public class Activity_welcome extends Activity_base {
 
             @Override
             public void onNext(Integer value) {
-                btn.setText(getString(R.string.welcome_hint,value));
+                btn.setText(getString(R.string.welcome_hint, value));
             }
 
             @Override
@@ -159,46 +164,78 @@ public class Activity_welcome extends Activity_base {
     }
 
     private void initDB() {
-        if (!sharedPreferences.getBoolean(FIRST_INIT, true)) {
-            Log.d(TAG, "initDB: has init db");
+        if (hasInit())
             return;
-        }else{
-            Log.d(TAG, "initDB: has not init ");
-        }
+        initDao();
+        clearDB();
+        wirteTreeSpecial("treeSpecial.txt");
+        wirteAreaCode("areaCode.txt");
+        writeToShare();
+    }
 
-
+    private void initDao() {
         treeSpecialDao = ((App) getApplicationContext()).getDaoSession().getTreeSpecialDao();
-        String json = null;
-        try {
-            BufferedReader br = new BufferedReader(new InputStreamReader(getAssets().open("treeSpecial.txt")));
-            json =  file2string(br);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Gson gson = new Gson();
-        TreeSpecialHelper treeHelper = gson.fromJson(json, TreeSpecialHelper.class);
+        areaCodeDao = ((App) getApplicationContext()).getDaoSession().getAreaCodeDao();
+    }
+    private void clearDB() {
+        treeSpecialDao.queryBuilder().build().list().clear();
+        areaCodeDao.queryBuilder().build().list().clear();
+
+    }
+
+    /**
+     * @return true if not init db ,false or else
+     */
+    private boolean hasInit() {
+        return !sharedPreferences.getBoolean(FIRST_INIT, true);
+    }
+    private void wirteTreeSpecial(String file) {
+        String json = getAssetFile(file);
+        TreeSpecialHelper treeHelper = new Gson().fromJson(json, TreeSpecialHelper.class);
         TreeSpecial treeSpecial;
         ArrayList<TreeSpecial> treeSpecialList = new ArrayList<>();
         for (TreeSpecialHelper.RECORDSBean bean : treeHelper.getRECORDS()) {
             treeSpecial = bean.convertToEntity();
-            treeSpecialList .add(treeSpecial);
-//            treeSpecialDao.save(treeSpecial);
+            treeSpecialList.add(treeSpecial);
         }
-        Log.i(TAG, "initDB: "+treeSpecialList.size());
         treeSpecialDao.saveInTx(treeSpecialList);
-        writeToShare();
     }
-    void writeToShare(){
+
+    private void wirteAreaCode(String file){
+        String json = getAssetFile(file);
+        AreaCodeHelper areaCodeHelper =  new Gson().fromJson(json, AreaCodeHelper.class);
+        AreaCode areaCode;
+        ArrayList<AreaCode> treeSpecialList = new ArrayList<>();
+        for (AreaCodeHelper.RECORDSBean bean : areaCodeHelper.getRECORDS()) {
+            areaCode = bean.convertToEntity();
+            treeSpecialList.add(areaCode);
+        }
+        areaCodeDao.saveInTx(treeSpecialList);
+    }
+
+    private String getAssetFile(String file) {
+        String json = null;
+        try {
+            BufferedReader br = new BufferedReader(new InputStreamReader(getAssets().open(file)));
+            json = file2string(br);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return json;
+    }
+
+    void writeToShare() {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(FIRST_INIT, false);
         editor.apply();
         editor.commit();
-        Log.i(TAG, "initDB: "+sharedPreferences.getBoolean(FIRST_INIT,true));
+        Log.i(TAG, "initDB: " + sharedPreferences.getBoolean(FIRST_INIT, true));
     }
+
     private String file2string(BufferedReader br) throws IOException {
         StringBuffer sbu = new StringBuffer();
         byte[] bytes = new byte[1024];
-        while(br.ready()){
+        while (br.ready()) {
             sbu.append(br.readLine());
         }
         return sbu.toString();

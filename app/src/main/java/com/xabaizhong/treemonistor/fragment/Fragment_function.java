@@ -16,6 +16,7 @@ import com.xabaizhong.treemonistor.R;
 import com.xabaizhong.treemonistor.activity.add_tree.Activity_add_manage;
 import com.xabaizhong.treemonistor.activity.Activity_monitor;
 import com.xabaizhong.treemonistor.activity.Activity_query;
+import com.xabaizhong.treemonistor.activity.base_data.Activity_base_data;
 import com.xabaizhong.treemonistor.base.Fragment_base;
 
 import java.util.ArrayList;
@@ -85,6 +86,7 @@ public class Fragment_function extends Fragment_base implements AdapterView.OnIt
     final static int ACTIVITY_ADD = 1;
     final static int ACTIVITY_QUERY = 2;
     final static int ACTIVITY_MONITOR = 3;
+    final static int ACTIVITY_DATA = 4;
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -102,6 +104,10 @@ public class Fragment_function extends Fragment_base implements AdapterView.OnIt
                 break;
             case ACTIVITY_MONITOR:
                 i.setClass(getContext(), Activity_monitor.class);
+                getActivity().startActivity(i);
+                break;
+            case ACTIVITY_DATA:
+                i.setClass(getContext(), Activity_base_data.class);
                 getActivity().startActivity(i);
                 break;
         }

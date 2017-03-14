@@ -61,9 +61,17 @@ public class C_dialog_radio {
     }
 
     private void initRadioGroup() {
+        LinearLayout layout = new LinearLayout(context);
+        layout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setPadding(16,0,16,0);
+
+
         RadioGroup group = new RadioGroup(context);
-        group.setLayoutParams(new RadioGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        group.setLayoutParams(new RadioGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         group.setOrientation(LinearLayout.VERTICAL);
+        layout.addView(group);
+
         RadioButton rb;
         for (int i = 0; i < mList.size(); i++) {
             rb = new RadioButton(context);
@@ -81,7 +89,7 @@ public class C_dialog_radio {
                 }
             });
         }
-        builder.setView(group);
+        builder.setView(layout);
     }
 
 

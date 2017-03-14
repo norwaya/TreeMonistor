@@ -104,7 +104,10 @@
             android:label="选择树种"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
-
+        <activity
+            android:name=".activity.base_data.Activity_base_data"
+            android:label="基础数据库"
+            android:screenOrientation="portrait"/>
         <!--service-->
         <service
             android:name="com.baidu.location.f"

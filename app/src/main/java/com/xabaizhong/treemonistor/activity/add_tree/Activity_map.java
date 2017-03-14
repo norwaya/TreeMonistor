@@ -238,7 +238,7 @@ public class Activity_map extends Activity_base {
             }
         });
 
-        MyLocationConfiguration.LocationMode locationMode = MyLocationConfiguration.LocationMode.FOLLOWING;
+        final MyLocationConfiguration.LocationMode locationMode = MyLocationConfiguration.LocationMode.FOLLOWING;
         baiduMap.setMyLocationConfigeration
                 (new MyLocationConfiguration(locationMode, true, null));
 
@@ -273,6 +273,8 @@ public class Activity_map extends Activity_base {
                         locationBox.setDistrict(reverseGeoCodeResult.getAddressDetail().district);
                         locationBox.setStreet(reverseGeoCodeResult.getAddressDetail().street);
                         locationBox.setSematicDescription(reverseGeoCodeResult.getSematicDescription());
+                        locationBox.setLon(reverseGeoCodeResult.getLocation().longitude);
+                        locationBox.setLat(reverseGeoCodeResult.getLocation().latitude);
                     }
                 });
 
@@ -328,7 +330,7 @@ public class Activity_map extends Activity_base {
         if (locationBox.check()) {
             finish();
         } else {
-            showToast("未获取到地理位置的信息");
+            showToast("未获取到地理位置的信息,请检查网络是否连接");
         }
     }
 
@@ -353,6 +355,8 @@ public class Activity_map extends Activity_base {
                     activity_map.locationBox.setDistrict(location.getDistrict());
                     activity_map.locationBox.setStreet(location.getStreet());
                     activity_map.locationBox.setSematicDescription(location.getLocationDescribe());
+                    activity_map.locationBox.setLat(location.getLatitude());
+                    activity_map.locationBox.setLon(location.getLongitude());
                 }
             }
             activity_map.baiduLog(location);
@@ -465,6 +469,8 @@ public class Activity_map extends Activity_base {
         private String district;
         private String street;
         private String sematicDescription;
+        private Double lat;
+        private Double lon;
 
         public LocationBox() {
         }
@@ -496,21 +502,19 @@ public class Activity_map extends Activity_base {
             return true;
         }
 
-        public LocationBox(String province, String city, String district, String street, String sematicDescription) {
-            this.province = province;
-            this.city = city;
-            this.district = district;
-            this.street = street;
-            this.sematicDescription = sematicDescription;
+
+        @Override
+        public int describeContents() {
+            return 0;
         }
 
-        public String getStreet() {
-
-            return street;
-        }
-
-        public void setStreet(String street) {
-            this.street = street;
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(province);
+            dest.writeString(city);
+            dest.writeString(district);
+            dest.writeString(street);
+            dest.writeString(sematicDescription);
         }
 
         public String getProvince() {
@@ -537,6 +541,14 @@ public class Activity_map extends Activity_base {
             this.district = district;
         }
 
+        public String getStreet() {
+            return street;
+        }
+
+        public void setStreet(String street) {
+            this.street = street;
+        }
+
         public String getSematicDescription() {
             return sematicDescription;
         }
@@ -545,18 +557,20 @@ public class Activity_map extends Activity_base {
             this.sematicDescription = sematicDescription;
         }
 
-        @Override
-        public int describeContents() {
-            return 0;
+        public Double getLat() {
+            return lat;
         }
 
-        @Override
-        public void writeToParcel(Parcel dest, int flags) {
-            dest.writeString(province);
-            dest.writeString(city);
-            dest.writeString(district);
-            dest.writeString(street);
-            dest.writeString(sematicDescription);
+        public void setLat(Double lat) {
+            this.lat = lat;
+        }
+
+        public Double getLon() {
+            return lon;
+        }
+
+        public void setLon(Double lon) {
+            this.lon = lon;
         }
     }
 }

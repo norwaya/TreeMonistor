@@ -8,14 +8,31 @@ public class MessageEvent {
     private int code;
     private int id;
     private String text;
+    private String remark;
 
     public MessageEvent() {
     }
 
-    public MessageEvent(int id, String text,int code) {
+    public MessageEvent(int id, String text, int code) {
         this.id = id;
         this.text = text;
         this.code = code;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public MessageEvent(int code, int id, String text, String remark) {
+
+        this.code = code;
+        this.id = id;
+        this.text = text;
+        this.remark = remark;
     }
 
     public int getId() {
