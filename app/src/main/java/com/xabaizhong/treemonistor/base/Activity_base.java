@@ -1,10 +1,16 @@
 package com.xabaizhong.treemonistor.base;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
+
+import com.xabaizhong.treemonistor.activity.Activity_login2;
+import com.xabaizhong.treemonistor.contant.Contant;
+
+import java.util.Set;
 
 /**
  * Created by admin on 2017/2/28.
@@ -34,4 +40,12 @@ public class Activity_base extends AppCompatActivity {
             toast.setText(text);
         toast.show();
     }
+    protected boolean login_suc(){
+        Set<String> userSet = sharedPreferences.getStringSet(Contant.KV.USER,null);
+        if(userSet == null){
+           return false;
+        }
+        return true;
+    }
+
 }

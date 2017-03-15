@@ -10,6 +10,11 @@
         <item>使用说明</item>
     </string-array>
 
+    <string-array name="add_tree_list">
+        <item>古树名木信息上传</item>
+        <item>古树群信息上传</item>
+    </string-array>
+
     <string-array name="data_base">
         <item>树种基本信息</item>
         <item>树木病虫分类</item>

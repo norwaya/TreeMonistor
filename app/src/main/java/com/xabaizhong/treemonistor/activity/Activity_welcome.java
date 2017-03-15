@@ -58,6 +58,7 @@ public class Activity_welcome extends Activity_base {
 
     TreeSpecialDao treeSpecialDao;
     AreaCodeDao areaCodeDao;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -129,7 +130,11 @@ public class Activity_welcome extends Activity_base {
 
             @Override
             public void onComplete() {
-                startActivity(new Intent(Activity_welcome.this, Activity_main.class));
+                if (login_suc()) {
+                    startActivity(new Intent(Activity_welcome.this, Activity_main.class));
+                } else {
+                    startActivity(new Intent(Activity_welcome.this, Activity_login2.class));
+                }
                 finish();
             }
         };
@@ -177,6 +182,7 @@ public class Activity_welcome extends Activity_base {
         treeSpecialDao = ((App) getApplicationContext()).getDaoSession().getTreeSpecialDao();
         areaCodeDao = ((App) getApplicationContext()).getDaoSession().getAreaCodeDao();
     }
+
     private void clearDB() {
         treeSpecialDao.queryBuilder().build().list().clear();
         areaCodeDao.queryBuilder().build().list().clear();
@@ -189,6 +195,7 @@ public class Activity_welcome extends Activity_base {
     private boolean hasInit() {
         return !sharedPreferences.getBoolean(FIRST_INIT, true);
     }
+
     private void wirteTreeSpecial(String file) {
         String json = getAssetFile(file);
         TreeSpecialHelper treeHelper = new Gson().fromJson(json, TreeSpecialHelper.class);
@@ -201,9 +208,9 @@ public class Activity_welcome extends Activity_base {
         treeSpecialDao.saveInTx(treeSpecialList);
     }
 
-    private void wirteAreaCode(String file){
+    private void wirteAreaCode(String file) {
         String json = getAssetFile(file);
-        AreaCodeHelper areaCodeHelper =  new Gson().fromJson(json, AreaCodeHelper.class);
+        AreaCodeHelper areaCodeHelper = new Gson().fromJson(json, AreaCodeHelper.class);
         AreaCode areaCode;
         ArrayList<AreaCode> treeSpecialList = new ArrayList<>();
         for (AreaCodeHelper.RECORDSBean bean : areaCodeHelper.getRECORDS()) {

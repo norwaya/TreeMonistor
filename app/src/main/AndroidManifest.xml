@@ -7,27 +7,32 @@
     <!-- 存储 -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <!-- baidu map-->
+    <!-- baidu map -->
     <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
-    <!-- 这个权限用于进行网络定位-->
+    <!-- 这个权限用于进行网络定位 -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <!-- 这个权限用于访问GPS定位-->
+    <!-- 这个权限用于访问GPS定位 -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <!-- 用于访问wifi网络信息，wifi信息会用于进行网络定位-->
+    <!-- 用于访问wifi网络信息，wifi信息会用于进行网络定位 -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <!-- 获取运营商信息，用于支持提供运营商信息相关的接口-->
+    <!-- 获取运营商信息，用于支持提供运营商信息相关的接口 -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <!-- 这个权限用于获取wifi的获取权限，wifi信息会用来进行网络定位-->
+    <!-- 这个权限用于获取wifi的获取权限，wifi信息会用来进行网络定位 -->
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
-    <!-- 用于读取手机当前的状态-->
+    <!-- 用于读取手机当前的状态 -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-    <!-- SD卡读取权限，用户写入离线定位数据-->
+    <!-- SD卡读取权限，用户写入离线定位数据 -->
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
 
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.READ_PROFILE"/>
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
+
     <application
-        android:name="com.xabaizhong.treemonistor.base.App"
+        android:name=".base.App"
         android:allowBackup="true"
         android:icon="@mipmap/rose"
         android:label="@string/app_name"
@@ -38,33 +43,32 @@
             android:value="G6baKP9GEGTXB6o59GZ89qBoLKt3cyZq"/>
 
         <activity
-            android:name="com.xabaizhong.treemonistor.activity.Activity_main"
+            android:name=".activity.Activity_main"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
-
         </activity>
         <activity
-            android:name="com.xabaizhong.treemonistor.activity.add_tree.Activity_add_manage"
+            android:name=".activity.add_tree.Activity_add_manage"
             android:label="addTreeManger"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name="com.xabaizhong.treemonistor.activity.add_tree.Activity_add_tree"
+            android:name=".activity.add_tree.Activity_add_tree"
             android:label="tree_add"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.xabaizhong.treemonistor.activity.Activity_query"
+            android:name=".activity.Activity_query"
             android:label="query"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name="com.xabaizhong.treemonistor.activity.Activity_monitor"
+            android:name=".activity.Activity_monitor"
             android:label="monitor"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name="com.xabaizhong.treemonistor.activity.Activity_detailInfo"
+            android:name=".activity.Activity_detailInfo"
             android:label="tree-detail"
             android:screenOrientation="portrait"/>
         <activity
@@ -73,30 +77,31 @@
             android:label="@string/image_selector"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.xabaizhong.treemonistor.activity.SettingsActivity"
+            android:name=".activity.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name="com.xabaizhong.treemonistor.activity.Activity_login"
+            android:name=".activity.Activity_login"
             android:label="login"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.xabaizhong.treemonistor.activity.Activity_welcome"
+            android:name=".activity.Activity_welcome"
             android:label="monitor"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
+
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
-            android:name="com.xabaizhong.treemonistor.activity.Activity_news_show"
+            android:name=".activity.Activity_news_show"
             android:label=""
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.xabaizhong.treemonistor.activity.add_tree.Activity_map"
+            android:name=".activity.add_tree.Activity_map"
             android:label=""
             android:screenOrientation="portrait"/>
         <activity
@@ -108,7 +113,12 @@
             android:name=".activity.base_data.Activity_base_data"
             android:label="基础数据库"
             android:screenOrientation="portrait"/>
-        <!--service-->
+
+        <activity
+            android:name=".activity.Activity_login2"
+            android:label="@string/title_activity_login2"
+            android:screenOrientation="portrait"/>
+        <!-- service -->
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"
@@ -118,6 +128,8 @@
                 </action>
             </intent-filter>
         </service>
+
+
     </application>
 
 </manifest>

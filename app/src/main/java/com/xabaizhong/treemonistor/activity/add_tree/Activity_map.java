@@ -11,6 +11,8 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import com.baidu.location.BDLocation;
@@ -18,11 +20,14 @@ import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClientOption;
 import com.baidu.location.Poi;
 import com.baidu.mapapi.map.BaiduMap;
+import com.baidu.mapapi.map.BitmapDescriptor;
+import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.MyLocationConfiguration;
+import com.baidu.mapapi.map.MyLocationConfiguration.LocationMode;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.search.geocode.GeoCodeResult;
@@ -41,6 +46,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.baidu.mapapi.map.MyLocationConfiguration.LocationMode.FOLLOWING;
+
 /**
  * Created by admin on 2017/3/7.
  */
@@ -57,6 +64,10 @@ public class Activity_map extends Activity_base {
 
 
     LocationService locationService;
+    @BindView(R.id.center)
+    ImageView center;
+    @BindView(R.id.btn_mode)
+    Button btnMode;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -75,8 +86,15 @@ public class Activity_map extends Activity_base {
         n();
         flag.setAnimation(null);
     }
-    void initBaiduMap(){
+    BitmapDescriptor mIconLocation;
+    void initBaiduMap() {
+        baiduMap.setMyLocationEnabled(true);
+        mLocationMode = FOLLOWING;
+        BitmapDescriptor mIconLocation = BitmapDescriptorFactory.fromResource(R.drawable.icon_gcoding);
+        baiduMap.setMyLocationConfigeration(new MyLocationConfiguration(mLocationMode,true,mIconLocation));
+        btnMode.setText("跟随模式");
     }
+
     private void initilize() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             requestpermission();
@@ -85,7 +103,9 @@ public class Activity_map extends Activity_base {
         }
     }
 
+
     private void init() {
+
 
         locationService = ((App) getApplicationContext()).locationService;
         locationService.setLocationOption(getDefaultOption());
@@ -172,7 +192,7 @@ public class Activity_map extends Activity_base {
     private void navigateTo(LatLng location) {
         //如果是第一次创建，就获取位置信息并且将地图移到当前位置
         //为防止地图被反复移动，所以就只在第一次创建时执行
-        if (checkNeedUpdate(location)) {
+        if (isFirst) {
             //LatLng对象主要用来存放经纬度
             //zoomTo是用来设置百度地图的缩放级别，范围为3~19，数值越大越精确
             LatLng ll = new LatLng(location.latitude, location.longitude);
@@ -180,7 +200,7 @@ public class Activity_map extends Activity_base {
             baiduMap.animateMapStatus(update);
             update = MapStatusUpdateFactory.zoomTo(16f);
             baiduMap.animateMapStatus(update);
-            currentLatatLng = location;
+            isFirst = false;
         }
 
         //封装设备当前位置并且显示在地图上
@@ -190,6 +210,7 @@ public class Activity_map extends Activity_base {
         locationBuilder.longitude(location.longitude);
         MyLocationData locationData = locationBuilder.build();
         baiduMap.setMyLocationData(locationData);
+
     }
 
     LatLng currentLatatLng = new LatLng(0.0, 0.0);
@@ -227,18 +248,10 @@ public class Activity_map extends Activity_base {
         return ss;
     }
 
-    boolean hasDrag = false;
-    boolean loaded = false;
 
     private void n() {
-        baiduMap.setOnMapLoadedCallback(new BaiduMap.OnMapLoadedCallback() {
-            @Override
-            public void onMapLoaded() {
-                loaded = true;
-            }
-        });
 
-        final MyLocationConfiguration.LocationMode locationMode = MyLocationConfiguration.LocationMode.FOLLOWING;
+        final LocationMode locationMode = FOLLOWING;
         baiduMap.setMyLocationConfigeration
                 (new MyLocationConfiguration(locationMode, true, null));
 
@@ -267,7 +280,6 @@ public class Activity_map extends Activity_base {
 
                     @Override
                     public void onGetReverseGeoCodeResult(ReverseGeoCodeResult reverseGeoCodeResult) {
-                        hasDrag = true;
                         locationBox.setProvince(reverseGeoCodeResult.getAddressDetail().province);
                         locationBox.setCity(reverseGeoCodeResult.getAddressDetail().city);
                         locationBox.setDistrict(reverseGeoCodeResult.getAddressDetail().district);
@@ -322,15 +334,34 @@ public class Activity_map extends Activity_base {
         return option;
     }
 
-    @OnClick(R.id.btn)
-    public void onClick() {
-        Intent i = new Intent();
-        i.putExtra("location", locationBox);
-        setResult(Activity_add_tree.ResultCode.REQUEST_CODE_REGION_RESULT, i);
-        if (locationBox.check()) {
-            finish();
-        } else {
-            showToast("未获取到地理位置的信息,请检查网络是否连接");
+    LocationMode mLocationMode;
+
+    @OnClick({R.id.btn, R.id.btn_mode})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.btn:
+                Intent i = new Intent();
+                i.putExtra("location", locationBox);
+                setResult(Activity_add_tree.ResultCode.REQUEST_CODE_REGION_RESULT, i);
+                if (locationBox.check()) {
+                    finish();
+                } else {
+                    showToast("未获取到地理位置的信息,请检查网络是否连接");
+                }
+                break;
+            case R.id.btn_mode:
+                switch (mLocationMode) {
+                    case FOLLOWING:
+                        mLocationMode = LocationMode.NORMAL;
+                        btnMode.setText("默认模式");
+                        break;
+                    case NORMAL:
+                        mLocationMode = FOLLOWING;
+                        btnMode.setText("跟随模式");
+                        break;
+                }
+                baiduMap.setMyLocationConfigeration(new MyLocationConfiguration(mLocationMode,true,mIconLocation));
+                break;
         }
     }
 
@@ -349,7 +380,8 @@ public class Activity_map extends Activity_base {
                 LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
                 activity_map.navigateTo(latLng);
 
-                if (!activity_map.hasDrag) {
+                if (activity_map.mLocationMode == FOLLOWING) {
+                    Log.i("listener", "onReceiveLocation: follow ing");
                     activity_map.locationBox.setProvince(location.getProvince());
                     activity_map.locationBox.setCity(location.getCity());
                     activity_map.locationBox.setDistrict(location.getDistrict());

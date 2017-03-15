@@ -1,12 +1,12 @@
 package com.xabaizhong.treemonistor.entity;
 
 import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Index;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.greenrobot.greendao.annotation.Generated;
@@ -18,63 +18,65 @@ import org.greenrobot.greendao.annotation.NotNull;
  * Created by admin on 2017/3/13.
  */
 @Entity(indexes = {
-        @Index(value = "id, treeId DESC", unique = true)
+        @Index(value = "id DESC", unique = true)
 })
 public class TreeTypeInfo {
     @Id
-    private long id;
-    private String treeId;
+    private Long id;
     private String ivst;
-    private String typeId;
+    private String typeId;  // 0 古树 1 古树群
     private String recoredPerson;
     private Date date;
     private String areaId;
-    @Expose
-    private long treeID;
-    @Expose
-    @ToOne(joinProperty = "treeID")
+    private long gsTree;// tree  id  属相  not  treeId
+
+    @ToOne(joinProperty = "gsTree")
     private Tree tree;
-    /** Used to resolve relations */
+
+    @ToOne(joinProperty = "gsTree")
+    private TreeGroup treeGroup;
+    /**
+     * Used to resolve relations
+     */
     @Generated(hash = 2040040024)
     private transient DaoSession daoSession;
-    /** Used for active entity operations. */
+    /**
+     * Used for active entity operations.
+     */
     @Generated(hash = 747255772)
     private transient TreeTypeInfoDao myDao;
-    @Generated(hash = 504113244)
-    private transient Long tree__resolvedKey;
 
-
-    @Generated(hash = 826155680)
-    public TreeTypeInfo(long id, String treeId, String ivst, String typeId,
-            String recoredPerson, Date date, String areaId, long treeID) {
+    @Generated(hash = 869834564)
+    public TreeTypeInfo(Long id, String ivst, String typeId, String recoredPerson,
+                        Date date, String areaId, long gsTree) {
         this.id = id;
-        this.treeId = treeId;
         this.ivst = ivst;
         this.typeId = typeId;
         this.recoredPerson = recoredPerson;
         this.date = date;
         this.areaId = areaId;
-        this.treeID = treeID;
+        this.gsTree = gsTree;
     }
 
     @Generated(hash = 1444053980)
     public TreeTypeInfo() {
     }
 
-    public long getId() {
+    @Generated(hash = 504113244)
+    private transient Long tree__resolvedKey;
+    @Generated(hash = 371016317)
+    private transient Long treeGroup__resolvedKey;
+
+    public String check() {
+        return null;
+    }
+
+    public Long getId() {
         return this.id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getTreeId() {
-        return this.treeId;
-    }
-
-    public void setTreeId(String treeId) {
-        this.treeId = treeId;
     }
 
     public String getIvst() {
@@ -117,18 +119,20 @@ public class TreeTypeInfo {
         this.areaId = areaId;
     }
 
-    public long getTreeID() {
-        return this.treeID;
+    public long getGsTree() {
+        return this.gsTree;
     }
 
-    public void setTreeID(long treeID) {
-        this.treeID = treeID;
+    public void setGsTree(long gsTree) {
+        this.gsTree = gsTree;
     }
 
-    /** To-one relationship, resolved on first access. */
-    @Generated(hash = 2005549894)
+    /**
+     * To-one relationship, resolved on first access.
+     */
+    @Generated(hash = 628870927)
     public Tree getTree() {
-        long __key = this.treeID;
+        long __key = this.gsTree;
         if (tree__resolvedKey == null || !tree__resolvedKey.equals(__key)) {
             final DaoSession daoSession = this.daoSession;
             if (daoSession == null) {
@@ -144,17 +148,57 @@ public class TreeTypeInfo {
         return tree;
     }
 
-    /** called by internal mechanisms, do not call yourself. */
-    @Generated(hash = 384253357)
+    /**
+     * called by internal mechanisms, do not call yourself.
+     */
+    @Generated(hash = 1396535806)
     public void setTree(@NotNull Tree tree) {
         if (tree == null) {
             throw new DaoException(
-                    "To-one property 'treeID' has not-null constraint; cannot set to-one to null");
+                    "To-one property 'gsTree' has not-null constraint; cannot set to-one to null");
         }
         synchronized (this) {
             this.tree = tree;
-            treeID = tree.getId();
-            tree__resolvedKey = treeID;
+            gsTree = tree.getId();
+            tree__resolvedKey = gsTree;
+        }
+    }
+
+    /**
+     * To-one relationship, resolved on first access.
+     */
+    @Generated(hash = 2078446062)
+    public TreeGroup getTreeGroup() {
+        long __key = this.gsTree;
+        if (treeGroup__resolvedKey == null
+                || !treeGroup__resolvedKey.equals(__key)) {
+            final DaoSession daoSession = this.daoSession;
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            TreeGroupDao targetDao = daoSession.getTreeGroupDao();
+            TreeGroup treeGroupNew = targetDao.load(__key);
+            synchronized (this) {
+                treeGroup = treeGroupNew;
+                treeGroup__resolvedKey = __key;
+            }
+        }
+        return treeGroup;
+    }
+
+    /**
+     * called by internal mechanisms, do not call yourself.
+     */
+    @Generated(hash = 1699931499)
+    public void setTreeGroup(@NotNull TreeGroup treeGroup) {
+        if (treeGroup == null) {
+            throw new DaoException(
+                    "To-one property 'gsTree' has not-null constraint; cannot set to-one to null");
+        }
+        synchronized (this) {
+            this.treeGroup = treeGroup;
+            gsTree = treeGroup.getId();
+            treeGroup__resolvedKey = gsTree;
         }
     }
 
@@ -192,6 +236,12 @@ public class TreeTypeInfo {
             throw new DaoException("Entity is detached from DAO context");
         }
         myDao.update(this);
+    }
+
+    public String stringDate(){
+        SimpleDateFormat sdf = new SimpleDateFormat();
+        sdf.applyPattern("yyyy-MM-dd");
+        return sdf.format(date);
     }
 
     /** called by internal mechanisms, do not call yourself. */

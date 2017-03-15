@@ -8,13 +8,18 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.google.gson.Gson;
 import com.xabaizhong.treemonistor.R;
 import com.xabaizhong.treemonistor.base.Activity_base;
 import com.xabaizhong.treemonistor.base.App;
+import com.xabaizhong.treemonistor.entity.DaoSession;
+import com.xabaizhong.treemonistor.entity.Pic;
+import com.xabaizhong.treemonistor.entity.PicDao;
 import com.xabaizhong.treemonistor.entity.Tree;
 import com.xabaizhong.treemonistor.entity.TreeDao;
 import com.xabaizhong.treemonistor.entity.TreeSpecial;
 import com.xabaizhong.treemonistor.entity.TreeTypeInfo;
+import com.xabaizhong.treemonistor.entity.TreeTypeInfoDao;
 import com.xabaizhong.treemonistor.myview.C_dialog_checkbox;
 import com.xabaizhong.treemonistor.myview.C_dialog_date;
 import com.xabaizhong.treemonistor.myview.C_dialog_radio;
@@ -26,6 +31,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -59,7 +65,7 @@ import static com.xabaizhong.treemonistor.activity.add_tree.Activity_add_tree.Re
  * Created by admin on 2017/2/28.
  */
 
-public class Activity_add_tree extends Activity_base implements View.OnClickListener {
+public class Activity_add_tree extends Activity_base {
     ArrayList<String> list;
     @BindView(R.id.tree_id)
     C_info_gather_item1 treeId;
@@ -132,7 +138,6 @@ public class Activity_add_tree extends Activity_base implements View.OnClickList
     @BindView(R.id.layout)
     CoordinatorLayout layout;
 
-    TreeDao treeDao;
     Tree tree = new Tree();
     TreeTypeInfo treeTypeInfo = new TreeTypeInfo();
     @BindView(R.id.grow_space)
@@ -307,15 +312,80 @@ public class Activity_add_tree extends Activity_base implements View.OnClickList
     @OnClick(R.id.btn)
     public void onClick() {
         fillTree();
-        if (tree.check() == null) {
+        String checkResult = check();
+        if (checkResult == null) {
             //deal with pic
+            saveTree();
+
+        } else {
+            showToast(checkResult);
         }
     }
+
+    String check() {
+
+        return null;
+
+    }
+
+
+
+    private void saveTree() {
+        initDao();
+        save();
+    }
+
+    private void save() {
+        tree.setId(null);
+        treeDao.save(tree);
+        long treeID = tree.getId();
+        if (list != null)
+            for (String string : list
+                    ) {
+                picDao.save(new Pic(null, treeID, string));
+            }
+        treeTypeInfo.setGsTree(treeID);
+        treeTypeInfo.setTypeId("0");
+        treeTypeInfoDao.save(treeTypeInfo);
+        check(treeTypeInfo.getId());
+    }
+
+    private void check(long id) {
+
+
+        List<TreeTypeInfo> list = treeTypeInfoDao.queryBuilder().where(TreeTypeInfoDao.Properties.Id.eq(id)).build().list();
+        for (TreeTypeInfo treeType : list
+                ) {
+            treeType.getTree();
+            Log.i(TAG, "check: " + (new Gson().toJson(treeType)));
+
+            Tree tree = treeType.getTree();
+            Log.d(TAG, "check: " + tree.getId() + "\t" + tree.getTreeId() + tree.getSmallName());
+            for (Pic pic : treeType.getTree().getPics()
+                    ) {
+                Log.i(TAG, "check: " + pic.getPath());
+            }
+        }
+    }
+
+    PicDao picDao;
+    TreeDao treeDao;
+    TreeTypeInfoDao treeTypeInfoDao;
+
+    private void initDao() {
+        DaoSession daoSession = ((App) getApplicationContext()).getDaoSession();
+        if (picDao == null)
+            picDao = daoSession.getPicDao();
+        if (treeDao == null)
+            treeDao = daoSession.getTreeDao();
+        if (treeTypeInfoDao == null)
+            treeTypeInfoDao = daoSession.getTreeTypeInfoDao();
+    }
+
 
     private void fillTree() {
         String id = treeId.getText();
         tree.setTreeId(id);
-        treeTypeInfo.setTreeId(id);
         treeTypeInfo.setIvst(tch.getText());
         treeTypeInfo.setRecoredPerson(tcr.getText());
 
@@ -392,6 +462,7 @@ public class Activity_add_tree extends Activity_base implements View.OnClickList
                 if (resultCode == REQUEST_CODE_CNAME_RESULT) {
                     TreeSpecial treeSpecial = data.getParcelableExtra("special");
                     tree.setTreeSpeID(treeSpecial.getCode() + "");
+                    tree.setTreeSpecialId(treeSpecial.getId());
                     cname.setText(treeSpecial.getCname());
                     alias.setText(treeSpecial.getAlias());
                 }
@@ -434,21 +505,6 @@ public class Activity_add_tree extends Activity_base implements View.OnClickList
 
     }
 
-    @Override
-    public void onClick(View v) {
-        /*switch (v.getId()) {
-            case R.id.tree_code:
-                // 古树编号
-                break;
-            case R.id.cname:
-                startActivityForResult(new Intent(this, Activity_map.class), REQUEST_CODE_REGION);
-                break;
-            case R.id.region:
-                //地区信息
-                startActivityForResult(new Intent(this, Activity_map.class), REQUEST_CODE_REGION);
-                break;
-        }*/
-    }
 
     String[] array;
 

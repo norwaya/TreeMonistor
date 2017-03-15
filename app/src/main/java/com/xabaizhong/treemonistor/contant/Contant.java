@@ -12,5 +12,6 @@ public interface Contant {
     }
     class KV{
         public static String FIRST_INIT = "first_init";
+        public static String USER = "user";
     }
 }

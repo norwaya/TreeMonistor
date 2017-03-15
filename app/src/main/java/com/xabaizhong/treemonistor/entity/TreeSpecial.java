@@ -7,6 +7,7 @@ import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Index;
 import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Unique;
 
 /**
  * Created by admin on 2017/3/13.
@@ -14,25 +15,49 @@ import org.greenrobot.greendao.annotation.Generated;
 @Entity(indexes = {
         @Index(value = "id DESC", unique = true)
 })
-public class TreeSpecial implements Parcelable{
+public class TreeSpecial implements Parcelable {
+
+    /* private int SpeID;
+     private String CHName;
+     private String Jianpin;
+     private String SpecialCode;
+     private String ENName;
+     private String Family;
+     private String ToFamily;
+     private String Belong;
+     private String Alias;
+     private String LatinName;
+     private String Explian;
+     private String TreeSpeID;
+     private int ReviewSta;
+     private String Memo;
+     private String Memo1;
+     private String Memo2;*/
     @Id
     private Long id;
     private String cname;
-    private int code;
+    private String jianPin;
+    private String code;
     private String enname;
     private String family;
     private String tofamily;
     private String belong;
     private String alias;
     private String latin;
-    private String remark;
+    private String explian;
+    @Index(unique = true)
+    private String treeSpecId;
+    private int ReviewSta;
 
-    @Generated(hash = 1965726077)
-    public TreeSpecial(Long id, String cname, int code, String enname,
-                       String family, String tofamily, String belong, String alias,
-                       String latin, String remark) {
+
+    @Generated(hash = 1047807236)
+    public TreeSpecial(Long id, String cname, String jianPin, String code,
+            String enname, String family, String tofamily, String belong,
+            String alias, String latin, String explian, String treeSpecId,
+            int ReviewSta) {
         this.id = id;
         this.cname = cname;
+        this.jianPin = jianPin;
         this.code = code;
         this.enname = enname;
         this.family = family;
@@ -40,23 +65,52 @@ public class TreeSpecial implements Parcelable{
         this.belong = belong;
         this.alias = alias;
         this.latin = latin;
-        this.remark = remark;
+        this.explian = explian;
+        this.treeSpecId = treeSpecId;
+        this.ReviewSta = ReviewSta;
     }
 
     @Generated(hash = 31977416)
     public TreeSpecial() {
     }
 
+
     protected TreeSpecial(Parcel in) {
+        id = in.readLong();
         cname = in.readString();
-        code = in.readInt();
+        jianPin = in.readString();
+        code = in.readString();
         enname = in.readString();
         family = in.readString();
         tofamily = in.readString();
         belong = in.readString();
         alias = in.readString();
         latin = in.readString();
-        remark = in.readString();
+        explian = in.readString();
+        treeSpecId = in.readString();
+        ReviewSta = in.readInt();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeString(cname);
+        dest.writeString(jianPin);
+        dest.writeString(code);
+        dest.writeString(enname);
+        dest.writeString(family);
+        dest.writeString(tofamily);
+        dest.writeString(belong);
+        dest.writeString(alias);
+        dest.writeString(latin);
+        dest.writeString(explian);
+        dest.writeString(treeSpecId);
+        dest.writeInt(ReviewSta);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public static final Creator<TreeSpecial> CREATOR = new Creator<TreeSpecial>() {
@@ -87,11 +141,19 @@ public class TreeSpecial implements Parcelable{
         this.cname = cname;
     }
 
-    public int getCode() {
+    public String getJianPin() {
+        return this.jianPin;
+    }
+
+    public void setJianPin(String jianPin) {
+        this.jianPin = jianPin;
+    }
+
+    public String getCode() {
         return this.code;
     }
 
-    public void setCode(int code) {
+    public void setCode(String code) {
         this.code = code;
     }
 
@@ -143,30 +205,31 @@ public class TreeSpecial implements Parcelable{
         this.latin = latin;
     }
 
-    public String getRemark() {
-        return this.remark;
+    public String getExplian() {
+        return this.explian;
     }
 
-    public void setRemark(String remark) {
-        this.remark = remark;
+    public void setExplian(String explian) {
+        this.explian = explian;
     }
 
-
-    @Override
-    public int describeContents() {
-        return 0;
+    public String getTreeSpecId() {
+        return this.treeSpecId;
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(cname);
-        dest.writeInt(code);
-        dest.writeString(enname);
-        dest.writeString(family);
-        dest.writeString(tofamily);
-        dest.writeString(belong);
-        dest.writeString(alias);
-        dest.writeString(latin);
-        dest.writeString(remark);
+    public void setTreeSpecId(String treeSpecId) {
+        this.treeSpecId = treeSpecId;
+    }
+
+    public int getReviewSta() {
+        return this.ReviewSta;
+    }
+
+    public void setReviewSta(int ReviewSta) {
+        this.ReviewSta = ReviewSta;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }

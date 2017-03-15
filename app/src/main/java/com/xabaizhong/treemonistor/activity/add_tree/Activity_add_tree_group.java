@@ -39,6 +39,7 @@ public class Activity_add_tree_group extends Activity_base  {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_add_group);
         init();
 
 

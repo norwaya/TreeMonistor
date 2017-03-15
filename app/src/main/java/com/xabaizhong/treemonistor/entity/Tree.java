@@ -1,10 +1,22 @@
 package com.xabaizhong.treemonistor.entity;
 
+import android.util.Log;
+
+import com.google.gson.annotations.Expose;
+
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Index;
+import org.greenrobot.greendao.annotation.OrderBy;
+import org.greenrobot.greendao.annotation.ToMany;
+import org.greenrobot.greendao.annotation.ToOne;
 import org.greenrobot.greendao.annotation.Unique;
 import org.greenrobot.greendao.annotation.Generated;
+
+import java.util.List;
+
+import org.greenrobot.greendao.DaoException;
+import org.greenrobot.greendao.annotation.NotNull;
 
 /**
  * Created by admin on 2017/3/2.
@@ -14,7 +26,7 @@ import org.greenrobot.greendao.annotation.Generated;
 })
 public class Tree {
     @Id
-    private long id;
+    private Long id;
 
     /* private String TreeId;     //古树编号  -----unique
      private String Ivst;     //调查号
@@ -59,7 +71,6 @@ public class Tree {
      private String Protected;     //地上保护现状
      private String Recovery;     //养护复壮现状
      private String Remark;  //备注*/
-    @Index(unique = true)
     private String treeId;  //id  √
     private String treeType;//古树标志
     private String treeArea;//农村  城市
@@ -69,8 +80,8 @@ public class Tree {
     private String smallName;//√
     private String ordinate;// longitude
     private String abscissa;//横坐标  纬度
-    private String specialCode; //树种代码
-    private String treeHeight;//
+    private String specialCode; //树种代码  specialCodeId
+    private String treeHeight; //
     private String treeDBH;//
     private String crownAvg;//
     private String crownEW;//
@@ -99,9 +110,30 @@ public class Tree {
     private String treeLevel;//等级
     private String treeStatus;//状态
 
+    private long treeSpecialId;
 
-    @Generated(hash = 1655488908)
-    public Tree(long id, String treeId, String treeType, String treeArea,
+    @ToOne(joinProperty = "treeSpecialId")
+    private TreeSpecial treeSpecial;
+
+    @Expose
+    @ToMany(referencedJoinProperty = "treeId")//treeId 指的是id  主键
+    @OrderBy("id ASC")
+    private List<Pic> pics;
+
+    /**
+     * Used to resolve relations
+     */
+    @Generated(hash = 2040040024)
+    private transient DaoSession daoSession;
+
+    /**
+     * Used for active entity operations.
+     */
+    @Generated(hash = 948839816)
+    private transient TreeDao myDao;
+
+    @Generated(hash = 1102234020)
+    public Tree(Long id, String treeId, String treeType, String treeArea,
                 String treeSpeID, String town, String village, String smallName,
                 String ordinate, String abscissa, String specialCode, String treeHeight,
                 String treeDBH, String crownAvg, String crownEW, String crownNS,
@@ -110,7 +142,8 @@ public class Tree {
                 String realAge, String guessAge, String evevation, String Aspect,
                 String Slope, String SlopePos, String Soil, String enviorFactor,
                 String specStatDesc, String specDesc, String explain, String protecte,
-                String recovery, String owner, String treeLevel, String treeStatus) {
+                String recovery, String owner, String treeLevel, String treeStatus,
+                long treeSpecialId) {
         this.id = id;
         this.treeId = treeId;
         this.treeType = treeType;
@@ -150,17 +183,18 @@ public class Tree {
         this.owner = owner;
         this.treeLevel = treeLevel;
         this.treeStatus = treeStatus;
+        this.treeSpecialId = treeSpecialId;
     }
 
     @Generated(hash = 439989092)
     public Tree() {
     }
 
-    public long getId() {
+    public Long getId() {
         return this.id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -468,10 +502,127 @@ public class Tree {
         this.treeStatus = treeStatus;
     }
 
-    public String check() {
-        if("".equals(treeId) || treeId.length() != 11 || !treeId.startsWith("610000"))
-            return "treeid error";
-
-        return null;
+    public long getTreeSpecialId() {
+        return this.treeSpecialId;
     }
+
+    public void setTreeSpecialId(long treeSpecialId) {
+        this.treeSpecialId = treeSpecialId;
+    }
+
+    @Generated(hash = 2091176287)
+    private transient Long treeSpecial__resolvedKey;
+
+    /**
+     * To-one relationship, resolved on first access.
+     */
+    @Generated(hash = 1272969414)
+    public TreeSpecial getTreeSpecial() {
+        long __key = this.treeSpecialId;
+        if (treeSpecial__resolvedKey == null
+                || !treeSpecial__resolvedKey.equals(__key)) {
+            final DaoSession daoSession = this.daoSession;
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            TreeSpecialDao targetDao = daoSession.getTreeSpecialDao();
+            TreeSpecial treeSpecialNew = targetDao.load(__key);
+            synchronized (this) {
+                treeSpecial = treeSpecialNew;
+                treeSpecial__resolvedKey = __key;
+            }
+        }
+        return treeSpecial;
+    }
+
+    /**
+     * called by internal mechanisms, do not call yourself.
+     */
+    @Generated(hash = 1668721663)
+    public void setTreeSpecial(@NotNull TreeSpecial treeSpecial) {
+        if (treeSpecial == null) {
+            throw new DaoException(
+                    "To-one property 'treeSpecialId' has not-null constraint; cannot set to-one to null");
+        }
+        synchronized (this) {
+            this.treeSpecial = treeSpecial;
+            treeSpecialId = treeSpecial.getId();
+            treeSpecial__resolvedKey = treeSpecialId;
+        }
+    }
+
+    /**
+     * To-many relationship, resolved on first access (and after reset).
+     * Changes to to-many relations are not persisted, make changes to the target entity.
+     */
+    @Generated(hash = 612066960)
+    public List<Pic> getPics() {
+        if (pics == null) {
+            final DaoSession daoSession = this.daoSession;
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            PicDao targetDao = daoSession.getPicDao();
+            List<Pic> picsNew = targetDao._queryTree_Pics(id);
+            synchronized (this) {
+                if (pics == null) {
+                    pics = picsNew;
+                }
+            }
+        }
+        return pics;
+    }
+
+    /**
+     * Resets a to-many relationship, making the next get call to query for a fresh result.
+     */
+    @Generated(hash = 582493596)
+    public synchronized void resetPics() {
+        pics = null;
+    }
+
+    /**
+     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#delete(Object)}.
+     * Entity must attached to an entity context.
+     */
+    @Generated(hash = 128553479)
+    public void delete() {
+        if (myDao == null) {
+            throw new DaoException("Entity is detached from DAO context");
+        }
+        myDao.delete(this);
+    }
+
+    /**
+     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#refresh(Object)}.
+     * Entity must attached to an entity context.
+     */
+    @Generated(hash = 1942392019)
+    public void refresh() {
+        if (myDao == null) {
+            throw new DaoException("Entity is detached from DAO context");
+        }
+        myDao.refresh(this);
+    }
+
+    /**
+     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#update(Object)}.
+     * Entity must attached to an entity context.
+     */
+    @Generated(hash = 713229351)
+    public void update() {
+        if (myDao == null) {
+            throw new DaoException("Entity is detached from DAO context");
+        }
+        myDao.update(this);
+    }
+
+
+    /** called by internal mechanisms, do not call yourself. */
+    @Generated(hash = 1935359770)
+    public void __setDaoSession(DaoSession daoSession) {
+        this.daoSession = daoSession;
+        myDao = daoSession != null ? daoSession.getTreeDao() : null;
+    }
+
 }

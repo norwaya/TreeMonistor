@@ -1,0 +1,88 @@
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
+
+        <android.support.v7.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:orientation="vertical">
+
+            <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+                android:id="@+id/tree_id"
+                style="@style/custom_edit_text_style"
+                app:input_type="number"
+                app:left_text="古树群编号"
+                app:mid_text_hint="古树群编号（标准GB/T 2260）"/>
+
+            <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+                android:id="@+id/research_persion"
+                style="@style/custom_edit_text_style"
+                app:left_text="调查人"
+                app:mid_text_hint="调查人"/>
+            <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+                android:id="@+id/research_date"
+                style="@style/custom_edit_text_style"
+                app:left_text="调查日期"
+                app:mid_text_hint="调查日期"
+                app:mid_type="read"/>
+            <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+                android:id="@+id/region"
+                style="@style/custom_edit_text_style"
+                app:left_text="地区信息"
+                app:mid_font_color="@android:color/holo_blue_dark"
+                app:mid_text_hint="省市县"
+                app:mid_type="read"/>
+
+            <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+                android:id="@+id/placeName"
+                style="@style/custom_edit_text_style"
+                app:left_text="详细信息"
+                app:mid_text_hint="[乡镇][村]街道"/>
+            <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+                android:id="@+id/evevation"
+                style="@style/custom_edit_text_style"
+                app:left_text="海拔"
+                app:input_type="number"
+                app:mid_text_hint="平均海拔（米）"/>
+
+            <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+                android:id="@+id/gSTreeNum"
+                style="@style/custom_edit_text_style"
+                app:left_text="古树数量"
+                app:mid_text_hint="古树数量"/>
+            <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+                android:id="@+id/mainTreeName"
+                style="@style/custom_edit_text_style"
+                app:left_text="主要树种"
+                app:mid_text_hint="主要树种"/>
+            <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+                android:id="@+id/szjx"
+                style="@style/custom_edit_text_style"
+                app:left_text="四至界限"
+                app:mid_text_hint="四至界限"/>
+            <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+                android:id="@+id/averageAge"
+                style="@style/custom_edit_text_style"
+                app:input_type="decimal"
+                app:left_text="树龄"
+                app:mid_text_hint="树龄（年）"/>
+
+            <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+                android:id="@+id/yBDInfo"
+                style="@style/custom_edit_text_style"
+                app:left_text="郁闭度"
+                app:mid_text_hint="郁闭度"/>
+        </android.support.v7.widget.LinearLayoutCompat>
+    </ScrollView>
+</android.support.design.widget.CoordinatorLayout>

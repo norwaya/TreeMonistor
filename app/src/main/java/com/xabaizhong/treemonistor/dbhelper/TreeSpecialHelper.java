@@ -10,6 +10,7 @@ import java.util.List;
 
 public class TreeSpecialHelper {
 
+
     private List<RECORDSBean> RECORDS;
 
     public List<RECORDSBean> getRECORDS() {
@@ -22,105 +23,173 @@ public class TreeSpecialHelper {
 
     public static class RECORDSBean {
         /**
-         * cname : 乔木树种
-         * code : 900
-         * enname :
-         * family :
-         * tofamily :
-         * belong :
-         * alias : 乔木树种
-         * latin :
-         * remark :
+         * SpeID : 1
+         * CHName : 乔木树种
+         * Jianpin : qmsz
+         * SpecialCode : 900
+         * ENName :
+         * Family :
+         * ToFamily :
+         * Belong :
+         * Alias : 乔木树种
+         * LatinName :
+         * Explian :
+         * TreeSpeID : T00001
+         * ReviewSta : 1
+         * Memo :
+         * Memo1 :
+         * Memo2 :
          */
 
-        private String cname;
-        private int code;
-        private String enname;
-        private String family;
-        private String tofamily;
-        private String belong;
-        private String alias;
-        private String latin;
-        private String remark;
+        private int SpeID;
+        private String CHName;
+        private String Jianpin;
+        private String SpecialCode;
+        private String ENName;
+        private String Family;
+        private String ToFamily;
+        private String Belong;
+        private String Alias;
+        private String LatinName;
+        private String Explian;
+        private String TreeSpeID;
+        private int ReviewSta;
+        private String Memo;
+        private String Memo1;
+        private String Memo2;
 
-        public TreeSpecial convertToEntity(){
-            TreeSpecial treeSpecial = new TreeSpecial();
-            /*(long id, String cname, String code, String enname,
-                    String family, String tofamily, String belong, String alias,
-                    String latin, String remark)*/
-            return new TreeSpecial(null,this.cname,this.code,this.enname,this.family,this.tofamily,this.tofamily,this.alias,this.latin,this.remark);
+        public int getSpeID() {
+            return SpeID;
         }
 
-        public String getCname() {
-            return cname;
+        public void setSpeID(int SpeID) {
+            this.SpeID = SpeID;
         }
 
-        public void setCname(String cname) {
-            this.cname = cname;
+        public String getCHName() {
+            return CHName;
         }
 
-        public int getCode() {
-            return code;
+        public void setCHName(String CHName) {
+            this.CHName = CHName;
         }
 
-        public void setCode(int code) {
-            this.code = code;
+        public String getJianpin() {
+            return Jianpin;
         }
 
-        public String getEnname() {
-            return enname;
+        public void setJianpin(String Jianpin) {
+            this.Jianpin = Jianpin;
         }
 
-        public void setEnname(String enname) {
-            this.enname = enname;
+        public String getSpecialCode() {
+            return SpecialCode;
+        }
+
+        public void setSpecialCode(String SpecialCode) {
+            this.SpecialCode = SpecialCode;
+        }
+
+        public String getENName() {
+            return ENName;
+        }
+
+        public void setENName(String ENName) {
+            this.ENName = ENName;
         }
 
         public String getFamily() {
-            return family;
+            return Family;
         }
 
-        public void setFamily(String family) {
-            this.family = family;
+        public void setFamily(String Family) {
+            this.Family = Family;
         }
 
-        public String getTofamily() {
-            return tofamily;
+        public String getToFamily() {
+            return ToFamily;
         }
 
-        public void setTofamily(String tofamily) {
-            this.tofamily = tofamily;
+        public void setToFamily(String ToFamily) {
+            this.ToFamily = ToFamily;
         }
 
         public String getBelong() {
-            return belong;
+            return Belong;
         }
 
-        public void setBelong(String belong) {
-            this.belong = belong;
+        public void setBelong(String Belong) {
+            this.Belong = Belong;
         }
 
         public String getAlias() {
-            return alias;
+            return Alias;
         }
 
-        public void setAlias(String alias) {
-            this.alias = alias;
+        public void setAlias(String Alias) {
+            this.Alias = Alias;
         }
 
-        public String getLatin() {
-            return latin;
+        public String getLatinName() {
+            return LatinName;
         }
 
-        public void setLatin(String latin) {
-            this.latin = latin;
+        public void setLatinName(String LatinName) {
+            this.LatinName = LatinName;
         }
 
-        public String getRemark() {
-            return remark;
+        public String getExplian() {
+            return Explian;
         }
 
-        public void setRemark(String remark) {
-            this.remark = remark;
+        public void setExplian(String Explian) {
+            this.Explian = Explian;
         }
+
+        public String getTreeSpeID() {
+            return TreeSpeID;
+        }
+
+        public void setTreeSpeID(String TreeSpeID) {
+            this.TreeSpeID = TreeSpeID;
+        }
+
+        public int getReviewSta() {
+            return ReviewSta;
+        }
+
+        public void setReviewSta(int ReviewSta) {
+            this.ReviewSta = ReviewSta;
+        }
+
+        public String getMemo() {
+            return Memo;
+        }
+
+        public void setMemo(String Memo) {
+            this.Memo = Memo;
+        }
+
+        public String getMemo1() {
+            return Memo1;
+        }
+
+        public void setMemo1(String Memo1) {
+            this.Memo1 = Memo1;
+        }
+
+        public String getMemo2() {
+            return Memo2;
+        }
+
+        public void setMemo2(String Memo2) {
+            this.Memo2 = Memo2;
+        }
+
+        public TreeSpecial convertToEntity() {
+            return new TreeSpecial(null, CHName, Jianpin, SpecialCode, ENName, Family, ToFamily, Belong, Alias, LatinName,
+                    Explian, TreeSpeID, ReviewSta);
+        }
+
     }
 }
