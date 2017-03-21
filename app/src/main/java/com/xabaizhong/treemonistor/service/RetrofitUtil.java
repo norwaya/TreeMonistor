@@ -2,6 +2,9 @@ package com.xabaizhong.treemonistor.service;
 
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.io.IOException;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
@@ -20,7 +23,8 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class RetrofitUtil {
     private static Retrofit retrofit;
-    private final static String url = "http://v.juhe.cn/";
+//    private final static String url = "http://v.juhe.cn/";
+    private final static String url = "http://192.168.0.168:8080/";
     public static Retrofit instance() {
         if (retrofit == null)
             synchronized (RetrofitUtil.class) {
@@ -35,10 +39,11 @@ public class RetrofitUtil {
      * @return
      */
     private static Retrofit getRetrofit() {
+        Gson gson = new GsonBuilder().setLenient().create();/////
         Retrofit.Builder builder = new Retrofit.Builder().baseUrl(url)
                 .client(client().build())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .addConverterFactory(ScalarsConverterFactory.create());
 
         return builder.build();

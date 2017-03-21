@@ -1,4 +1,4 @@
-package com.xabaizhong.treemonistor.activity;
+package com.xabaizhong.treemonistor.activity.query;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

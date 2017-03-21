@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.xabaizhong.treemonistor.activity.Activity_login2;
 import com.xabaizhong.treemonistor.contant.Contant;
+import com.xabaizhong.treemonistor.entity.User;
 
 import java.util.Set;
 
@@ -40,12 +41,21 @@ public class Activity_base extends AppCompatActivity {
             toast.setText(text);
         toast.show();
     }
-    protected boolean login_suc(){
-        Set<String> userSet = sharedPreferences.getStringSet(Contant.KV.USER,null);
-        if(userSet == null){
-           return false;
+
+    protected boolean login_suc() {
+        Set<String> userSet = sharedPreferences.getStringSet(Contant.KV.USER, null);
+        if (userSet == null) {
+            return false;
         }
         return true;
     }
 
+    protected void saveUser(User user) {
+        if (user == null)
+            return;
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("name", "");
+        editor.apply();
+        editor.commit();
+    }
 }

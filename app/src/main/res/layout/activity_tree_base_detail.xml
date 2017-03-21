@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:layout_margin="@dimen/activity_horizontal_margin"
+              android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:dividerPadding="1px"
+            android:showDividers="middle"
+            android:divider="@drawable/divider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+
+                android:id="@+id/layout_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:textSize="18dp"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:text="中文名"/>
+
+                <TextView
+                    android:textSize="18dp"
+                    android:id="@+id/cname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginStart="8dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_latin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:textSize="18dp"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:text="拉丁名"/>
+
+                <TextView
+                    android:textSize="18dp"
+                    android:id="@+id/latin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginStart="8dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_family"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:textSize="18dp"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:text="科"/>
+
+                <TextView
+                    android:textSize="18dp"
+                    android:id="@+id/family"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginStart="8dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_belong"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:textSize="18dp"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:text="属"/>
+
+                <TextView
+                    android:textSize="18dp"
+                    android:id="@+id/belong"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginStart="8dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_alias"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:textSize="18dp"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:text="别名"/>
+
+                <TextView
+                    android:textSize="18dp"
+                    android:id="@+id/alias"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginStart="8dp"/>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/layout_desc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:textSize="18dp"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:text="描述"/>
+
+                <TextView
+                    android:textSize="18dp"
+                    android:id="@+id/desc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginStart="8dp"/>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

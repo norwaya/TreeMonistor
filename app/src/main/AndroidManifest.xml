@@ -34,8 +34,10 @@
     <application
         android:name=".base.App"
         android:allowBackup="true"
+        android:hardwareAccelerated="false"
         android:icon="@mipmap/rose"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <meta-data
@@ -58,7 +60,7 @@
             android:label="tree_add"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".activity.Activity_query"
+            android:name=".activity.query.Activity_query"
             android:label="query"
             android:screenOrientation="portrait">
         </activity>
@@ -76,11 +78,6 @@
             android:configChanges="orientation|screenSize"
             android:label="@string/image_selector"
             android:screenOrientation="portrait"/>
-        <activity
-            android:name=".activity.SettingsActivity"
-            android:label="@string/title_activity_settings"
-            android:screenOrientation="portrait">
-        </activity>
         <activity
             android:name=".activity.Activity_login"
             android:label="login"
@@ -118,6 +115,37 @@
             android:name=".activity.Activity_login2"
             android:label="@string/title_activity_login2"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.add_tree.Activity_add_tree_group"
+            android:label="tree-group"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.base_data.Activity_tree_base"
+            android:label="树种信息查询"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+        <activity
+            android:name=".activity.base_data.Activity_tree_base_detail"
+            android:label="树种信息"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.base_data.Activity_base_pest"
+            android:label="pest"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.base_data.Activity_base_pest_detail"
+            android:label="pest-info"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.base_data.Activity_base_weakness"
+            android:label="weaknewss"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.base_data.Activity_base_weakness_detail"
+            android:label="weaknewss"
+            android:screenOrientation="portrait"/>
+
+
         <!-- service -->
         <service
             android:name="com.baidu.location.f"
@@ -128,7 +156,16 @@
                 </action>
             </intent-filter>
         </service>
-
+        <service android:name=".service.service_notice.NoticeService">
+            <intent-filter>
+                <action android:name="monitor-service"/>
+            </intent-filter>
+        </service>
+        <receiver android:name=".service.service_notice.NoticeBroadCast">
+            <intent-filter>
+                <action android:name="monitor-receiver"/>
+            </intent-filter>
+        </receiver>
 
     </application>
 

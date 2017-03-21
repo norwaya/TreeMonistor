@@ -42,7 +42,7 @@ public class Activity_add_manage extends Activity_base implements AdapterView.On
     }
 
 
-    @Override
+   /* @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_activity_add_manager, menu);
         return super.onCreateOptionsMenu(menu);
@@ -62,7 +62,7 @@ public class Activity_add_manage extends Activity_base implements AdapterView.On
                 break;
         }
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 
 
 

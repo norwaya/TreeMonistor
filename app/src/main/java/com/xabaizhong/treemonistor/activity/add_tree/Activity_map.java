@@ -342,7 +342,7 @@ public class Activity_map extends Activity_base {
             case R.id.btn:
                 Intent i = new Intent();
                 i.putExtra("location", locationBox);
-                setResult(Activity_add_tree.ResultCode.REQUEST_CODE_REGION_RESULT, i);
+                setResult(100, i);
                 if (locationBox.check()) {
                     finish();
                 } else {
@@ -389,6 +389,7 @@ public class Activity_map extends Activity_base {
                     activity_map.locationBox.setSematicDescription(location.getLocationDescribe());
                     activity_map.locationBox.setLat(location.getLatitude());
                     activity_map.locationBox.setLon(location.getLongitude());
+                    location.getAltitude();
                 }
             }
             activity_map.baiduLog(location);

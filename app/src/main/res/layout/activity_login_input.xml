@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/activity_horizontal_margin"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/login_bound_top"
+        android:gravity="center_vertical"
+        android:padding="5dp"
+        >
+
+        <RelativeLayout
+            android:id="@+id/center"
+            android:layout_width="match_parent"
+            android:layout_height="0dp">
+
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/iv_area"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:scaleType="fitCenter"
+            android:src="@drawable/region"/>
+
+        <ImageView
+            android:id="@+id/iv_area_close"
+            android:layout_width="30dp"
+            android:layout_height="18dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:scaleType="fitCenter"
+            android:src="@drawable/close"/>
+
+        <EditText
+            android:id="@+id/area"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:background="@android:color/transparent"
+            android:hint="地区行政编号"
+            android:layout_toEndOf="@+id/iv_area"
+            android:layout_toStartOf="@+id/iv_area_close"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/login_bound_mid"
+        android:gravity="center_vertical"
+        android:padding="5dp"
+        >
+
+        <ImageView
+            android:id="@+id/iv_pwd"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:scaleType="fitCenter"
+            android:src="@drawable/username"/>
+
+        <ImageView
+            android:id="@+id/iv_name_close"
+            android:layout_width="30dp"
+            android:layout_height="18dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:scaleType="fitCenter"
+            android:src="@drawable/close"/>
+
+        <EditText
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/iv_pwd"
+            android:layout_toStartOf="@id/iv_name_close"
+            android:background="@android:color/transparent"
+            android:hint="用户名"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/login_bound_bottom"
+        android:gravity="center_vertical"
+        android:padding="5dp"
+        >
+
+        <ImageView
+            android:id="@+id/iv_name"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:scaleType="fitCenter"
+            android:src="@drawable/pwd"/>
+
+        <ImageView
+            android:id="@+id/iv_eye"
+            android:layout_width="30dp"
+            android:layout_height="18dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:scaleType="fitCenter"
+            android:src="@drawable/eye_close"/>
+
+        <EditText
+            android:inputType="textPassword"
+            android:id="@+id/pwd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/iv_name"
+            android:layout_toStartOf="@id/iv_eye"
+            android:background="@android:color/transparent"
+            android:hint="密码"/>
+
+    </RelativeLayout>
+
+
+
+
+</LinearLayout>

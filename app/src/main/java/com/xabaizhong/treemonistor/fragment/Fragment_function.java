@@ -2,6 +2,7 @@ package com.xabaizhong.treemonistor.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -9,13 +10,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
 import com.xabaizhong.treemonistor.R;
 import com.xabaizhong.treemonistor.activity.add_tree.Activity_add_manage;
 import com.xabaizhong.treemonistor.activity.Activity_monitor;
-import com.xabaizhong.treemonistor.activity.Activity_query;
+import com.xabaizhong.treemonistor.activity.query.Activity_query;
 import com.xabaizhong.treemonistor.activity.base_data.Activity_base_data;
 import com.xabaizhong.treemonistor.base.Fragment_base;
 
@@ -49,8 +51,14 @@ public class Fragment_function extends Fragment_base implements AdapterView.OnIt
     }
 
     private void initView() {
-        contentArray = mContext.getResources().getStringArray(R.array.function_array);
-        View view = LayoutInflater.from(mContext).inflate(R.layout.fragment_function_header, null);
+       contentArray = mContext.getResources().getStringArray(R.array.function_array);
+         View view = LayoutInflater.from(mContext).inflate(R.layout.fragment_function_header, lv,false);
+        ImageView iv = (ImageView) view.findViewById(R.id.iv);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            iv.setImageDrawable(mContext.getDrawable(R.drawable.tree_header));
+        }else{
+            iv.setImageDrawable(getResources().getDrawable(R.drawable.tree_header));
+        }
         lv.addHeaderView(view);
         lv.setAdapter(new SimpleAdapter(getContext(), getList(), R.layout.fragment_function_list_item, new String[]{"image", "name"}, new int[]{R.id.iv, R.id.text1}));
         lv.setOnItemClickListener(this);

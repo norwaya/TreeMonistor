@@ -31,10 +31,10 @@ public class TreeTypeInfo {
     private long gsTree;// tree  id  属相  not  treeId
 
     @ToOne(joinProperty = "gsTree")
-    private Tree tree;
+    public Tree tree;
 
     @ToOne(joinProperty = "gsTree")
-    private TreeGroup treeGroup;
+    public TreeGroup treeGroup;
     /**
      * Used to resolve relations
      */
@@ -238,7 +238,7 @@ public class TreeTypeInfo {
         myDao.update(this);
     }
 
-    public String stringDate(){
+    public String stringDate() {
         SimpleDateFormat sdf = new SimpleDateFormat();
         sdf.applyPattern("yyyy-MM-dd");
         return sdf.format(date);
@@ -250,5 +250,6 @@ public class TreeTypeInfo {
         this.daoSession = daoSession;
         myDao = daoSession != null ? daoSession.getTreeTypeInfoDao() : null;
     }
+
 
 }

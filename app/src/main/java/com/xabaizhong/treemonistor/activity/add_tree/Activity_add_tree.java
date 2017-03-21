@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.xabaizhong.treemonistor.R;
 import com.xabaizhong.treemonistor.base.Activity_base;
 import com.xabaizhong.treemonistor.base.App;
@@ -24,8 +25,11 @@ import com.xabaizhong.treemonistor.myview.C_dialog_checkbox;
 import com.xabaizhong.treemonistor.myview.C_dialog_date;
 import com.xabaizhong.treemonistor.myview.C_dialog_radio;
 import com.xabaizhong.treemonistor.myview.C_info_gather_item1;
+import com.xabaizhong.treemonistor.utils.FileUtil;
 import com.xabaizhong.treemonistor.utils.MessageEvent;
 import com.xabaizhong.treemonistor.utils.RxBus;
+import com.xabaizhong.treemonistor.utils.ScaleBitmap;
+import com.xabaizhong.treemonistor.utils.TreeGroupOp;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -36,8 +40,13 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 import me.nereo.multi_image_selector.MultiImageSelector;
 import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 
@@ -315,11 +324,55 @@ public class Activity_add_tree extends Activity_base {
         String checkResult = check();
         if (checkResult == null) {
             //deal with pic
-            saveTree();
-
+//            saveTree();
+            upload();
         } else {
             showToast(checkResult);
         }
+    }
+
+    private void upload() {
+
+        io.reactivex.Observer<Object> observer = new io.reactivex.Observer<Object>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(Object value) {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+                TreeGroupOp.Instance().setFiles(FileUtil.getFiles())
+                        .setJson(json)
+                        .op();
+            }
+        };
+
+        Observable.create(new ObservableOnSubscribe<Object>() {
+            @Override
+            public void subscribe(ObservableEmitter<Object> e) throws Exception {
+                FileUtil.clearFileDir();
+                if (list != null)
+                    for (int i = 0; i < list.size(); i++) {
+                        Log.i(TAG, "subscribe: image"+i);
+                        ScaleBitmap.getBitmap(list.get(i),"image"+i+".png");
+                        Log.i(TAG, "subscribe: complete"+i);
+                    }
+                e.onComplete();
+                Log.i(TAG, "subscribe: over");
+            }
+        }).observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(observer);
     }
 
     String check() {
@@ -382,14 +435,13 @@ public class Activity_add_tree extends Activity_base {
             treeTypeInfoDao = daoSession.getTreeTypeInfoDao();
     }
 
-
+    String json;
     private void fillTree() {
         String id = treeId.getText();
         tree.setTreeId(id);
         treeTypeInfo.setIvst(tch.getText());
         treeTypeInfo.setRecoredPerson(tcr.getText());
 
-        //
         tree.setTreeHeight(height.getText());
         tree.setTreeDBH(dbh.getText());
         String strCrownEW = crownEW.getText();
@@ -407,6 +459,9 @@ public class Activity_add_tree extends Activity_base {
         tree.setEnviorFactor(environmentFactor.getText());
         tree.setSpecStatDesc(specStatDesc.getText());
         tree.setSpecDesc(specDesc.getText());
+        treeTypeInfo.tree = tree;
+        json = new GsonBuilder().setDateFormat("yyyy-MM-dd%20HH:mm:ss").create().toJson(treeTypeInfo);
+        Log.i(TAG, "fillTree: "+json);
     }
 
     private void computeCrownAvg(String ew, String ns) {
@@ -446,7 +501,7 @@ public class Activity_add_tree extends Activity_base {
                     pic.setText(list.size() + "");
                 }
             case REQUEST_CODE_REGION:
-                if (resultCode == ResultCode.REQUEST_CODE_REGION_RESULT) {
+                if (resultCode == 100) {
                     Activity_map.LocationBox box = data.getParcelableExtra("location");
                     if (box != null) {
                         region.setText(box.getProvince() + box.getCity() + box.getDistrict());

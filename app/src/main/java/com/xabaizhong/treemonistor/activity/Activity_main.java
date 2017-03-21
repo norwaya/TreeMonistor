@@ -1,9 +1,13 @@
 package com.xabaizhong.treemonistor.activity;
 
 import android.Manifest;
+import android.content.ComponentName;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
@@ -22,6 +26,7 @@ import com.xabaizhong.treemonistor.fragment.Fragment_function;
 import com.xabaizhong.treemonistor.fragment.Fragment_news;
 import com.xabaizhong.treemonistor.fragment.Fragment_setting;
 import com.xabaizhong.treemonistor.myview.MyRadio;
+import com.xabaizhong.treemonistor.service.service_notice.NoticeBroadCast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,11 +59,12 @@ public class Activity_main extends Activity_base implements MyRadio.OnRadioCheck
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         initSource();
-
     }
 
 
+
     int REQEUST_CODE_WRITER = 0x100;
+
 
     /**
      * 请求所需要的权限
@@ -107,7 +113,6 @@ public class Activity_main extends Activity_base implements MyRadio.OnRadioCheck
 
     }
 
-
     public void showFragment(int id) {
         FragmentManager fm = getSupportFragmentManager();
         Log.d(TAG, "showFragment: ");
@@ -124,6 +129,7 @@ public class Activity_main extends Activity_base implements MyRadio.OnRadioCheck
         ft.commitAllowingStateLoss();
 
     }
+
 
     public void switchPage(int id) {
         if (CHECKED_RADIO_ID == id)
@@ -144,7 +150,6 @@ public class Activity_main extends Activity_base implements MyRadio.OnRadioCheck
         }
         CHECKED_RADIO_ID = id;
     }
-
 
     @OnClick({R.id.tab_news, R.id.tab_function, R.id.tab_expert, R.id.tab_setting})
     public void onClick(MyRadio view) {
@@ -174,6 +179,7 @@ public class Activity_main extends Activity_base implements MyRadio.OnRadioCheck
         CHECKED_RADIO_ID = view.getId();
     }
 
+
     @Override
     public void checked(int page) {
         switch (page) {
@@ -192,8 +198,9 @@ public class Activity_main extends Activity_base implements MyRadio.OnRadioCheck
         }
     }
 
-
     static class FragmentHolder {
+
+
         //        final static int NEWS = 0;
 //        final static int FUNCTION = 1;
 //        final static int EXPERT = 2;
@@ -209,6 +216,7 @@ public class Activity_main extends Activity_base implements MyRadio.OnRadioCheck
             fragment_function = null;
             fragment_setting = null;
         }
+
     }
 
     private Fragment getFragment(@IdRes int fragment, FragmentTransaction ft) {
@@ -277,16 +285,20 @@ public class Activity_main extends Activity_base implements MyRadio.OnRadioCheck
     long date = 0;
 
     private void ifClose() {
-        Log.d(TAG, "ifClose: "+date +"\t"+System.nanoTime()+"\t"+(System.nanoTime() - date)+"\t"+2e6d);
+        Log.d(TAG, "ifClose: " + date + "\t" + System.nanoTime() + "\t" + (System.nanoTime() - date) + "\t" + 2e6d);
         if ((System.nanoTime() - date) < 2e9d) {
             Log.d(TAG, "ifClose: ");
             finish();
         } else {
             date = System.nanoTime();
-            Snackbar.make(layout,getString(R.string.close_app),Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(layout, getString(R.string.close_app), Snackbar.LENGTH_SHORT).show();
         }
 
     }
+
+
+
+
 
     @Override
     public void onBackPressed() {

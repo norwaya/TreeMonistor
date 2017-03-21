@@ -1,5 +1,6 @@
 package com.xabaizhong.treemonistor.contant;
 
+
 /**
  * Created by admin on 2017/3/7.
  */
@@ -13,5 +14,6 @@ public interface Contant {
     class KV{
         public static String FIRST_INIT = "first_init";
         public static String USER = "user";
+        public static String NOTICE_PUSH = "notice_push";
     }
 }

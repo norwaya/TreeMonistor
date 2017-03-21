@@ -18,15 +18,22 @@ import com.xabaizhong.treemonistor.R;
 import com.xabaizhong.treemonistor.base.Activity_base;
 import com.xabaizhong.treemonistor.base.App;
 import com.xabaizhong.treemonistor.dbhelper.AreaCodeHelper;
+import com.xabaizhong.treemonistor.dbhelper.PestHelper;
 import com.xabaizhong.treemonistor.dbhelper.TreeSpecialHelper;
+import com.xabaizhong.treemonistor.dbhelper.WeaknessHelper;
 import com.xabaizhong.treemonistor.entity.AreaCode;
 import com.xabaizhong.treemonistor.entity.AreaCodeDao;
+import com.xabaizhong.treemonistor.entity.Pest;
+import com.xabaizhong.treemonistor.entity.PestClass;
+import com.xabaizhong.treemonistor.entity.PestClassDao;
+import com.xabaizhong.treemonistor.entity.PestDao;
 import com.xabaizhong.treemonistor.entity.TreeSpecial;
 import com.xabaizhong.treemonistor.entity.TreeSpecialDao;
+import com.xabaizhong.treemonistor.entity.Weakness;
+import com.xabaizhong.treemonistor.entity.WeaknessDao;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
@@ -42,6 +49,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 import static com.xabaizhong.treemonistor.contant.Contant.KV.FIRST_INIT;
+import static com.xabaizhong.treemonistor.contant.Contant.KV.NOTICE_PUSH;
 
 /**
  * Created by admin on 2017/3/3.
@@ -54,10 +62,13 @@ public class Activity_welcome extends Activity_base {
     @BindView(R.id.activity_welcome_btn)
     Button btn;
 
-    final static int SECOND = 1;
+    final static int SECOND = 6;
 
     TreeSpecialDao treeSpecialDao;
     AreaCodeDao areaCodeDao;
+    PestDao pestDao;
+    PestClassDao pestClassDao;
+    WeaknessDao weaknessDao;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -130,7 +141,8 @@ public class Activity_welcome extends Activity_base {
 
             @Override
             public void onComplete() {
-                if (login_suc()) {
+//                if (login_suc()) {
+                if (true) {
                     startActivity(new Intent(Activity_welcome.this, Activity_main.class));
                 } else {
                     startActivity(new Intent(Activity_welcome.this, Activity_login2.class));
@@ -173,19 +185,35 @@ public class Activity_welcome extends Activity_base {
             return;
         initDao();
         clearDB();
-        wirteTreeSpecial("treeSpecial.txt");
-        wirteAreaCode("areaCode.txt");
+        Log.i(TAG, "initDB: begin init db");
+        writeTreeSpecial("treeSpecial.json");
+        Log.i(TAG, "initDB: 1");
+        writeAreaCode("areaCode.json");
+        Log.i(TAG, "initDB: 2");
+        writePest("pest_classify.json");
+        Log.i(TAG, "initDB: 3");
+        writePestClass();
+        Log.i(TAG, "initDB: 1");
+        writeWeakness("illness.json");
+        Log.i(TAG, "initDB: 4");
         writeToShare();
+        Log.d(TAG, "initDB: writer db complete");
     }
 
     private void initDao() {
         treeSpecialDao = ((App) getApplicationContext()).getDaoSession().getTreeSpecialDao();
         areaCodeDao = ((App) getApplicationContext()).getDaoSession().getAreaCodeDao();
+        pestClassDao = ((App) getApplicationContext()).getDaoSession().getPestClassDao();
+        pestDao = ((App) getApplicationContext()).getDaoSession().getPestDao();
+        weaknessDao = ((App) getApplicationContext()).getDaoSession().getWeaknessDao();
     }
 
     private void clearDB() {
         treeSpecialDao.queryBuilder().build().list().clear();
         areaCodeDao.queryBuilder().build().list().clear();
+        pestClassDao.queryBuilder().build().list().clear();
+        pestDao.queryBuilder().build().list().clear();
+        weaknessDao.queryBuilder().build().list().clear();
 
     }
 
@@ -196,7 +224,7 @@ public class Activity_welcome extends Activity_base {
         return !sharedPreferences.getBoolean(FIRST_INIT, true);
     }
 
-    private void wirteTreeSpecial(String file) {
+    private void writeTreeSpecial(String file) {
         String json = getAssetFile(file);
         TreeSpecialHelper treeHelper = new Gson().fromJson(json, TreeSpecialHelper.class);
         TreeSpecial treeSpecial;
@@ -208,7 +236,7 @@ public class Activity_welcome extends Activity_base {
         treeSpecialDao.saveInTx(treeSpecialList);
     }
 
-    private void wirteAreaCode(String file) {
+    private void writeAreaCode(String file) {
         String json = getAssetFile(file);
         AreaCodeHelper areaCodeHelper = new Gson().fromJson(json, AreaCodeHelper.class);
         AreaCode areaCode;
@@ -218,6 +246,41 @@ public class Activity_welcome extends Activity_base {
             treeSpecialList.add(areaCode);
         }
         areaCodeDao.saveInTx(treeSpecialList);
+    }
+
+    private void writePest(String file) {
+        String json = getAssetFile(file);
+        PestHelper pestHelper = new Gson().fromJson(json, PestHelper.class);
+        Pest pest;
+        ArrayList<Pest> pestList = new ArrayList<>();
+        for (PestHelper.RECORDSBean bean : pestHelper.getRECORDS()) {
+            pest = bean.toPest();
+            pestList.add(pest);
+        }
+        pestDao.saveInTx(pestList);
+    }
+
+    private void writeWeakness(String file) {
+        String json = getAssetFile(file);
+        WeaknessHelper weaknessHelper = new Gson().fromJson(json, WeaknessHelper.class);
+        ArrayList<Weakness> weakList = new ArrayList<>();
+        for (WeaknessHelper.RECORDSBean bean : weaknessHelper.getRECORDS()) {
+            weakList.add(bean.toWeakness());
+        }
+        weaknessDao.saveInTx(weakList);
+    }
+
+    private void writePestClass() {
+       /* 食叶性害虫	1
+        刺吸性害虫	2
+        蛀食性害虫	3
+        食根性害虫	4*/
+        String[] array = {"食叶性害虫", "刺吸性害虫", "蛀食性害虫", "食根性害虫"};
+        ArrayList<PestClass> pestClassList = new ArrayList<>();
+        for (int i = 0; i < array.length; i++) {
+            pestClassList.add(new PestClass(null, (i + 1), array[i]));
+        }
+        pestClassDao.saveInTx(pestClassList);
     }
 
     private String getAssetFile(String file) {
@@ -234,6 +297,7 @@ public class Activity_welcome extends Activity_base {
     void writeToShare() {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(FIRST_INIT, false);
+        editor.putBoolean(NOTICE_PUSH, true);
         editor.apply();
         editor.commit();
         Log.i(TAG, "initDB: " + sharedPreferences.getBoolean(FIRST_INIT, true));

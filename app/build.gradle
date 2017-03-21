@@ -66,4 +66,6 @@ dependencies {
     compile 'org.greenrobot:greendao:3.2.0'
     compile files('libs/BaiduLBS_Android.jar')
     compile files('libs/baidumapapi_search_v4_2_1.jar')
+
+    compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha2'
 }

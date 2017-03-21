@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">tree-monitor</string>
+    <string name="app_name">古树监测</string>
     <string name="http_url">http://192.168.1.1</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
