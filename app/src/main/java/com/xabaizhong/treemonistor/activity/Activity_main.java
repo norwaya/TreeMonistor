@@ -1,8 +1,12 @@
 package com.xabaizhong.treemonistor.activity;
 
 import android.Manifest;
+import android.app.Notification;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -26,7 +30,6 @@ import com.xabaizhong.treemonistor.fragment.Fragment_function;
 import com.xabaizhong.treemonistor.fragment.Fragment_news;
 import com.xabaizhong.treemonistor.fragment.Fragment_setting;
 import com.xabaizhong.treemonistor.myview.MyRadio;
-import com.xabaizhong.treemonistor.service.service_notice.NoticeBroadCast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +37,13 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static com.xabaizhong.treemonistor.activity.Activity_main.ReceiveConstant.RECEIVER_ACTION;
+import static com.xabaizhong.treemonistor.activity.Activity_main.ReceiveConstant.RECEIVER_INTENT;
+import static com.xabaizhong.treemonistor.activity.Activity_main.ReceiveConstant.RECEIVER_INTENT_BIND_SERVICE;
+import static com.xabaizhong.treemonistor.activity.Activity_main.ReceiveConstant.RECEIVER_INTENT_UNBIND_SERVICE;
+import static com.xabaizhong.treemonistor.activity.Activity_main.ReceiveConstant.SERVICE_ACTION;
+import static com.xabaizhong.treemonistor.contant.Contant.KV.NOTICE_PUSH;
 
 public class Activity_main extends Activity_base implements MyRadio.OnRadioCheckedListenter {
     final static int FRAGMENT_SIZE = 4;
@@ -60,7 +70,6 @@ public class Activity_main extends Activity_base implements MyRadio.OnRadioCheck
         ButterKnife.bind(this);
         initSource();
     }
-
 
 
     int REQEUST_CODE_WRITER = 0x100;
@@ -109,8 +118,22 @@ public class Activity_main extends Activity_base implements MyRadio.OnRadioCheck
         }
 //        tabNews.setChecked(true);
 //        showFragment(R.id.tab_news);
+        initReceiver();
 
-
+    }
+    NoticeBroadCast noticeBroadCast;
+    private void initReceiver() {
+         noticeBroadCast = new NoticeBroadCast();
+        IntentFilter intneFilter = new IntentFilter();
+        intneFilter.addAction(RECEIVER_ACTION);
+        registerReceiver(noticeBroadCast, intneFilter);
+        boolean noticeS = sharedPreferences.getBoolean(NOTICE_PUSH, true);
+        if (noticeS) {
+            Intent i = new Intent();
+            i.setAction(RECEIVER_ACTION);
+            i.putExtra(RECEIVER_INTENT, RECEIVER_INTENT_BIND_SERVICE);
+            sendBroadcast(i);
+        }
     }
 
     public void showFragment(int id) {
@@ -297,9 +320,6 @@ public class Activity_main extends Activity_base implements MyRadio.OnRadioCheck
     }
 
 
-
-
-
     @Override
     public void onBackPressed() {
         ifClose();
@@ -309,7 +329,87 @@ public class Activity_main extends Activity_base implements MyRadio.OnRadioCheck
     protected void onDestroy() {
         Log.d(TAG, "onDestroy: ");
         closeFragment();
+        if (noticeBroadCast != null) {
+            unregisterReceiver(noticeBroadCast);
+        }
         super.onDestroy();
+    }
+
+    /**
+     * Created by admin on 2017/3/21.
+     */
+
+    public class NoticeBroadCast extends BroadcastReceiver {
+        String TAG = "NoticeBroadCast";
+        Context context;
+        boolean first = true;
+
+        public NoticeBroadCast() {
+
+        }
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(RECEIVER_ACTION)) {
+                this.context = context;
+                initSercice();
+                String str = intent.getStringExtra(RECEIVER_INTENT);
+                if (str != null)
+                    switch (str) {
+                        case RECEIVER_INTENT_BIND_SERVICE:
+                            bindService();
+                            break;
+                        case RECEIVER_INTENT_UNBIND_SERVICE:
+                            unbindService();
+                            break;
+                    }
+            }
+        }
+
+        Intent serviceIntent;
+        ServiceConnection serviceConn;
+
+        private void initSercice() {
+            if (!first) {
+                return;
+            }
+            serviceIntent = new Intent();
+            serviceIntent.setPackage(getPackageName());
+            serviceIntent.setAction(SERVICE_ACTION);
+            serviceConn = new ServiceConnection() {
+                @Override
+                public void onServiceConnected(ComponentName name, IBinder service) {
+                    Log.i(TAG, "onServiceConnected: ");
+                }
+
+                @Override
+                public void onServiceDisconnected(ComponentName name) {
+                    Log.i(TAG, "onServiceDisconnected: ");
+                }
+            };
+            first = false;
+        }
+
+        private void bindService() {
+            Activity_main.this.bindService(serviceIntent, serviceConn, BIND_AUTO_CREATE);
+            Log.d(TAG, "bindService: ");
+        }
+
+        private void unbindService() {
+            Activity_main.this.unbindService(serviceConn);
+            Log.d(TAG, "unbindService: ");
+        }
+
+
+    }
+
+    public interface ReceiveConstant {
+        String SERVICE_ACTION = "monitor_notice_service";
+        String RECEIVER_ACTION = "monitor_notice_receiver";
+        String RECEIVER_INTENT = "receiver-intent";
+        String RECEIVER_INTENT_BIND_SERVICE = "bind-service";
+        String RECEIVER_INTENT_UNBIND_SERVICE = "unbind-service";
+
     }
 }
 

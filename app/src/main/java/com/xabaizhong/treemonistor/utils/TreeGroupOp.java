@@ -51,7 +51,7 @@ public class TreeGroupOp {
     Map<String, RequestBody> map;
 
     public TreeGroupOp setFiles(List<File> list) {
-        packFile(list);
+//        packFile(list);
         return this;
     }
 

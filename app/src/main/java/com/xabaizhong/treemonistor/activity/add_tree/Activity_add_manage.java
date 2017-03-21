@@ -9,9 +9,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
+import com.squareup.picasso.Picasso;
 import com.xabaizhong.treemonistor.R;
 import com.xabaizhong.treemonistor.base.Activity_base;
 
@@ -65,9 +67,6 @@ public class Activity_add_manage extends Activity_base implements AdapterView.On
     }*/
 
 
-
-
-
     int size;
 
     @Override
@@ -78,9 +77,14 @@ public class Activity_add_manage extends Activity_base implements AdapterView.On
 
 
     String[] contentArray;
+
     private void initView() {
         contentArray = getResources().getStringArray(R.array.add_tree_list);
         View view = LayoutInflater.from(this).inflate(R.layout.fragment_function_header, null);
+        ImageView iv = (ImageView) view.findViewById(R.id.iv);
+        Picasso.with(this)
+                .load(R.drawable.tree_header)
+                .into(iv);
         lv.addHeaderView(view);
         lv.setAdapter(new SimpleAdapter(this, getList(), R.layout.fragment_function_list_item, new String[]{"image", "name"}, new int[]{R.id.iv, R.id.text1}));
         lv.setOnItemClickListener(this);
@@ -92,6 +96,7 @@ public class Activity_add_manage extends Activity_base implements AdapterView.On
             R.drawable.ic_fragment_function_monistor,
             R.drawable.ic_fragment_function_monistor,
             R.drawable.ic_fragment_function_monistor};
+
     private List<Map<String, Object>> getList() {
         List<Map<String, Object>> list = new ArrayList<>();
         for (int i = 0; i < contentArray.length; i++) {
@@ -118,8 +123,8 @@ public class Activity_add_manage extends Activity_base implements AdapterView.On
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Log.i(TAG, "onItemClick: "+position);
-        switch(position){
+        Log.i(TAG, "onItemClick: " + position);
+        switch (position) {
             case 1:
                 startActivity(new Intent(this, Activity_add_tree.class));
                 break;

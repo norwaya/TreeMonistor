@@ -1,7 +1,5 @@
 package com.xabaizhong.treemonistor.entity;
 
-import android.util.Log;
-
 import com.google.gson.annotations.Expose;
 
 import org.greenrobot.greendao.annotation.Entity;
@@ -10,7 +8,7 @@ import org.greenrobot.greendao.annotation.Index;
 import org.greenrobot.greendao.annotation.OrderBy;
 import org.greenrobot.greendao.annotation.ToMany;
 import org.greenrobot.greendao.annotation.ToOne;
-import org.greenrobot.greendao.annotation.Unique;
+import org.greenrobot.greendao.annotation.Transient;
 import org.greenrobot.greendao.annotation.Generated;
 
 import java.util.List;
@@ -60,10 +58,10 @@ public class Tree {
      private double RealAge;     //真实树龄
      private double GuessAge;     //估测树龄
      private double Evevation;     //海拔
-     private String Aspect;     //坡向
-     private String Slope;     //坡度
-     private String SlopePos;     //坡位
-     private String Soil;     //土壤名称
+     private String aspect;     //坡向
+     private String slope;     //坡度
+     private String slopePos;     //坡位
+     private String soil;     //土壤名称
      private String EnviorFactor;     //影响生长环境因素
      private String SpecStatDesc;     //树木特殊状况描述
      private String SpecDesc;     //树种鉴定记载
@@ -96,10 +94,10 @@ public class Tree {
     private String realAge;//
     private String guessAge;//
     private String evevation;//海拔
-    private String Aspect;//
-    private String Slope;//
-    private String SlopePos;//
-    private String Soil;//
+    private String aspect;//
+    private String slope;//
+    private String slopePos;//
+    private String soil;//
     private String enviorFactor;//
     private String specStatDesc;//树木特殊状况描述
     private String specDesc;//树种鉴定记载
@@ -120,6 +118,9 @@ public class Tree {
     @OrderBy("id ASC")
     private List<Pic> pics;
 
+    @Transient
+    public List<String> picList;
+
     /**
      * Used to resolve relations
      */
@@ -132,15 +133,15 @@ public class Tree {
     @Generated(hash = 948839816)
     private transient TreeDao myDao;
 
-    @Generated(hash = 1102234020)
+    @Generated(hash = 358084106)
     public Tree(Long id, String treeId, String treeType, String treeArea,
                 String treeSpeID, String town, String village, String smallName,
                 String ordinate, String abscissa, String specialCode, String treeHeight,
                 String treeDBH, String crownAvg, String crownEW, String crownNS,
                 String managementUnit, String managementPersion, String treeHistory,
                 String grownSpace, String special, String growth, String enviorment,
-                String realAge, String guessAge, String evevation, String Aspect,
-                String Slope, String SlopePos, String Soil, String enviorFactor,
+                String realAge, String guessAge, String evevation, String aspect,
+                String slope, String slopePos, String soil, String enviorFactor,
                 String specStatDesc, String specDesc, String explain, String protecte,
                 String recovery, String owner, String treeLevel, String treeStatus,
                 long treeSpecialId) {
@@ -170,10 +171,10 @@ public class Tree {
         this.realAge = realAge;
         this.guessAge = guessAge;
         this.evevation = evevation;
-        this.Aspect = Aspect;
-        this.Slope = Slope;
-        this.SlopePos = SlopePos;
-        this.Soil = Soil;
+        this.aspect = aspect;
+        this.slope = slope;
+        this.slopePos = slopePos;
+        this.soil = soil;
         this.enviorFactor = enviorFactor;
         this.specStatDesc = specStatDesc;
         this.specDesc = specDesc;
@@ -399,35 +400,35 @@ public class Tree {
     }
 
     public String getAspect() {
-        return this.Aspect;
+        return this.aspect;
     }
 
-    public void setAspect(String Aspect) {
-        this.Aspect = Aspect;
+    public void setAspect(String aspect) {
+        this.aspect = aspect;
     }
 
     public String getSlope() {
-        return this.Slope;
+        return this.slope;
     }
 
-    public void setSlope(String Slope) {
-        this.Slope = Slope;
+    public void setSlope(String slope) {
+        this.slope = slope;
     }
 
     public String getSlopePos() {
-        return this.SlopePos;
+        return this.slopePos;
     }
 
-    public void setSlopePos(String SlopePos) {
-        this.SlopePos = SlopePos;
+    public void setSlopePos(String slopePos) {
+        this.slopePos = slopePos;
     }
 
     public String getSoil() {
-        return this.Soil;
+        return this.soil;
     }
 
-    public void setSoil(String Soil) {
-        this.Soil = Soil;
+    public void setSoil(String soil) {
+        this.soil = soil;
     }
 
     public String getEnviorFactor() {
@@ -617,12 +618,12 @@ public class Tree {
         myDao.update(this);
     }
 
-
     /** called by internal mechanisms, do not call yourself. */
     @Generated(hash = 1935359770)
     public void __setDaoSession(DaoSession daoSession) {
         this.daoSession = daoSession;
         myDao = daoSession != null ? daoSession.getTreeDao() : null;
     }
+
 
 }

@@ -158,14 +158,9 @@
         </service>
         <service android:name=".service.service_notice.NoticeService">
             <intent-filter>
-                <action android:name="monitor-service"/>
+                <action android:name="monitor_notice_service"/>
             </intent-filter>
         </service>
-        <receiver android:name=".service.service_notice.NoticeBroadCast">
-            <intent-filter>
-                <action android:name="monitor-receiver"/>
-            </intent-filter>
-        </receiver>
 
     </application>
 

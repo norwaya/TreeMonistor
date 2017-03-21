@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -31,6 +32,10 @@ import com.xabaizhong.treemonistor.utils.RxBus;
 import com.xabaizhong.treemonistor.utils.ScaleBitmap;
 import com.xabaizhong.treemonistor.utils.TreeGroupOp;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -49,6 +54,8 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.nereo.multi_image_selector.MultiImageSelector;
 import me.nereo.multi_image_selector.MultiImageSelectorActivity;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 
 import static com.xabaizhong.treemonistor.activity.add_tree.Activity_add_tree.ResultCode.REQUEST_CODE_ASPECT;
 import static com.xabaizhong.treemonistor.activity.add_tree.Activity_add_tree.ResultCode.REQUEST_CODE_CNAME;
@@ -351,9 +358,12 @@ public class Activity_add_tree extends Activity_base {
 
             @Override
             public void onComplete() {
-                TreeGroupOp.Instance().setFiles(FileUtil.getFiles())
+                tree.picList = fillPic();
+                json = new GsonBuilder().setDateFormat("yyyy-MM-dd%20HH:mm:ss").create().toJson(treeTypeInfo);
+                Log.i(TAG, "fillTree: " + json);
+                /*TreeGroupOp.Instance().setFiles(FileUtil.getFiles())
                         .setJson(json)
-                        .op();
+                        .op();*/
             }
         };
 
@@ -363,9 +373,9 @@ public class Activity_add_tree extends Activity_base {
                 FileUtil.clearFileDir();
                 if (list != null)
                     for (int i = 0; i < list.size(); i++) {
-                        Log.i(TAG, "subscribe: image"+i);
-                        ScaleBitmap.getBitmap(list.get(i),"image"+i+".png");
-                        Log.i(TAG, "subscribe: complete"+i);
+                        Log.i(TAG, "subscribe: image" + i);
+                        ScaleBitmap.getBitmap(list.get(i), "image" + i + ".png");
+                        Log.i(TAG, "subscribe: complete" + i);
                     }
                 e.onComplete();
                 Log.i(TAG, "subscribe: over");
@@ -382,25 +392,24 @@ public class Activity_add_tree extends Activity_base {
     }
 
 
-
     private void saveTree() {
-        initDao();
-        save();
+//        initDao();
+        /*save();*/
     }
 
     private void save() {
         tree.setId(null);
         treeDao.save(tree);
         long treeID = tree.getId();
-        if (list != null)
+        /*if (list != null)
             for (String string : list
                     ) {
                 picDao.save(new Pic(null, treeID, string));
-            }
+            }*/
         treeTypeInfo.setGsTree(treeID);
-        treeTypeInfo.setTypeId("0");
-        treeTypeInfoDao.save(treeTypeInfo);
-        check(treeTypeInfo.getId());
+
+        /*treeTypeInfoDao.save(treeTypeInfo);
+        check(treeTypeInfo.getId());*/
     }
 
     private void check(long id) {
@@ -436,7 +445,10 @@ public class Activity_add_tree extends Activity_base {
     }
 
     String json;
+
     private void fillTree() {
+        treeTypeInfo.setTypeId("0");
+
         String id = treeId.getText();
         tree.setTreeId(id);
         treeTypeInfo.setIvst(tch.getText());
@@ -459,9 +471,38 @@ public class Activity_add_tree extends Activity_base {
         tree.setEnviorFactor(environmentFactor.getText());
         tree.setSpecStatDesc(specStatDesc.getText());
         tree.setSpecDesc(specDesc.getText());
+
         treeTypeInfo.tree = tree;
-        json = new GsonBuilder().setDateFormat("yyyy-MM-dd%20HH:mm:ss").create().toJson(treeTypeInfo);
-        Log.i(TAG, "fillTree: "+json);
+
+
+
+    }
+
+    private List<String> fillPic() {
+        List<String> list = new ArrayList<>();
+        for (File file : FileUtil.getFiles()) {
+            if (!file.getName().equals(".nomedia")) {
+//                list.add(encode64base(file));
+                list.add("image");
+            }
+
+        }
+        return list;
+    }
+    private String encode64base(File file){
+        FileInputStream inputFile = null;
+        try {
+            inputFile = new FileInputStream(file);
+            byte[] buffer = new byte[(int) file.length()];
+            inputFile.read(buffer);
+            inputFile.close();
+            return  Base64.encodeToString(buffer,Base64.DEFAULT);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private void computeCrownAvg(String ew, String ns) {
@@ -508,7 +549,8 @@ public class Activity_add_tree extends Activity_base {
                         detailAddress.setText(box.getStreet() + box.getSematicDescription());
                         setAreaId(box);
                         tree.setSmallName(box.getStreet() + box.getSematicDescription());
-
+                        tree.setAbscissa(box.getLat()+"");
+                        tree.setOrdinate(box.getLon()+"");
                     }
                 }
 

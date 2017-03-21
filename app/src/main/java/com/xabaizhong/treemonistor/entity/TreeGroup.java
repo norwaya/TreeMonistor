@@ -6,6 +6,7 @@ import org.greenrobot.greendao.annotation.Index;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Transient;
 
+import java.util.List;
 import java.util.Map;
 
 @Entity(indexes = {
@@ -43,8 +44,10 @@ public class TreeGroup {
     private String explain;//	照片及说明
 
     @Transient
-    private Map<String, Integer> treeMap;
+    private List<Map<String, Object>> treeMap;
 
+    @Transient
+    public List<String> picList;
 
     @Generated(hash = 748440422)
     public TreeGroup(Long id, String treeId, String placeName, String mainTreeName,
@@ -313,11 +316,11 @@ public class TreeGroup {
         this.explain = explain;
     }
 
-    public Map<String, Integer> getTreeMap() {
+    public List<Map<String, Object>> getTreeMap() {
         return treeMap;
     }
 
-    public void setTreeMap(Map<String, Integer> treeMap) {
+    public void setTreeMap(List<Map<String, Object>> treeMap) {
         this.treeMap = treeMap;
     }
 }

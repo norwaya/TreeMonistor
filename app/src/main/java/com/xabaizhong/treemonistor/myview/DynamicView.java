@@ -48,15 +48,16 @@ public class DynamicView extends LinearLayout {
         addView(mapView.getView());
     }
 
-    public Map<String, Integer> getTreeMap() {
+    public List<Map<String, Object>> getTreeMap() {
+        List<Map<String, Object>> mapList = new ArrayList<>();
         Map<String, Integer> map = new HashMap<>();
         for (MapView mapView : list
                 ) {
-            Map<String, Integer> l = mapView.getKV();
+            Map<String, Object> l = mapView.getKV();
             if (l != null)
-                map.putAll(l);
+                mapList.add(l);
         }
-        return map;
+        return mapList;
     }
 
     private void addItem() {
@@ -121,14 +122,15 @@ public class DynamicView extends LinearLayout {
 
         }
 
-        public Map<String, Integer> getKV() {
-            Map<String, Integer> map = null;
+        public Map<String, Object> getKV() {
+            Map<String, Object> map = null;
             String name = viewHolder.name.getText().toString();
             String num = viewHolder.num.getText().toString();
             if (!TextUtils.isEmpty(name) && !TextUtils.isEmpty(num)) {
                 map = new HashMap<>();
                 try {
-                    map.put(name, Integer.parseInt(num));
+                    map.put("name", name);
+                    map.put("num", Integer.parseInt(num));
                 } catch (Exception e) {
 
                 }

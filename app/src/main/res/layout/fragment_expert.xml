@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:fab="http://schemas.android.com/apk/res-auto"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:fitsSystemWindows="true"
-                android:layout_height="match_parent">
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
 
     <com.jcodecraeer.xrecyclerview.XRecyclerView
-        android:fitsSystemWindows="true"
         android:id="@+id/xRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:fitsSystemWindows="true"        />
 
     <com.github.clans.fab.FloatingActionMenu
         android:id="@+id/menu_yellow"
@@ -18,9 +18,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="10dp"
+        android:layout_gravity="bottom|end"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
         android:clickable="true"
@@ -39,25 +39,30 @@
             style="@style/MenuButtonsStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_fragment_expert_unknow"
-            fab:fab_label="@string/tree_unknow"/>
+            android:src="@drawable/ic_edit"
+            fab:fab_label="@string/tree_unknow"
+            fab:fab_size="mini"/>
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/fab_tree_weakness"
             style="@style/MenuButtonsStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_fragment_expert_bug"
-            fab:fab_label="@string/tree_weakness"/>
+            android:src="@drawable/ic_edit"
+            fab:fab_label="@string/tree_weakness"
+            fab:fab_size="mini"/>
+
         <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/fab_tree_weakness"
+            android:id="@+id/fab_tree_weakness2"
             style="@style/MenuButtonsStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_fragment_expert_bug"
-            fab:fab_label="@string/tree_weakness"/>
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_edit"
+            fab:fab_label="@string/tree_weakness"
+            fab:fab_size="mini"/>
 
     </com.github.clans.fab.FloatingActionMenu>
 
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>
 

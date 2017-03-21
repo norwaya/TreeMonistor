@@ -6,7 +6,7 @@ package com.xabaizhong.treemonistor.contant;
  */
 
 public interface Contant {
-
+    String SHAREDPREFENCE_NAME = "monitor_dic";
      class NEW {
         public static String APP_KEY = "b5e882c74dbcfe8aba88412519948ff1";
          public final static int LOADING_NEWS_SIZE = 20;

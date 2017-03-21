@@ -24,10 +24,12 @@ import com.xabaizhong.treemonistor.utils.RxBus;
 import com.xabaizhong.treemonistor.utils.ScaleBitmap;
 import com.xabaizhong.treemonistor.utils.TreeGroupOp;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Observer;
 
 import butterknife.BindView;
@@ -256,9 +258,12 @@ public class Activity_add_tree_group extends Activity_base {
 
             @Override
             public void onComplete() {
-                TreeGroupOp.Instance().setFiles(FileUtil.getFiles())
+                treeGroup.picList = fillPic();
+                json = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create().toJson(treeTypeInfo);
+                Log.i(TAG, "fillData: "+json);
+               /* TreeGroupOp.Instance().setFiles(FileUtil.getFiles())
                         .setJson(json)
-                        .op();
+                        .op();*/
             }
         };
 
@@ -278,7 +283,17 @@ public class Activity_add_tree_group extends Activity_base {
                 .subscribe(observer);
 
     }
+    private List<String> fillPic() {
+        List<String> list = new ArrayList<>();
+        for (File file : FileUtil.getFiles()) {
+            if (!file.getName().equals(".nomedia")) {
+//                list.add(encode64base(file));
+                list.add("image");
+            }
 
+        }
+        return list;
+    }
     private String check() {
         return null;
     }
@@ -305,8 +320,7 @@ public class Activity_add_tree_group extends Activity_base {
         treeGroup.setRWJYInfo(rWJYInfo.getText());
         treeGroup.setSuggest(suggest.getText());
         treeTypeInfo.treeGroup = treeGroup;
-        json = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create().toJson(treeTypeInfo);
-        Log.i(TAG, "fillData: "+json);
+
     }
 
     private void selectPhoto() {
