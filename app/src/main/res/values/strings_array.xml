@@ -3,7 +3,8 @@
     <string-array name="function_array">
         <item>古树信息上传</item>
         <item>古树信息查询</item>
-        <item>古树实时监管</item>
+        <item>实时监管上报</item>
+        <item>实时监管查询</item>
         <item>基础数据库</item>
         <item>应急通讯</item>
         <item>通知公告</item>

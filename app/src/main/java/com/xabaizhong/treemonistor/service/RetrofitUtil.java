@@ -24,7 +24,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 public class RetrofitUtil {
     private static Retrofit retrofit;
 //    private final static String url = "http://v.juhe.cn/";
-    private final static String url = "http://192.168.0.168:8080/";
+    private final static String url = "http://baizhong.applinzi.com/";
     public static Retrofit instance() {
         if (retrofit == null)
             synchronized (RetrofitUtil.class) {

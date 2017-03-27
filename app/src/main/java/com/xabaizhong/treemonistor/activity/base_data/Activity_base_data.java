@@ -53,7 +53,7 @@ public class Activity_base_data extends Activity_base implements AdapterView.OnI
         }
         lv.addHeaderView(view);
         lv.setOnItemClickListener(this);
-        lv.setAdapter(new SimpleAdapter(this, initList(), R.layout.fragment_function_list_item, new String[]{"image", "name"}, new int[]{R.id.iv, R.id.text1}));
+        lv.setAdapter(new SimpleAdapter(this, initList(), R.layout.fragment_function_list_item, new String[]{"image", "name"}, new int[]{R.id.iv, R.id.text}));
     }
 
     List<Map<String, Object>> initList() {

@@ -1,22 +1,17 @@
 package com.xabaizhong.treemonistor.service;
 
 import com.xabaizhong.treemonistor.entity.HttpResult;
-import com.xabaizhong.treemonistor.entity.ResultMessage;
 import com.xabaizhong.treemonistor.service.entity.Response_news;
-
-import java.util.List;
-import java.util.Map;
+import com.xabaizhong.treemonistor.service.entity.ResultMessage;
+import com.xabaizhong.treemonistor.service.entity.User;
 
 import io.reactivex.Observable;
-import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.http.Body;
-import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
-import retrofit2.http.PartMap;
 import retrofit2.http.Query;
 import retrofit2.http.Url;
 
@@ -25,8 +20,8 @@ import retrofit2.http.Url;
  */
 
 public interface ApiService {
-    @GET("login.do")
-    Observable<HttpResult> login(@Query("username") String name, @Query("password") String pwd);
+    @POST
+    Observable<ResultMessage<User>> login(@Url String url, @Query("user") String name, @Query("pwd") String pwd);
 
     @Multipart
     @POST
@@ -40,5 +35,6 @@ public interface ApiService {
 
     @Multipart
     @POST
-    Observable<ResultMessage> treeBaseInfo(@Url String url, @Query("json") String josn, @PartMap Map<String,RequestBody> map);
+    Observable<ResultMessage> urlAndJson(@Url String url, @Query("json") String json);
+
 }

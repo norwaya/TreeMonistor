@@ -2,7 +2,9 @@ package com.xabaizhong.treemonistor.activity;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
@@ -15,6 +17,11 @@ import android.widget.RelativeLayout;
 
 import com.xabaizhong.treemonistor.R;
 import com.xabaizhong.treemonistor.base.Activity_base;
+import com.xabaizhong.treemonistor.service.ApiService;
+import com.xabaizhong.treemonistor.service.RetrofitUtil;
+import com.xabaizhong.treemonistor.service.entity.ResultMessage;
+import com.xabaizhong.treemonistor.service.entity.User;
+
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,18 +40,20 @@ import io.reactivex.schedulers.Schedulers;
 
 public class Activity_login extends Activity_base implements View.OnFocusChangeListener {
 
-    @BindView(R.id.center)
-    RelativeLayout center;
-    @BindView(R.id.area)
+    /*@BindView(R.id.area)
     EditText area;
+     @BindView(R.id.iv_area_close)
+    ImageView ivAreaClose;
+
+    */
+
     @BindView(R.id.name)
     EditText name;
     @BindView(R.id.pwd)
     EditText pwd;
     @BindView(R.id.layout)
     RelativeLayout layout;
-    @BindView(R.id.iv_area_close)
-    ImageView ivAreaClose;
+
     @BindView(R.id.iv_name_close)
     ImageView ivNameClose;
     @BindView(R.id.iv_eye)
@@ -65,58 +74,97 @@ public class Activity_login extends Activity_base implements View.OnFocusChangeL
         initView();
     }
 
-    Observer<Object> observer;
 
     private void initObserver() {
-        observer = new Observer<Object>() {
-            @Override
-            public void onSubscribe(Disposable d) {
-
-            }
-
-            @Override
-            public void onNext(Object value) {
-                showToast("login suc");
-                pb.setVisibility(View.INVISIBLE);
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-
-            @Override
-            public void onComplete() {
-                Activity_login.this.finish();
-            }
-        };
 
     }
 
     private void initView() {
         pb.setVisibility(View.INVISIBLE);
 
-        ivAreaClose.setVisibility(View.INVISIBLE);
+        /*ivAreaClose.setVisibility(View.INVISIBLE);*/
         ivNameClose.setVisibility(View.INVISIBLE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            ivEye.setImageDrawable(getDrawable(R.drawable.eye_close));
-        } else {
-            ivEye.setImageDrawable(getResources().getDrawable(R.drawable.eye_close));
-        }
+        initEye(false);
 
 
-        area.setOnFocusChangeListener(this);
+        /*area.setOnFocusChangeListener(this);*/
         pwd.setOnFocusChangeListener(this);
         name.setOnFocusChangeListener(this);
+
+        addTextViewWatch();
     }
 
-    @OnClick({R.id.iv_area_close, R.id.iv_name_close, R.id.iv_eye, R.id.btn_login})
+    private void addTextViewWatch() {
+
+        /*area.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (area.hasFocus() && !TextUtils.isEmpty(area.getText())) {
+                    ivAreaClose.setVisibility(View.VISIBLE);
+                } else {
+                    ivAreaClose.setVisibility(View.INVISIBLE);
+                }
+            }
+        });*/
+        name.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (name.hasFocus() && !TextUtils.isEmpty(name.getText())) {
+                    ivNameClose.setVisibility(View.VISIBLE);
+                } else {
+                    ivNameClose.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+        pwd.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (pwd.hasFocus() && !TextUtils.isEmpty(pwd.getText())) {
+                    ivEye.setVisibility(View.VISIBLE);
+                } else {
+                    ivEye.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+    }
+
+    @OnClick({/*R.id.iv_area_close,*/ R.id.iv_name_close, R.id.iv_eye, R.id.btn_login})
     public void onClick(View view) {
         Log.i(TAG, "onClick: ");
         switch (view.getId()) {
-            case R.id.iv_area_close:
+           /* case R.id.iv_area_close:
                 area.setText("");
-                break;
+                break;*/
             case R.id.iv_name_close:
                 name.setText("");
                 break;
@@ -127,63 +175,109 @@ public class Activity_login extends Activity_base implements View.OnFocusChangeL
                     pwd.setTransformationMethod(PasswordTransformationMethod.getInstance());
                 }
                 flag = !flag;
+                initEye(flag);
                 pwd.postInvalidate();
+                if (pwd.hasFocus()) {
+                    pwd.setSelection(pwd.getText().length());
+                }
                 break;
             case R.id.btn_login:
                 pb.setVisibility(View.VISIBLE);
-                login();
+                attemptLogin();
                 break;
         }
     }
 
-    private void login() {
-        if(!verification()){
+    private void initEye(boolean invisible) {
+        if (invisible) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                ivEye.setImageDrawable(getDrawable(R.drawable.eye));
+            } else {
+                ivEye.setImageDrawable(getResources().getDrawable(R.drawable.eye));
+            }
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                ivEye.setImageDrawable(getDrawable(R.drawable.eye_close));
+            } else {
+                ivEye.setImageDrawable(getResources().getDrawable(R.drawable.eye_close));
+            }
+        }
+    }
+
+
+    private void attemptLogin() {
+        if (!verification()) {
             showToast("error");
         }
-
-        Observable
-                .create(new ObservableOnSubscribe<Object>() {
-                    @Override
-                    public void subscribe(ObservableEmitter<Object> e) throws Exception {
-                        Thread.sleep(2000);
-                        e.onNext(0);
-                        Thread.sleep(1000);
-                        e.onComplete();
-                    }
-                })
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(observer);
+        login();
     }
+
 
     private boolean verification() {
         return true;
     }
 
+    private void login() {
+        Observable<ResultMessage<User>> observable = RetrofitUtil.instance()
+                .create(ApiService.class).login(
+                        "login.nb",
+                        name.getText().toString(),
+                        pwd.getText().toString())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io());
+        observable.subscribe(new Observer<ResultMessage<User>>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(ResultMessage<User> value) {
+                pb.setVisibility(View.INVISIBLE);
+                if (value.getError_code() == 0) {
+                    writerUserToFile(value.getData());
+                } else {
+                    showToast(value.getMessage());
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                pb.setVisibility(View.INVISIBLE);
+                showToast("check your netLink.");
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
+
+
+    private void writerUserToFile(User user) {
+        Log.i(TAG, "writerUserToFile: " + user.toString());
+    }
+
+
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
         switch (v.getId()) {
-            case R.id.area:
-                if (hasFocus && !TextUtils.isEmpty(area.getText())) {
-                    ivAreaClose.setVisibility(View.VISIBLE);
-                }else{
-                    ivAreaClose.setVisibility(View.INVISIBLE);
-                }
-                break;
             case R.id.name:
                 if (hasFocus && !TextUtils.isEmpty(name.getText())) {
                     ivNameClose.setVisibility(View.VISIBLE);
-                }else{
+                } else {
                     ivNameClose.setVisibility(View.INVISIBLE);
                 }
                 break;
             case R.id.pwd:
                 if (hasFocus && !TextUtils.isEmpty(pwd.getText())) {
                     ivEye.setVisibility(View.VISIBLE);
-                }else{
+                } else {
                     ivEye.setVisibility(View.INVISIBLE);
                 }
                 break;
         }
     }
+
 }

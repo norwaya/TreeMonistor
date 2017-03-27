@@ -1,15 +1,13 @@
 package com.xabaizhong.treemonistor.base;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
-import com.xabaizhong.treemonistor.activity.Activity_login2;
 import com.xabaizhong.treemonistor.contant.Contant;
-import com.xabaizhong.treemonistor.entity.User;
+import com.xabaizhong.treemonistor.service.entity.User;
 
 import java.util.Set;
 

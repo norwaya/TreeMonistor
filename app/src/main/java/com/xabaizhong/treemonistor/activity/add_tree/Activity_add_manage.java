@@ -86,7 +86,7 @@ public class Activity_add_manage extends Activity_base implements AdapterView.On
                 .load(R.drawable.tree_header)
                 .into(iv);
         lv.addHeaderView(view);
-        lv.setAdapter(new SimpleAdapter(this, getList(), R.layout.fragment_function_list_item, new String[]{"image", "name"}, new int[]{R.id.iv, R.id.text1}));
+        lv.setAdapter(new SimpleAdapter(this, getList(), R.layout.fragment_function_list_item, new String[]{"image", "name"}, new int[]{R.id.iv, R.id.text}));
         lv.setOnItemClickListener(this);
     }
 

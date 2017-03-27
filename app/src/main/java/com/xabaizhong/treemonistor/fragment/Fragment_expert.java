@@ -21,6 +21,7 @@ import com.squareup.picasso.Picasso;
 import com.xabaizhong.treemonistor.R;
 import com.xabaizhong.treemonistor.activity.add_tree.Activity_map;
 import com.xabaizhong.treemonistor.adapter.Fragment_expert_adapter;
+import com.xabaizhong.treemonistor.adapter.HeaderAndFooterWrapper;
 import com.xabaizhong.treemonistor.base.Fragment_base;
 import com.xabaizhong.treemonistor.entity.ResultOfExpert;
 import com.xabaizhong.treemonistor.utils.RecycleViewDivider;
@@ -40,13 +41,13 @@ import static android.support.v7.widget.RecyclerView.VERTICAL;
 public class Fragment_expert extends Fragment_base {
 
     String TAG = "fragment-expert";
-    @BindView(R.id.menu_yellow)
+   /* @BindView(R.id.menu_yellow)
     FloatingActionMenu menuYellow;
     @BindView(R.id.fab_tree_unknow)
     FloatingActionButton fabTreeUnknow;
     @BindView(R.id.fab_tree_weakness)
     FloatingActionButton fabTreeWeakness;
-    private Context context;
+    private Context context;*/
     @BindView(R.id.xRecyclerView)
     XRecyclerView xRecyclerView;
 
@@ -68,26 +69,31 @@ public class Fragment_expert extends Fragment_base {
     Fragment_expert_adapter adapter;
 
     private void initView() {
-        menuYellow.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
+       /* menuYellow.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
             @Override
             public void onMenuToggle(boolean opened) {
                 Log.d(TAG, "onMenuToggle: " + opened);
             }
-        });
+        });*/
 
         View view = LayoutInflater.from(context).inflate(R.layout.fragment_expert_header, null);
-        view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 200));
+        /*view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 200));*/
         ImageView iv = (ImageView) view.findViewById(R.id.iv);
         Picasso.with(context)
                 .load(R.drawable.tree_header)
                 .into(iv);
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         xRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL));
         xRecyclerView.addItemDecoration(new RecycleViewDivider(context, VERTICAL, R.drawable.divider));
-        xRecyclerView.addHeaderView(view);
+      /*  xRecyclerView.addHeaderView(view);*/
         adapter = new Fragment_expert_adapter(context);
-        xRecyclerView.setAdapter(adapter);
+
+        HeaderAndFooterWrapper headerAdapter = new HeaderAndFooterWrapper(adapter);
+        headerAdapter.addHeaderView(view);
+
+        xRecyclerView.setAdapter(headerAdapter);
         xRecyclerView.setPullRefreshEnabled(true);
         xRecyclerView.setLoadingMoreEnabled(true);
 
@@ -160,7 +166,7 @@ public class Fragment_expert extends Fragment_base {
     }
 
 
-    @OnClick({R.id.fab_tree_unknow, R.id.fab_tree_weakness})
+    /*@OnClick({R.id.fab_tree_unknow, R.id.fab_tree_weakness})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.fab_tree_unknow:
@@ -171,6 +177,6 @@ public class Fragment_expert extends Fragment_base {
                 break;
         }
         menuYellow.close(true);
-    }
+    }*/
 
 }

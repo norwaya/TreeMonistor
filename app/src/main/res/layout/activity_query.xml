@@ -16,7 +16,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="区域选择"/>
+            android:ellipsize="end"
+            android:text="区域"/>
 
         <Spinner
             android:id="@+id/spinner"
@@ -34,4 +35,8 @@
             android:layout_weight="1"
             android:text="查询"/>
     </LinearLayout>
+    <com.github.mikephil.charting.charts.BarChart
+        android:layout_width="match_parent"
+        android:id="@+id/bar_chart"
+        android:layout_height="match_parent"/>
 </LinearLayout>

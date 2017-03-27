@@ -81,6 +81,7 @@
         <activity
             android:name=".activity.Activity_login"
             android:label="login"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.Activity_welcome"

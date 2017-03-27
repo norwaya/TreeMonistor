@@ -13,7 +13,7 @@ public interface Contant {
     }
     class KV{
         public static String FIRST_INIT = "first_init";
-        public static String USER = "user";
         public static String NOTICE_PUSH = "notice_push";
+        public static String USER = "user";
     }
 }

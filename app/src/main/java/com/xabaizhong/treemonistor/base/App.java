@@ -3,6 +3,7 @@ package com.xabaizhong.treemonistor.base;
 import android.app.Application;
 import android.app.Service;
 import android.os.Vibrator;
+import android.support.multidex.MultiDexApplication;
 
 import com.baidu.mapapi.SDKInitializer;
 import com.xabaizhong.treemonistor.entity.DaoMaster;
@@ -15,7 +16,7 @@ import org.greenrobot.greendao.database.Database;
  * Created by admin on 2017/3/4.
  */
 
-public class App extends Application {
+public class App extends MultiDexApplication {
 
     public static final boolean ENCRYPTED = false;
 

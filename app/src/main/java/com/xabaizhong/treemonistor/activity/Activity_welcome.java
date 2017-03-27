@@ -70,6 +70,8 @@ public class Activity_welcome extends Activity_base {
     PestClassDao pestClassDao;
     WeaknessDao weaknessDao;
 
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -120,13 +122,13 @@ public class Activity_welcome extends Activity_base {
         Log.i(TAG, "initAll: " + (end - stat));
     }
 
-
+    Disposable disposable;
     private void initImage() {
 
         Observer<Integer> observer = new Observer<Integer>() {
             @Override
             public void onSubscribe(Disposable d) {
-
+                disposable = d;
             }
 
             @Override
@@ -142,12 +144,7 @@ public class Activity_welcome extends Activity_base {
             @Override
             public void onComplete() {
 //                if (login_suc()) {
-                if (true) {
-                    startActivity(new Intent(Activity_welcome.this, Activity_main.class));
-                } else {
-                    startActivity(new Intent(Activity_welcome.this, Activity_login2.class));
-                }
-                finish();
+                work();
             }
         };
         Observable
@@ -171,9 +168,24 @@ public class Activity_welcome extends Activity_base {
 
     }
 
+    private void work(){
+        if (true) {
+            startActivity(new Intent(Activity_welcome.this, Activity_main.class));
+        } else {
+            startActivity(new Intent(Activity_welcome.this, Activity_login2.class));
+        }
+        finish();
+    }
+
+    boolean flag = false;
     @OnClick(R.id.activity_welcome_btn)
     public void onClick() {
-
+       /* if(flag){
+            if(disposable != null){
+                disposable.dispose();
+                work();
+            }
+        }*/
     }
 
     @Override
@@ -181,23 +193,19 @@ public class Activity_welcome extends Activity_base {
     }
 
     private void initDB() {
-        if (hasInit())
+        if (hasInit()){
+            flag = true;
             return;
+        }
         initDao();
         clearDB();
-        Log.i(TAG, "initDB: begin init db");
-        writeTreeSpecial("treeSpecial.json");
-        Log.i(TAG, "initDB: 1");
-        writeAreaCode("areaCode.json");
-        Log.i(TAG, "initDB: 2");
+        writeTreeSpecial("tree_special.json");
+        writeAreaCode("area_code.json");
         writePest("pest_classify.json");
-        Log.i(TAG, "initDB: 3");
         writePestClass();
-        Log.i(TAG, "initDB: 1");
         writeWeakness("illness.json");
-        Log.i(TAG, "initDB: 4");
         writeToShare();
-        Log.d(TAG, "initDB: writer db complete");
+        flag = true;
     }
 
     private void initDao() {

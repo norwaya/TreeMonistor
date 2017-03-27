@@ -2,9 +2,10 @@ package com.xabaizhong.treemonistor.utils;
 
 import android.util.Log;
 
-import com.xabaizhong.treemonistor.entity.ResultMessage;
 import com.xabaizhong.treemonistor.service.ApiService;
 import com.xabaizhong.treemonistor.service.RetrofitUtil;
+import com.xabaizhong.treemonistor.service.entity.ResultMessage;
+import com.xabaizhong.treemonistor.service.entity.User;
 
 import java.io.File;
 import java.util.HashMap;
@@ -72,7 +73,7 @@ public class TreeGroupOp {
 
     public void op() {
 
-        RetrofitUtil.instance().create(ApiService.class).treeBaseInfo("pro01/upload.do", json, map)
+        RetrofitUtil.instance().create(ApiService.class).urlAndJson("pro01/upload.do", json)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Observer<ResultMessage>() {

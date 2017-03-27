@@ -22,42 +22,166 @@ public class AreaCodeHelper {
 
     public static class RECORDSBean {
         /**
-         * areaid : 610100
-         * cname : 西安市
-         * id : 1
+         * AreaID : 100000
+         * ParentId : 0
+         * Name : 中国
+         * MergerName : 中国
+         * ShortName : 中国
+         * MergerShortName : 中国
+         * LevelType : 0
+         * CityCode :
+         * ZipCode :
+         * Pinyin : China
+         * Jianpin : CN
+         * FirstChar : C
+         * Lng : 116.3683244
+         * Lat : 39.915085
+         * Remarks :
          */
 
-        private int areaid;
-        private String cname;
-        private int id;
+        private String AreaID;
+        private String ParentId;
+        private String Name;
+        private String MergerName;
+        private String ShortName;
+        private String MergerShortName;
+        private String LevelType;
+        private String CityCode;
+        private String ZipCode;
+        private String Pinyin;
+        private String Jianpin;
+        private String FirstChar;
+        private String Lng;
+        private String Lat;
+        private String Remarks;
 
-        public int getAreaid() {
-            return areaid;
+        public String getAreaID() {
+            return AreaID;
         }
 
-        public void setAreaid(int areaid) {
-            this.areaid = areaid;
+        public void setAreaID(String AreaID) {
+            this.AreaID = AreaID;
         }
 
-        public String getCname() {
-            return cname;
+        public String getParentId() {
+            return ParentId;
         }
 
-        public void setCname(String cname) {
-            this.cname = cname;
+        public void setParentId(String ParentId) {
+            this.ParentId = ParentId;
         }
 
-        public int getId() {
-            return id;
+        public String getName() {
+            return Name;
         }
 
-        public void setId(int id) {
-            this.id = id;
+        public void setName(String Name) {
+            this.Name = Name;
+        }
+
+        public String getMergerName() {
+            return MergerName;
+        }
+
+        public void setMergerName(String MergerName) {
+            this.MergerName = MergerName;
+        }
+
+        public String getShortName() {
+            return ShortName;
+        }
+
+        public void setShortName(String ShortName) {
+            this.ShortName = ShortName;
+        }
+
+        public String getMergerShortName() {
+            return MergerShortName;
+        }
+
+        public void setMergerShortName(String MergerShortName) {
+            this.MergerShortName = MergerShortName;
+        }
+
+        public String getLevelType() {
+            return LevelType;
+        }
+
+        public void setLevelType(String LevelType) {
+            this.LevelType = LevelType;
+        }
+
+        public String getCityCode() {
+            return CityCode;
+        }
+
+        public void setCityCode(String CityCode) {
+            this.CityCode = CityCode;
+        }
+
+        public String getZipCode() {
+            return ZipCode;
+        }
+
+        public void setZipCode(String ZipCode) {
+            this.ZipCode = ZipCode;
+        }
+
+        public String getPinyin() {
+            return Pinyin;
+        }
+
+        public void setPinyin(String Pinyin) {
+            this.Pinyin = Pinyin;
+        }
+
+        public String getJianpin() {
+            return Jianpin;
+        }
+
+        public void setJianpin(String Jianpin) {
+            this.Jianpin = Jianpin;
+        }
+
+        public String getFirstChar() {
+            return FirstChar;
+        }
+
+        public void setFirstChar(String FirstChar) {
+            this.FirstChar = FirstChar;
+        }
+
+        public String getLng() {
+            return Lng;
+        }
+
+        public void setLng(String Lng) {
+            this.Lng = Lng;
+        }
+
+        public String getLat() {
+            return Lat;
+        }
+
+        public void setLat(String Lat) {
+            this.Lat = Lat;
+        }
+
+        public String getRemarks() {
+            return Remarks;
+        }
+
+        public void setRemarks(String Remarks) {
+            this.Remarks = Remarks;
         }
 
         public AreaCode convertToEntity() {
-            return new AreaCode(null,this.cname,this.areaid);
-        }
+            return new AreaCode(null, getAreaID(), getParentId(), getName(), getMergerName(),
+                    getShortName(), getMergerShortName(), getLevelType(), getCityCode(),
+                    getZipCode(), getPinyin(), getJianpin(), getFirstChar(), getLng(),
+                    getLat(), getRemarks());
 
+        }
     }
+
 }

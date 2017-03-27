@@ -5,13 +5,17 @@
               android:fitsSystemWindows="true"
               android:orientation="vertical">
 
-    <ListView
+    <!--<ListView
         android:id="@+id/lv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:divider="@drawable/list_divider"
         android:dividerHeight="1px">
-    </ListView>
+    </ListView>-->
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/function_rv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
     <LinearLayout
         android:layout_width="match_parent"

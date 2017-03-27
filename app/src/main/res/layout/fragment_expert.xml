@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -8,19 +8,18 @@
 
     <com.jcodecraeer.xrecyclerview.XRecyclerView
         android:id="@+id/xRecyclerView"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:fitsSystemWindows="true"        />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
-    <com.github.clans.fab.FloatingActionMenu
+    <!--<com.github.clans.fab.FloatingActionMenu
         android:id="@+id/menu_yellow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
+        android:layout_gravity="bottom|end"
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="10dp"
-        android:layout_gravity="bottom|end"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
         android:clickable="true"
@@ -28,6 +27,7 @@
         fab:menu_colorNormal="@color/wx_green"
         fab:menu_colorPressed="@color/wx_green"
         fab:menu_colorRipple="@color/deep_green"
+        fab:menu_fab_size="normal"
         fab:menu_labels_hideAnimation="@anim/jump_to_down"
         fab:menu_labels_showAnimation="@anim/jump_from_down"
         fab:menu_labels_style="@style/MenuLabelsStyle"
@@ -53,6 +53,16 @@
             fab:fab_size="mini"/>
 
         <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fab_tree_tree_age"
+            style="@style/MenuButtonsStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_edit"
+            fab:fab_label="@string/tree_age"
+            fab:fab_size="mini"/>
+
+        <com.github.clans.fab.FloatingActionButton
             android:id="@+id/fab_tree_weakness2"
             style="@style/MenuButtonsStyle"
             android:layout_width="wrap_content"
@@ -62,7 +72,108 @@
             fab:fab_label="@string/tree_weakness"
             fab:fab_size="mini"/>
 
-    </com.github.clans.fab.FloatingActionMenu>
+    </com.github.clans.fab.FloatingActionMenu>-->
+    <terranovaproductions.newcomicreader.FloatingActionMenu
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="bottom|end"
+        >
 
-</android.support.design.widget.CoordinatorLayout>
+        <!--First button as menu button-->
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_main"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/close"
+            fab:backgroundTint="@color/wx_green"
+            fab:fabSize="normal"/>
+
+        <!-- Other button as menu items-->
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_tree_weakness"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_edit"
+            fab:backgroundTint="@color/wx_green"
+            fab:fabSize="mini"
+            fab:fab_label="@string/tree_weakness"/>
+
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_tree_unknow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_edit"
+            fab:backgroundTint="@color/wx_green"
+            fab:fabSize="mini"
+            fab:fab_label="@string/tree_unknow"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_tree_growth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_edit"
+            fab:backgroundTint="@color/wx_green"
+            fab:fabSize="mini"
+            fab:fab_label="@string/tree_growth"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_tree_age"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_edit"
+            fab:backgroundTint="@color/wx_green"
+            fab:fabSize="mini"
+            fab:fab_label="@string/tree_age"/>
+    </terranovaproductions.newcomicreader.FloatingActionMenu>
+    <!-- <com.novaapps.floatingactionmenu.FloatingActionMenu
+         android:layout_alignParentBottom="true"
+         android:layout_alignParentEnd="true"
+         android:layout_gravity="bottom|end"
+         android:layout_marginLeft="10dp"
+         android:layout_marginTop="10dp"
+         android:id="@+id/fab_menu_circle"
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+         android:layout_marginBottom="16dp"
+         android:layout_marginRight="16dp"
+         android:layout_marginEnd="16dp">
+
+         &lt;!&ndash;First button as menu button&ndash;&gt;
+         <android.support.design.widget.FloatingActionButton
+             android:id="@+id/fab_main_circle"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:src="@drawable/ic_edit"
+             fab:fabSize="normal"
+             fab:backgroundTint="@color/wx_green"/>
+
+         &lt;!&ndash; Other button as menu items&ndash;&gt;
+         <android.support.design.widget.FloatingActionButton
+             android:id="@+id/fab_random_circle"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:src="@drawable/ic_edit"
+             fab:fabSize="mini"
+             fab:backgroundTint="@color/wx_green" />
+
+
+         <android.support.design.widget.FloatingActionButton
+             android:id="@+id/fab_download_circle"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:src="@drawable/ic_edit"
+             fab:fabSize="mini"
+             fab:backgroundTint="@color/wx_green"/>
+
+         <android.support.design.widget.FloatingActionButton
+             android:id="@+id/fab_browser_circle"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:src="@drawable/ic_edit"
+             fab:fabSize="mini"
+             fab:backgroundTint="@color/wx_green"/>
+
+     </com.novaapps.floatingactionmenu.FloatingActionMenu>-->
+</FrameLayout>
 
