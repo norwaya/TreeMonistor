@@ -1,49 +1,63 @@
 package com.xabaizhong.treemonistor.service.entity;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 /**
  * Created by admin on 2017/3/15.
  */
 
 public class User {
+
     /**
-     * name : sa
-     * areaId : admin
-     * permission : 3
+     * username : 610000
+     * password : admin
+     * roleid : 1
+     * deptid : 2
+     * areaid : 610000
      */
 
-    private String name;
-    private String areaId;
-    private String permission;
+    private String username;
+    private String password;
+    private String roleid;
+    private String deptid;
+    private String areaid;
 
-    public String getName() {
-        return name;
+
+    public String getUsername() {
+        return username;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getAreaId() {
-        return areaId;
+    public String getPassword() {
+        return password;
     }
 
-    public void setAreaId(String areaId) {
-        this.areaId = areaId;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    public String getPermission() {
-        return permission;
+    public String getRoleid() {
+        return roleid;
     }
 
-    public void setPermission(String permission) {
-        this.permission = permission;
+    public void setRoleid(String roleid) {
+        this.roleid = roleid;
     }
 
-    @Override
-    public String toString() {
-        return this.name + "\t" + this.areaId + "\t" + this.getPermission();
+    public String getDeptid() {
+        return deptid;
+    }
+
+    public void setDeptid(String deptid) {
+        this.deptid = deptid;
+    }
+
+    public String getAreaid() {
+        return areaid;
+    }
+
+    public void setAreaid(String areaid) {
+        this.areaid = areaid;
     }
 }

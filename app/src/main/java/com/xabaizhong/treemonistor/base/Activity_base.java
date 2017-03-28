@@ -48,12 +48,4 @@ public class Activity_base extends AppCompatActivity {
         return true;
     }
 
-    protected void saveUser(User user) {
-        if (user == null)
-            return;
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("name", "");
-        editor.apply();
-        editor.commit();
-    }
 }

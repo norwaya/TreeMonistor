@@ -1,25 +1,20 @@
 package com.xabaizhong.treemonistor.fragment;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 
-import com.github.clans.fab.FloatingActionButton;
-import com.github.clans.fab.FloatingActionMenu;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.squareup.picasso.Picasso;
 import com.xabaizhong.treemonistor.R;
-import com.xabaizhong.treemonistor.activity.add_tree.Activity_map;
 import com.xabaizhong.treemonistor.adapter.Fragment_expert_adapter;
 import com.xabaizhong.treemonistor.adapter.HeaderAndFooterWrapper;
 import com.xabaizhong.treemonistor.base.Fragment_base;
@@ -31,6 +26,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import terranovaproductions.newcomicreader.FloatingActionMenu;
 
 import static android.support.v7.widget.RecyclerView.VERTICAL;
 
@@ -41,15 +37,17 @@ import static android.support.v7.widget.RecyclerView.VERTICAL;
 public class Fragment_expert extends Fragment_base {
 
     String TAG = "fragment-expert";
-   /* @BindView(R.id.menu_yellow)
-    FloatingActionMenu menuYellow;
-    @BindView(R.id.fab_tree_unknow)
-    FloatingActionButton fabTreeUnknow;
-    @BindView(R.id.fab_tree_weakness)
-    FloatingActionButton fabTreeWeakness;
-    private Context context;*/
+    /* @BindView(R.id.menu_yellow)
+     FloatingActionMenu menuYellow;
+     @BindView(R.id.fab_tree_unknow)
+     FloatingActionButton fabTreeUnknow;
+     @BindView(R.id.fab_tree_weakness)
+     FloatingActionButton fabTreeWeakness;
+     private Context context;*/
     @BindView(R.id.xRecyclerView)
     XRecyclerView xRecyclerView;
+    @BindView(R.id.fab_father)
+    FloatingActionMenu fabFather;
 
 
     @Override
@@ -62,6 +60,7 @@ public class Fragment_expert extends Fragment_base {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_expert, container, false);
         ButterKnife.bind(this, view);
+
         initView();
         return view;
     }
@@ -69,6 +68,27 @@ public class Fragment_expert extends Fragment_base {
     Fragment_expert_adapter adapter;
 
     private void initView() {
+        fabFather.setIsCircle(false);
+        fabFather.setmItemGap(20);
+        fabFather.setOnMenuItemClickListener(new FloatingActionMenu.OnMenuItemClickListener() {
+            @Override
+            public void onMenuItemClick(FloatingActionMenu floatingActionMenu, int i, FloatingActionButton floatingActionButton) {
+                switch(floatingActionButton.getId()){
+                    case R.id.fab_tree_weakness:
+                        Log.d(TAG, "onMenuItemClick: fab_tree_weakness");
+                        break;
+                    case R.id.fab_tree_unknow:
+                        Log.d(TAG, "onMenuItemClick: fab_tree_unknow");
+                        break;
+                    case R.id.fab_tree_growth:
+                        Log.d(TAG, "onMenuItemClick: fab_tree_growth");
+                        break;
+                    case R.id.fab_tree_age:
+                        Log.d(TAG, "onMenuItemClick: fab_tree_age");
+                        break;
+                }
+            }
+        });
        /* menuYellow.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
             @Override
             public void onMenuToggle(boolean opened) {
@@ -163,6 +183,21 @@ public class Fragment_expert extends Fragment_base {
     public void onAttach(Context context) {
         super.onAttach(context);
         this.context = context;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+    }
+
+    @OnClick(R.id.fab_main)
+    public void onViewClicked() {
+        if (fabFather.isOpened()) {
+            fabFather.close();
+        } else {
+            fabFather.open();
+        }
+
     }
 
 

@@ -10,68 +10,58 @@ import org.ksoap2.transport.HttpTransportSE;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.ConnectException;
+import java.util.Map;
 
 public class WebserviceHelper {
+    static String base = "http://192.168.0.118:8055/";
+    static String TAG = "GetWebService";
 
-	/**
-	 * 
-	 * @param nameSpace
-	 * @param methodName
-	 * @param parameter
-	 * @param url
-	 * @param action
-	 * @return
-	 */
+    /**
+     * @param url_d      接口名称
+     * @param methodName 方法名称
+     * @param map
+     * @return
+     */
 /*	public static String GetWebService(String nameSpace, String methodName, String parameter,
-			String parameter2,String url, String action,String action2) {
+            String parameter2,String url, String action,String action2) {
 */
-	public static String GetWebService(String nameSpace, String methodName, String parameter,
-                                       String url, String action) {
-		String TAG = "GetWebService";
-		SoapObject soapObj = new SoapObject(nameSpace, methodName);
-		soapObj.addProperty(parameter, action);
-		//soapObj.addProperty(parameter2, action2);
-		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+    public static String GetWebService(String url_d, String methodName, Map<String, ? extends Serializable> map)
+            throws ConnectException {
+        String nameSpace = "http://tempuri.org/";
+        String url = base + url_d + ".asmx?wsdl";
 
-		envelope.bodyOut = soapObj;
-		envelope.dotNet = true;
+        SoapObject soapObj = new SoapObject(nameSpace, methodName);
+        /*soapObj.addProperty(parameter, action);*/
 
-		HttpTransportSE transport = new HttpTransportSE(url);
+        for (String key : map.keySet()) {
+            soapObj.addProperty(key, map.get(key));
+        }
 
-		try {
-			/**
-			 * ���������ȡ����
-			 */
-			transport.call(nameSpace + methodName, envelope);
-			SoapObject soapReault = (SoapObject) envelope.bodyIn;
-			Log.i("main", "GetWebService: "+soapReault);
-			String result = soapReault.getProperty(0).toString();
-			return result;
+        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        envelope.bodyOut = soapObj;
+        envelope.dotNet = true;
 
-		} catch (SoapFault e) {
-			Log.i(TAG, "GetWebService: SoapFault");
-			return e.getMessage();
+        HttpTransportSE transport = new HttpTransportSE(url);
 
-		} catch (ConnectException e) {
-			Log.i(TAG, "GetWebService: ConnectException");
-			/**
-			 * ����������
-			 */
-			return "ConnectException";
+        try {
+            transport.call(nameSpace + methodName, envelope);
+            SoapObject soapReault = (SoapObject) envelope.bodyIn;
+            return soapReault.getProperty(0).toString();
 
-		} catch (IOException e) {
-			Log.i(TAG, "GetWebService: IOException");
-			return e.getMessage();
+        } catch (SoapFault e) {
+            Log.i(TAG, "GetWebService: SoapFault");
+            return "soap 构建错误";
 
-		} catch (XmlPullParserException e) {
-			Log.i(TAG, "GetWebService: XmlPullParserException");
-			return e.getMessage();
+        } catch (IOException e) {
+            Log.i(TAG, "GetWebService: IOException");
+            return "IO 异常";
 
-		} catch (Exception e) {
-			Log.i(TAG, "GetWebService: Exception");
-			return e.getMessage();
+        } catch (XmlPullParserException e) {
+            Log.i(TAG, "GetWebService: XmlPullParserException");
+            return "xml 解析错误";
 
-		}
-	}
+        }
+    }
 }

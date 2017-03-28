@@ -1,6 +1,5 @@
 package com.xabaizhong.treemonistor.service;
 
-import com.xabaizhong.treemonistor.entity.HttpResult;
 import com.xabaizhong.treemonistor.service.entity.Response_news;
 import com.xabaizhong.treemonistor.service.entity.ResultMessage;
 import com.xabaizhong.treemonistor.service.entity.User;
@@ -22,6 +21,9 @@ import retrofit2.http.Url;
 public interface ApiService {
     @POST
     Observable<ResultMessage<User>> login(@Url String url, @Query("user") String name, @Query("pwd") String pwd);
+
+
+
 
     @Multipart
     @POST

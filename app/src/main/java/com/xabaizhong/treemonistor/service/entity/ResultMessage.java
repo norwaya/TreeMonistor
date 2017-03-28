@@ -14,7 +14,15 @@ public class ResultMessage<T> {
 
     private int error_code;
     private String message;
-    private T data;
+    private T result;
+
+    public T getResult() {
+        return result;
+    }
+
+    public void setResult(T result) {
+        this.result = result;
+    }
 
     public int getError_code() {
         return error_code;
@@ -30,14 +38,6 @@ public class ResultMessage<T> {
 
     public void setMessage(String message) {
         this.message = message;
-    }
-
-    public T getData() {
-        return data;
-    }
-
-    public void setData(T data) {
-        this.data = data;
     }
 
 

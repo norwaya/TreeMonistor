@@ -5,6 +5,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+
 import java.io.IOException;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
@@ -23,8 +24,11 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class RetrofitUtil {
     private static Retrofit retrofit;
-//    private final static String url = "http://v.juhe.cn/";
-    private final static String url = "http://baizhong.applinzi.com/";
+//        private final static String url = "http://v.juhe.cn/";
+        private final static String url = "http://192.168.0.118:8055/";
+
+//    private final static String url = "http://baizhong.applinzi.com/";
+
     public static Retrofit instance() {
         if (retrofit == null)
             synchronized (RetrofitUtil.class) {
@@ -36,13 +40,18 @@ public class RetrofitUtil {
 
     /**
      * "http://117.34.115.230:8080/spring/"
+     *
      * @return
      */
     private static Retrofit getRetrofit() {
+       /* Strategy strategy = new AnnotationStrategy();
+        Serializer serializer = new Persister(strategy);*/
+
         Gson gson = new GsonBuilder().setLenient().create();/////
         Retrofit.Builder builder = new Retrofit.Builder().baseUrl(url)
                 .client(client().build())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                /*.addConverterFactory(SimpleXmlConverterFactory.create(serializer))*/
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addConverterFactory(ScalarsConverterFactory.create());
 
@@ -62,9 +71,15 @@ public class RetrofitUtil {
     static class LogInterceptor implements Interceptor {
         private String TAG = "okhttp-interceptor";
 
+
+
         @Override
         public okhttp3.Response intercept(Chain chain) throws IOException {
             Request request = chain.request();
+            request.newBuilder()
+                    .header("Content-Type", "application/soap+xml;charset=UTF-8")//添加请求头
+                    .method(request.method(), request.body());
+
             Log.v(TAG, "request:" + request.toString());
             long t1 = System.nanoTime();
             okhttp3.Response response = chain.proceed(chain.request());

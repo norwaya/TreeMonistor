@@ -34,7 +34,6 @@ public class Activity_add_manage extends Activity_base implements AdapterView.On
     final static int LOAD_NUM = 20;
     @BindView(R.id.lv)
     ListView lv;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
