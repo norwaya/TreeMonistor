@@ -133,6 +133,7 @@ public class Fragment_function extends Fragment_base implements Fragment_functio
                 getActivity().startActivity(i);
                 break;
             case ACTIVITY_REGULATION:
+
                 break;
             case ACTIVITY_REGULATION_QUERY:
                 i.setClass(getContext(), Activity_monitor.class);

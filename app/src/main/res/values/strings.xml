@@ -38,6 +38,7 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="real_name">姓名: %1$s</string>
 
     <!-- Strings related to Settings -->
 

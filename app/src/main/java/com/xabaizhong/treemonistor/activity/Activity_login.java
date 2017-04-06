@@ -1,5 +1,6 @@
 package com.xabaizhong.treemonistor.activity;
 
+import android.content.ComponentName;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -20,15 +21,12 @@ import android.widget.RelativeLayout;
 import com.google.gson.Gson;
 import com.xabaizhong.treemonistor.R;
 import com.xabaizhong.treemonistor.base.Activity_base;
-import com.xabaizhong.treemonistor.service.ApiService;
-import com.xabaizhong.treemonistor.service.RetrofitUtil;
+import com.xabaizhong.treemonistor.contant.UserSharedField;
 import com.xabaizhong.treemonistor.service.WebserviceHelper;
-import com.xabaizhong.treemonistor.service.entity.ResultMessage;
-import com.xabaizhong.treemonistor.service.entity.User;
+import com.xabaizhong.treemonistor.service.model.User;
 import com.xabaizhong.treemonistor.service.response.LoginResultMessage;
+import com.xabaizhong.treemonistor.utils.InputVerification;
 
-
-import org.json.JSONStringer;
 
 import java.net.ConnectException;
 import java.util.HashMap;
@@ -37,13 +35,6 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by admin on 2017/3/3.
@@ -226,8 +217,12 @@ public class Activity_login extends Activity_base implements View.OnFocusChangeL
         login();
     }
 
-
+    /**
+     * @return true if username and pwd is ok
+     */
     private boolean verification() {
+        if (InputVerification.isNull(name) || InputVerification.isNull(pwd))
+            return false;
         return true;
     }
 
@@ -246,7 +241,7 @@ public class Activity_login extends Activity_base implements View.OnFocusChangeL
             protected String doInBackground(Void... params) {
                 try {
                     return WebserviceHelper.GetWebService(
-                            "login", "login", getLoginInfo());
+                            "Login", "login", getLoginInfo());
                 } catch (ConnectException e) {
                     e.printStackTrace();
                     return "-1";
@@ -256,100 +251,30 @@ public class Activity_login extends Activity_base implements View.OnFocusChangeL
             @Override
             protected void onPostExecute(String s) {
                 pb.setVisibility(View.INVISIBLE);
-                if ("-1".equals(s)) {
+                if (s == null || "-1".equals(s)) {
                     Log.i(TAG, "onPostExecute: " + s);
                 } else {
                     Log.i(TAG, "onPostExecute: " + s);
                     LoginResultMessage loginResult = new Gson().fromJson(s, LoginResultMessage.class);
-                    Log.i(TAG, "onPostExecute: " + loginResult.getResult().getUsername());
+                    Log.i(TAG, "onPostExecute: " + loginResult.getResult());
                     writerUserToFile(loginResult.getResult());
 
                 }
             }
         }.execute();
-
-       /* Observable
-                .create(new ObservableOnSubscribe<String>() {
-                    @Override
-                    public void subscribe(ObservableEmitter<String> e) throws Exception {
-                        String result = WebserviceHelper.GetWebService(
-                                "login", "login", getLoginInfo());
-                        e.onNext(result);
-                    }
-                })
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(new Observer<String>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onNext(String value) {
-                        pb.setVisibility(View.INVISIBLE);
-                        Log.i(TAG, "onNext: " + value);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        pb.setVisibility(View.INVISIBLE);
-                        showToast("check your netLink.");
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });*/
     }
-/*
-    private void login() {
-        Observable<String> observable = RetrofitUtil.instance()
-                .create(ApiService.class).login(
-                        "login.nb",
-                        name.getText().toString(),
-                        pwd.getText().toString())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io());
-        observable.subscribe(new Observer<String>() {
-            @Override
-            public void onSubscribe(Disposable d) {
-
-            }
-
-            @Override
-            public void onNext(String value) {
-                pb.setVisibility(View.INVISIBLE);
-                if (value.getError_code() == 0) {
-                    writerUserToFile(value.getData());
-                } else {
-                    showToast(value.getMessage());
-                }
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                pb.setVisibility(View.INVISIBLE);
-                showToast("check your netLink.");
-            }
-
-            @Override
-            public void onComplete() {
-
-            }
-        });
-    }
-*/
 
 
     private void writerUserToFile(User user) {
         Log.i(TAG, "writerUserToFile: " + user.toString());
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("username", user.getUsername());
-        editor.putString("", user.getRoleid());
-        editor.putString("", user.getDeptid());
-        editor.putString("", user.getPassword());
+        editor.putString(UserSharedField.USERID, user.getUser_id());
+        editor.putString(UserSharedField.ROLEID, user.getRole_id());
+        editor.putString(UserSharedField.AREAID, user.getArea_id());
+        editor.putString(UserSharedField.REALNAME, user.getReal_name());
+
+        editor.apply();
+        editor.commit();
     }
 
 

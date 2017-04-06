@@ -1,6 +1,7 @@
 package com.xabaizhong.treemonistor.activity.add_tree;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
@@ -12,12 +13,15 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.xabaizhong.treemonistor.R;
 import com.xabaizhong.treemonistor.base.Activity_base;
+import com.xabaizhong.treemonistor.contant.UserSharedField;
 import com.xabaizhong.treemonistor.entity.TreeGroup;
 import com.xabaizhong.treemonistor.entity.TreeTypeInfo;
 import com.xabaizhong.treemonistor.myview.C_dialog_date;
 import com.xabaizhong.treemonistor.myview.C_dialog_radio;
 import com.xabaizhong.treemonistor.myview.C_info_gather_item1;
 import com.xabaizhong.treemonistor.myview.DynamicView;
+import com.xabaizhong.treemonistor.service.WebserviceHelper;
+import com.xabaizhong.treemonistor.service.model.ResultMessage;
 import com.xabaizhong.treemonistor.utils.FileUtil;
 import com.xabaizhong.treemonistor.utils.MessageEvent;
 import com.xabaizhong.treemonistor.utils.RxBus;
@@ -25,11 +29,14 @@ import com.xabaizhong.treemonistor.utils.ScaleBitmap;
 import com.xabaizhong.treemonistor.utils.TreeGroupOp;
 
 import java.io.File;
+import java.net.ConnectException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Observer;
 
 import butterknife.BindView;
@@ -261,9 +268,7 @@ public class Activity_add_tree_group extends Activity_base {
                 treeGroup.picList = fillPic();
                 json = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create().toJson(treeTypeInfo);
                 Log.i(TAG, "fillData: "+json);
-               /* TreeGroupOp.Instance().setFiles(FileUtil.getFiles())
-                        .setJson(json)
-                        .op();*/
+               submitTreeInfo();
             }
         };
 
@@ -283,12 +288,49 @@ public class Activity_add_tree_group extends Activity_base {
                 .subscribe(observer);
 
     }
+    AsyncTask asyncTask;
+
+    private void submitTreeInfo() {
+        asyncTask = new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... params) {
+                try {
+                    return WebserviceHelper.GetWebService(
+                            "UploadTreeInfo", "UploadTreeInfoMethod", getParms());
+                } catch (ConnectException e) {
+                    e.printStackTrace();
+                    return "-1";
+                }
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+
+                ResultMessage msg = new Gson().fromJson(s, ResultMessage.class);
+                if(msg.getError_code() == 0){
+                    showToast("suc");
+                }
+            }
+        }.execute();
+    }
+
+
+    private Map<String, String> getParms(){
+        Map<String, String> map = new HashMap<>();
+        String user_id = sharedPreferences.getString(UserSharedField.USERID,"");
+
+        map.put("UserID ",user_id);
+        map.put("TreeType","0");
+        map.put("JsonStr",json);
+        return map;
+    }
+
+
     private List<String> fillPic() {
         List<String> list = new ArrayList<>();
         for (File file : FileUtil.getFiles()) {
             if (!file.getName().equals(".nomedia")) {
-//                list.add(encode64base(file));
-                list.add("image");
+                list.add(FileUtil.file2String(file));
             }
 
         }

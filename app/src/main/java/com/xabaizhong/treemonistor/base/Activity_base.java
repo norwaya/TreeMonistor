@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import com.xabaizhong.treemonistor.contant.Contant;
-import com.xabaizhong.treemonistor.service.entity.User;
 
 import java.util.Set;
 

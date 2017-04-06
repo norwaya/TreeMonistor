@@ -5,6 +5,9 @@ package com.xabaizhong.treemonistor.contant;
  */
 
 public interface UserSharedField {
-    String USERNAME = "username";
-    String AREAID = "userid";
+//    String USERNAME = "username";
+    String USERID = "userid";
+    String AREAID = "areaid";
+    String ROLEID = "roleid";  //type -> int
+    String REALNAME = "realname";
 }

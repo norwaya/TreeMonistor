@@ -42,7 +42,7 @@
         android:theme="@style/AppTheme">
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="G6baKP9GEGTXB6o59GZ89qBoLKt3cyZq"/>
+            android:value="fBHis1xlWjQjZ08jDPogZpBNzZ653Fhm"/>
 
         <activity
             android:name=".activity.Activity_main"
@@ -145,7 +145,9 @@
             android:name=".activity.base_data.Activity_base_weakness_detail"
             android:label="weaknewss"
             android:screenOrientation="portrait"/>
-
+        <activity android:name=".activity.Activity_userInfo"
+            android:label="user_detail"
+            android:screenOrientation="portrait"/>
 
         <!-- service -->
         <service

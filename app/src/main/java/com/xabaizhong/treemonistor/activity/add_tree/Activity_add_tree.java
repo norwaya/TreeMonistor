@@ -1,6 +1,7 @@
 package com.xabaizhong.treemonistor.activity.add_tree;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
@@ -14,6 +15,7 @@ import com.google.gson.GsonBuilder;
 import com.xabaizhong.treemonistor.R;
 import com.xabaizhong.treemonistor.base.Activity_base;
 import com.xabaizhong.treemonistor.base.App;
+import com.xabaizhong.treemonistor.contant.UserSharedField;
 import com.xabaizhong.treemonistor.entity.DaoSession;
 import com.xabaizhong.treemonistor.entity.Pic;
 import com.xabaizhong.treemonistor.entity.PicDao;
@@ -26,6 +28,9 @@ import com.xabaizhong.treemonistor.myview.C_dialog_checkbox;
 import com.xabaizhong.treemonistor.myview.C_dialog_date;
 import com.xabaizhong.treemonistor.myview.C_dialog_radio;
 import com.xabaizhong.treemonistor.myview.C_info_gather_item1;
+import com.xabaizhong.treemonistor.service.WebserviceHelper;
+import com.xabaizhong.treemonistor.service.model.ResultMessage;
+import com.xabaizhong.treemonistor.service.response.LoginResultMessage;
 import com.xabaizhong.treemonistor.utils.FileUtil;
 import com.xabaizhong.treemonistor.utils.MessageEvent;
 import com.xabaizhong.treemonistor.utils.RxBus;
@@ -36,11 +41,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.ConnectException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -361,9 +369,7 @@ public class Activity_add_tree extends Activity_base {
                 tree.picList = fillPic();
                 json = new GsonBuilder().setDateFormat("yyyy-MM-dd%20HH:mm:ss").create().toJson(treeTypeInfo);
                 Log.i(TAG, "fillTree: " + json);
-                /*TreeGroupOp.Instance().setFiles(FileUtil.getFiles())
-                        .setJson(json)
-                        .op();*/
+                submitTreeInfo();
             }
         };
 
@@ -384,6 +390,44 @@ public class Activity_add_tree extends Activity_base {
                 .subscribeOn(Schedulers.io())
                 .subscribe(observer);
     }
+
+    AsyncTask asyncTask;
+
+    private void submitTreeInfo() {
+        asyncTask = new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... params) {
+                try {
+                    return WebserviceHelper.GetWebService(
+                            "UploadTreeInfo", "UploadTreeInfoMethod", getParms());
+                } catch (ConnectException e) {
+                    e.printStackTrace();
+                    return "-1";
+                }
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+
+                ResultMessage msg = new Gson().fromJson(s, ResultMessage.class);
+                if(msg.getError_code() == 0){
+                    showToast("suc");
+                }
+            }
+        }.execute();
+    }
+
+
+    private Map<String, String> getParms(){
+        Map<String, String> map = new HashMap<>();
+        String user_id = sharedPreferences.getString(UserSharedField.USERID,"");
+
+        map.put("UserID ",user_id);
+        map.put("TreeType","0");
+        map.put("JsonStr",json);
+        return map;
+    }
+
 
     String check() {
 
@@ -475,35 +519,34 @@ public class Activity_add_tree extends Activity_base {
         treeTypeInfo.tree = tree;
 
 
-
     }
 
     private List<String> fillPic() {
         List<String> list = new ArrayList<>();
         for (File file : FileUtil.getFiles()) {
             if (!file.getName().equals(".nomedia")) {
-//                list.add(encode64base(file));
-                list.add("image");
+                list.add(FileUtil.file2String(file));
             }
 
         }
         return list;
     }
-    private String encode64base(File file){
+
+   /* private String encode64base(File file) {
         FileInputStream inputFile = null;
         try {
             inputFile = new FileInputStream(file);
             byte[] buffer = new byte[(int) file.length()];
             inputFile.read(buffer);
             inputFile.close();
-            return  Base64.encodeToString(buffer,Base64.DEFAULT);
+            return Base64.encodeToString(buffer, Base64.DEFAULT);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
-    }
+    }*/
 
     private void computeCrownAvg(String ew, String ns) {
         if ("".equals(ew) || "".equals(ns))
@@ -549,8 +592,8 @@ public class Activity_add_tree extends Activity_base {
                         detailAddress.setText(box.getStreet() + box.getSematicDescription());
                         setAreaId(box);
                         tree.setSmallName(box.getStreet() + box.getSematicDescription());
-                        tree.setAbscissa(box.getLat()+"");
-                        tree.setOrdinate(box.getLon()+"");
+                        tree.setAbscissa(box.getLat() + "");
+                        tree.setOrdinate(box.getLon() + "");
                     }
                 }
 

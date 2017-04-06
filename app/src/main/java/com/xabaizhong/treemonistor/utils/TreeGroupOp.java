@@ -4,8 +4,7 @@ import android.util.Log;
 
 import com.xabaizhong.treemonistor.service.ApiService;
 import com.xabaizhong.treemonistor.service.RetrofitUtil;
-import com.xabaizhong.treemonistor.service.entity.ResultMessage;
-import com.xabaizhong.treemonistor.service.entity.User;
+import com.xabaizhong.treemonistor.service.model.ResultMessage;
 
 import java.io.File;
 import java.util.HashMap;

@@ -15,7 +15,7 @@ import java.net.ConnectException;
 import java.util.Map;
 
 public class WebserviceHelper {
-    static String base = "http://192.168.0.118:8055/";
+    static String base = "http://192.168.0.186:8055/";
     static String TAG = "GetWebService";
 
     /**
@@ -52,16 +52,15 @@ public class WebserviceHelper {
 
         } catch (SoapFault e) {
             Log.i(TAG, "GetWebService: SoapFault");
-            return "soap 构建错误";
 
         } catch (IOException e) {
             Log.i(TAG, "GetWebService: IOException");
-            return "IO 异常";
 
         } catch (XmlPullParserException e) {
             Log.i(TAG, "GetWebService: XmlPullParserException");
-            return "xml 解析错误";
 
         }
+        return null;
+
     }
 }

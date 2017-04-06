@@ -28,7 +28,7 @@ import com.xabaizhong.treemonistor.entity.Data_news;
 import com.xabaizhong.treemonistor.entity.Data_newsDao;
 import com.xabaizhong.treemonistor.service.ApiService;
 import com.xabaizhong.treemonistor.service.RetrofitUtil;
-import com.xabaizhong.treemonistor.service.entity.Response_news;
+import com.xabaizhong.treemonistor.service.model.Response_news;
 import com.xabaizhong.treemonistor.utils.RecycleViewDivider;
 
 import java.util.List;
@@ -202,6 +202,13 @@ public class Fragment_news extends Fragment_base {
     public void onDetach() {
         super.onDetach();
         Log.d(TAG, "onDetach: ");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        xRecyclerView.refreshComplete();
+        xRecyclerView.loadMoreComplete();
     }
 
     @Override
