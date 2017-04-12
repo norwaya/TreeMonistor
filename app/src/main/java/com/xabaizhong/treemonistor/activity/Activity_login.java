@@ -73,7 +73,7 @@ public class Activity_login extends Activity_base implements View.OnFocusChangeL
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
-        name.setText("610000");
+        name.setText("test1");
         pwd.setText("admin");
         initObserver();
         initView();
@@ -226,10 +226,12 @@ public class Activity_login extends Activity_base implements View.OnFocusChangeL
         return true;
     }
 
-    private Map<String, String> getLoginInfo() {
-        Map<String, String> map = new HashMap<String, String>();
-        map.put("UserName", name.getText().toString());
-        map.put("PassWord", pwd.getText().toString());
+    private Map<String, Object> getLoginInfo() {
+
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("UserID", name.getText().toString());
+        map.put("Password", pwd.getText().toString());
+
         return map;
     }
 
@@ -256,8 +258,11 @@ public class Activity_login extends Activity_base implements View.OnFocusChangeL
                 } else {
                     Log.i(TAG, "onPostExecute: " + s);
                     LoginResultMessage loginResult = new Gson().fromJson(s, LoginResultMessage.class);
-                    Log.i(TAG, "onPostExecute: " + loginResult.getResult());
-                    writerUserToFile(loginResult.getResult());
+                    Log.i(TAG, "onPostExecute: " + loginResult.getMessage());
+                    if (loginResult.getError_code() == 0){
+                        writerUserToFile(loginResult.getResult());
+                        finish();
+                    }
 
                 }
             }

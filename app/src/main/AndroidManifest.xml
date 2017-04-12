@@ -148,6 +148,9 @@
         <activity android:name=".activity.Activity_userInfo"
             android:label="user_detail"
             android:screenOrientation="portrait"/>
+        <activity android:name=".activity.query.Activity_query_tree_info"
+            android:label="tree-query"
+            android:screenOrientation="portrait"/>
 
         <!-- service -->
         <service
@@ -159,9 +162,11 @@
                 </action>
             </intent-filter>
         </service>
-        <service android:name=".service.service_notice.NoticeService">
+        <service android:name=".service.service_notice.NoticeService"
+            >
             <intent-filter>
-                <action android:name="monitor_notice_service"/>
+                <action android:name="com.action.monitor_notice_service"/>
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
 

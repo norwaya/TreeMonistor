@@ -54,22 +54,30 @@ public class Activity_userInfo extends Activity_base {
                             "Login", "UserDetInfo", requestMap());
                 } catch (ConnectException e) {
                     e.printStackTrace();
-                    return "-1";
+                    return null;
                 }
             }
 
             @Override
             protected void onPostExecute(String s) {
-                User user = new Gson().fromJson(s,User.class);
-                userDetail.setText(user.toString());
+                if (s == null)
+                    return;
+                Log.i(TAG, "onPostExecute: "+s);
+                LoginResultMessage loginResultMessage = new Gson().fromJson(s, LoginResultMessage.class);
+                if (loginResultMessage.getError_code() == 0)
+                    userDetail.setText(loginResultMessage.getResult().toString());
+                else{
+                    userDetail.setText("获取信息失败");
+                }
             }
         }.execute();
     }
 
-    private Map<String, String> requestMap() {
-        Map<String, String> map = new HashMap<>();
-        String userid = sharedPreferences.getString(UserSharedField.USERID,"null");
-        map.put("UserID",userid);
+    private Map<String, Object> requestMap() {
+        Map<String, Object> map = new HashMap<>();
+        String userid = sharedPreferences.getString(UserSharedField.USERID, "null");
+        map.put("UserID", userid);
+        map.put("Type", 1);
         return map;
     }
 

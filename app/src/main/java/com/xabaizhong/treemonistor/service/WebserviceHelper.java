@@ -15,7 +15,7 @@ import java.net.ConnectException;
 import java.util.Map;
 
 public class WebserviceHelper {
-    static String base = "http://192.168.0.186:8055/";
+    static String base = "http://192.168.0.118:8055/";
     static String TAG = "GetWebService";
 
     /**
@@ -27,9 +27,10 @@ public class WebserviceHelper {
 /*	public static String GetWebService(String nameSpace, String methodName, String parameter,
             String parameter2,String url, String action,String action2) {
 */
-    public static String GetWebService(String url_d, String methodName, Map<String, ? extends Serializable> map)
+    public static String GetWebService(String url_d, String methodName, Map<String, Object> map)
             throws ConnectException {
         String nameSpace = "http://tempuri.org/";
+//        String nameSpace = "http://tempuri.org/";
         String url = base + url_d + ".asmx?wsdl";
 
         SoapObject soapObj = new SoapObject(nameSpace, methodName);
@@ -37,6 +38,7 @@ public class WebserviceHelper {
 
         for (String key : map.keySet()) {
             soapObj.addProperty(key, map.get(key));
+            Log.i(TAG, "GetWebService: "+key + map.get(key));
         }
 
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
@@ -59,6 +61,9 @@ public class WebserviceHelper {
         } catch (XmlPullParserException e) {
             Log.i(TAG, "GetWebService: XmlPullParserException");
 
+        } catch(IllegalArgumentException e){
+            Log.i(TAG, "GetWebService: IllegalArgumentException");
+            e.printStackTrace();
         }
         return null;
 

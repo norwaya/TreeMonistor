@@ -265,10 +265,10 @@ public class Activity_add_tree_group extends Activity_base {
 
             @Override
             public void onComplete() {
-                treeGroup.picList = fillPic();
+                treeGroup.setPicList(fillPic());
                 json = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create().toJson(treeTypeInfo);
-                Log.i(TAG, "fillData: "+json);
-               submitTreeInfo();
+                Log.i(TAG, "fillData: " + json);
+                submitTreeInfo();
             }
         };
 
@@ -278,7 +278,7 @@ public class Activity_add_tree_group extends Activity_base {
                 FileUtil.clearFileDir();
                 if (list != null)
                     for (int i = 0; i < list.size(); i++) {
-                        ScaleBitmap.getBitmap(list.get(i),"image"+i+".png");
+                        ScaleBitmap.getBitmap(list.get(i), "image" + i + ".png");
                     }
                 e.onComplete();
                 Log.i(TAG, "subscribe: over");
@@ -288,6 +288,7 @@ public class Activity_add_tree_group extends Activity_base {
                 .subscribe(observer);
 
     }
+
     AsyncTask asyncTask;
 
     private void submitTreeInfo() {
@@ -299,15 +300,19 @@ public class Activity_add_tree_group extends Activity_base {
                             "UploadTreeInfo", "UploadTreeInfoMethod", getParms());
                 } catch (ConnectException e) {
                     e.printStackTrace();
-                    return "-1";
+                    return null;
                 }
             }
 
             @Override
             protected void onPostExecute(String s) {
-
+                if (s == null) {
+                    Log.i(TAG, "onPostExecute: error");
+                    return;
+                }
                 ResultMessage msg = new Gson().fromJson(s, ResultMessage.class);
-                if(msg.getError_code() == 0){
+                Log.i(TAG, "onPostExecute: "+msg.getMessage());
+                if (msg.getError_code() == 0) {
                     showToast("suc");
                 }
             }
@@ -315,13 +320,12 @@ public class Activity_add_tree_group extends Activity_base {
     }
 
 
-    private Map<String, String> getParms(){
-        Map<String, String> map = new HashMap<>();
-        String user_id = sharedPreferences.getString(UserSharedField.USERID,"");
-
-        map.put("UserID ",user_id);
-        map.put("TreeType","0");
-        map.put("JsonStr",json);
+    private Map<String, Object> getParms() {
+        Map<String, Object> map = new HashMap<>();
+        String user_id = sharedPreferences.getString(UserSharedField.USERID, "");
+        map.put("UserID ", user_id);
+        map.put("TreeType", "0");
+        map.put("JsonStr", json);
         return map;
     }
 
@@ -330,39 +334,52 @@ public class Activity_add_tree_group extends Activity_base {
         List<String> list = new ArrayList<>();
         for (File file : FileUtil.getFiles()) {
             if (!file.getName().equals(".nomedia")) {
-                list.add(FileUtil.file2String(file));
+                list.add(FileUtil.bitmapToBase64Str(file));
             }
 
         }
         return list;
     }
+
     private String check() {
         return null;
     }
+
     String json;
+
     private void fillData() {
-        treeTypeInfo.setTypeId("1");
-        treeTypeInfo.setRecoredPerson(researchPersion.getText());
+        treeTypeInfo.setTypeId(1);
+//        treeTypeInfo.setRecoredPerson(researchPersion.getText());
+        treeTypeInfo.setTreeId(treeId.getText());
+
         treeGroup.setEvevation(evevation.getText());
-        treeGroup.setGSTreeNum(gSTreeNum.getText());
+        treeGroup.setgSTreeNum(gSTreeNum.getText());
         treeGroup.setMainTreeName(mainTreeName.getText());
         treeGroup.setTreeMap(treeMap.getTreeMap());
         treeGroup.setSZJX(szjx.getText());
-        treeGroup.setYBDInfo(yBDInfo.getText());
+        treeGroup.setyBDInfo(yBDInfo.getText());
         treeGroup.setXiaMuDensity(xiaMuDensity.getText());
         treeGroup.setXiaMuType(xiaMuType.getText());
-        treeGroup.setDBWDensity(dBWDensity.getText());
-        treeGroup.setDBWType(dBWType.getText());
+        treeGroup.setdBWDensity(dBWDensity.getText());
+        treeGroup.setdBWType(dBWType.getText());
         treeGroup.setAverageAge(averageAge.getText());
         treeGroup.setAverageDiameter(averageDiameter.getText());
         treeGroup.setAverageHeight(averageHeight.getText());
         treeGroup.setArea(area.getText());
         treeGroup.setManagementUnit(managementUnit.getText());
         treeGroup.setManagementState(managementState.getText());
-        treeGroup.setRWJYInfo(rWJYInfo.getText());
+        treeGroup.setrWJYInfo(rWJYInfo.getText());
         treeGroup.setSuggest(suggest.getText());
-        treeTypeInfo.treeGroup = treeGroup;
 
+        treeTypeInfo.setTreeGroup(treeGroup);
+        treeTypeInfo.setAreaId("610322");
+        treeGroup.setUserID(userId());
+
+        treeGroup.setTreeId(sharedPreferences.getString(UserSharedField.USERID,""));
+    }
+
+    private String userId() {
+        return sharedPreferences.getString(UserSharedField.USERID, "");
     }
 
     private void selectPhoto() {
@@ -375,7 +392,6 @@ public class Activity_add_tree_group extends Activity_base {
                 .start(this, Result_Code.REQUEST_IMAGE);
     }
 
-
     public void showDateDialog() {
         C_dialog_date dateDialog = new C_dialog_date(this);
         dateDialog.setDateDialogListener(new C_dialog_date.DateDialogListener() {
@@ -384,6 +400,7 @@ public class Activity_add_tree_group extends Activity_base {
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
                 researchDate.setText(format.format(date));
                 treeTypeInfo.setDate(date);
+                treeGroup.setDate(date);
             }
         });
         dateDialog.show();

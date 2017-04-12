@@ -90,7 +90,7 @@ public class Fragment_setting extends Fragment_base {
         }
     }
 
-    AsyncTask asyncTask;
+    /*AsyncTask asyncTask;
 
     private void getUserInfo() {
         asyncTask = new AsyncTask<Void, Void, String>() {
@@ -101,7 +101,7 @@ public class Fragment_setting extends Fragment_base {
                             "Login", "UserDetInfo", requestMap());
                 } catch (ConnectException e) {
                     e.printStackTrace();
-                    return "-1";
+                    return null;
                 }
             }
 
@@ -117,7 +117,7 @@ public class Fragment_setting extends Fragment_base {
         String userid = sharedPreferences.getString(UserSharedField.USERID, "null");
         map.put("UserID", userid);
         return map;
-    }
+    }*/
 
 
     @Override

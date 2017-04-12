@@ -1,6 +1,7 @@
 package com.xabaizhong.treemonistor.entity;
 
 import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
@@ -11,6 +12,8 @@ import org.greenrobot.greendao.annotation.ToOne;
 import org.greenrobot.greendao.annotation.Transient;
 import org.greenrobot.greendao.annotation.Generated;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.greenrobot.greendao.DaoException;
@@ -19,11 +22,7 @@ import org.greenrobot.greendao.annotation.NotNull;
 /**
  * Created by admin on 2017/3/2.
  */
-@Entity(indexes = {
-        @Index(value = "id, treeId DESC", unique = true)
-})
 public class Tree {
-    @Id
     private Long id;
 
     /* private String TreeId;     //古树编号  -----unique
@@ -69,9 +68,14 @@ public class Tree {
      private String Protected;     //地上保护现状
      private String Recovery;     //养护复壮现状
      private String Remark;  //备注*/
+
+
     private String treeId;  //id  √
-    private String treeType;//古树标志
-    private String treeArea;//农村  城市
+    @SerializedName("treetype")
+    private int treeType;//古树标志
+    @SerializedName("treearea")
+    private int treeArea;//农村  城市
+    @SerializedName("treespeid")
     private String treeSpeID; //特征代码
     private String town;//
     private String village;//
@@ -107,92 +111,19 @@ public class Tree {
     private String owner;//归属
     private String treeLevel;//等级
     private String treeStatus;//状态
-
-    private long treeSpecialId;
-
-    @ToOne(joinProperty = "treeSpecialId")
-    private TreeSpecial treeSpecial;
-
-    @Expose
-    @ToMany(referencedJoinProperty = "treeId")//treeId 指的是id  主键
-    @OrderBy("id ASC")
-    private List<Pic> pics;
-
-    @Transient
-    public List<String> picList;
-
-    /**
-     * Used to resolve relations
-     */
-    @Generated(hash = 2040040024)
-    private transient DaoSession daoSession;
-
-    /**
-     * Used for active entity operations.
-     */
-    @Generated(hash = 948839816)
-    private transient TreeDao myDao;
-
-    @Generated(hash = 358084106)
-    public Tree(Long id, String treeId, String treeType, String treeArea,
-                String treeSpeID, String town, String village, String smallName,
-                String ordinate, String abscissa, String specialCode, String treeHeight,
-                String treeDBH, String crownAvg, String crownEW, String crownNS,
-                String managementUnit, String managementPersion, String treeHistory,
-                String grownSpace, String special, String growth, String enviorment,
-                String realAge, String guessAge, String evevation, String aspect,
-                String slope, String slopePos, String soil, String enviorFactor,
-                String specStatDesc, String specDesc, String explain, String protecte,
-                String recovery, String owner, String treeLevel, String treeStatus,
-                long treeSpecialId) {
-        this.id = id;
-        this.treeId = treeId;
-        this.treeType = treeType;
-        this.treeArea = treeArea;
-        this.treeSpeID = treeSpeID;
-        this.town = town;
-        this.village = village;
-        this.smallName = smallName;
-        this.ordinate = ordinate;
-        this.abscissa = abscissa;
-        this.specialCode = specialCode;
-        this.treeHeight = treeHeight;
-        this.treeDBH = treeDBH;
-        this.crownAvg = crownAvg;
-        this.crownEW = crownEW;
-        this.crownNS = crownNS;
-        this.managementUnit = managementUnit;
-        this.managementPersion = managementPersion;
-        this.treeHistory = treeHistory;
-        this.grownSpace = grownSpace;
-        this.special = special;
-        this.growth = growth;
-        this.enviorment = enviorment;
-        this.realAge = realAge;
-        this.guessAge = guessAge;
-        this.evevation = evevation;
-        this.aspect = aspect;
-        this.slope = slope;
-        this.slopePos = slopePos;
-        this.soil = soil;
-        this.enviorFactor = enviorFactor;
-        this.specStatDesc = specStatDesc;
-        this.specDesc = specDesc;
-        this.explain = explain;
-        this.protecte = protecte;
-        this.recovery = recovery;
-        this.owner = owner;
-        this.treeLevel = treeLevel;
-        this.treeStatus = treeStatus;
-        this.treeSpecialId = treeSpecialId;
+    private Date date;
+    private String UserID;
+    @SerializedName("piclist")
+    private List<String> picList = new ArrayList<>();
+    public Date getDate() {
+        return date;
     }
 
-    @Generated(hash = 439989092)
-    public Tree() {
+    public void setDate(Date date) {
+        this.date = date;
     }
-
     public Long getId() {
-        return this.id;
+        return id;
     }
 
     public void setId(Long id) {
@@ -200,31 +131,31 @@ public class Tree {
     }
 
     public String getTreeId() {
-        return this.treeId;
+        return treeId;
     }
 
     public void setTreeId(String treeId) {
         this.treeId = treeId;
     }
 
-    public String getTreeType() {
-        return this.treeType;
+    public int getTreeType() {
+        return treeType;
     }
 
-    public void setTreeType(String treeType) {
+    public void setTreeType(int treeType) {
         this.treeType = treeType;
     }
 
-    public String getTreeArea() {
-        return this.treeArea;
+    public int getTreeArea() {
+        return treeArea;
     }
 
-    public void setTreeArea(String treeArea) {
+    public void setTreeArea(int treeArea) {
         this.treeArea = treeArea;
     }
 
     public String getTreeSpeID() {
-        return this.treeSpeID;
+        return treeSpeID;
     }
 
     public void setTreeSpeID(String treeSpeID) {
@@ -232,7 +163,7 @@ public class Tree {
     }
 
     public String getTown() {
-        return this.town;
+        return town;
     }
 
     public void setTown(String town) {
@@ -240,7 +171,7 @@ public class Tree {
     }
 
     public String getVillage() {
-        return this.village;
+        return village;
     }
 
     public void setVillage(String village) {
@@ -248,7 +179,7 @@ public class Tree {
     }
 
     public String getSmallName() {
-        return this.smallName;
+        return smallName;
     }
 
     public void setSmallName(String smallName) {
@@ -256,7 +187,7 @@ public class Tree {
     }
 
     public String getOrdinate() {
-        return this.ordinate;
+        return ordinate;
     }
 
     public void setOrdinate(String ordinate) {
@@ -264,7 +195,7 @@ public class Tree {
     }
 
     public String getAbscissa() {
-        return this.abscissa;
+        return abscissa;
     }
 
     public void setAbscissa(String abscissa) {
@@ -272,7 +203,7 @@ public class Tree {
     }
 
     public String getSpecialCode() {
-        return this.specialCode;
+        return specialCode;
     }
 
     public void setSpecialCode(String specialCode) {
@@ -280,7 +211,7 @@ public class Tree {
     }
 
     public String getTreeHeight() {
-        return this.treeHeight;
+        return treeHeight;
     }
 
     public void setTreeHeight(String treeHeight) {
@@ -288,7 +219,7 @@ public class Tree {
     }
 
     public String getTreeDBH() {
-        return this.treeDBH;
+        return treeDBH;
     }
 
     public void setTreeDBH(String treeDBH) {
@@ -296,7 +227,7 @@ public class Tree {
     }
 
     public String getCrownAvg() {
-        return this.crownAvg;
+        return crownAvg;
     }
 
     public void setCrownAvg(String crownAvg) {
@@ -304,7 +235,7 @@ public class Tree {
     }
 
     public String getCrownEW() {
-        return this.crownEW;
+        return crownEW;
     }
 
     public void setCrownEW(String crownEW) {
@@ -312,7 +243,7 @@ public class Tree {
     }
 
     public String getCrownNS() {
-        return this.crownNS;
+        return crownNS;
     }
 
     public void setCrownNS(String crownNS) {
@@ -320,7 +251,7 @@ public class Tree {
     }
 
     public String getManagementUnit() {
-        return this.managementUnit;
+        return managementUnit;
     }
 
     public void setManagementUnit(String managementUnit) {
@@ -328,7 +259,7 @@ public class Tree {
     }
 
     public String getManagementPersion() {
-        return this.managementPersion;
+        return managementPersion;
     }
 
     public void setManagementPersion(String managementPersion) {
@@ -336,7 +267,7 @@ public class Tree {
     }
 
     public String getTreeHistory() {
-        return this.treeHistory;
+        return treeHistory;
     }
 
     public void setTreeHistory(String treeHistory) {
@@ -344,7 +275,7 @@ public class Tree {
     }
 
     public String getGrownSpace() {
-        return this.grownSpace;
+        return grownSpace;
     }
 
     public void setGrownSpace(String grownSpace) {
@@ -352,7 +283,7 @@ public class Tree {
     }
 
     public String getSpecial() {
-        return this.special;
+        return special;
     }
 
     public void setSpecial(String special) {
@@ -360,7 +291,7 @@ public class Tree {
     }
 
     public String getGrowth() {
-        return this.growth;
+        return growth;
     }
 
     public void setGrowth(String growth) {
@@ -368,7 +299,7 @@ public class Tree {
     }
 
     public String getEnviorment() {
-        return this.enviorment;
+        return enviorment;
     }
 
     public void setEnviorment(String enviorment) {
@@ -376,7 +307,7 @@ public class Tree {
     }
 
     public String getRealAge() {
-        return this.realAge;
+        return realAge;
     }
 
     public void setRealAge(String realAge) {
@@ -384,7 +315,7 @@ public class Tree {
     }
 
     public String getGuessAge() {
-        return this.guessAge;
+        return guessAge;
     }
 
     public void setGuessAge(String guessAge) {
@@ -392,7 +323,7 @@ public class Tree {
     }
 
     public String getEvevation() {
-        return this.evevation;
+        return evevation;
     }
 
     public void setEvevation(String evevation) {
@@ -400,7 +331,7 @@ public class Tree {
     }
 
     public String getAspect() {
-        return this.aspect;
+        return aspect;
     }
 
     public void setAspect(String aspect) {
@@ -408,7 +339,7 @@ public class Tree {
     }
 
     public String getSlope() {
-        return this.slope;
+        return slope;
     }
 
     public void setSlope(String slope) {
@@ -416,7 +347,7 @@ public class Tree {
     }
 
     public String getSlopePos() {
-        return this.slopePos;
+        return slopePos;
     }
 
     public void setSlopePos(String slopePos) {
@@ -424,7 +355,7 @@ public class Tree {
     }
 
     public String getSoil() {
-        return this.soil;
+        return soil;
     }
 
     public void setSoil(String soil) {
@@ -432,7 +363,7 @@ public class Tree {
     }
 
     public String getEnviorFactor() {
-        return this.enviorFactor;
+        return enviorFactor;
     }
 
     public void setEnviorFactor(String enviorFactor) {
@@ -440,7 +371,7 @@ public class Tree {
     }
 
     public String getSpecStatDesc() {
-        return this.specStatDesc;
+        return specStatDesc;
     }
 
     public void setSpecStatDesc(String specStatDesc) {
@@ -448,7 +379,7 @@ public class Tree {
     }
 
     public String getSpecDesc() {
-        return this.specDesc;
+        return specDesc;
     }
 
     public void setSpecDesc(String specDesc) {
@@ -456,7 +387,7 @@ public class Tree {
     }
 
     public String getExplain() {
-        return this.explain;
+        return explain;
     }
 
     public void setExplain(String explain) {
@@ -464,7 +395,7 @@ public class Tree {
     }
 
     public String getProtecte() {
-        return this.protecte;
+        return protecte;
     }
 
     public void setProtecte(String protecte) {
@@ -472,7 +403,7 @@ public class Tree {
     }
 
     public String getRecovery() {
-        return this.recovery;
+        return recovery;
     }
 
     public void setRecovery(String recovery) {
@@ -480,7 +411,7 @@ public class Tree {
     }
 
     public String getOwner() {
-        return this.owner;
+        return owner;
     }
 
     public void setOwner(String owner) {
@@ -488,7 +419,7 @@ public class Tree {
     }
 
     public String getTreeLevel() {
-        return this.treeLevel;
+        return treeLevel;
     }
 
     public void setTreeLevel(String treeLevel) {
@@ -496,134 +427,26 @@ public class Tree {
     }
 
     public String getTreeStatus() {
-        return this.treeStatus;
+        return treeStatus;
     }
 
     public void setTreeStatus(String treeStatus) {
         this.treeStatus = treeStatus;
     }
 
-    public long getTreeSpecialId() {
-        return this.treeSpecialId;
+    public String getUserID() {
+        return UserID;
     }
 
-    public void setTreeSpecialId(long treeSpecialId) {
-        this.treeSpecialId = treeSpecialId;
+    public void setUserID(String userID) {
+        UserID = userID;
     }
 
-    @Generated(hash = 2091176287)
-    private transient Long treeSpecial__resolvedKey;
-
-    /**
-     * To-one relationship, resolved on first access.
-     */
-    @Generated(hash = 1272969414)
-    public TreeSpecial getTreeSpecial() {
-        long __key = this.treeSpecialId;
-        if (treeSpecial__resolvedKey == null
-                || !treeSpecial__resolvedKey.equals(__key)) {
-            final DaoSession daoSession = this.daoSession;
-            if (daoSession == null) {
-                throw new DaoException("Entity is detached from DAO context");
-            }
-            TreeSpecialDao targetDao = daoSession.getTreeSpecialDao();
-            TreeSpecial treeSpecialNew = targetDao.load(__key);
-            synchronized (this) {
-                treeSpecial = treeSpecialNew;
-                treeSpecial__resolvedKey = __key;
-            }
-        }
-        return treeSpecial;
+    public List<String> getPicList() {
+        return picList;
     }
 
-    /**
-     * called by internal mechanisms, do not call yourself.
-     */
-    @Generated(hash = 1668721663)
-    public void setTreeSpecial(@NotNull TreeSpecial treeSpecial) {
-        if (treeSpecial == null) {
-            throw new DaoException(
-                    "To-one property 'treeSpecialId' has not-null constraint; cannot set to-one to null");
-        }
-        synchronized (this) {
-            this.treeSpecial = treeSpecial;
-            treeSpecialId = treeSpecial.getId();
-            treeSpecial__resolvedKey = treeSpecialId;
-        }
+    public void setPicList(List<String> picList) {
+        this.picList = picList;
     }
-
-    /**
-     * To-many relationship, resolved on first access (and after reset).
-     * Changes to to-many relations are not persisted, make changes to the target entity.
-     */
-    @Generated(hash = 612066960)
-    public List<Pic> getPics() {
-        if (pics == null) {
-            final DaoSession daoSession = this.daoSession;
-            if (daoSession == null) {
-                throw new DaoException("Entity is detached from DAO context");
-            }
-            PicDao targetDao = daoSession.getPicDao();
-            List<Pic> picsNew = targetDao._queryTree_Pics(id);
-            synchronized (this) {
-                if (pics == null) {
-                    pics = picsNew;
-                }
-            }
-        }
-        return pics;
-    }
-
-    /**
-     * Resets a to-many relationship, making the next get call to query for a fresh result.
-     */
-    @Generated(hash = 582493596)
-    public synchronized void resetPics() {
-        pics = null;
-    }
-
-    /**
-     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#delete(Object)}.
-     * Entity must attached to an entity context.
-     */
-    @Generated(hash = 128553479)
-    public void delete() {
-        if (myDao == null) {
-            throw new DaoException("Entity is detached from DAO context");
-        }
-        myDao.delete(this);
-    }
-
-    /**
-     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#refresh(Object)}.
-     * Entity must attached to an entity context.
-     */
-    @Generated(hash = 1942392019)
-    public void refresh() {
-        if (myDao == null) {
-            throw new DaoException("Entity is detached from DAO context");
-        }
-        myDao.refresh(this);
-    }
-
-    /**
-     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#update(Object)}.
-     * Entity must attached to an entity context.
-     */
-    @Generated(hash = 713229351)
-    public void update() {
-        if (myDao == null) {
-            throw new DaoException("Entity is detached from DAO context");
-        }
-        myDao.update(this);
-    }
-
-    /** called by internal mechanisms, do not call yourself. */
-    @Generated(hash = 1935359770)
-    public void __setDaoSession(DaoSession daoSession) {
-        this.daoSession = daoSession;
-        myDao = daoSession != null ? daoSession.getTreeDao() : null;
-    }
-
-
 }

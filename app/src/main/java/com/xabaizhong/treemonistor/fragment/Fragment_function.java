@@ -21,6 +21,7 @@ import com.xabaizhong.treemonistor.activity.Activity_monitor;
 import com.xabaizhong.treemonistor.activity.add_tree.Activity_add_manage;
 import com.xabaizhong.treemonistor.activity.base_data.Activity_base_data;
 import com.xabaizhong.treemonistor.activity.query.Activity_query;
+import com.xabaizhong.treemonistor.activity.query.Activity_query_tree_info;
 import com.xabaizhong.treemonistor.adapter.Fragment_function_adapter;
 import com.xabaizhong.treemonistor.adapter.HeaderAndFooterWrapper;
 import com.xabaizhong.treemonistor.base.Fragment_base;
@@ -123,13 +124,7 @@ public class Fragment_function extends Fragment_base implements Fragment_functio
                 getActivity().startActivity(i);
                 break;
             case ACTIVITY_QUERY:
-                String areaId = sharedPreferences.getString(UserSharedField.AREAID, "unlogin");
-                if (areaId.equals("unlogin")) {
-                    i.setClass(getContext(), Activity_login.class);
-                }else{
-                    i.putExtra("areaid", areaId);
-                    i.setClass(getContext(), Activity_query.class);
-                }
+                i.setClass(getContext(), Activity_query_tree_info.class);
                 getActivity().startActivity(i);
                 break;
             case ACTIVITY_REGULATION:
