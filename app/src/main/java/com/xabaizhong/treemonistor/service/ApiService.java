@@ -1,8 +1,8 @@
 package com.xabaizhong.treemonistor.service;
 
-import com.xabaizhong.treemonistor.service.entity.Response_news;
-import com.xabaizhong.treemonistor.service.entity.ResultMessage;
-import com.xabaizhong.treemonistor.service.entity.User;
+import com.xabaizhong.treemonistor.service.model.Response_news;
+import com.xabaizhong.treemonistor.service.model.ResultMessage;
+import com.xabaizhong.treemonistor.service.model.User;
 
 import io.reactivex.Observable;
 import okhttp3.RequestBody;

@@ -48,8 +48,8 @@ public class Fragment_function_adapter extends RecyclerView.Adapter<Fragment_fun
     @Override
     public void onBindViewHolder(FunctionViewHoler holder, final int position) {
         //权限控制 ，根据权限 控制显示的功能选项
-        boolean flag = position != 2;
-        if (flag) {
+//        boolean flag = position != 2;
+//        if (flag) {
             Picasso.with(context)
                     .load(imageIdList.get(position))
                     .into(holder.iv);
@@ -61,8 +61,9 @@ public class Fragment_function_adapter extends RecyclerView.Adapter<Fragment_fun
                         onItemClickListener.onItemClick(v,position);
                 }
             });
-        }
-        holder.setVisibility(flag);
+//        }
+//        holder.setVisibility(flag);
+        holder.setVisibility(true);
 
     }
 

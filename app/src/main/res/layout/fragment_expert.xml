@@ -39,6 +39,14 @@
             android:src="@drawable/ic_edit"
             fab:backgroundTint="@color/wx_green"
             fab:fabSize="mini"/>
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_tree_bug"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/tree_bug"
+            android:src="@drawable/ic_edit"
+            fab:backgroundTint="@color/wx_green"
+            fab:fabSize="mini"/>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_tree_unknow"

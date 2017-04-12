@@ -11,6 +11,7 @@
     <string name="news">资讯</string>
 
     <string name="tree_weakness">病害树木鉴定</string>
+    <string name="tree_bug">虫害树木鉴定</string>
     <string name="tree_unknow">树种鉴别</string>
     <string name="tree_age">树龄鉴定</string>
     <string name="tree_growth">生长势等级鉴定</string>
@@ -38,6 +39,7 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="real_name">姓名: %1$s</string>
 
     <!-- Strings related to Settings -->
 

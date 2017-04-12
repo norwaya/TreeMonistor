@@ -1,6 +1,7 @@
 package com.xabaizhong.treemonistor.activity.add_tree;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
@@ -13,19 +14,16 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.xabaizhong.treemonistor.R;
 import com.xabaizhong.treemonistor.base.Activity_base;
-import com.xabaizhong.treemonistor.base.App;
-import com.xabaizhong.treemonistor.entity.DaoSession;
-import com.xabaizhong.treemonistor.entity.Pic;
-import com.xabaizhong.treemonistor.entity.PicDao;
+import com.xabaizhong.treemonistor.contant.UserSharedField;
 import com.xabaizhong.treemonistor.entity.Tree;
-import com.xabaizhong.treemonistor.entity.TreeDao;
 import com.xabaizhong.treemonistor.entity.TreeSpecial;
 import com.xabaizhong.treemonistor.entity.TreeTypeInfo;
-import com.xabaizhong.treemonistor.entity.TreeTypeInfoDao;
 import com.xabaizhong.treemonistor.myview.C_dialog_checkbox;
 import com.xabaizhong.treemonistor.myview.C_dialog_date;
 import com.xabaizhong.treemonistor.myview.C_dialog_radio;
 import com.xabaizhong.treemonistor.myview.C_info_gather_item1;
+import com.xabaizhong.treemonistor.service.WebserviceHelper;
+import com.xabaizhong.treemonistor.service.model.ResultMessage;
 import com.xabaizhong.treemonistor.utils.FileUtil;
 import com.xabaizhong.treemonistor.utils.MessageEvent;
 import com.xabaizhong.treemonistor.utils.RxBus;
@@ -36,11 +34,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.ConnectException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -170,7 +171,6 @@ public class Activity_add_tree extends Activity_base {
     }
 
     private void init() {
-        treeDao = ((App) getApplicationContext()).getDaoSession().getTreeDao();
         initCallBack();
     }
 
@@ -358,12 +358,10 @@ public class Activity_add_tree extends Activity_base {
 
             @Override
             public void onComplete() {
-                tree.picList = fillPic();
-                json = new GsonBuilder().setDateFormat("yyyy-MM-dd%20HH:mm:ss").create().toJson(treeTypeInfo);
+                tree.setPicList(fillPic());
+                json = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create().toJson(treeTypeInfo);
                 Log.i(TAG, "fillTree: " + json);
-                /*TreeGroupOp.Instance().setFiles(FileUtil.getFiles())
-                        .setJson(json)
-                        .op();*/
+                submitTreeInfo();
             }
         };
 
@@ -385,6 +383,51 @@ public class Activity_add_tree extends Activity_base {
                 .subscribe(observer);
     }
 
+    AsyncTask asyncTask;
+
+    private void submitTreeInfo() {
+        asyncTask = new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... params) {
+                try {
+                    return WebserviceHelper.GetWebService(
+                            "UploadTreeInfo", "UploadTreeInfoMethod", getParms());
+                } catch (ConnectException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                if(s == null){
+                    showToast("请求错误");
+                    return;
+                }
+                ResultMessage msg = new Gson().fromJson(s, ResultMessage.class);
+                Log.i(TAG, "onPostExecute: "+msg.getMessage());
+                if(msg.getError_code() == 0){
+                   showToast("古树信息上传成功.");
+                    Activity_add_tree.this.finish();
+                }
+            }
+        }.execute();
+    }
+
+
+
+
+    private Map<String, Object> getParms(){
+        Map<String, Object> map = new HashMap<>();
+        String user_id = sharedPreferences.getString(UserSharedField.USERID,"");
+
+        map.put("UserID ",user_id);
+        map.put("TreeType",0);
+        map.put("JsonStr",json);
+        return map;
+    }
+
+
     String check() {
 
         return null;
@@ -399,7 +442,6 @@ public class Activity_add_tree extends Activity_base {
 
     private void save() {
         tree.setId(null);
-        treeDao.save(tree);
         long treeID = tree.getId();
         /*if (list != null)
             for (String string : list
@@ -414,45 +456,19 @@ public class Activity_add_tree extends Activity_base {
 
     private void check(long id) {
 
-
-        List<TreeTypeInfo> list = treeTypeInfoDao.queryBuilder().where(TreeTypeInfoDao.Properties.Id.eq(id)).build().list();
-        for (TreeTypeInfo treeType : list
-                ) {
-            treeType.getTree();
-            Log.i(TAG, "check: " + (new Gson().toJson(treeType)));
-
-            Tree tree = treeType.getTree();
-            Log.d(TAG, "check: " + tree.getId() + "\t" + tree.getTreeId() + tree.getSmallName());
-            for (Pic pic : treeType.getTree().getPics()
-                    ) {
-                Log.i(TAG, "check: " + pic.getPath());
-            }
-        }
     }
 
-    PicDao picDao;
-    TreeDao treeDao;
-    TreeTypeInfoDao treeTypeInfoDao;
 
-    private void initDao() {
-        DaoSession daoSession = ((App) getApplicationContext()).getDaoSession();
-        if (picDao == null)
-            picDao = daoSession.getPicDao();
-        if (treeDao == null)
-            treeDao = daoSession.getTreeDao();
-        if (treeTypeInfoDao == null)
-            treeTypeInfoDao = daoSession.getTreeTypeInfoDao();
-    }
 
     String json;
 
     private void fillTree() {
-        treeTypeInfo.setTypeId("0");
+        treeTypeInfo.setTypeId(0);
 
         String id = treeId.getText();
         tree.setTreeId(id);
         treeTypeInfo.setIvst(tch.getText());
-        treeTypeInfo.setRecoredPerson(tcr.getText());
+//        treeTypeInfo.setRecoredPerson(tcr.getText());
 
         tree.setTreeHeight(height.getText());
         tree.setTreeDBH(dbh.getText());
@@ -472,38 +488,44 @@ public class Activity_add_tree extends Activity_base {
         tree.setSpecStatDesc(specStatDesc.getText());
         tree.setSpecDesc(specDesc.getText());
 
-        treeTypeInfo.tree = tree;
+        treeTypeInfo.setTree(tree); ;
+        treeTypeInfo.setTreeId(id);
 
-
+        tree.setUserID(userId());
+        tree.setTreeId(sharedPreferences.getString(UserSharedField.USERID,""));
 
     }
+    private String userId(){
+        return sharedPreferences.getString(UserSharedField.USERID,"");
+    }
+
 
     private List<String> fillPic() {
         List<String> list = new ArrayList<>();
         for (File file : FileUtil.getFiles()) {
             if (!file.getName().equals(".nomedia")) {
-//                list.add(encode64base(file));
-                list.add("image");
+                list.add(FileUtil.bitmapToBase64Str(file));
             }
 
         }
         return list;
     }
-    private String encode64base(File file){
+
+   /* private String encode64base(File file) {
         FileInputStream inputFile = null;
         try {
             inputFile = new FileInputStream(file);
             byte[] buffer = new byte[(int) file.length()];
             inputFile.read(buffer);
             inputFile.close();
-            return  Base64.encodeToString(buffer,Base64.DEFAULT);
+            return Base64.encodeToString(buffer, Base64.DEFAULT);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
-    }
+    }*/
 
     private void computeCrownAvg(String ew, String ns) {
         if ("".equals(ew) || "".equals(ns))
@@ -518,8 +540,8 @@ public class Activity_add_tree extends Activity_base {
     public void setAreaId(Activity_map.LocationBox locationBox) {
         tree.setAbscissa(locationBox.getLat() + "");
         tree.setOrdinate(locationBox.getLon() + "");
+        //610329
 
-        treeTypeInfo.setAreaId("");
     }
 
 
@@ -549,8 +571,8 @@ public class Activity_add_tree extends Activity_base {
                         detailAddress.setText(box.getStreet() + box.getSematicDescription());
                         setAreaId(box);
                         tree.setSmallName(box.getStreet() + box.getSematicDescription());
-                        tree.setAbscissa(box.getLat()+"");
-                        tree.setOrdinate(box.getLon()+"");
+                        tree.setAbscissa(box.getLat() + "");
+                        tree.setOrdinate(box.getLon() + "");
                     }
                 }
 
@@ -559,7 +581,7 @@ public class Activity_add_tree extends Activity_base {
                 if (resultCode == REQUEST_CODE_CNAME_RESULT) {
                     TreeSpecial treeSpecial = data.getParcelableExtra("special");
                     tree.setTreeSpeID(treeSpecial.getCode() + "");
-                    tree.setTreeSpecialId(treeSpecial.getId());
+                    tree.setTreeSpeID(treeSpecial.getId()+"");
                     cname.setText(treeSpecial.getCname());
                     alias.setText(treeSpecial.getAlias());
                 }
@@ -666,6 +688,7 @@ public class Activity_add_tree extends Activity_base {
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
                 researchDate.setText(format.format(date));
                 treeTypeInfo.setDate(date);
+                tree.setDate(date);
             }
         });
         dateDialog.show();
@@ -703,7 +726,7 @@ public class Activity_add_tree extends Activity_base {
                         break;
                     case REQUEST_CODE_GSBZ:
                         gsbz.setText(array[messageEvent.getId()]);
-                        tree.setTreeType((messageEvent.getId() + 1) + "");
+                        tree.setTreeType((messageEvent.getId() + 1) );
                         break;
                     case REQUEST_CODE_OWNER:
                         owner.setText(array[messageEvent.getId()]);
@@ -743,7 +766,7 @@ public class Activity_add_tree extends Activity_base {
                         break;
                     case REQUEST_CODE_TREEAREA:
                         treeArea.setText(messageEvent.getText());
-                        tree.setTreeArea(messageEvent.getId() + "");
+                        tree.setTreeArea(messageEvent.getId());
                         break;
                 }
             }

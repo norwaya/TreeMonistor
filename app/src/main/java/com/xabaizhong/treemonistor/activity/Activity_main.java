@@ -1,7 +1,7 @@
 package com.xabaizhong.treemonistor.activity;
 
 import android.Manifest;
-import android.app.Notification;
+import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -30,6 +30,7 @@ import com.xabaizhong.treemonistor.fragment.Fragment_function;
 import com.xabaizhong.treemonistor.fragment.Fragment_news;
 import com.xabaizhong.treemonistor.fragment.Fragment_setting;
 import com.xabaizhong.treemonistor.myview.MyRadio;
+import com.xabaizhong.treemonistor.service.service_notice.NoticeService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -121,9 +122,11 @@ public class Activity_main extends Activity_base implements MyRadio.OnRadioCheck
         initReceiver();
 
     }
+
     NoticeBroadCast noticeBroadCast;
+
     private void initReceiver() {
-         noticeBroadCast = new NoticeBroadCast();
+        noticeBroadCast = new NoticeBroadCast();
         IntentFilter intneFilter = new IntentFilter();
         intneFilter.addAction(RECEIVER_ACTION);
         registerReceiver(noticeBroadCast, intneFilter);
@@ -357,10 +360,12 @@ public class Activity_main extends Activity_base implements MyRadio.OnRadioCheck
                 if (str != null)
                     switch (str) {
                         case RECEIVER_INTENT_BIND_SERVICE:
-                            bindService();
+//                            bindService();
+                            startNoticeService();
                             break;
                         case RECEIVER_INTENT_UNBIND_SERVICE:
-                            unbindService();
+//                            unbindService();
+                            stopNoticeService();
                             break;
                     }
             }
@@ -374,8 +379,10 @@ public class Activity_main extends Activity_base implements MyRadio.OnRadioCheck
                 return;
             }
             serviceIntent = new Intent();
+
             serviceIntent.setPackage(getPackageName());
             serviceIntent.setAction(SERVICE_ACTION);
+            serviceIntent.addCategory(Intent.CATEGORY_DEFAULT);
             serviceConn = new ServiceConnection() {
                 @Override
                 public void onServiceConnected(ComponentName name, IBinder service) {
@@ -390,21 +397,42 @@ public class Activity_main extends Activity_base implements MyRadio.OnRadioCheck
             first = false;
         }
 
-        private void bindService() {
-            Activity_main.this.bindService(serviceIntent, serviceConn, BIND_AUTO_CREATE);
-            Log.d(TAG, "bindService: ");
+        private void startNoticeService() {
+            if (isServiceRunning(getApplicationContext(), NoticeService.class.getName())) {
+                return;
+            }
+            startService(serviceIntent);
         }
 
-        private void unbindService() {
-            Activity_main.this.unbindService(serviceConn);
-            Log.d(TAG, "unbindService: ");
+        private void stopNoticeService() {
+            stopService(serviceIntent);
         }
 
+        public boolean isServiceRunning(Context mContext, String className) {
+
+            boolean isRunning = false;
+            ActivityManager activityManager = (ActivityManager) mContext
+                    .getSystemService(Context.ACTIVITY_SERVICE);
+            List<ActivityManager.RunningServiceInfo> serviceList = activityManager
+                    .getRunningServices(30);
+
+            if (!(serviceList.size() > 0)) {
+                return false;
+            }
+
+            for (int i = 0; i < serviceList.size(); i++) {
+                if (serviceList.get(i).service.getClassName().equals(className) == true) {
+                    isRunning = true;
+                    break;
+                }
+            }
+            return isRunning;
+        }
 
     }
 
     public interface ReceiveConstant {
-        String SERVICE_ACTION = "monitor_notice_service";
+        String SERVICE_ACTION = "com.action.monitor_notice_service";
         String RECEIVER_ACTION = "monitor_notice_receiver";
         String RECEIVER_INTENT = "receiver-intent";
         String RECEIVER_INTENT_BIND_SERVICE = "bind-service";

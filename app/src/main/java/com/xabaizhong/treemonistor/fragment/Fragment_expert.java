@@ -77,6 +77,9 @@ public class Fragment_expert extends Fragment_base {
                     case R.id.fab_tree_weakness:
                         Log.d(TAG, "onMenuItemClick: fab_tree_weakness");
                         break;
+                    case R.id.fab_tree_bug:
+                        Log.d(TAG, "onMenuItemClick: fab_tree_bug");
+                        break;
                     case R.id.fab_tree_unknow:
                         Log.d(TAG, "onMenuItemClick: fab_tree_unknow");
                         break;

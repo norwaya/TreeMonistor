@@ -27,9 +27,10 @@ public class WebserviceHelper {
 /*	public static String GetWebService(String nameSpace, String methodName, String parameter,
             String parameter2,String url, String action,String action2) {
 */
-    public static String GetWebService(String url_d, String methodName, Map<String, ? extends Serializable> map)
+    public static String GetWebService(String url_d, String methodName, Map<String, Object> map)
             throws ConnectException {
         String nameSpace = "http://tempuri.org/";
+//        String nameSpace = "http://tempuri.org/";
         String url = base + url_d + ".asmx?wsdl";
 
         SoapObject soapObj = new SoapObject(nameSpace, methodName);
@@ -37,6 +38,7 @@ public class WebserviceHelper {
 
         for (String key : map.keySet()) {
             soapObj.addProperty(key, map.get(key));
+            Log.i(TAG, "GetWebService: "+key + map.get(key));
         }
 
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
@@ -52,16 +54,18 @@ public class WebserviceHelper {
 
         } catch (SoapFault e) {
             Log.i(TAG, "GetWebService: SoapFault");
-            return "soap 构建错误";
 
         } catch (IOException e) {
             Log.i(TAG, "GetWebService: IOException");
-            return "IO 异常";
 
         } catch (XmlPullParserException e) {
             Log.i(TAG, "GetWebService: XmlPullParserException");
-            return "xml 解析错误";
 
+        } catch(IllegalArgumentException e){
+            Log.i(TAG, "GetWebService: IllegalArgumentException");
+            e.printStackTrace();
         }
+        return null;
+
     }
 }

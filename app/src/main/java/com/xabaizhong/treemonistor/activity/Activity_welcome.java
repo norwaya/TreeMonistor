@@ -62,7 +62,7 @@ public class Activity_welcome extends Activity_base {
     @BindView(R.id.activity_welcome_btn)
     Button btn;
 
-    final static int SECOND = 6;
+    final static int SECOND = 3;
 
     TreeSpecialDao treeSpecialDao;
     AreaCodeDao areaCodeDao;
@@ -115,11 +115,12 @@ public class Activity_welcome extends Activity_base {
     }
 
     void initAll() {
-        initImage();
+
         long stat = System.nanoTime();
         initDB();
         long end = System.nanoTime();
         Log.i(TAG, "initAll: " + (end - stat));
+        initImage();
     }
 
     Disposable disposable;
