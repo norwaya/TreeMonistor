@@ -7,32 +7,22 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.SimpleAdapter;
 
 import com.xabaizhong.treemonistor.R;
-import com.xabaizhong.treemonistor.activity.Activity_login;
-import com.xabaizhong.treemonistor.activity.Activity_monitor;
+import com.xabaizhong.treemonistor.activity.monitor.Activity_monitor;
 import com.xabaizhong.treemonistor.activity.add_tree.Activity_add_manage;
 import com.xabaizhong.treemonistor.activity.base_data.Activity_base_data;
-import com.xabaizhong.treemonistor.activity.query.Activity_query;
-import com.xabaizhong.treemonistor.activity.query.Activity_query_tree_info;
+import com.xabaizhong.treemonistor.activity.query_treeOrGroup.Activity_query_tree_info;
 import com.xabaizhong.treemonistor.adapter.Fragment_function_adapter;
 import com.xabaizhong.treemonistor.adapter.HeaderAndFooterWrapper;
 import com.xabaizhong.treemonistor.base.Fragment_base;
-import com.xabaizhong.treemonistor.contant.UserSharedField;
 import com.xabaizhong.treemonistor.utils.RecycleViewDivider;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -128,11 +118,11 @@ public class Fragment_function extends Fragment_base implements Fragment_functio
                 getActivity().startActivity(i);
                 break;
             case ACTIVITY_REGULATION:
-
-                break;
-            case ACTIVITY_REGULATION_QUERY:
                 i.setClass(getContext(), Activity_monitor.class);
                 getActivity().startActivity(i);
+                break;
+            case ACTIVITY_REGULATION_QUERY:
+
                 break;
             case ACTIVITY_DATA:
                 i.setClass(getContext(), Activity_base_data.class);

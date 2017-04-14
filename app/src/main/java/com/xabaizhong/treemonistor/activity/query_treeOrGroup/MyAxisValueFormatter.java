@@ -1,4 +1,4 @@
-package com.xabaizhong.treemonistor.activity.query;
+package com.xabaizhong.treemonistor.activity.query_treeOrGroup;
 
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;

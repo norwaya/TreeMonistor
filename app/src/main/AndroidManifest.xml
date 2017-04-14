@@ -60,17 +60,17 @@
             android:label="tree_add"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".activity.query.Activity_query"
+            android:name=".activity.query_treeOrGroup.Activity_query"
             android:label="query"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".activity.Activity_monitor"
+            android:name=".activity.monitor.Activity_monitor"
             android:label="monitor"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".activity.Activity_detailInfo"
+            android:name=".activity.query_treeOrGroup.Activity_tree_detailInfo"
             android:label="tree-detail"
             android:screenOrientation="portrait"/>
         <activity
@@ -148,7 +148,10 @@
         <activity android:name=".activity.Activity_userInfo"
             android:label="user_detail"
             android:screenOrientation="portrait"/>
-        <activity android:name=".activity.query.Activity_query_tree_info"
+        <activity android:name=".activity.query_treeOrGroup.Activity_query_tree_info"
+            android:label="tree-query"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.query_treeOrGroup.Activity_query_tree_info_list"
             android:label="tree-query"
             android:screenOrientation="portrait"/>
 

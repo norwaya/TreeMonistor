@@ -13,5 +13,6 @@
     <dimen name="textview_height_normal">30dp</dimen>
     <dimen name="button_height_normal">30dp</dimen>
     <dimen name="image_item_normal">50dp</dimen>
+    <dimen name="checked_textview_width">100dp</dimen>
 
 </resources>

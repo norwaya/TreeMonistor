@@ -1,5 +1,5 @@
 
-package com.xabaizhong.treemonistor.activity.query;
+package com.xabaizhong.treemonistor.activity.query_treeOrGroup;
 
 import android.content.Context;
 import android.widget.TextView;

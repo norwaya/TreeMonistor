@@ -1,4 +1,4 @@
-package com.xabaizhong.treemonistor.activity.query;
+package com.xabaizhong.treemonistor.activity.query_treeOrGroup;
 
 import android.graphics.Typeface;
 import android.os.Bundle;

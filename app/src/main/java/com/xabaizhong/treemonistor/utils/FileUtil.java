@@ -103,7 +103,7 @@ public class FileUtil {
         Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
 
         ByteArrayOutputStream bStream=new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG,100,bStream);
+        bitmap.compress(Bitmap.CompressFormat.PNG,100,bStream);
         byte[]bytes=bStream.toByteArray();
         String string=Base64.encodeToString(bytes,Base64.DEFAULT);
         wf(string);

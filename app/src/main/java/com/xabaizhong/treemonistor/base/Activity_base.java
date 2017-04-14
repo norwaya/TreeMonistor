@@ -9,6 +9,8 @@ import android.widget.Toast;
 
 import com.xabaizhong.treemonistor.contant.Contant;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Set;
 
 /**
@@ -46,5 +48,11 @@ public class Activity_base extends AppCompatActivity {
             return false;
         }
         return true;
+    }
+
+    protected String getStringDate(){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return sdf.format(new Date());
+
     }
 }
