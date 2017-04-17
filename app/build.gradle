@@ -9,6 +9,10 @@ android {
             storePassword 'yinpan123'
         }
     }
+    dexOptions {
+        maxProcessCount 4 // this is the default value
+        javaMaxHeapSize "2g"
+    }
     compileSdkVersion 25
     buildToolsVersion "25.0.0"
     defaultConfig {
@@ -26,9 +30,11 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.debug_keystore
+
         }
         debug {
             signingConfig signingConfigs.debug_keystore
+            debuggable true
         }
     }
     sourceSets {

@@ -154,7 +154,18 @@
         <activity android:name=".activity.query_treeOrGroup.Activity_query_tree_info_list"
             android:label="tree-query"
             android:screenOrientation="portrait"/>
-
+        <activity android:name=".activity.expert.Activity_monitor_growth"
+                  android:label="monitor-growth"
+                  android:screenOrientation="portrait"/>
+        <activity android:name=".activity.expert.Activity_species"
+                  android:label="树种鉴定"
+                  android:screenOrientation="portrait"/>
+        <activity android:name=".activity.expert.Activity_expert_bug"
+                  android:label="病虫鉴定"
+                  android:screenOrientation="portrait"/>
+        <activity android:name=".activity.expert.Activity_expert_weak"
+                  android:label="病害鉴定"
+                  android:screenOrientation="portrait"/>
         <!-- service -->
         <service
             android:name="com.baidu.location.f"

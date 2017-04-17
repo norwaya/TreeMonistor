@@ -1,6 +1,7 @@
 package com.xabaizhong.treemonistor.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -15,6 +16,10 @@ import android.widget.ImageView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.squareup.picasso.Picasso;
 import com.xabaizhong.treemonistor.R;
+import com.xabaizhong.treemonistor.activity.expert.Activity_expert_bug;
+import com.xabaizhong.treemonistor.activity.expert.Activity_expert_weak;
+import com.xabaizhong.treemonistor.activity.expert.Activity_monitor_growth;
+import com.xabaizhong.treemonistor.activity.expert.Activity_species;
 import com.xabaizhong.treemonistor.adapter.Fragment_expert_adapter;
 import com.xabaizhong.treemonistor.adapter.HeaderAndFooterWrapper;
 import com.xabaizhong.treemonistor.base.Fragment_base;
@@ -73,17 +78,21 @@ public class Fragment_expert extends Fragment_base {
         fabFather.setOnMenuItemClickListener(new FloatingActionMenu.OnMenuItemClickListener() {
             @Override
             public void onMenuItemClick(FloatingActionMenu floatingActionMenu, int i, FloatingActionButton floatingActionButton) {
-                switch(floatingActionButton.getId()){
+                switch (floatingActionButton.getId()) {
                     case R.id.fab_tree_weakness:
                         Log.d(TAG, "onMenuItemClick: fab_tree_weakness");
+                        startActivity(new Intent(context, Activity_expert_weak.class));
                         break;
                     case R.id.fab_tree_bug:
                         Log.d(TAG, "onMenuItemClick: fab_tree_bug");
+                        startActivity(new Intent(context, Activity_expert_bug.class));
                         break;
                     case R.id.fab_tree_unknow:
+                        startActivity(new Intent(context, Activity_species.class));
                         Log.d(TAG, "onMenuItemClick: fab_tree_unknow");
                         break;
                     case R.id.fab_tree_growth:
+                        startActivity(new Intent(context, Activity_monitor_growth.class));
                         Log.d(TAG, "onMenuItemClick: fab_tree_growth");
                         break;
                     case R.id.fab_tree_age:

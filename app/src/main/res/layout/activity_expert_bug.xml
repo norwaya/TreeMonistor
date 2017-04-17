@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/layout_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical"
+        android:padding="@dimen/activity_horizontal_margin">
+
+
+        <Button
+            android:id="@+id/submit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_style_circle"
+            android:padding="@dimen/activity_horizontal_margin"
+            android:text="确定"/>
+
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_above="@id/layout_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
+
+        <LinearLayout
+            android:background="@android:color/white"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+                android:id="@+id/bug_season"
+                style="@style/custom_edit_text_style"
+                app:mid_font_color="@color/wx_green"
+                app:mid_type="read"
+                app:left_text="季节"
+                app:mid_text_hint="季节"/>
+
+            <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+                android:id="@+id/bug_species"
+                style="@style/custom_edit_text_style"
+                app:mid_font_color="@color/wx_green"
+                app:mid_type="read"
+                app:left_text="树种"
+                app:mid_text_hint="树种"/>
+
+            <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+                android:id="@+id/bug_part"
+                style="@style/custom_edit_text_style"
+                app:mid_font_color="@color/wx_green"
+                app:mid_type="read"
+                app:left_text="虫害部位"
+                app:mid_text_hint="虫害部位"/>
+
+            <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+                android:id="@+id/bug_classic"
+                style="@style/custom_edit_text_style"
+                app:mid_font_color="@color/wx_green"
+                app:mid_type="read"
+                app:left_text="害虫分类"
+                app:mid_text_hint="害虫分类"/>
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

@@ -9,6 +9,7 @@ import android.util.Log;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -110,7 +111,11 @@ public class FileUtil {
         return string;
     }
 
-    //加密
+    public static Bitmap base64ToBitmap(String str){
+        byte[] bytes = Base64.decode(str, Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+    }
+   /* //加密
     public static String getBase64(String str) {
         byte[] b = null;
         String s = null;
@@ -139,7 +144,7 @@ public class FileUtil {
             }
         }
         return result;
-    }
+    }*/
 
 }
 
