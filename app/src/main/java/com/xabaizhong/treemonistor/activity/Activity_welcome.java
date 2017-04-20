@@ -20,7 +20,6 @@ import com.xabaizhong.treemonistor.base.App;
 import com.xabaizhong.treemonistor.dbhelper.AreaCodeHelper;
 import com.xabaizhong.treemonistor.dbhelper.PestHelper;
 import com.xabaizhong.treemonistor.dbhelper.TreeSpecialHelper;
-import com.xabaizhong.treemonistor.dbhelper.WeaknessHelper;
 import com.xabaizhong.treemonistor.entity.AreaCode;
 import com.xabaizhong.treemonistor.entity.AreaCodeDao;
 import com.xabaizhong.treemonistor.entity.Pest;
@@ -29,13 +28,24 @@ import com.xabaizhong.treemonistor.entity.PestClassDao;
 import com.xabaizhong.treemonistor.entity.PestDao;
 import com.xabaizhong.treemonistor.entity.TreeSpecial;
 import com.xabaizhong.treemonistor.entity.TreeSpecialDao;
+import com.xabaizhong.treemonistor.entity.Tree_weak_part;
+import com.xabaizhong.treemonistor.entity.Tree_weak_partDao;
 import com.xabaizhong.treemonistor.entity.Weakness;
 import com.xabaizhong.treemonistor.entity.WeaknessDao;
+import com.xabaizhong.treemonistor.entity.Weakness_f1;
+import com.xabaizhong.treemonistor.entity.Weakness_f1Dao;
+import com.xabaizhong.treemonistor.entity.Weakness_f2;
+import com.xabaizhong.treemonistor.entity.Weakness_f2Dao;
+import com.xabaizhong.treemonistor.entity.json_entity.Json_tree_f1;
+import com.xabaizhong.treemonistor.entity.json_entity.Json_tree_f2;
+import com.xabaizhong.treemonistor.entity.json_entity.Json_tree_weak_part;
+import com.xabaizhong.treemonistor.entity.json_entity.Json_tree_weak;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -69,7 +79,9 @@ public class Activity_welcome extends Activity_base {
     PestDao pestDao;
     PestClassDao pestClassDao;
     WeaknessDao weaknessDao;
-
+    Tree_weak_partDao treePartWeakDao;
+    Weakness_f1Dao weaknessF1Dao;
+    Weakness_f2Dao weaknessF2Dao;
 
 
     @Override
@@ -124,6 +136,7 @@ public class Activity_welcome extends Activity_base {
     }
 
     Disposable disposable;
+
     private void initImage() {
 
         Observer<Integer> observer = new Observer<Integer>() {
@@ -169,7 +182,7 @@ public class Activity_welcome extends Activity_base {
 
     }
 
-    private void work(){
+    private void work() {
         if (true) {
             startActivity(new Intent(Activity_welcome.this, Activity_main.class));
         } else {
@@ -179,6 +192,7 @@ public class Activity_welcome extends Activity_base {
     }
 
     boolean flag = false;
+
     @OnClick(R.id.activity_welcome_btn)
     public void onClick() {
        /* if(flag){
@@ -194,7 +208,7 @@ public class Activity_welcome extends Activity_base {
     }
 
     private void initDB() {
-        if (hasInit()){
+        if (hasInit()) {
             flag = true;
             return;
         }
@@ -204,9 +218,28 @@ public class Activity_welcome extends Activity_base {
         writeAreaCode("area_code.json");
         writePest("pest_classify.json");
         writePestClass();
-        writeWeakness("illness.json");
+
+        writeTreePart();
+        writeWeakness_f1();
+        writeWeakness_f2();
+        writeWeakness();
+
         writeToShare();
         flag = true;
+
+        check();
+    }
+
+    private void check() {
+        List<Weakness> list = weaknessDao
+                .queryBuilder()
+                .build()
+                .list();
+        for (Weakness w : list
+                ) {
+            String f2 = w.getF2Id() == 0 ? "null" : w.getWeakness_f2().getName();
+            Log.i(TAG, "check: " + w.getName() + "\t" + w.getTreePart().getName() + "\t" + w.getWeakness_f1().getName() + "\t" + f2);
+        }
     }
 
     private void initDao() {
@@ -215,6 +248,10 @@ public class Activity_welcome extends Activity_base {
         pestClassDao = ((App) getApplicationContext()).getDaoSession().getPestClassDao();
         pestDao = ((App) getApplicationContext()).getDaoSession().getPestDao();
         weaknessDao = ((App) getApplicationContext()).getDaoSession().getWeaknessDao();
+        treePartWeakDao = ((App) getApplicationContext()).getDaoSession().getTree_weak_partDao();
+        weaknessF1Dao = ((App) getApplicationContext()).getDaoSession().getWeakness_f1Dao();
+        weaknessF2Dao = ((App) getApplicationContext()).getDaoSession().getWeakness_f2Dao();
+
     }
 
     private void clearDB() {
@@ -223,7 +260,9 @@ public class Activity_welcome extends Activity_base {
         pestClassDao.queryBuilder().build().list().clear();
         pestDao.queryBuilder().build().list().clear();
         weaknessDao.queryBuilder().build().list().clear();
-
+        treePartWeakDao.queryBuilder().build().list().clear();
+        weaknessF1Dao.queryBuilder().build().list().clear();
+        weaknessF2Dao.queryBuilder().build().list().clear();
     }
 
     /**
@@ -269,14 +308,95 @@ public class Activity_welcome extends Activity_base {
         pestDao.saveInTx(pestList);
     }
 
-    private void writeWeakness(String file) {
-        String json = getAssetFile(file);
-        WeaknessHelper weaknessHelper = new Gson().fromJson(json, WeaknessHelper.class);
+    private void writeTreePart() {
+        String json = getAssetFile("tree_weak_part.json");
+        Log.i(TAG, "writeTreePart: " + json);
+        Json_tree_weak_part treePart = new Gson().fromJson(json, Json_tree_weak_part.class);
+
+        ArrayList<Tree_weak_part> list = new ArrayList<>();
+        for (Json_tree_weak_part.RECORDSBean bean : treePart.getRECORDS()) {
+            list.add(bean.toTreePart());
+        }
+        treePartWeakDao.saveInTx(list);
+    }
+
+    private void writeWeakness_f1() {
+        String json = getAssetFile("weakness_f1.json");
+        Json_tree_f1 jsonTreeF1 = new Gson().fromJson(json, Json_tree_f1.class);
+
+
+        ArrayList<Weakness_f1> weakList = new ArrayList<>();
+        for (Json_tree_f1.RECORDSBean bean : jsonTreeF1.getRECORDS()) {
+            weakList.add(bean.toWeaknessF1());
+        }
+        weaknessF1Dao.saveInTx(weakList);
+    }
+
+    private void writeWeakness_f2() {
+        String json = getAssetFile("weakness_f2.json");
+        Json_tree_f2 jsonTreeF2 = new Gson().fromJson(json, Json_tree_f2.class);
+
+
+        ArrayList<Weakness_f2> list = new ArrayList<>();
+        for (Json_tree_f2.RECORDSBean bean : jsonTreeF2.getRECORDS()) {
+            list.add(bean.toWeaknessF2());
+        }
+        weaknessF2Dao.saveInTx(list);
+    }
+
+
+    private void writeWeakness() {
+
+
+        String json = getAssetFile("tree_weak.json");
+        Json_tree_weak json_tree_weak = new Gson().fromJson(json, Json_tree_weak.class);
+
+
         ArrayList<Weakness> weakList = new ArrayList<>();
-        for (WeaknessHelper.RECORDSBean bean : weaknessHelper.getRECORDS()) {
-            weakList.add(bean.toWeakness());
+        for (Json_tree_weak.RECORDSBean bean : json_tree_weak.getRECORDS()) {
+            weakList.add(convertToWeakness(bean));
         }
         weaknessDao.saveInTx(weakList);
+    }
+
+    private Weakness convertToWeakness(Json_tree_weak.RECORDSBean bean) {
+        long f2Id = bean.getExpression2() == 0 ? 0 : loadWeaknessF2(bean.getExpression2()).getId();
+        return new Weakness(null, bean.getIllName(),
+                loadTreePart(bean.getPart()).getId(),
+                loadWeaknessF1(bean.getExpression1()).getId(),
+                f2Id,
+                bean.getTrait(), bean.getMethod());
+
+    }
+
+    private Tree_weak_part loadTreePart(int tree_part_id) {
+        Log.i(TAG, "loadTreePart: "+tree_part_id);
+        List<Tree_weak_part> list = treePartWeakDao
+                .queryBuilder()
+                .where(Tree_weak_partDao.Properties.PartId.eq(tree_part_id))
+                .build()
+                .list();
+        return list.get(0);
+    }
+
+    private Weakness_f1 loadWeaknessF1(int weakness_f1_id) {
+        Log.i(TAG, "loadWeaknessF1: "+weakness_f1_id);
+        List<Weakness_f1> list = weaknessF1Dao
+                .queryBuilder()
+                .where(Weakness_f1Dao.Properties.FId.eq(weakness_f1_id))
+                .build()
+                .list();
+        return list.get(0);
+    }
+
+    private Weakness_f2 loadWeaknessF2(int weakness_f2_id) {
+        Log.i(TAG, "loadWeaknessF2: "+weakness_f2_id);
+        List<Weakness_f2> list = weaknessF2Dao
+                .queryBuilder()
+                .where(Weakness_f2Dao.Properties.FId.eq(weakness_f2_id))
+                .build()
+                .list();
+        return list.get(0);
     }
 
     private void writePestClass() {
@@ -297,6 +417,7 @@ public class Activity_welcome extends Activity_base {
         try {
             BufferedReader br = new BufferedReader(new InputStreamReader(getAssets().open(file)));
             json = file2string(br);
+
         } catch (IOException e) {
             e.printStackTrace();
         }

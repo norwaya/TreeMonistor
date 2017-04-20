@@ -1,66 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:layout_width="match_parent"
-            android:fitsSystemWindows="true"
-            android:layout_height="match_parent">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <android.support.v7.widget.LinearLayoutCompat
-        android:background="@android:color/white"
+    <Button
+        android:id="@+id/submit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="10dp"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:orientation="vertical">
+        android:layout_alignParentBottom="true"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:background="@drawable/button_style_circle"
+        android:text="确定"/>
 
-        <com.xabaizhong.treemonistor.myview.C_info_gather_item1
-            android:id="@+id/tv1"
-            style="@style/custom_edit_text_style"
-            app:left_text="1"
-            app:mid_font_color="@color/wx_green"
-            app:mid_text_hint="树叶分类"
-            app:mid_type="read"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/submit"
+        android:fitsSystemWindows="true">
 
-        <com.xabaizhong.treemonistor.myview.C_info_gather_item1
-            android:id="@+id/tv2"
-            style="@style/custom_edit_text_style"
-            app:left_text="1"
-            app:mid_font_color="@color/wx_green"
-            app:mid_text_hint="树叶颜色"
-            app:mid_type="read"/>
+        <android.support.v7.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@android:color/white"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:orientation="vertical">
 
-        <com.xabaizhong.treemonistor.myview.C_info_gather_item1
-            android:id="@+id/tv3"
-            style="@style/custom_edit_text_style"
-            app:left_text="1"
-            app:mid_font_color="@color/wx_green"
-            app:mid_text_hint="花"
-            app:mid_type="read"/>
+            <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+                android:id="@+id/leaf"
+                style="@style/custom_edit_text_style"
+                app:left_text="树叶分类"
+                app:mid_font_color="@color/wx_green"
+                app:mid_text_hint="树叶分类"
+                app:mid_type="read"/>
 
-        <com.xabaizhong.treemonistor.myview.C_info_gather_item1
-            android:id="@+id/tv4"
-            style="@style/custom_edit_text_style"
-            app:left_text="1"
-            app:mid_font_color="@color/wx_green"
-            app:mid_text_hint="花的颜色"
-            app:mid_type="read"/>
+            <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+                android:id="@+id/leaf_color"
+                style="@style/custom_edit_text_style"
+                app:left_text="树叶颜色"
+                app:mid_font_color="@color/wx_green"
+                app:mid_text_hint="树叶颜色"
+                app:mid_type="read"/>
 
-        <com.xabaizhong.treemonistor.myview.C_info_gather_item1
-            android:id="@+id/tv5"
-            style="@style/custom_edit_text_style"
-            app:left_text="1"
-            app:mid_font_color="@color/wx_green"
-            app:mid_text_hint="果实"
-            app:mid_type="read"/>
+            <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+                android:id="@+id/flower"
+                style="@style/custom_edit_text_style"
+                app:left_text="花"
+                app:mid_font_color="@color/wx_green"
+                app:mid_text_hint="花"
+                app:mid_type="read"/>
 
-        <com.xabaizhong.treemonistor.myview.C_info_gather_item1
-            android:id="@+id/tv6"
-            style="@style/custom_edit_text_style"
-            app:left_text="234"
-            app:mid_font_color="@color/wx_green"
-            app:mid_text_hint="果实颜色"
-            app:mid_type="read"/>
-    </android.support.v7.widget.LinearLayoutCompat>
-</ScrollView>
+            <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+                android:id="@+id/flower_color"
+                style="@style/custom_edit_text_style"
+                app:left_text="花的颜色"
+                app:mid_font_color="@color/wx_green"
+                app:mid_text_hint="花的颜色"
+                app:mid_type="read"/>
+
+            <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+                android:id="@+id/fruit"
+                style="@style/custom_edit_text_style"
+                app:left_text="果实"
+                app:mid_font_color="@color/wx_green"
+                app:mid_text_hint="果实"
+                app:mid_type="read"/>
+
+            <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+                android:id="@+id/fruit_color"
+                style="@style/custom_edit_text_style"
+                app:left_text="果实颜色"
+                app:mid_font_color="@color/wx_green"
+                app:mid_text_hint="果实颜色"
+                app:mid_type="read"/>
+        </android.support.v7.widget.LinearLayoutCompat>
+    </ScrollView>
+</RelativeLayout>

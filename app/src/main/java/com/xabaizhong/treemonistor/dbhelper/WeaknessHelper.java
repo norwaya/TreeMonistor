@@ -66,7 +66,8 @@ public class WeaknessHelper {
         }
 
         public Weakness toWeakness() {
-            return new Weakness(null, illness_name, illness_symptom, harm_peculiarity, step);
+//            return new Weakness(null, illness_name, illness_symptom, harm_peculiarity, step);
+            return null;
         }
 
     }

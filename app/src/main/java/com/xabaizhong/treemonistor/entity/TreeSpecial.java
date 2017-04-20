@@ -45,15 +45,29 @@ public class TreeSpecial implements Parcelable {
     private String alias;
     private String latin;
     private String explian;
-    @Index(unique = true)
-    private String treeSpecId;
+    private String treeSpecCode;
     private int ReviewSta;
 
 
-    @Generated(hash = 1047807236)
+    protected TreeSpecial(Parcel in) {
+        cname = in.readString();
+        jianPin = in.readString();
+        code = in.readString();
+        enname = in.readString();
+        family = in.readString();
+        tofamily = in.readString();
+        belong = in.readString();
+        alias = in.readString();
+        latin = in.readString();
+        explian = in.readString();
+        treeSpecCode = in.readString();
+        ReviewSta = in.readInt();
+    }
+
+    @Generated(hash = 1556976984)
     public TreeSpecial(Long id, String cname, String jianPin, String code,
             String enname, String family, String tofamily, String belong,
-            String alias, String latin, String explian, String treeSpecId,
+            String alias, String latin, String explian, String treeSpecCode,
             int ReviewSta) {
         this.id = id;
         this.cname = cname;
@@ -66,7 +80,7 @@ public class TreeSpecial implements Parcelable {
         this.alias = alias;
         this.latin = latin;
         this.explian = explian;
-        this.treeSpecId = treeSpecId;
+        this.treeSpecCode = treeSpecCode;
         this.ReviewSta = ReviewSta;
     }
 
@@ -74,26 +88,8 @@ public class TreeSpecial implements Parcelable {
     public TreeSpecial() {
     }
 
-
-    protected TreeSpecial(Parcel in) {
-        id = in.readLong();
-        cname = in.readString();
-        jianPin = in.readString();
-        code = in.readString();
-        enname = in.readString();
-        family = in.readString();
-        tofamily = in.readString();
-        belong = in.readString();
-        alias = in.readString();
-        latin = in.readString();
-        explian = in.readString();
-        treeSpecId = in.readString();
-        ReviewSta = in.readInt();
-    }
-
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(id);
         dest.writeString(cname);
         dest.writeString(jianPin);
         dest.writeString(code);
@@ -104,7 +100,7 @@ public class TreeSpecial implements Parcelable {
         dest.writeString(alias);
         dest.writeString(latin);
         dest.writeString(explian);
-        dest.writeString(treeSpecId);
+        dest.writeString(treeSpecCode);
         dest.writeInt(ReviewSta);
     }
 
@@ -112,18 +108,6 @@ public class TreeSpecial implements Parcelable {
     public int describeContents() {
         return 0;
     }
-
-    public static final Creator<TreeSpecial> CREATOR = new Creator<TreeSpecial>() {
-        @Override
-        public TreeSpecial createFromParcel(Parcel in) {
-            return new TreeSpecial(in);
-        }
-
-        @Override
-        public TreeSpecial[] newArray(int size) {
-            return new TreeSpecial[size];
-        }
-    };
 
     public Long getId() {
         return this.id;
@@ -213,12 +197,12 @@ public class TreeSpecial implements Parcelable {
         this.explian = explian;
     }
 
-    public String getTreeSpecId() {
-        return this.treeSpecId;
+    public String getTreeSpecCode() {
+        return this.treeSpecCode;
     }
 
-    public void setTreeSpecId(String treeSpecId) {
-        this.treeSpecId = treeSpecId;
+    public void setTreeSpecCode(String treeSpecCode) {
+        this.treeSpecCode = treeSpecCode;
     }
 
     public int getReviewSta() {
@@ -229,7 +213,15 @@ public class TreeSpecial implements Parcelable {
         this.ReviewSta = ReviewSta;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
+    public static final Creator<TreeSpecial> CREATOR = new Creator<TreeSpecial>() {
+        @Override
+        public TreeSpecial createFromParcel(Parcel in) {
+            return new TreeSpecial(in);
+        }
+
+        @Override
+        public TreeSpecial[] newArray(int size) {
+            return new TreeSpecial[size];
+        }
+    };
 }

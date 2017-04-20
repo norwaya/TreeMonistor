@@ -1,0 +1,24 @@
+{
+  "RECORDS": [
+    {
+      "HexapodPartID": 1,
+      "Name": "叶"
+    },
+    {
+      "HexapodPartID": 2,
+      "Name": "枝干"
+    },
+    {
+      "HexapodPartID": 3,
+      "Name": "果实"
+    },
+    {
+      "HexapodPartID": 4,
+      "Name": "嫩枝或枝稍"
+    },
+    {
+      "HexapodPartID": 5,
+      "Name": "干基或根部"
+    }
+  ]
+}

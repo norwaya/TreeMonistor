@@ -65,7 +65,7 @@ public class Activity_base_weakness extends Activity_base {
             for (Weakness weakness:list
                  ) {
                 map = new HashMap<>();
-                map.put("name", weakness.getCname());
+                map.put("name", weakness.getName());
             }
             return mapList;
         }

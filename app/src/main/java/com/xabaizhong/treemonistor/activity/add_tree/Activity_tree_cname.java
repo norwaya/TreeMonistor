@@ -35,7 +35,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static android.support.v7.widget.RecyclerView.VERTICAL;
-import static com.xabaizhong.treemonistor.activity.add_tree.Activity_add_tree.ResultCode.REQUEST_CODE_CNAME_RESULT;
 
 /**
  * Created by admin on 2017/3/13.
@@ -74,6 +73,9 @@ public class Activity_tree_cname extends Activity_base implements View.OnClickLi
 
     }
 
+    public static final int REQUEST_CODE_CNAME_RESULT = 155;
+    
+    
     private void initRecyclerView() {
         adapter = new Activity_tree_cname_adapter(this,R.layout.activity_tree_cname_item);
         adapter.setCallBack(new CommonRecyclerViewAdapter.CallBack<ViewHolder, TreeSpecial>() {

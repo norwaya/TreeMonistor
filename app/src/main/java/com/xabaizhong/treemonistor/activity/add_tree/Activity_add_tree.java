@@ -60,7 +60,6 @@ import okhttp3.RequestBody;
 
 import static com.xabaizhong.treemonistor.activity.add_tree.Activity_add_tree.ResultCode.REQUEST_CODE_ASPECT;
 import static com.xabaizhong.treemonistor.activity.add_tree.Activity_add_tree.ResultCode.REQUEST_CODE_CNAME;
-import static com.xabaizhong.treemonistor.activity.add_tree.Activity_add_tree.ResultCode.REQUEST_CODE_CNAME_RESULT;
 import static com.xabaizhong.treemonistor.activity.add_tree.Activity_add_tree.ResultCode.REQUEST_CODE_ENVIRONMENT;
 import static com.xabaizhong.treemonistor.activity.add_tree.Activity_add_tree.ResultCode.REQUEST_CODE_GROWSPACE;
 import static com.xabaizhong.treemonistor.activity.add_tree.Activity_add_tree.ResultCode.REQUEST_CODE_GROWTH;
@@ -578,7 +577,7 @@ public class Activity_add_tree extends Activity_base {
 
                 break;
             case REQUEST_CODE_CNAME:
-                if (resultCode == REQUEST_CODE_CNAME_RESULT) {
+                if (resultCode == Activity_tree_cname.REQUEST_CODE_CNAME_RESULT) {
                     TreeSpecial treeSpecial = data.getParcelableExtra("special");
                     tree.setTreeSpeID(treeSpecial.getCode() + "");
                     tree.setTreeSpeID(treeSpecial.getId()+"");
@@ -595,7 +594,6 @@ public class Activity_add_tree extends Activity_base {
 
     public static interface ResultCode {
         int REQUEST_CODE_CNAME = 0x103;
-        int REQUEST_CODE_CNAME_RESULT = 103;
 
 
         int REQUEST_CODE_REGION = 0x100;

@@ -146,7 +146,7 @@ public class C_info_gather_item1 extends LinearLayout {
                     @Override
                     public void onClick(View v) {
                         if (callback_mid != null)
-                            callback_mid.onClickListener((EditText) v);
+                            callback_mid.onClickListener( v);
                     }
                 };
                 break;
@@ -155,7 +155,7 @@ public class C_info_gather_item1 extends LinearLayout {
                     @Override
                     public void onClick(View v) {
                         if (callback_mid != null)
-                            callback_mid.onClickListener((EditText) v);
+                            callback_mid.onClickListener( v);
                     }
                 };
                 initMidWhenWriter();
@@ -165,7 +165,7 @@ public class C_info_gather_item1 extends LinearLayout {
                     @Override
                     public void onClick(View v) {
                         if (callback_mid != null)
-                            callback_mid.onClickListener((EditText) v);
+                            callback_mid.onClickListener(v);
                     }
                 };
                 initMidWhenWriter();
