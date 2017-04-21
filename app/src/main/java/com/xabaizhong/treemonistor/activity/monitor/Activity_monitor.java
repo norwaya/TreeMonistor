@@ -161,6 +161,7 @@ public class Activity_monitor extends Activity_base {
             return false;
         }
         int position = spinnerTreeList.getSelectedItemPosition();
+        //// TODO: 2017/4/21 0021  填入treeid
         monitorTree.setTreeID("123123123");
         return true;
     }
@@ -207,7 +208,6 @@ public class Activity_monitor extends Activity_base {
                 scaleImages();
                 fillImages();
 
-                Thread.sleep(3000);
                 e.onComplete();
                 Log.i(TAG, "subscribe: over");
             }

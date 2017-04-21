@@ -40,7 +40,7 @@ public class Activity_monitor_growth extends Activity_base implements Fragment_e
         Log.i(TAG, "onClickItem: " + position);
         Fragment_monitor_growth_detail fragment = new Fragment_monitor_growth_detail();
         Bundle bundle = new Bundle();
-        bundle.putInt("id",position);
+        bundle.putInt("f1Id",position);
         fragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_detail,fragment).commit();
     }

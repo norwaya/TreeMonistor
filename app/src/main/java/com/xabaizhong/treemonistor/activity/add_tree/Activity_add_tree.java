@@ -574,18 +574,16 @@ public class Activity_add_tree extends Activity_base {
                         tree.setOrdinate(box.getLon() + "");
                     }
                 }
-
                 break;
             case REQUEST_CODE_CNAME:
                 if (resultCode == Activity_tree_cname.REQUEST_CODE_CNAME_RESULT) {
                     TreeSpecial treeSpecial = data.getParcelableExtra("special");
-                    tree.setTreeSpeID(treeSpecial.getCode() + "");
+                    tree.setTreeSpeID(treeSpecial.getTreeSpecCode());
                     tree.setTreeSpeID(treeSpecial.getId()+"");
                     cname.setText(treeSpecial.getCname());
                     alias.setText(treeSpecial.getAlias());
                 }
                 break;
-
             default:
                 break;
         }

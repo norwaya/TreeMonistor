@@ -1,0 +1,98 @@
+package com.xabaizhong.treemonistor.service;
+
+import android.os.AsyncTask;
+import android.util.Log;
+import android.view.View;
+
+import com.google.gson.Gson;
+import com.xabaizhong.treemonistor.contant.UserSharedField;
+import com.xabaizhong.treemonistor.service.model.SpeciesResult;
+
+import java.net.ConnectException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Created by Administrator on 2017/4/21 0021.
+ */
+
+public class AsyncTaskRequest {
+
+    private String interfaceName;
+    private String methodName;
+
+
+
+    public static AsyncTaskRequest instance(String interfaceName, String methodName) {
+        AsyncTaskRequest a = new AsyncTaskRequest();
+        a.setInterfaceName(interfaceName);
+        a.setMethodName(methodName);
+        return a;
+    }
+
+    AsyncTask asyncTask = null;
+    Map<String,Object> map ;
+    public  void create() {
+        if (map == null) {
+            throw new RuntimeException("params is not initial!");
+        }
+        if (callBack == null) {
+            throw new RuntimeException("callBack interface is not implemented");
+        }
+        asyncTask = new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... params) {
+                try {
+                    return WebserviceHelper.GetWebService(
+                            "CheckUp", "SpeciesIden", map);
+                } catch (ConnectException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                if (callBack != null) {
+                    callBack.execute(s);
+                }
+            }
+        }.execute();
+    }
+
+    List<String> speList;
+
+
+
+    CallBack callBack;
+
+    public AsyncTaskRequest setCallBack(CallBack callBack) {
+        this.callBack = callBack;
+        return this;
+    }
+
+    public AsyncTaskRequest setParams(Map<String, Object> map) {
+        this.map = map;
+        return this;
+    }
+
+
+    private void setInterfaceName(String interfaceName) {
+        this.interfaceName = interfaceName;
+    }
+
+
+    private void setMethodName(String methodName) {
+        this.methodName = methodName;
+    }
+
+    public void cancel(){
+        if (asyncTask != null && !asyncTask.isCancelled()) {
+            asyncTask.cancel(true);
+        }
+    }
+    public interface CallBack {
+        void execute(String s);
+    }
+}

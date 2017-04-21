@@ -35,7 +35,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static android.support.v7.widget.RecyclerView.VERTICAL;
-import static com.xabaizhong.treemonistor.activity.add_tree.Activity_add_tree.ResultCode.REQUEST_CODE_CNAME_RESULT;
 
 /**
  * Created by admin on 2017/3/17.
@@ -79,7 +78,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static android.support.v7.widget.RecyclerView.VERTICAL;
-import static com.xabaizhong.treemonistor.activity.add_tree.Activity_add_tree.ResultCode.REQUEST_CODE_CNAME_RESULT;
 
 /**
  * Created by admin on 2017/3/13.

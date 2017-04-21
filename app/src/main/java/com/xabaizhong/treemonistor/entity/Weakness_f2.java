@@ -14,41 +14,42 @@ import org.greenrobot.greendao.annotation.Generated;
 public class Weakness_f2 {
     @Id
     private Long id;
+    private int f1Id;
     private int fId;
     private String name;
+@Generated(hash = 822929943)
+public Weakness_f2(Long id, int f1Id, int fId, String name) {
+    this.id = id;
+    this.f1Id = f1Id;
+    this.fId = fId;
+    this.name = name;
+}
+@Generated(hash = 154543802)
+public Weakness_f2() {
+}
+public Long getId() {
+    return this.id;
+}
+public void setId(Long id) {
+    this.id = id;
+}
+public int getF1Id() {
+    return this.f1Id;
+}
+public void setF1Id(int f1Id) {
+    this.f1Id = f1Id;
+}
+public int getFId() {
+    return this.fId;
+}
+public void setFId(int fId) {
+    this.fId = fId;
+}
+public String getName() {
+    return this.name;
+}
+public void setName(String name) {
+    this.name = name;
+}
 
-    @Generated(hash = 222814106)
-    public Weakness_f2(Long id, int fId, String name) {
-        this.id = id;
-        this.fId = fId;
-        this.name = name;
-    }
-
-    @Generated(hash = 154543802)
-    public Weakness_f2() {
-    }
-
-    public Long getId() {
-        return this.id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public int getFId() {
-        return this.fId;
-    }
-
-    public void setFId(int fId) {
-        this.fId = fId;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 }

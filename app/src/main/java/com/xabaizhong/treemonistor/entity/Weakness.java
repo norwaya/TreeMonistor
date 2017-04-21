@@ -21,6 +21,8 @@ public class Weakness {
     private Long id;
     private String name;
     private long partId;
+
+
     @ToOne(joinProperty = "partId")
     private Tree_weak_part treePart;
     private long f1Id;

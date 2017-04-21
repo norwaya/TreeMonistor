@@ -38,7 +38,7 @@ public class Fragment_monitor_growth_detail extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        int id = getArguments().getInt("id");
+        int id = getArguments().getInt("f1Id");
         Activity_monitor_growth.GrowthInfo.GrowthBean bean = Activity_monitor_growth.GrowthInfo.list.get(id);
         leaf.setText(bean.getLeaf());
         branch.setText(bean.getBranch());

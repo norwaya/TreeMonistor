@@ -77,6 +77,34 @@
                 app:mid_font_color="@color/wx_green"
                 app:mid_text_hint="果实颜色"
                 app:mid_type="read"/>
+
+            <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/layout_need_upload"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+                    android:id="@+id/btn_image"
+                    style="@style/custom_edit_text_style"
+                    app:left_text="选择照片"
+                    app:mid_font_color="@color/wx_green"
+                    app:mid_text_hint="选择照片"
+                    app:mid_type="read"/>
+            </LinearLayout>
         </android.support.v7.widget.LinearLayoutCompat>
     </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/pb"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"/>
+    </RelativeLayout>
 </RelativeLayout>

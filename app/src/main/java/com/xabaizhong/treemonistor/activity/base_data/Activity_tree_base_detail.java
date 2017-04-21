@@ -1,19 +1,34 @@
 package com.xabaizhong.treemonistor.activity.base_data;
 
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.xabaizhong.treemonistor.R;
 import com.xabaizhong.treemonistor.base.Activity_base;
 import com.xabaizhong.treemonistor.base.App;
+import com.xabaizhong.treemonistor.contant.UserSharedField;
 import com.xabaizhong.treemonistor.entity.TreeSpecial;
 import com.xabaizhong.treemonistor.entity.TreeSpecialDao;
+import com.xabaizhong.treemonistor.service.WebserviceHelper;
+import com.xabaizhong.treemonistor.service.model.PicPath;
+
+import java.net.ConnectException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by admin on 2017/3/17.
@@ -44,6 +59,8 @@ public class Activity_tree_base_detail extends Activity_base {
     TextView desc;
     @BindView(R.id.layout_desc)
     LinearLayout layoutDesc;
+    @BindView(R.id.show_pic)
+    Button showPic;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,6 +72,7 @@ public class Activity_tree_base_detail extends Activity_base {
 
     long id;
     TreeSpecial treeSpecial;
+    ArrayList<String> picList = new ArrayList<>();
 
     private void initView() {
         id = getIntent().getLongExtra("id", 0);
@@ -63,7 +81,58 @@ public class Activity_tree_base_detail extends Activity_base {
         initDao();
         if (treeSpecial != null) {
             fillData();
+            showPic();
+        } else {
+            finish();
         }
+
+
+    }
+
+    AsyncTask asyncTask;
+
+    private void showPic() {
+        asyncTask = new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... params) {
+                try {
+                    return WebserviceHelper.GetWebService(
+                            "Pic", "SpeciesPicList", getParms());
+                } catch (ConnectException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                if (s == null) {
+                    showToast("请求错误");
+                    return;
+                }
+                showToast(s);
+                Log.i(TAG, "onPostExecute: " + s);
+                PicPath picPath = new Gson().fromJson(s, PicPath.class);
+                if (picPath.getResult() != null && picPath.getResult().size() > 0) {
+                    picList.addAll(picPath.getResult());
+                    showPic.setVisibility(View.VISIBLE);
+                }
+            }
+        }.execute();
+    }
+
+    private Map<String, Object> getParms() {
+        Map<String, Object> map = new HashMap<>();
+//        String user_id = sharedPreferences.getString(UserSharedField.USERID, "");
+        /*<UserID>string</UserID>
+      <leafShape>int</leafShape>
+      <leafColor>int</leafColor>
+      <flwerType>int</flwerType>
+      <flowerColor>int</flowerColor>
+      <fruitType>int</fruitType>
+      <fruitColor>int</fruitColor>*/
+        map.put("TreeSpeID ", treeSpecial.getTreeSpeId());
+        return map;
     }
 
     private void fillData() {
@@ -102,4 +171,10 @@ public class Activity_tree_base_detail extends Activity_base {
     }
 
 
+    @OnClick(R.id.show_pic)
+    public void onViewClicked() {
+        Intent i = new Intent(this,Activity_pic_vp.class);
+        i.putStringArrayListExtra("picList", picList);
+        startActivity(i);
+    }
 }

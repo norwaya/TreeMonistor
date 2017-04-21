@@ -237,8 +237,8 @@ public class Activity_welcome extends Activity_base {
                 .list();
         for (Weakness w : list
                 ) {
-            String f2 = w.getF2Id() == 0 ? "null" : w.getWeakness_f2().getName();
-            Log.i(TAG, "check: " + w.getName() + "\t" + w.getTreePart().getName() + "\t" + w.getWeakness_f1().getName() + "\t" + f2);
+            String f2 = w.getF2Id() == 0 ? "null" : w.getWeakness_f2().getFId()+ w.getWeakness_f2().getName();
+            Log.i(TAG, "check: " + w.getName() + "\t" + w.getTreePart().getName() + "\t" +w.getWeakness_f1()+ w.getWeakness_f1().getName() + "\t" + f2);
         }
     }
 
@@ -360,7 +360,7 @@ public class Activity_welcome extends Activity_base {
     }
 
     private Weakness convertToWeakness(Json_tree_weak.RECORDSBean bean) {
-        long f2Id = bean.getExpression2() == 0 ? 0 : loadWeaknessF2(bean.getExpression2()).getId();
+        long f2Id = bean.getExpression2() == 0 ? 0 : loadWeaknessF2(bean.getExpression1(), bean.getExpression2()).getId();
         return new Weakness(null, bean.getIllName(),
                 loadTreePart(bean.getPart()).getId(),
                 loadWeaknessF1(bean.getExpression1()).getId(),
@@ -370,7 +370,7 @@ public class Activity_welcome extends Activity_base {
     }
 
     private Tree_weak_part loadTreePart(int tree_part_id) {
-        Log.i(TAG, "loadTreePart: "+tree_part_id);
+        Log.i(TAG, "loadTreePart: " + tree_part_id);
         List<Tree_weak_part> list = treePartWeakDao
                 .queryBuilder()
                 .where(Tree_weak_partDao.Properties.PartId.eq(tree_part_id))
@@ -380,7 +380,7 @@ public class Activity_welcome extends Activity_base {
     }
 
     private Weakness_f1 loadWeaknessF1(int weakness_f1_id) {
-        Log.i(TAG, "loadWeaknessF1: "+weakness_f1_id);
+        Log.i(TAG, "loadWeaknessF1: " + weakness_f1_id);
         List<Weakness_f1> list = weaknessF1Dao
                 .queryBuilder()
                 .where(Weakness_f1Dao.Properties.FId.eq(weakness_f1_id))
@@ -389,11 +389,11 @@ public class Activity_welcome extends Activity_base {
         return list.get(0);
     }
 
-    private Weakness_f2 loadWeaknessF2(int weakness_f2_id) {
-        Log.i(TAG, "loadWeaknessF2: "+weakness_f2_id);
+    private Weakness_f2 loadWeaknessF2(int weakness_f1_id, int weakness_f2_id) {
+        Log.i(TAG, "loadWeaknessF2: " + weakness_f1_id + "\t" + weakness_f2_id);
         List<Weakness_f2> list = weaknessF2Dao
                 .queryBuilder()
-                .where(Weakness_f2Dao.Properties.FId.eq(weakness_f2_id))
+                .where(Weakness_f2Dao.Properties.FId.eq(weakness_f2_id), Weakness_f2Dao.Properties.F1Id.eq(weakness_f1_id))
                 .build()
                 .list();
         return list.get(0);

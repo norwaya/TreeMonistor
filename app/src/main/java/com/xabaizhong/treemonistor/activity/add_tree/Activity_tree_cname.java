@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
@@ -57,27 +58,44 @@ public class Activity_tree_cname extends Activity_base implements View.OnClickLi
         initView();
         init();
     }
+
     TreeSpecialDao dao;
+
     private void init() {
-        dao = ((App)getApplicationContext()).getDaoSession().getTreeSpecialDao();
+        dao = ((App) getApplicationContext()).getDaoSession().getTreeSpecialDao();
     }
 
     Activity_tree_cname_adapter adapter;
+
     private void initView() {
+
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
         initSearchView();
 
         initRecyclerView();
 
 
+    }
 
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()){
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public static final int REQUEST_CODE_CNAME_RESULT = 155;
-    
-    
+
+
     private void initRecyclerView() {
-        adapter = new Activity_tree_cname_adapter(this,R.layout.activity_tree_cname_item);
+        adapter = new Activity_tree_cname_adapter(this, R.layout.activity_tree_cname_item);
         adapter.setCallBack(new CommonRecyclerViewAdapter.CallBack<ViewHolder, TreeSpecial>() {
             @Override
             public void bindView(ViewHolder holder, int position, List<TreeSpecial> list) {
@@ -89,8 +107,8 @@ public class Activity_tree_cname extends Activity_base implements View.OnClickLi
             public void onItemClickListener(View view, int position) {
                 Intent i = new Intent();
                 i.putExtra("special", list.get(position));
-                setResult(REQUEST_CODE_CNAME_RESULT,i);
-                Log.i(TAG, "onItemClickListener: "+position);
+                setResult(REQUEST_CODE_CNAME_RESULT, i);
+                Log.i(TAG, "onItemClickListener: " + position);
                 Activity_tree_cname.this.finish();
             }
         });
@@ -98,7 +116,9 @@ public class Activity_tree_cname extends Activity_base implements View.OnClickLi
         rv.addItemDecoration(new RecycleViewDivider(this, VERTICAL, R.drawable.divider2));
         rv.setAdapter(adapter);
     }
+
     int width;
+
     private void initSearchView() {
         width = sv.getLeft();
         setSupportActionBar(toolbar);
@@ -132,20 +152,23 @@ public class Activity_tree_cname extends Activity_base implements View.OnClickLi
     public void onClick(View v) {
 
     }
+
     List<TreeSpecial> list;
+
     public List<TreeSpecial> getList(String query) {
         Query<TreeSpecial> queryDao = dao.queryBuilder().whereOr(
-                TreeSpecialDao.Properties.Cname.like("%"+query+"%"),
-                TreeSpecialDao.Properties.Alias.like("%"+query+"%")).limit(20).build();
+                TreeSpecialDao.Properties.Cname.like("%" + query + "%"),
+                TreeSpecialDao.Properties.Alias.like("%" + query + "%")).limit(20).build();
         list = queryDao.list();
         return list;
     }
 
 
-    public static class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView cname;
         TextView alias;
         ImageView icon;
+
         public ViewHolder(View itemView) {
             super(itemView);
             cname = (TextView) itemView.findViewById(R.id.cname);

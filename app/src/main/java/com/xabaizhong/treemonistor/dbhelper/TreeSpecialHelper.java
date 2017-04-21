@@ -1,5 +1,6 @@
 package com.xabaizhong.treemonistor.dbhelper;
 
+import com.google.gson.annotations.SerializedName;
 import com.xabaizhong.treemonistor.entity.TreeSpecial;
 
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
 public class TreeSpecialHelper {
 
 
+    @SerializedName("RECORDS")
     private List<RECORDSBean> RECORDS;
 
     public List<RECORDSBean> getRECORDS() {
@@ -23,47 +25,51 @@ public class TreeSpecialHelper {
 
     public static class RECORDSBean {
         /**
-         * SpeID : 1
-         * CHName : 乔木树种
-         * Jianpin : qmsz
-         * SpecialCode : 900
-         * ENName :
-         * Family :
-         * ToFamily :
-         * Belong :
-         * Alias : 乔木树种
-         * LatinName :
-         * Explian :
-         * TreeSpeID : T00001
-         * ReviewSta : 1
-         * Memo :
-         * Memo1 :
-         * Memo2 :
+         * TreeSpeID : T00021
+         * CHName : 臭冷杉
+         * jianpin : cls
+         * SpecialCode : 115
+         * ENName : Abies nephrolepsi
+         * Family : 松科
+         * ToFamily : 冷杉亚科
+         * Belong : 冷杉属
+         * Alias : 华北冷杉、臭松、东陵冷杉
+         * LatinName : Abies nephrolepis (Trautv.) Maxim.
+         * Explian : 臭冷杉(拉丁学名:Abiesnephrolepis(Trautv.) Maxim.)别名: 华北冷杉、臭松、东陵冷杉 、小五台地区俗称"臭桃葫芦"，乔木，高30m，胸径50cm，树冠尖塔形至圆锥形。树皮青灰色，浅裂或不裂。一年生枝淡黄色或淡灰褐色，密生褐色短柔毛。冬芽有树脂，叶条形，长1~3厘米。宽约1.5mm。上面亮绿色，下面有2条白色气孔带，花期:4~5月，果期:9~10月。产于中国东北小兴安岭南坡、长白山区及张广才岭海拔300-1800米，河北小五台山、雾灵山、围场及山西五台山海拔1700-21
+         * TreeSpeType : 0
          */
 
-        private int SpeID;
-        private String CHName;
-        private String Jianpin;
-        private String SpecialCode;
-        private String ENName;
-        private String Family;
-        private String ToFamily;
-        private String Belong;
-        private String Alias;
-        private String LatinName;
-        private String Explian;
+        @SerializedName("TreeSpeID")
         private String TreeSpeID;
-        private int ReviewSta;
-        private String Memo;
-        private String Memo1;
-        private String Memo2;
+        @SerializedName("CHName")
+        private String CHName;
+        @SerializedName("jianpin")
+        private String jianpin;
+        @SerializedName("SpecialCode")
+        private String SpecialCode;
+        @SerializedName("ENName")
+        private String ENName;
+        @SerializedName("Family")
+        private String Family;
+        @SerializedName("ToFamily")
+        private String ToFamily;
+        @SerializedName("Belong")
+        private String Belong;
+        @SerializedName("Alias")
+        private String Alias;
+        @SerializedName("LatinName")
+        private String LatinName;
+        @SerializedName("Explian")
+        private String Explian;
+        @SerializedName("TreeSpeType")
+        private int TreeSpeType;
 
-        public int getSpeID() {
-            return SpeID;
+        public String getTreeSpeID() {
+            return TreeSpeID;
         }
 
-        public void setSpeID(int SpeID) {
-            this.SpeID = SpeID;
+        public void setTreeSpeID(String TreeSpeID) {
+            this.TreeSpeID = TreeSpeID;
         }
 
         public String getCHName() {
@@ -75,11 +81,11 @@ public class TreeSpecialHelper {
         }
 
         public String getJianpin() {
-            return Jianpin;
+            return jianpin;
         }
 
-        public void setJianpin(String Jianpin) {
-            this.Jianpin = Jianpin;
+        public void setJianpin(String jianpin) {
+            this.jianpin = jianpin;
         }
 
         public String getSpecialCode() {
@@ -146,50 +152,17 @@ public class TreeSpecialHelper {
             this.Explian = Explian;
         }
 
-        public String getTreeSpeID() {
-            return TreeSpeID;
+        public int getTreeSpeType() {
+            return TreeSpeType;
         }
 
-        public void setTreeSpeID(String TreeSpeID) {
-            this.TreeSpeID = TreeSpeID;
-        }
-
-        public int getReviewSta() {
-            return ReviewSta;
-        }
-
-        public void setReviewSta(int ReviewSta) {
-            this.ReviewSta = ReviewSta;
-        }
-
-        public String getMemo() {
-            return Memo;
-        }
-
-        public void setMemo(String Memo) {
-            this.Memo = Memo;
-        }
-
-        public String getMemo1() {
-            return Memo1;
-        }
-
-        public void setMemo1(String Memo1) {
-            this.Memo1 = Memo1;
-        }
-
-        public String getMemo2() {
-            return Memo2;
-        }
-
-        public void setMemo2(String Memo2) {
-            this.Memo2 = Memo2;
+        public void setTreeSpeType(int TreeSpeType) {
+            this.TreeSpeType = TreeSpeType;
         }
 
         public TreeSpecial convertToEntity() {
-            return new TreeSpecial(null, CHName, Jianpin, SpecialCode, ENName, Family, ToFamily, Belong, Alias, LatinName,
-                    Explian, TreeSpeID, ReviewSta);
+            return new TreeSpecial(null, TreeSpeID, CHName, jianpin,
+                    SpecialCode, ENName, Family, ToFamily, Belong, Alias, LatinName, Explian, TreeSpeType);
         }
-
     }
 }
