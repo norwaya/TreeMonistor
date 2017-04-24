@@ -3,11 +3,10 @@ package com.xabaizhong.treemonistor.service.model;
 import android.util.Log;
 
 import com.google.gson.annotations.SerializedName;
-import com.xabaizhong.treemonistor.utils.InputVerification;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.List;
 
 /**
  * Created by admin on 2017/3/15.
@@ -15,46 +14,25 @@ import java.lang.reflect.Method;
 
 public class User {
 
-    @SerializedName("RoleID")
-    private String role_id;
-    @SerializedName("UserID")
-    private String user_id; // FIXME check this code
-    @SerializedName("AreaID")
-    private String area_id;
+
     /**
+     * UserID : lizhuang
+     * PassWord : admin
+     * RoleID : ["3","50"]
+     * AreaID : 610000
      * RealName : lizhuang5
-     * UserTel : 23231
-     * UserUnit : lizhuang6
-     * UserMail : lizhuang7
-     * Usersex : 0
-     * UserAge : 45
-     * UserField : lizhuang1
-     * UserAddress : lizhuang2
-     * Titles : lizhuang4
-     * PicStr :
      */
 
+    @SerializedName("UserID")
+    private String UserID;
+    @SerializedName("PassWord")
+    private String PassWord;
+    @SerializedName("AreaID")
+    private String AreaID;
     @SerializedName("RealName")
-    private String real_name;
-    @SerializedName("UserTel")
-    private String user_tel;
-    @SerializedName("UserUnit")
-    private String user_unit;
-    @SerializedName("UserMail")
-    private String user_mail;
-    @SerializedName("Usersex")
-    private String user_sex;
-    @SerializedName("UserAge")
-    private String user_age;
-    @SerializedName("UserField")
-    private String user_field;
-    @SerializedName("UserAddress")
-    private String user_address;
-    @SerializedName("Titles")
-    private String titles;
-    @SerializedName("PicStr")
-    private String pic_str;
-
+    private String RealName;
+    @SerializedName("RoleID")
+    private List<String> RoleID;
 
     @Override
     public String toString() {
@@ -106,109 +84,44 @@ public class User {
         return sbu.toString();*/
     }
 
-    public String getRole_id() {
-        return role_id;
+
+    public String getUserID() {
+        return UserID;
     }
 
-    public void setRole_id(String role_id) {
-        this.role_id = role_id;
+    public void setUserID(String UserID) {
+        this.UserID = UserID;
     }
 
-    public String getUser_id() {
-        return user_id;
+    public String getPassWord() {
+        return PassWord;
     }
 
-    public void setUser_id(String user_id) {
-        this.user_id = user_id;
+    public void setPassWord(String PassWord) {
+        this.PassWord = PassWord;
     }
 
-    public String getArea_id() {
-        return area_id;
+    public String getAreaID() {
+        return AreaID;
     }
 
-    public void setArea_id(String area_id) {
-        this.area_id = area_id;
+    public void setAreaID(String AreaID) {
+        this.AreaID = AreaID;
     }
 
-    public String getReal_name() {
-        return real_name;
+    public String getRealName() {
+        return RealName;
     }
 
-    public void setReal_name(String real_name) {
-        this.real_name = real_name;
+    public void setRealName(String RealName) {
+        this.RealName = RealName;
     }
 
-    public String getUser_tel() {
-        return user_tel;
+    public List<String> getRoleID() {
+        return RoleID;
     }
 
-    public void setUser_tel(String user_tel) {
-        this.user_tel = user_tel;
-    }
-
-    public String getUser_unit() {
-        return user_unit;
-    }
-
-    public void setUser_unit(String user_unit) {
-        this.user_unit = user_unit;
-    }
-
-    public String getUser_mail() {
-        return user_mail;
-    }
-
-    public void setUser_mail(String user_mail) {
-        this.user_mail = user_mail;
-    }
-
-    public String getUser_sex() {
-        if ("0".equals(user_sex) || "1".equals(user_sex))
-            return user_sex.equals("0") ? "男" : "女";
-        return "";
-    }
-
-    public void setUser_sex(String user_sex) {
-        this.user_sex = user_sex;
-    }
-
-    public String getUser_age() {
-        return user_age;
-    }
-
-    public void setUser_age(String user_age) {
-        this.user_age = user_age;
-    }
-
-    public String getUser_field() {
-        return user_field;
-    }
-
-    public void setUser_field(String user_field) {
-        this.user_field = user_field;
-    }
-
-    public String getUser_address() {
-        return user_address;
-    }
-
-    public void setUser_address(String user_address) {
-        this.user_address = user_address;
-    }
-
-    public String getTitles() {
-        return titles;
-    }
-
-    public void setTitles(String titles) {
-        this.titles = titles;
-    }
-
-    public String getPic_str() {
-        return pic_str;
-    }
-
-    public void setPic_str(String pic_str) {
-        this.pic_str = pic_str;
+    public void setRoleID(List<String> RoleID) {
+        this.RoleID = RoleID;
     }
 }

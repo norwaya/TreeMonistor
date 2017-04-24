@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    android:orientation="vertical">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:fitsSystemWindows="true"
+              android:orientation="vertical">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -23,15 +23,15 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/activity_horizontal_margin"
-                android:background="@android:color/white">
+                android:background="@android:color/white"
+                android:padding="@dimen/activity_horizontal_margin">
 
                 <RelativeLayout
-                    android:visibility="gone"
                     android:id="@+id/user_unlogin"
-                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp">
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:visibility="gone">
 
                     <TextView
                         android:id="@+id/user_tv"
@@ -42,7 +42,7 @@
                         android:drawableRight="@drawable/text_right"
                         android:gravity="center_vertical"
                         android:text="登录"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Title" />
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -55,35 +55,38 @@
                         android:layout_width="70dp"
                         android:layout_height="70dp"
                         android:layout_centerVertical="true"
-                        app:civ_border_width="2px"
-                        app:civ_border_overlay="true"
                         android:layout_marginRight="@dimen/activity_horizontal_margin"
                         android:src="@drawable/tree_header"
                         app:civ_border_color="@android:color/transparent"
-                        app:civ_fill_color="@android:color/darker_gray" />
+                        app:civ_border_overlay="true"
+                        app:civ_border_width="2px"
+                        app:civ_fill_color="@android:color/darker_gray"/>
 
                     <LinearLayout
-                        android:orientation="vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_toRightOf="@id/user_icon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
+                        android:orientation="vertical">
+
                         <TextView
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
                             android:id="@+id/tv_user_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
                             android:text="norwaya丶"
-                            android:textAlignment="gravity" />
+                            android:textAlignment="gravity"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"/>
+
                         <TextView
                             android:layout_width="wrap_content"
-                            android:layout_height="8dp" />
+                            android:layout_height="8dp"/>
+
                         <TextView
-                            android:text="@string/real_name"
                             android:id="@+id/tv_real_name"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="wrap_content"
+                            android:text="@string/real_name"/>
                     </LinearLayout>
                 </RelativeLayout>
             </FrameLayout>
@@ -99,14 +102,31 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:text="消息推送"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Title" />
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
 
                 <Switch
                     android:id="@+id/information_s"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true" />
+                    android:layout_centerVertical="true"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/destroy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/text1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:drawableRight="@drawable/text_right"
+                    android:padding="@dimen/activity_horizontal_margin"
+                    android:text="注销"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+
             </RelativeLayout>
         </LinearLayout>
     </ScrollView>

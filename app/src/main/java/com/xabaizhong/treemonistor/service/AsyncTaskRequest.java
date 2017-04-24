@@ -23,7 +23,6 @@ public class AsyncTaskRequest {
     private String methodName;
 
 
-
     public static AsyncTaskRequest instance(String interfaceName, String methodName) {
         AsyncTaskRequest a = new AsyncTaskRequest();
         a.setInterfaceName(interfaceName);
@@ -31,12 +30,15 @@ public class AsyncTaskRequest {
         return a;
     }
 
-    AsyncTask asyncTask = null;
-    Map<String,Object> map ;
-    public  void create() {
-        if (map == null) {
-            throw new RuntimeException("params is not initial!");
-        }
+    private AsyncTask asyncTask = null;
+    private Map<String, Object> map;
+    public AsyncTaskRequest create(String tag) {
+        Log.i("AsyncTaskRequest", "create: "+tag);
+        return create();
+    }
+
+    public AsyncTaskRequest create() {
+        Log.i("AsyncTaskRequest", "create: "+"++++++++++++++++++++++++");
         if (callBack == null) {
             throw new RuntimeException("callBack interface is not implemented");
         }
@@ -45,7 +47,7 @@ public class AsyncTaskRequest {
             protected String doInBackground(Void... params) {
                 try {
                     return WebserviceHelper.GetWebService(
-                            "CheckUp", "SpeciesIden", map);
+                            interfaceName, methodName, map);
                 } catch (ConnectException e) {
                     e.printStackTrace();
                     return null;
@@ -59,13 +61,10 @@ public class AsyncTaskRequest {
                 }
             }
         }.execute();
+        return this;
     }
 
-    List<String> speList;
-
-
-
-    CallBack callBack;
+    private CallBack callBack;
 
     public AsyncTaskRequest setCallBack(CallBack callBack) {
         this.callBack = callBack;
@@ -87,11 +86,17 @@ public class AsyncTaskRequest {
         this.methodName = methodName;
     }
 
-    public void cancel(){
+    public boolean isCancelled() {
+        return asyncTask == null || asyncTask.isCancelled();
+    }
+
+    public void cancel() {
         if (asyncTask != null && !asyncTask.isCancelled()) {
             asyncTask.cancel(true);
+            asyncTask = null;
         }
     }
+
     public interface CallBack {
         void execute(String s);
     }

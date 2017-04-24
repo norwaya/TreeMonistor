@@ -22,6 +22,7 @@ import com.google.gson.Gson;
 import com.xabaizhong.treemonistor.R;
 import com.xabaizhong.treemonistor.base.Activity_base;
 import com.xabaizhong.treemonistor.contant.UserSharedField;
+import com.xabaizhong.treemonistor.service.AsyncTaskRequest;
 import com.xabaizhong.treemonistor.service.WebserviceHelper;
 import com.xabaizhong.treemonistor.service.model.User;
 import com.xabaizhong.treemonistor.service.response.LoginResultMessage;
@@ -29,8 +30,11 @@ import com.xabaizhong.treemonistor.utils.InputVerification;
 
 
 import java.net.ConnectException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -209,12 +213,32 @@ public class Activity_login extends Activity_base implements View.OnFocusChangeL
         }
     }
 
+    AsyncTaskRequest asyncTaskRequest = null;
 
     private void attemptLogin() {
         if (!verification()) {
             showToast("error");
         }
-        login();
+//        login();
+        asyncTaskRequest = AsyncTaskRequest.instance("Login", "login").setParams(getLoginInfo())
+                .setCallBack(new AsyncTaskRequest.CallBack() {
+                    @Override
+                    public void execute(String s) {
+                        pb.setVisibility(View.INVISIBLE);
+                        if (s == null || "-1".equals(s)) {
+                            Log.i(TAG, "onPostExecute: " + s);
+                        } else {
+                            Log.i(TAG, "onPostExecute: " + s);
+                            LoginResultMessage loginResult = new Gson().fromJson(s, LoginResultMessage.class);
+                            Log.i(TAG, "onPostExecute: " + loginResult.getMessage());
+                            if (loginResult.getError_code() == 0) {
+                                writerUserToFile(loginResult.getResult());
+                                finish();
+                            }
+
+                        }
+                    }
+                }).create();
     }
 
     /**
@@ -235,7 +259,7 @@ public class Activity_login extends Activity_base implements View.OnFocusChangeL
         return map;
     }
 
-    AsyncTask asyncTask;
+   /* AsyncTask asyncTask;
 
     private void login() {
         asyncTask = new AsyncTask<Void, Void, String>() {
@@ -259,7 +283,7 @@ public class Activity_login extends Activity_base implements View.OnFocusChangeL
                     Log.i(TAG, "onPostExecute: " + s);
                     LoginResultMessage loginResult = new Gson().fromJson(s, LoginResultMessage.class);
                     Log.i(TAG, "onPostExecute: " + loginResult.getMessage());
-                    if (loginResult.getError_code() == 0){
+                    if (loginResult.getError_code() == 0) {
                         writerUserToFile(loginResult.getResult());
                         finish();
                     }
@@ -268,16 +292,19 @@ public class Activity_login extends Activity_base implements View.OnFocusChangeL
             }
         }.execute();
     }
-
+*/
 
     private void writerUserToFile(User user) {
         Log.i(TAG, "writerUserToFile: " + user.toString());
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(UserSharedField.USERID, user.getUser_id());
-        editor.putString(UserSharedField.ROLEID, user.getRole_id());
-        editor.putString(UserSharedField.AREAID, user.getArea_id());
-        editor.putString(UserSharedField.REALNAME, user.getReal_name());
 
+        Set<String> set = new HashSet<>();
+        set.addAll(user.getRoleID());
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(UserSharedField.USERID, user.getUserID());
+        editor.putStringSet(UserSharedField.ROLEID, set);
+        editor.putString(UserSharedField.AREAID, user.getAreaID());
+        editor.putString(UserSharedField.REALNAME, user.getRealName());
         editor.apply();
         editor.commit();
     }
@@ -306,8 +333,8 @@ public class Activity_login extends Activity_base implements View.OnFocusChangeL
     @Override
     protected void onPause() {
         super.onPause();
-        if (asyncTask != null && !asyncTask.isCancelled()) {
-            asyncTask.cancel(true);
+        if (asyncTaskRequest != null) {
+            asyncTaskRequest.cancel();
         }
     }
 }

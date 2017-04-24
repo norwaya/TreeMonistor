@@ -24,6 +24,7 @@ import com.xabaizhong.treemonistor.adapter.Fragment_expert_adapter;
 import com.xabaizhong.treemonistor.adapter.HeaderAndFooterWrapper;
 import com.xabaizhong.treemonistor.base.Fragment_base;
 import com.xabaizhong.treemonistor.entity.ResultOfExpert;
+import com.xabaizhong.treemonistor.service.AsyncTaskRequest;
 import com.xabaizhong.treemonistor.utils.RecycleViewDivider;
 
 import java.util.ArrayList;
@@ -134,19 +135,7 @@ public class Fragment_expert extends Fragment_base {
                 new XRecyclerView.LoadingListener() {
                     @Override
                     public void onRefresh() {
-                        new Thread() {
-                            @Override
-                            public void run() {
-                                super.run();
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        requestData();
-                                        xRecyclerView.refreshComplete();
-                                    }
-                                });
-                            }
-                        }.start();
+
                     }
 
                     @Override
@@ -158,7 +147,6 @@ public class Fragment_expert extends Fragment_base {
                                 getActivity().runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        requestData();
                                         xRecyclerView.loadMoreComplete();
                                     }
                                 });
@@ -168,6 +156,28 @@ public class Fragment_expert extends Fragment_base {
                 }
         );
     }
+
+    private void request(){
+        AsyncTaskRequest.instance("","")
+                .setParams(null)
+                .setCallBack(new AsyncTaskRequest.CallBack() {
+                    @Override
+                    public void execute(String s) {
+                        requestData();
+                        xRecyclerView.refreshComplete();
+                    }
+                }).create();
+    }
+
+
+
+
+
+
+
+
+
+
 
 
     ArrayList<ResultOfExpert> list;

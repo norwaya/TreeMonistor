@@ -182,6 +182,22 @@
             android:name=".activity.base_data.Activity_pic_vp"
             android:label="病害鉴定"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.expert_zd.Activity_expert_zd"
+            android:label="专家诊断"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.expert_zd.Activity_expert_zd_detail"
+            android:label="专家诊断"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.monitor_query.Activity_monitor_query"
+            android:label="监管查询"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.monitor_query.Activity_monitor_query_dateList"
+            android:label="监管查询"
+            android:screenOrientation="portrait"/>
         <!-- service -->
         <service
             android:name="com.baidu.location.f"

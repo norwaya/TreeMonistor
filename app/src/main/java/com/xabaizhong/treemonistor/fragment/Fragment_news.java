@@ -211,17 +211,15 @@ public class Fragment_news extends Fragment_base {
         xRecyclerView.loadMoreComplete();
     }
 
-    @Override
+   /* @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        Log.d(TAG, "onSaveInstanceState: " + (outState == null));
     }
 
     @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
-        Log.d(TAG, "onViewStateRestored: " + (savedInstanceState == null));
-    }
+    }*/
 
     List<Data_news> list;
 

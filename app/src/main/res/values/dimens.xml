@@ -14,5 +14,6 @@
     <dimen name="button_height_normal">30dp</dimen>
     <dimen name="image_item_normal">50dp</dimen>
     <dimen name="checked_textview_width">100dp</dimen>
+    <dimen name="font_normal">18sp</dimen>
 
 </resources>

@@ -7,15 +7,18 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.xabaizhong.treemonistor.R;
+import com.xabaizhong.treemonistor.activity.expert_zd.Activity_expert_zd;
 import com.xabaizhong.treemonistor.activity.monitor.Activity_monitor;
 import com.xabaizhong.treemonistor.activity.add_tree.Activity_add_manage;
 import com.xabaizhong.treemonistor.activity.base_data.Activity_base_data;
+import com.xabaizhong.treemonistor.activity.monitor_query.Activity_monitor_query;
 import com.xabaizhong.treemonistor.activity.query_treeOrGroup.Activity_query_tree_info;
 import com.xabaizhong.treemonistor.adapter.Fragment_function_adapter;
 import com.xabaizhong.treemonistor.adapter.HeaderAndFooterWrapper;
@@ -80,6 +83,7 @@ public class Fragment_function extends Fragment_base implements Fragment_functio
                 R.drawable.ic_fragment_function_monistor,
                 R.drawable.ic_fragment_function_monistor,
                 R.drawable.ic_fragment_function_monistor,
+                R.drawable.ic_fragment_function_monistor,
                 R.drawable.ic_fragment_function_monistor), Arrays.asList(contentArray));
     }
 
@@ -94,10 +98,11 @@ public class Fragment_function extends Fragment_base implements Fragment_functio
     final static int ACTIVITY_QUERY = 1;
     final static int ACTIVITY_REGULATION = 2;
     final static int ACTIVITY_REGULATION_QUERY = 3;
-    final static int ACTIVITY_DATA = 4;
-    final static int ACTIVITY_COMMUNICATE = 5;
-    final static int ACTIVITY_NOTICE = 6;
-    final static int ACTIVITY_EXPLAIN = 7;
+    private static final int ACTIVITY_EXPERT = 4;
+    final static int ACTIVITY_DATA = 5;
+    final static int ACTIVITY_COMMUNICATE = 6;
+    final static int ACTIVITY_NOTICE = 7;
+    final static int ACTIVITY_EXPLAIN = 8;
 
 
     @Override
@@ -122,7 +127,14 @@ public class Fragment_function extends Fragment_base implements Fragment_functio
                 getActivity().startActivity(i);
                 break;
             case ACTIVITY_REGULATION_QUERY:
-
+                Log.i(TAG, "onItemClick: 监管查询");
+                i.setClass(getContext(), Activity_monitor_query.class);
+                getActivity().startActivity(i);
+                break;
+            case ACTIVITY_EXPERT:
+                Log.i(TAG, "onItemClick: expert ");
+                i.setClass(getContext(), Activity_expert_zd.class);
+//                getActivity().startActivity(i);
                 break;
             case ACTIVITY_DATA:
                 i.setClass(getContext(), Activity_base_data.class);

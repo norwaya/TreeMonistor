@@ -35,11 +35,11 @@ public class WebserviceHelper {
 
         SoapObject soapObj = new SoapObject(nameSpace, methodName);
         /*soapObj.addProperty(parameter, action);*/
-
-        for (String key : map.keySet()) {
-            soapObj.addProperty(key, map.get(key));
-            Log.i(TAG, "GetWebService: "+key + map.get(key));
-        }
+        if (map != null)
+            for (String key : map.keySet()) {
+                soapObj.addProperty(key, map.get(key));
+                Log.i(TAG, "GetWebService: " + key + map.get(key));
+            }
 
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         envelope.bodyOut = soapObj;
@@ -49,6 +49,7 @@ public class WebserviceHelper {
 
         try {
             transport.call(nameSpace + methodName, envelope);
+            Object obj = envelope.bodyIn;
             SoapObject soapReault = (SoapObject) envelope.bodyIn;
             return soapReault.getProperty(0).toString();
 
@@ -61,7 +62,7 @@ public class WebserviceHelper {
         } catch (XmlPullParserException e) {
             Log.i(TAG, "GetWebService: XmlPullParserException");
 
-        } catch(IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             Log.i(TAG, "GetWebService: IllegalArgumentException");
             e.printStackTrace();
         }

@@ -2,9 +2,10 @@ package com.xabaizhong.treemonistor.fragment;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,11 +21,6 @@ import com.xabaizhong.treemonistor.activity.Activity_userInfo;
 import com.xabaizhong.treemonistor.base.Fragment_base;
 import com.xabaizhong.treemonistor.contant.UserSharedField;
 import com.xabaizhong.treemonistor.myview.CircleImageView;
-import com.xabaizhong.treemonistor.service.WebserviceHelper;
-
-import java.net.ConnectException;
-import java.util.HashMap;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -59,6 +55,18 @@ public class Fragment_setting extends Fragment_base {
     Switch informationS;
 
     private static final String UNLOGIND = "unlogin";
+    @BindView(R.id.destroy)
+    RelativeLayout destroy;
+    @BindView(R.id.text1)
+    TextView text1;
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.i(TAG, "onStart: ");
+    }
+
+    static int num = 0;
 
     @Override
     public void onResume() {
@@ -69,13 +77,13 @@ public class Fragment_setting extends Fragment_base {
         if (UNLOGIND.equals(name)) {
             userUnlogin.setVisibility(View.VISIBLE);
             userLogined.setVisibility(View.GONE);
+            destroy.setVisibility(View.INVISIBLE);
         } else {
             userUnlogin.setVisibility(View.GONE);
             userLogined.setVisibility(View.VISIBLE);
+            destroy.setVisibility(View.VISIBLE);
             validateUserInfo();
         }
-
-
     }
 
     private void validateUserInfo() {
@@ -90,40 +98,10 @@ public class Fragment_setting extends Fragment_base {
         }
     }
 
-    /*AsyncTask asyncTask;
-
-    private void getUserInfo() {
-        asyncTask = new AsyncTask<Void, Void, String>() {
-            @Override
-            protected String doInBackground(Void... params) {
-                try {
-                    return WebserviceHelper.GetWebService(
-                            "Login", "UserDetInfo", requestMap());
-                } catch (ConnectException e) {
-                    e.printStackTrace();
-                    return null;
-                }
-            }
-
-            @Override
-            protected void onPostExecute(String s) {
-                Log.d(TAG, "onPostExecute: " + s);
-            }
-        }.execute();
-    }
-
-    private Map<String, String> requestMap() {
-        Map<String, String> map = new HashMap<>();
-        String userid = sharedPreferences.getString(UserSharedField.USERID, "null");
-        map.put("UserID", userid);
-        return map;
-    }*/
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Nullable
@@ -180,6 +158,12 @@ public class Fragment_setting extends Fragment_base {
                 startActivity(new Intent(getActivity(), Activity_userInfo.class));
                 break;
         }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.i(TAG, "onPause: ");
     }
 
     @Override
