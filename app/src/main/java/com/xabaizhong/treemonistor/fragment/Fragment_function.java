@@ -134,7 +134,7 @@ public class Fragment_function extends Fragment_base implements Fragment_functio
             case ACTIVITY_EXPERT:
                 Log.i(TAG, "onItemClick: expert ");
                 i.setClass(getContext(), Activity_expert_zd.class);
-//                getActivity().startActivity(i);
+                getActivity().startActivity(i);
                 break;
             case ACTIVITY_DATA:
                 i.setClass(getContext(), Activity_base_data.class);

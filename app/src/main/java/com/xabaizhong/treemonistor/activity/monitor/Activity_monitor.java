@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -14,9 +15,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
 import com.xabaizhong.treemonistor.R;
 import com.xabaizhong.treemonistor.base.Activity_base;
 import com.xabaizhong.treemonistor.contant.UserSharedField;
+import com.xabaizhong.treemonistor.service.AsyncTaskRequest;
 import com.xabaizhong.treemonistor.service.WebserviceHelper;
 import com.xabaizhong.treemonistor.service.model.MonitorTree;
 import com.xabaizhong.treemonistor.service.model.ResultMessage;
@@ -81,17 +84,57 @@ public class Activity_monitor extends Activity_base {
     RelativeLayout pbLayout;
 
 
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+
         setContentView(R.layout.activity_monitor);
+        initSource();
         ButterKnife.bind(this);
         initView();
     }
 
+    private void initSource() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("UserID", sharedPreferences.getString(UserSharedField.USERID,""));
+
+        AsyncTaskRequest.instance("CheckUp","QueryTreeIDList_ImportantTree")
+                .setCallBack(new AsyncTaskRequest.CallBack() {
+                    @Override
+                    public void execute(String s) {
+                        Log.d(TAG, "execute: "+s);
+                            if(s == null){
+                                return;
+                            }
+                        ImportTreeList importTreeList = new Gson().fromJson(s, ImportTreeList.class);
+                        if(importTreeList.getErrorCode() == 0){
+                            if (importTreeList.getResult().size() == 0) {
+                                showToast("没有分配可以监管的古树");
+                                finish();
+                            }else{
+                                initSpinner(importTreeList.getResult());
+                            }
+                        }else{
+                            showToast("没有分配可以监管的古树");
+                            finish();
+                        }
+                    }
+                }).setParams(map).create();
+    }
+
     boolean flag;
 
+    private void initSpinner(List<String> list){
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list);
+        spinnerTreeList.setAdapter(arrayAdapter);
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+    }
     private void initView() {
+
+
         pbLayout.setOnClickListener(null);
         pbLayout.setVisibility(View.GONE);
         flag = true;
@@ -161,8 +204,7 @@ public class Activity_monitor extends Activity_base {
             return false;
         }
         int position = spinnerTreeList.getSelectedItemPosition();
-        //// TODO: 2017/4/21 0021  填入treeid
-        monitorTree.setTreeID("123123123");
+        monitorTree.setTreeID(spinnerTreeList.getSelectedItem().toString().trim());
         return true;
     }
 
@@ -451,5 +493,44 @@ public class Activity_monitor extends Activity_base {
         int SOUTHCODE = 684;
         int NORTHCODE = 32;
         int ALLCODE = 458;
+    }
+    public static class ImportTreeList{
+
+        /**
+         * message : sus
+         * error_code : 0
+         * result : ["61011100229","61011100109","61011101019","61011100015","61011100019","61011100029","61011100039"]
+         */
+
+        @SerializedName("message")
+        private String message;
+        @SerializedName("error_code")
+        private int errorCode;
+        @SerializedName("result")
+        private List<String> result;
+
+        public String getMessage() {
+            return message;
+        }
+
+        public void setMessage(String message) {
+            this.message = message;
+        }
+
+        public int getErrorCode() {
+            return errorCode;
+        }
+
+        public void setErrorCode(int errorCode) {
+            this.errorCode = errorCode;
+        }
+
+        public List<String> getResult() {
+            return result;
+        }
+
+        public void setResult(List<String> result) {
+            this.result = result;
+        }
     }
 }

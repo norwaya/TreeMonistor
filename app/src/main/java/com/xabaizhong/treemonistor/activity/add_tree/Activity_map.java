@@ -287,6 +287,8 @@ public class Activity_map extends Activity_base {
                         locationBox.setSematicDescription(reverseGeoCodeResult.getSematicDescription());
                         locationBox.setLon(reverseGeoCodeResult.getLocation().longitude);
                         locationBox.setLat(reverseGeoCodeResult.getLocation().latitude);
+                        Log.i(TAG, "onGetReverseGeoCodeResult: "+reverseGeoCodeResult.getLocation().longitude
+                        +"\t"+reverseGeoCodeResult.getLocation().latitude);
                     }
                 });
 
@@ -389,7 +391,6 @@ public class Activity_map extends Activity_base {
                     activity_map.locationBox.setSematicDescription(location.getLocationDescribe());
                     activity_map.locationBox.setLat(location.getLatitude());
                     activity_map.locationBox.setLon(location.getLongitude());
-                    location.getAltitude();
                 }
             }
             activity_map.baiduLog(location);
@@ -502,11 +503,12 @@ public class Activity_map extends Activity_base {
         private String district;
         private String street;
         private String sematicDescription;
-        private Double lat;
-        private Double lon;
+        private double lat;
+        private double lon;
 
         public LocationBox() {
         }
+
 
         protected LocationBox(Parcel in) {
             province = in.readString();
@@ -514,6 +516,24 @@ public class Activity_map extends Activity_base {
             district = in.readString();
             street = in.readString();
             sematicDescription = in.readString();
+            lat = in.readDouble();
+            lon = in.readDouble();
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(province);
+            dest.writeString(city);
+            dest.writeString(district);
+            dest.writeString(street);
+            dest.writeString(sematicDescription);
+            dest.writeDouble(lat);
+            dest.writeDouble(lon);
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
         }
 
         public static final Creator<LocationBox> CREATOR = new Creator<LocationBox>() {
@@ -536,19 +556,6 @@ public class Activity_map extends Activity_base {
         }
 
 
-        @Override
-        public int describeContents() {
-            return 0;
-        }
-
-        @Override
-        public void writeToParcel(Parcel dest, int flags) {
-            dest.writeString(province);
-            dest.writeString(city);
-            dest.writeString(district);
-            dest.writeString(street);
-            dest.writeString(sematicDescription);
-        }
 
         public String getProvince() {
             return province;

@@ -16,8 +16,8 @@ import com.xabaizhong.treemonistor.adapter.CommonRecyclerViewAdapter;
 import com.xabaizhong.treemonistor.base.Activity_base;
 import com.xabaizhong.treemonistor.base.App;
 import com.xabaizhong.treemonistor.entity.DaoSession;
-import com.xabaizhong.treemonistor.entity.Weakness_f1;
-import com.xabaizhong.treemonistor.entity.Weakness_f1Dao;
+import com.xabaizhong.treemonistor.entity.Tree_weak_part;
+import com.xabaizhong.treemonistor.entity.Tree_weak_partDao;
 import com.xabaizhong.treemonistor.utils.RecycleViewDivider;
 
 import java.util.List;
@@ -32,12 +32,9 @@ import static android.support.v7.widget.RecyclerView.VERTICAL;
  * Created by norwaya on 17-4-17.
  */
 
-public class Activity_expert_weak extends Activity_base implements CommonRecyclerViewAdapter.CallBack<Activity_expert_weak.ViewHolder, Weakness_f1> {
-    Button submit;
+public class Activity_expert_weak extends Activity_base implements CommonRecyclerViewAdapter.CallBack<Activity_expert_weak.ViewHolder, Tree_weak_part> {
     @BindView(R.id.rv)
     RecyclerView rv;
-    @BindView(R.id.title)
-    TextView title;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,13 +45,13 @@ public class Activity_expert_weak extends Activity_base implements CommonRecycle
         fillData();
     }
 
-    List<Weakness_f1> mList;
+    List<Tree_weak_part> mList;
 
     private void fillData() {
 
         DaoSession daoSession = ((App) getApplication()).getDaoSession();
-        Weakness_f1Dao weakness_f1Dao = daoSession.getWeakness_f1Dao();
-        mList = weakness_f1Dao.queryBuilder().build().list();
+        Tree_weak_partDao tree_weak_partDao = daoSession.getTree_weak_partDao();
+        mList = tree_weak_partDao.queryBuilder().build().list();
         adapter.setSource(mList);
     }
 
@@ -71,42 +68,19 @@ public class Activity_expert_weak extends Activity_base implements CommonRecycle
         rv.setAdapter(adapter);
     }
 
-    int mPosition = -1;
-
-    @OnClick(R.id.submit)
-    public void onViewClicked() {
-        if (mPosition == -1) {
-            showToast("请选择条件");
-            return;
-        }
-    }
 
     @Override
-    public void bindView(ViewHolder holder, int position, List<Weakness_f1> list) {
+    public void bindView(ViewHolder holder, int position, List<Tree_weak_part> list) {
 
         holder.title.setText(list.get(position).getName());
     }
 
     @Override
     public void onItemClickListener(View view, int position) {
-        title.setText("已选择: " + mList.get(position).getName());
-        mPosition = position + 1;
-        switch (position) {
-            case 0:
-            case 1:
-            case 2:
-
-                Intent i = new Intent(this, Activity_expert_weak2.class);
-                i.putExtra("f1Id", position + 1);
-                startActivity(i);
-                Log.i(TAG, "onItemClickListener: go intent " + position);
-                break;
-            case 4:
-            default:
-
-                Log.i(TAG, "onItemClickListener: " + position);
-                break;
-        }
+        Intent i = new Intent(this, Activity_expert_weak2.class);
+        i.putExtra("part", position + 1);
+        startActivity(i);
+        Log.i(TAG, "onItemClickListener: go intent " + position);
     }
 
 

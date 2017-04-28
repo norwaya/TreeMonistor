@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+                android:id="@+id/cname"
+                style="@style/custom_edit_text_style"
+                app:left_text="中文名称"
+                app:mid_font_color="@color/wx_green"
+                app:mid_type="read"/>
+
+            <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+                android:id="@+id/type"
+                style="@style/custom_edit_text_style"
+                app:left_text="昆虫类型"
+                app:mid_font_color="@color/wx_green"
+                app:mid_type="read"/>
+            <!-- "pest_name": "茶黄毒蛾",
+             "pest_type": 1,
+             "pest_explain": "雌蛾体长8-1 3毫米，翅展26-36毫米，琥珀色；前翅除前缘、翅尖和臀角外，均密布有深褐色鳞片。",
+             "harm_peculiarity": "老熟幼虫于 5月中旬群集树下，在枯枝落叶层下、根际松土表层下、树干裂缝中化蛹",
+             "step": "主要是摘除越冬卵块，可在每年11月至翌年3月间进行。捕杀幼虫，幼虫群集时，可摘除虫叶并将虫踩死。"-->
+            <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+                android:id="@+id/explain"
+                style="@style/custom_edit_text_style"
+                app:left_text="虫描述"
+                app:mid_font_color="@color/wx_green"
+                app:mid_type="read"/>
+
+            <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+                android:id="@+id/harm"
+                style="@style/custom_edit_text_style"
+                app:left_text="虫特点"
+                app:mid_font_color="@color/wx_green"
+                app:mid_type="read"/>
+
+            <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+                android:id="@+id/step"
+                style="@style/custom_edit_text_style"
+                app:left_text="虫害防治"
+                app:mid_font_color="@color/wx_green"
+                app:mid_type="read"/>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

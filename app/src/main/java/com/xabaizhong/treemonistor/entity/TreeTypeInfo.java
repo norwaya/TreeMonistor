@@ -23,8 +23,17 @@ public class TreeTypeInfo {
     private int typeId = 0;  // 0 古树 1 古树群
     private String treeId;
     private Date date;
-    private String areaId = "610329";
+    private String areaId;
     private long gsTree;// tree  id  属相  not  treeId
+
+    public  String check() {
+        if (treeId == null)
+            return "古树(群)编号为空";
+        if (date == null)
+            return "调查日期为空";
+        return null;
+    }
+
 
     private Tree tree;
 

@@ -24,5 +24,10 @@ public class InputVerification {
         }
         return false;
     }
-
+    public static boolean isNull(String charSequence){
+        if(charSequence == null && "".equals(charSequence)){
+            return true;
+        }
+        return false;
+    }
 }

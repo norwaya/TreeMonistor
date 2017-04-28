@@ -16,6 +16,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -30,6 +31,20 @@ public class FileUtil {
 
     private static String picPath = basePath + File.separator + "pic";
 
+
+    public static List<String> getPngFiles() {
+        List<String> list = new ArrayList<>();
+        List<File> files = getFiles();
+        if (files != null) {
+            for (File file : files) {
+                if (!file.getName().equals(".nomedia")) {
+                    list.add(FileUtil.bitmapToBase64Str(file));
+                }
+            }
+
+        }
+        return list;
+    }
 
     public static void clearFileDir() {
         File file = new File(picPath);
@@ -46,7 +61,7 @@ public class FileUtil {
         } else {
             for (File f : file.listFiles()
                     ) {
-                Log.i("file list", "clearFileDir: "+f.getName());
+                Log.i("file list", "clearFileDir: " + f.getName());
                 if (!f.getName().equals(".nomedia")) {
                     f.delete();
                 }
@@ -88,30 +103,30 @@ public class FileUtil {
 
 
     private static void wf(String text) {
-       try{
-           File f = new File(basePath,"log.txt");
-           f.createNewFile();
-           FileOutputStream fos = new FileOutputStream(f, true);
-           PrintWriter pw = new PrintWriter(fos);
-           pw.write(text);
-           pw.close();
-       }catch (Exception e){
+        try {
+            File f = new File(basePath, "log.txt");
+            f.createNewFile();
+            FileOutputStream fos = new FileOutputStream(f, true);
+            PrintWriter pw = new PrintWriter(fos);
+            pw.write(text);
+            pw.close();
+        } catch (Exception e) {
 
-       }
+        }
     }
 
-    public static String bitmapToBase64Str(File file){
+    public static String bitmapToBase64Str(File file) {
         Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
 
-        ByteArrayOutputStream bStream=new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG,100,bStream);
-        byte[]bytes=bStream.toByteArray();
-        String string=Base64.encodeToString(bytes,Base64.DEFAULT);
+        ByteArrayOutputStream bStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, bStream);
+        byte[] bytes = bStream.toByteArray();
+        String string = Base64.encodeToString(bytes, Base64.DEFAULT);
         wf(string);
         return string;
     }
 
-    public static Bitmap base64ToBitmap(String str){
+    public static Bitmap base64ToBitmap(String str) {
         byte[] bytes = Base64.decode(str, Base64.DEFAULT);
         return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
     }

@@ -30,7 +30,6 @@ import com.xabaizhong.treemonistor.entity.TreeSpecialDao;
 import com.xabaizhong.treemonistor.myview.C_dialog_radio;
 import com.xabaizhong.treemonistor.myview.C_info_gather_item1;
 import com.xabaizhong.treemonistor.service.AsyncTaskRequest;
-import com.xabaizhong.treemonistor.service.WebserviceHelper;
 import com.xabaizhong.treemonistor.service.model.SpeciesResult;
 import com.xabaizhong.treemonistor.utils.FileUtil;
 import com.xabaizhong.treemonistor.utils.MessageEvent;
@@ -38,7 +37,6 @@ import com.xabaizhong.treemonistor.utils.RxBus;
 import com.xabaizhong.treemonistor.utils.ScaleBitmap;
 
 import java.io.File;
-import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -51,7 +49,6 @@ import butterknife.OnClick;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import me.nereo.multi_image_selector.MultiImageSelector;
-import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 
 /**
  * Created by norwaya on 17-4-15.
@@ -161,8 +158,10 @@ public class Activity_species extends Activity_base implements C_info_gather_ite
                                     speList = result.getResult();
                                     showSpeciesDialog();
                                 } else {
-                                    showToast("系统没有匹配到合适的树种");
+                                    showToast("系统没有匹配到合适的树种,选择图片");
+                                    display();
                                 }
+                                pb.setVisibility(View.INVISIBLE);
                             }
                         })
                         .create();
@@ -172,24 +171,33 @@ public class Activity_species extends Activity_base implements C_info_gather_ite
                 showToast("添加图片");
 
             } else {
-                FileUtil.clearFileDir();
-                int index = 0;
-                for (String filePath : list
-                        ) {
-                    index++;
-                    ScaleBitmap.getBitmap(filePath, "a" + index + ".png");
-                }
+                new AsyncTask<Void, Void, String>() {
 
-                AsyncTaskRequest.instance("CheckUp", "SpeciesIden")
-                        .setParams(getUploadParas())
-                        .setCallBack(new AsyncTaskRequest.CallBack() {
-                            @Override
-                            public void execute(String s) {
-                                Log.i(TAG, "execute: " + s);
+                    @Override
+                    protected String doInBackground(Void... params) {
+                        FileUtil.clearFileDir();
+                        if (list != null)
+                            for (int i = 0; i < list.size(); i++) {
+                                ScaleBitmap.getBitmap(list.get(i), "image" + i + ".png");
                             }
-                        })
-                        .create();
+                        return "suc";
+                    }
 
+                    @Override
+                    protected void onPostExecute(String aVoid) {
+                        super.onPostExecute(aVoid);
+                        // 需要修改 接口 和 json 数据结构
+                        AsyncTaskRequest.instance("CheckUp", "SpeciesIden")
+                                .setParams(getUploadParas())
+                                .setCallBack(new AsyncTaskRequest.CallBack() {
+                                    @Override
+                                    public void execute(String s) {
+                                        Log.i(TAG, "execute: " + s);
+                                    }
+                                })
+                                .create();
+                    }
+                }.execute();
             }
         }
     }
@@ -198,15 +206,19 @@ public class Activity_species extends Activity_base implements C_info_gather_ite
     private Map<String, Object> getUploadParas() {
         Map<String, Object> map = new HashMap<>();
         params.picList.clear();
-        for (File file : FileUtil.getFiles()
-                ) {
-            params.picList.add(FileUtil.bitmapToBase64Str(file));
-        }
+        params.picList.addAll(FileUtil.getPngFiles());
         String user_id = sharedPreferences.getString(UserSharedField.USERID, "");
         map.put("UserID ", user_id);
-        map.put("JsonStr", new Gson().toJson(params));
+        String json = new Gson().toJson(params);
+        Log.i(TAG, "getUploadParas: " + json);
+        map.put("JsonStr", json);
         return map;
     }
+
+
+
+
+
 
    /* AsyncTask asyncTask;
 
@@ -261,6 +273,7 @@ public class Activity_species extends Activity_base implements C_info_gather_ite
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
+
                     }
                 })
                 .setNegativeButton("都不是，上报", new DialogInterface.OnClickListener() {
@@ -288,8 +301,6 @@ public class Activity_species extends Activity_base implements C_info_gather_ite
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-
                 Intent i = new Intent(Activity_species.this, Activity_tree_base_detail.class);
                 i.putExtra("id", getId(speList.get(position)));
                 startActivity(i);
@@ -324,7 +335,7 @@ public class Activity_species extends Activity_base implements C_info_gather_ite
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
 
-            TextView tv = (TextView) layoutInflater.inflate(R.layout.text1, parent, false);
+            TextView tv = (TextView) layoutInflater.inflate(R.layout.simple_text, parent, false);
             String cname = getCname(speList.get(position));
             tv.setText(cname);
             return tv;

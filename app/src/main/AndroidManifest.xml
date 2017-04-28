@@ -198,6 +198,23 @@
             android:name=".activity.monitor_query.Activity_monitor_query_dateList"
             android:label="监管查询"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.monitor_query.Activity_monitor_query_date_pics"
+            android:label="监管图片查看"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.Activity_image_noAction"
+            android:label="图片查看"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
+        <activity
+            android:name=".activity.expert.Activity_expert_weak_upload_info"
+            android:label="病害信息上报"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.expert.Activity_expert_age"
+            android:label="树龄鉴定"
+            android:screenOrientation="portrait"/>
         <!-- service -->
         <service
             android:name="com.baidu.location.f"

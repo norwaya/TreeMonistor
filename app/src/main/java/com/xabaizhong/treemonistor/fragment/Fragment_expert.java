@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.squareup.picasso.Picasso;
 import com.xabaizhong.treemonistor.R;
+import com.xabaizhong.treemonistor.activity.expert.Activity_expert_age;
 import com.xabaizhong.treemonistor.activity.expert.Activity_expert_bug;
 import com.xabaizhong.treemonistor.activity.expert.Activity_expert_weak;
 import com.xabaizhong.treemonistor.activity.expert.Activity_monitor_growth;
@@ -84,10 +85,10 @@ public class Fragment_expert extends Fragment_base {
                         Log.d(TAG, "onMenuItemClick: fab_tree_weakness");
                         startActivity(new Intent(context, Activity_expert_weak.class));
                         break;
-                    case R.id.fab_tree_bug:
+                 /*   case R.id.fab_tree_bug:
                         Log.d(TAG, "onMenuItemClick: fab_tree_bug");
                         startActivity(new Intent(context, Activity_expert_bug.class));
-                        break;
+                        break;*/
                     case R.id.fab_tree_unknow:
                         startActivity(new Intent(context, Activity_species.class));
                         Log.d(TAG, "onMenuItemClick: fab_tree_unknow");
@@ -97,6 +98,7 @@ public class Fragment_expert extends Fragment_base {
                         Log.d(TAG, "onMenuItemClick: fab_tree_growth");
                         break;
                     case R.id.fab_tree_age:
+                        startActivity(new Intent(context, Activity_expert_age.class));
                         Log.d(TAG, "onMenuItemClick: fab_tree_age");
                         break;
                 }
@@ -135,7 +137,7 @@ public class Fragment_expert extends Fragment_base {
                 new XRecyclerView.LoadingListener() {
                     @Override
                     public void onRefresh() {
-
+                        request();
                     }
 
                     @Override
@@ -158,7 +160,7 @@ public class Fragment_expert extends Fragment_base {
     }
 
     private void request(){
-        AsyncTaskRequest.instance("","")
+        AsyncTaskRequest.instance("Login","login")
                 .setParams(null)
                 .setCallBack(new AsyncTaskRequest.CallBack() {
                     @Override

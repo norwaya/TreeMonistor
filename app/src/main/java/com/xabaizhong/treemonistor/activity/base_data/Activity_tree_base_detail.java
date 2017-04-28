@@ -106,12 +106,12 @@ public class Activity_tree_base_detail extends Activity_base {
 
             @Override
             protected void onPostExecute(String s) {
+                Log.i(TAG, "onPostExecute: " + s);
                 if (s == null) {
                     showToast("请求错误");
                     return;
                 }
                 showToast(s);
-                Log.i(TAG, "onPostExecute: " + s);
                 PicPath picPath = new Gson().fromJson(s, PicPath.class);
                 if (picPath.getResult() != null && picPath.getResult().size() > 0) {
                     picList.addAll(picPath.getResult());

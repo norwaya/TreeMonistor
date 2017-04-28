@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:layout_margin="@dimen/activity_horizontal_margin"
               android:orientation="vertical">
 
     <ScrollView
@@ -10,121 +10,43 @@
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:dividerPadding="1px"
-            android:showDividers="middle"
-            android:divider="@drawable/divider"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <LinearLayout
+            <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+                android:id="@+id/cname"
+                style="@style/custom_edit_text_style"
+                app:left_text="中文名称"
+                app:mid_font_color="@color/wx_green"
+                app:mid_type="read"/>
 
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+            <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+                android:id="@+id/part"
+                style="@style/custom_edit_text_style"
+                app:left_text="病变部位"
+                app:mid_font_color="@color/wx_green"
+                app:mid_type="read"/>
 
-                <TextView
-                    android:textSize="18dp"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:text="中文名"/>
+            <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+                android:id="@+id/trait"
+                style="@style/custom_edit_text_style"
+                app:left_text="病害特点"
+                app:mid_font_color="@color/wx_green"
+                app:mid_type="read"/>
+            <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+                android:id="@+id/featrue"
+                style="@style/custom_edit_text_style"
+                app:left_text="表现"
+                app:mid_font_color="@color/wx_green"
+                app:mid_type="read"/>
 
-                <TextView
-                    android:textSize="18dp"
-                    android:id="@+id/cname"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginStart="8dp"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:textSize="18dp"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:text="害虫类型"/>
-
-                <TextView
-                    android:textSize="18dp"
-                    android:id="@+id/type"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginStart="8dp"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:textSize="18dp"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:text="害虫介绍"/>
-
-                <TextView
-                    android:textSize="18dp"
-                    android:id="@+id/explain"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginStart="8dp"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:textSize="18dp"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:text="为害特点"/>
-
-                <TextView
-                    android:textSize="18dp"
-                    android:id="@+id/special"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginStart="8dp"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/layout_alias"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:textSize="18dp"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:text="别名"/>
-
-                <TextView
-                    android:textSize="18dp"
-                    android:id="@+id/alias"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginStart="8dp"/>
-            </LinearLayout>
-
-
+            <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+                android:id="@+id/method"
+                style="@style/custom_edit_text_style"
+                app:left_text="治疗方法"
+                app:mid_font_color="@color/wx_green"
+                app:mid_type="read"/>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

@@ -74,19 +74,20 @@
                 style="@style/custom_edit_text_style"
                 app:left_text="主要树种"
                 app:mid_text_hint="主要树种"/>
+
             <com.xabaizhong.treemonistor.myview.DynamicView
-                android:background="@android:color/white"
-                android:layout_margin="8dp"
                 android:id="@+id/tree_map"
-                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:background="@android:color/white"
+                android:orientation="vertical"/>
+
             <com.xabaizhong.treemonistor.myview.C_info_gather_item1
                 android:id="@+id/szjx"
                 style="@style/custom_edit_text_style"
                 app:left_text="四至界限"
                 app:mid_text_hint="四至界限"/>
-
 
 
             <com.xabaizhong.treemonistor.myview.C_info_gather_item1
@@ -145,6 +146,7 @@
                 app:input_type="decimal"
                 app:left_text="平均树龄"
                 app:mid_text_hint="平均树龄（年）"/>
+
             <com.xabaizhong.treemonistor.myview.C_info_gather_item1
                 android:id="@+id/averageDiameter"
                 style="@style/custom_edit_text_style"
@@ -221,4 +223,15 @@
 
         </android.support.v7.widget.LinearLayoutCompat>
     </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/layout_pb"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ProgressBar
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>

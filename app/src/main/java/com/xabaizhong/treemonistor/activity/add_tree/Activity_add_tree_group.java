@@ -8,6 +8,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -26,7 +27,6 @@ import com.xabaizhong.treemonistor.utils.FileUtil;
 import com.xabaizhong.treemonistor.utils.MessageEvent;
 import com.xabaizhong.treemonistor.utils.RxBus;
 import com.xabaizhong.treemonistor.utils.ScaleBitmap;
-import com.xabaizhong.treemonistor.utils.TreeGroupOp;
 
 import java.io.File;
 import java.net.ConnectException;
@@ -37,7 +37,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Observer;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -45,13 +44,13 @@ import butterknife.OnClick;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.nereo.multi_image_selector.MultiImageSelector;
 import me.nereo.multi_image_selector.MultiImageSelectorActivity;
-import retrofit2.http.OPTIONS;
 
 
 /**
@@ -126,6 +125,8 @@ public class Activity_add_tree_group extends Activity_base {
     DynamicView treeMap;
     @BindView(R.id.submit)
     Button submit;
+    @BindView(R.id.layout_pb)
+    RelativeLayout layoutPb;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -197,7 +198,8 @@ public class Activity_add_tree_group extends Activity_base {
     }
 
     private void init() {
-
+        layoutPb.setOnClickListener(null);
+        layoutPb.setVisibility(View.INVISIBLE);
     }
 
     interface Result_Code {
@@ -238,8 +240,13 @@ public class Activity_add_tree_group extends Activity_base {
 
     @OnClick(R.id.submit)
     public void onClick() {
-        fillData();
+        try {
+            fillData();
+        } catch (Exception e) {
+
+        }
         if (check() == null) {
+            layoutPb.setVisibility(View.VISIBLE);
             upload();
         } else {
 
@@ -247,7 +254,7 @@ public class Activity_add_tree_group extends Activity_base {
     }
 
     private void upload() {
-        io.reactivex.Observer<Object> observer = new io.reactivex.Observer<Object>() {
+        Observer<Object> observer = new Observer<Object>() {
             @Override
             public void onSubscribe(Disposable d) {
 
@@ -306,12 +313,13 @@ public class Activity_add_tree_group extends Activity_base {
 
             @Override
             protected void onPostExecute(String s) {
+                layoutPb.setVisibility(View.INVISIBLE);
                 if (s == null) {
                     Log.i(TAG, "onPostExecute: error");
                     return;
                 }
                 ResultMessage msg = new Gson().fromJson(s, ResultMessage.class);
-                Log.i(TAG, "onPostExecute: "+msg.getMessage());
+                Log.i(TAG, "onPostExecute: " + msg.getMessage());
                 if (msg.getError_code() == 0) {
                     showToast("suc");
                 }
@@ -351,31 +359,28 @@ public class Activity_add_tree_group extends Activity_base {
         treeTypeInfo.setTypeId(1);
 //        treeTypeInfo.setRecoredPerson(researchPersion.getText());
         treeTypeInfo.setTreeId(treeId.getText());
-
         treeGroup.setEvevation(evevation.getText());
-        treeGroup.setgSTreeNum(gSTreeNum.getText());
         treeGroup.setMainTreeName(mainTreeName.getText());
         treeGroup.setTreeMap(treeMap.getTreeMap());
         treeGroup.setSZJX(szjx.getText());
-        treeGroup.setyBDInfo(yBDInfo.getText());
-        treeGroup.setXiaMuDensity(xiaMuDensity.getText());
         treeGroup.setXiaMuType(xiaMuType.getText());
-        treeGroup.setdBWDensity(dBWDensity.getText());
         treeGroup.setdBWType(dBWType.getText());
-        treeGroup.setAverageAge(averageAge.getText());
-        treeGroup.setAverageDiameter(averageDiameter.getText());
-        treeGroup.setAverageHeight(averageHeight.getText());
-        treeGroup.setArea(area.getText());
         treeGroup.setManagementUnit(managementUnit.getText());
         treeGroup.setManagementState(managementState.getText());
         treeGroup.setrWJYInfo(rWJYInfo.getText());
         treeGroup.setSuggest(suggest.getText());
-
         treeTypeInfo.setTreeGroup(treeGroup);
         treeTypeInfo.setAreaId("610322");
         treeGroup.setUserID(userId());
-
-        treeGroup.setTreeId(sharedPreferences.getString(UserSharedField.USERID,""));
+        treeGroup.setTreeId(sharedPreferences.getString(UserSharedField.USERID, ""));
+        treeGroup.setgSTreeNum(Double.parseDouble(gSTreeNum.getText()));
+        treeGroup.setyBDInfo(Double.parseDouble(yBDInfo.getText()));
+        treeGroup.setXiaMuDensity(Double.parseDouble(xiaMuDensity.getText()));
+        treeGroup.setdBWDensity(Double.parseDouble(dBWDensity.getText()));
+        treeGroup.setAverageAge(Double.parseDouble(averageAge.getText()));
+        treeGroup.setAverageDiameter(Double.parseDouble(averageDiameter.getText()));
+        treeGroup.setAverageHeight(Double.parseDouble(averageHeight.getText()));
+        treeGroup.setArea(Double.parseDouble(area.getText()));
     }
 
     private String userId() {
@@ -424,7 +429,7 @@ public class Activity_add_tree_group extends Activity_base {
                         break;
                     case Result_Code.REQUEST_CODE_SLOPE:
                         slope.setText(array[messageEvent.getId()]);
-                        treeGroup.setSlope((messageEvent.getId()) + "");
+                        treeGroup.setSlope((messageEvent.getId()));
                         break;
                     case Result_Code.REQUEST_CODE_SOIL:
                         soil.setText(array[messageEvent.getId()]);

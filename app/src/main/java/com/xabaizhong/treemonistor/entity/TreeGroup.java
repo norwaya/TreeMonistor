@@ -11,33 +11,33 @@ import java.util.Map;
 public class TreeGroup {
     private Long id;
 
-    private String treeId;
-    private String placeName;           //	地点
-    private String mainTreeName;   //	主要树种
-    private String SZJX; //	四至界限
-    private String area; //	面积
-    private String gSTreeNum;//	古树株数
-    private String averageHeight; //	平均高度
-    private String averageDiameter;//	平均胸径
-    private String averageAge;//	平均年龄
-    private String yBDInfo; //	郁闭度
-    private String evevation; //	海拔
-    private String aspect; //	坡向
-    private String slope;//	坡度
-    private String soilName;//	土壤名称
-    private String soilHeight;//	土壤厚度
-    private String xiaMuType; //	下木种类
-    private String xiaMuDensity;//	下木密度
-    private String dBWType;//	地被物种类
-    private String dBWDensity;//	地被物密度
-    private String managementUnit;//	管护单位
-    private String managementState;//	管护现状
-    private String aimsTree;//	目的保护树种
-    private String aimsFamily;//	科
-    private String aimsBelong;//	属
-    private String rWJYInfo; //	人为经营活动情况
-    private String suggest;//保护建议
-    private String explain;//	照片及说明
+    private String treeId = "";
+    private String placeName = "";           //	地点
+    private String mainTreeName = "";   //	主要树种
+    private String SZJX = ""; //	四至界限
+    private double area = 0.0; //	面积
+    private double gSTreeNum = 0.0;//	古树株数
+    private double averageHeight = 0.0; //	平均高度
+    private double averageDiameter = 0.0;//	平均胸径
+    private double averageAge = 0.0;//	平均年龄
+    private double yBDInfo = 0.0; //	郁闭度
+    private String evevation = ""; //	海拔
+    private String aspect = ""; //	坡向
+    private double slope = 0.0;//	坡度
+    private String soilName = "";//	土壤名称
+    private double soilHeight = 0.0;//	土壤厚度
+    private String xiaMuType = ""; //	下木种类
+    private double xiaMuDensity = 0.0;//	下木密度
+    private String dBWType = "";//	地被物种类
+    private double dBWDensity = 0.0;//	地被物密度
+    private String managementUnit = "";//	管护单位
+    private String managementState = "";//	管护现状
+    private String aimsTree = "";//	目的保护树种
+    private String aimsFamily = "";//	科
+    private String aimsBelong = "";//	属
+    private String rWJYInfo = ""; //	人为经营活动情况
+    private String suggest = "";//保护建议
+    private String explain = "";//	照片及说明
     private Date date;
 
     private List<Map<String, Object>> treeMap;
@@ -101,109 +101,6 @@ public class TreeGroup {
         this.SZJX = SZJX;
     }
 
-    public String getArea() {
-        return area;
-    }
-
-    public void setArea(String area) {
-        this.area = area;
-    }
-
-    public String getgSTreeNum() {
-        return gSTreeNum;
-    }
-
-    public void setgSTreeNum(String gSTreeNum) {
-        this.gSTreeNum = gSTreeNum;
-    }
-
-    public String getAverageHeight() {
-        return averageHeight;
-    }
-
-    public void setAverageHeight(String averageHeight) {
-        this.averageHeight = averageHeight;
-    }
-
-    public String getAverageDiameter() {
-        return averageDiameter;
-    }
-
-    public void setAverageDiameter(String averageDiameter) {
-        this.averageDiameter = averageDiameter;
-    }
-
-    public String getAverageAge() {
-        return averageAge;
-    }
-
-    public void setAverageAge(String averageAge) {
-        this.averageAge = averageAge;
-    }
-
-    public String getyBDInfo() {
-        return yBDInfo;
-    }
-
-    public void setyBDInfo(String yBDInfo) {
-        this.yBDInfo = yBDInfo;
-    }
-
-    public String getEvevation() {
-        return evevation;
-    }
-
-    public void setEvevation(String evevation) {
-        this.evevation = evevation;
-    }
-
-    public String getAspect() {
-        return aspect;
-    }
-
-    public void setAspect(String aspect) {
-        this.aspect = aspect;
-    }
-
-    public String getSlope() {
-        return slope;
-    }
-
-    public void setSlope(String slope) {
-        this.slope = slope;
-    }
-
-    public String getSoilName() {
-        return soilName;
-    }
-
-    public void setSoilName(String soilName) {
-        this.soilName = soilName;
-    }
-
-    public String getSoilHeight() {
-        return soilHeight;
-    }
-
-    public void setSoilHeight(String soilHeight) {
-        this.soilHeight = soilHeight;
-    }
-
-    public String getXiaMuType() {
-        return xiaMuType;
-    }
-
-    public void setXiaMuType(String xiaMuType) {
-        this.xiaMuType = xiaMuType;
-    }
-
-    public String getXiaMuDensity() {
-        return xiaMuDensity;
-    }
-
-    public void setXiaMuDensity(String xiaMuDensity) {
-        this.xiaMuDensity = xiaMuDensity;
-    }
 
     public String getdBWType() {
         return dBWType;
@@ -213,11 +110,11 @@ public class TreeGroup {
         this.dBWType = dBWType;
     }
 
-    public String getdBWDensity() {
+    public double getdBWDensity() {
         return dBWDensity;
     }
 
-    public void setdBWDensity(String dBWDensity) {
+    public void setdBWDensity(double dBWDensity) {
         this.dBWDensity = dBWDensity;
     }
 
@@ -279,6 +176,110 @@ public class TreeGroup {
 
     public String getExplain() {
         return explain;
+    }
+
+    public double getArea() {
+        return area;
+    }
+
+    public void setArea(double area) {
+        this.area = area;
+    }
+
+    public double getgSTreeNum() {
+        return gSTreeNum;
+    }
+
+    public void setgSTreeNum(double gSTreeNum) {
+        this.gSTreeNum = gSTreeNum;
+    }
+
+    public double getAverageHeight() {
+        return averageHeight;
+    }
+
+    public void setAverageHeight(double averageHeight) {
+        this.averageHeight = averageHeight;
+    }
+
+    public double getAverageDiameter() {
+        return averageDiameter;
+    }
+
+    public void setAverageDiameter(double averageDiameter) {
+        this.averageDiameter = averageDiameter;
+    }
+
+    public double getAverageAge() {
+        return averageAge;
+    }
+
+    public void setAverageAge(double averageAge) {
+        this.averageAge = averageAge;
+    }
+
+    public double getyBDInfo() {
+        return yBDInfo;
+    }
+
+    public void setyBDInfo(double yBDInfo) {
+        this.yBDInfo = yBDInfo;
+    }
+
+    public String getEvevation() {
+        return evevation;
+    }
+
+    public void setEvevation(String evevation) {
+        this.evevation = evevation;
+    }
+
+    public String getAspect() {
+        return aspect;
+    }
+
+    public void setAspect(String aspect) {
+        this.aspect = aspect;
+    }
+
+    public double getSlope() {
+        return slope;
+    }
+
+    public void setSlope(double slope) {
+        this.slope = slope;
+    }
+
+    public String getSoilName() {
+        return soilName;
+    }
+
+    public void setSoilName(String soilName) {
+        this.soilName = soilName;
+    }
+
+    public double getSoilHeight() {
+        return soilHeight;
+    }
+
+    public void setSoilHeight(double soilHeight) {
+        this.soilHeight = soilHeight;
+    }
+
+    public String getXiaMuType() {
+        return xiaMuType;
+    }
+
+    public void setXiaMuType(String xiaMuType) {
+        this.xiaMuType = xiaMuType;
+    }
+
+    public double getXiaMuDensity() {
+        return xiaMuDensity;
+    }
+
+    public void setXiaMuDensity(double xiaMuDensity) {
+        this.xiaMuDensity = xiaMuDensity;
     }
 
     public void setExplain(String explain) {

@@ -38,7 +38,6 @@ public class AsyncTaskRequest {
     }
 
     public AsyncTaskRequest create() {
-        Log.i("AsyncTaskRequest", "create: "+"++++++++++++++++++++++++");
         if (callBack == null) {
             throw new RuntimeException("callBack interface is not implemented");
         }

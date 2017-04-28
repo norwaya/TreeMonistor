@@ -24,9 +24,12 @@
             android:orientation="vertical">
 
             <TextView
+                android:gravity="top"
                 android:id="@+id/text1"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:padding="@dimen/activity_horizontal_margin"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"/>
 
             <Button
                 android:id="@+id/show_pic"
@@ -39,7 +42,6 @@
                 android:textColor="@color/wx_green"/>
 
             <EditText
-
                 android:id="@+id/edit1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

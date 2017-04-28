@@ -21,12 +21,8 @@ public class Expert_obtain_list {
     @SerializedName("message")
     private String message;
     @SerializedName("error_code")
-    private int errorCode;
-    @SerializedName("areaid")
-    private String areaid;
-    @SerializedName("userid")
-    private String userid;
-    @SerializedName("Checkinfolist")
+    private int error_code;
+    @SerializedName("result")
     private List<CheckinfolistBean> Checkinfolist;
 
     public String getMessage() {
@@ -37,28 +33,12 @@ public class Expert_obtain_list {
         this.message = message;
     }
 
-    public int getErrorCode() {
-        return errorCode;
+    public int getError_code() {
+        return error_code;
     }
 
-    public void setErrorCode(int errorCode) {
-        this.errorCode = errorCode;
-    }
-
-    public String getAreaid() {
-        return areaid;
-    }
-
-    public void setAreaid(String areaid) {
-        this.areaid = areaid;
-    }
-
-    public String getUserid() {
-        return userid;
-    }
-
-    public void setUserid(String userid) {
-        this.userid = userid;
+    public void setError_code(int error_code) {
+        this.error_code = error_code;
     }
 
     public List<CheckinfolistBean> getCheckinfolist() {
@@ -76,11 +56,9 @@ public class Expert_obtain_list {
          * CheckType : 0
          */
 
-        @SerializedName("TID")
+        @SerializedName("Tid")
         private int TID;
-        @SerializedName("treeid")
-        private String treeid;
-        @SerializedName("CheckType")
+        @SerializedName("Type")
         private int CheckType;
 
         public int getTID() {
@@ -89,14 +67,6 @@ public class Expert_obtain_list {
 
         public void setTID(int TID) {
             this.TID = TID;
-        }
-
-        public String getTreeid() {
-            return treeid;
-        }
-
-        public void setTreeid(String treeid) {
-            this.treeid = treeid;
         }
 
         public int getCheckType() {

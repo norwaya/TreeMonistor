@@ -74,6 +74,7 @@ public class Activity_expert_zd extends Activity_base implements XRecyclerView.L
 
     AsyncTaskRequest asyncTaskRequest;
     List<Expert_obtain_list.CheckinfolistBean> mList;
+
     private void refreshView() {
         /*<UserID>string</UserID>
       <CheckID>int</CheckID>
@@ -85,27 +86,19 @@ public class Activity_expert_zd extends Activity_base implements XRecyclerView.L
         params.put("CheckID", 0);//默认为全部
         params.put("AreaID", areaId);
 
-        asyncTaskRequest = AsyncTaskRequest.instance("DataQuerySys", "QueryTreeInfoMethod")
+        asyncTaskRequest = AsyncTaskRequest.instance("CheckUp", "ExpertLookResultList")
                 .setCallBack(new AsyncTaskRequest.CallBack() {
                     @Override
                     public void execute(String s) {
                         Log.i(TAG, "execute: " + s + "\n");
-                        String result = "{\n" +
-                                "    \"message\": \"sus\",\n" +
-                                "    \"error_code\": \"0\",\n" +
-                                "    \"areaid\": \"6100323\",\n" +
-                                "    \"userid\": \"610323001\",\n" +
-                                "    \"Checkinfolist\": [\n" +
-                                "        { \"TID\": 1, \"treeid\": \" 61032900001\", \"CheckType\": 0 },\n" +
-                                "        { \"TID\": 2, \"treeid\": \" 61032900001\", \"CheckType\": 1 },\n" +
-                                "        { \"TID\": 3, \"treeid\": \" 61032900001\", \"CheckType\": 2 }\n" +
-                                "    ]\n" +
-                                "}";
-                        Expert_obtain_list list = new Gson().fromJson(result, Expert_obtain_list.class);
-                        if (list.getErrorCode() == 0) {
+                        if (s == null) {
+                            showToast("网络错误");
+                            return;
+                        }
+                        Expert_obtain_list list = new Gson().fromJson(s, Expert_obtain_list.class);
+                        if (list.getError_code() == 0) {
                             mList = list.getCheckinfolist();
-                            for (Expert_obtain_list.CheckinfolistBean bean : list.getCheckinfolist()
-                                    ) {
+                            for (Expert_obtain_list.CheckinfolistBean bean : list.getCheckinfolist()) {
                                 Log.i(TAG, "execute: " + bean.getTID() + "\t" + bean.getCheckType());
                             }
                             adapter.setSource(list.getCheckinfolist());
@@ -143,7 +136,8 @@ public class Activity_expert_zd extends Activity_base implements XRecyclerView.L
     @Override
     public void onItemClickListener(View view, int position) {
         Intent i = new Intent(Activity_expert_zd.this, Activity_expert_zd_detail.class);
-        i.getIntExtra("type",mList.get(position).getCheckType());
+        i.putExtra("type", mList.get(position).getCheckType());
+        i.putExtra("tid", mList.get(position).getTID());
         startActivity(i);
     }
 

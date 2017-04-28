@@ -1,6 +1,7 @@
 package com.xabaizhong.treemonistor.entity;
 
 import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Index;
 import org.greenrobot.greendao.annotation.ToOne;
 import org.greenrobot.greendao.annotation.Generated;
@@ -14,6 +15,7 @@ import org.greenrobot.greendao.annotation.NotNull;
         @Index(value = "id DESC", unique = true)
 })
 public class Pest {
+    @Id
     private Long id;
     private String cname;
     private long pestClassId;

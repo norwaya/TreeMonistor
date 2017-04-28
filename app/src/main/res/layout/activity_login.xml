@@ -54,14 +54,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_above="@id/login_form"
-                android:layout_margin="@dimen/activity_horizontal_margin"
-                android:background="@android:color/holo_blue_dark">
+                android:layout_margin="@dimen/activity_horizontal_margin">
 
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:scaleType="fitEnd"
-                    android:src="@drawable/ic_fragment_expert_bug"/>
+                    android:scaleType="centerInside"
+                    android:src="@drawable/bz"/>
             </RelativeLayout>
 
             <Button

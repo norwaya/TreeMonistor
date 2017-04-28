@@ -16,6 +16,7 @@ import com.xabaizhong.treemonistor.R;
 import com.xabaizhong.treemonistor.adapter.Activity_monitor_query_adapter;
 import com.xabaizhong.treemonistor.adapter.CommonRecyclerViewAdapter;
 import com.xabaizhong.treemonistor.base.Activity_base;
+import com.xabaizhong.treemonistor.contant.UserSharedField;
 import com.xabaizhong.treemonistor.service.AsyncTaskRequest;
 
 import java.util.HashMap;
@@ -29,7 +30,7 @@ import butterknife.ButterKnife;
  * Created by Administrator on 2017/4/24 0024.
  */
 
-public class Activity_monitor_query extends Activity_base implements XRecyclerView.LoadingListener, CommonRecyclerViewAdapter.CallBack<Activity_monitor_query.ViewHolder, Activity_monitor_query.ImportTree.QueryimportinfolistBean> {
+public class Activity_monitor_query extends Activity_base implements XRecyclerView.LoadingListener, CommonRecyclerViewAdapter.CallBack<Activity_monitor_query.ViewHolder, Activity_monitor_query.ImportTree.ResultBean> {
     @BindView(R.id.xRecyclerView)
     XRecyclerView xRecyclerView;
 
@@ -62,7 +63,7 @@ public class Activity_monitor_query extends Activity_base implements XRecyclerVi
         refreshView();
     }
 
-    List<ImportTree.QueryimportinfolistBean> list;
+    List<ImportTree.ResultBean> list;
     AsyncTaskRequest ayncTaskRequest;
 
     private void refreshView() {
@@ -71,39 +72,33 @@ public class Activity_monitor_query extends Activity_base implements XRecyclerVi
 
 
         Map<String, Object> map = new HashMap<>();
-        map.put("UserID", "lizhuang");
-        map.put("AreaID", "admin");
+        map.put("UserID", sharedPreferences.getString(UserSharedField.USERID,""));
 
 
-        ayncTaskRequest = AsyncTaskRequest.instance("DataQuerySys", "ImportTreelInfoList")
+        ayncTaskRequest = AsyncTaskRequest.instance("CheckUp", "QueryCHNameList_ImportantTree")
                 .setParams(map)
                 .setCallBack(new AsyncTaskRequest.CallBack() {
                     @Override
                     public void execute(String s) {
                         Log.i(TAG, "execute: " + s);
-                        String result = "{\n" +
-                                "  \"message\": \"sus\",\n" +
-                                "  \"error_code\": 0,\n" +
-                                "  \"areaid\": \"6100323\",\n" +
-                                "  \"userid\": \"610323001\",\n" +
-                                "  \"queryimportinfolist\": [\n" +
-                                "    {\n" +
-                                "      \"treeid\": \" 61032900001\",\n" +
-                                "      \"treename\": \"槐树\"\n" +
-                                "    },\n" +
-                                "    {\n" +
-                                "      \" treeid\": \" 61032900002\",\n" +
-                                "      \" treename\": \"槐树\"\n" +
-                                "    },\n" +
-                                "    {\n" +
-                                "      \" treeid\": \"61032900003\",\n" +
-                                "      \" treename\": \"槐树\"\n" +
-                                "    }\n" +
-                                "  ]\n" +
-                                "}";
-                        list = new Gson().fromJson(result, ImportTree.class).getQueryimportinfolist();
-                        Log.i(TAG, "execute: "+list.size());
-                        adapter.setSource(list);
+                        if (s == null)
+                            return;
+                        ImportTree importTree  = new Gson().fromJson(s, ImportTree.class);
+
+                        if (importTree.getErrorCode() != 0 ) {
+
+                            finish();
+                        }else{
+                            list = importTree.getResult();
+                            if (list.size() == 0) {
+                                finish();
+                            }else{
+                                importTree.getResult();
+                                Log.i(TAG, "execute: " + list.size());
+                                adapter.setSource(list);
+                            }
+
+                        }
                         xRecyclerView.refreshComplete();
                         ayncTaskRequest = null;
                     }
@@ -125,17 +120,16 @@ public class Activity_monitor_query extends Activity_base implements XRecyclerVi
     }
 
     @Override
-    public void bindView(ViewHolder holder, int position, List<ImportTree.QueryimportinfolistBean> list) {
-        holder.text1.setText(list.get(position).getTreeid());
-        holder.text1.setText("text1");
-        holder.text2.setText(list.get(position).getTreename());
+    public void bindView(ViewHolder holder, int position, List<ImportTree.ResultBean> list) {
+        holder.text1.setText(list.get(position).getTreeID());
+        holder.text2.setText(list.get(position).getCHName());
     }
 
     @Override
     public void onItemClickListener(View view, int position) {
-       /* Intent i = new Intent(this, Activity_monitor_query_dateList.class);
-        i.putExtra("tree-id", list.get(position).getTreeid());
-        startActivity(i);*/
+        Intent i = new Intent(this, Activity_monitor_query_dateList.class);
+        i.putExtra("tree-id", list.get(position).getTreeID());
+        startActivity(i);
     }
 
 
@@ -157,21 +151,15 @@ public class Activity_monitor_query extends Activity_base implements XRecyclerVi
         /**
          * message : sus
          * error_code : 0
-         * areaid : 6100323
-         * userid : 610323001
-         * queryimportinfolist : [{"treeid":" 61032900001","treename":"槐树"}]
+         * result : [{"TreeID":"61011100015","CHName":"槐树"},{"TreeID":"61011100019","CHName":"皂荚"},{"TreeID":"61011100029","CHName":"槐树"},{"TreeID":"61011100039","CHName":"槐树"}]
          */
 
         @SerializedName("message")
         private String message;
         @SerializedName("error_code")
         private int errorCode;
-        @SerializedName("areaid")
-        private String areaid;
-        @SerializedName("userid")
-        private String userid;
-        @SerializedName("queryimportinfolist")
-        private List<QueryimportinfolistBean> queryimportinfolist;
+        @SerializedName("result")
+        private List<ResultBean> result;
 
         public String getMessage() {
             return message;
@@ -189,55 +177,39 @@ public class Activity_monitor_query extends Activity_base implements XRecyclerVi
             this.errorCode = errorCode;
         }
 
-        public String getAreaid() {
-            return areaid;
+        public List<ResultBean> getResult() {
+            return result;
         }
 
-        public void setAreaid(String areaid) {
-            this.areaid = areaid;
+        public void setResult(List<ResultBean> result) {
+            this.result = result;
         }
 
-        public String getUserid() {
-            return userid;
-        }
-
-        public void setUserid(String userid) {
-            this.userid = userid;
-        }
-
-        public List<QueryimportinfolistBean> getQueryimportinfolist() {
-            return queryimportinfolist;
-        }
-
-        public void setQueryimportinfolist(List<QueryimportinfolistBean> queryimportinfolist) {
-            this.queryimportinfolist = queryimportinfolist;
-        }
-
-        public static class QueryimportinfolistBean {
+        public static class ResultBean {
             /**
-             * treeid :  61032900001
-             * treename : 槐树
+             * TreeID : 61011100015
+             * CHName : 槐树
              */
 
-            @SerializedName("treeid")
-            private String treeid;
-            @SerializedName("treename")
-            private String treename;
+            @SerializedName("TreeID")
+            private String TreeID;
+            @SerializedName("CHName")
+            private String CHName;
 
-            public String getTreeid() {
-                return treeid;
+            public String getTreeID() {
+                return TreeID;
             }
 
-            public void setTreeid(String treeid) {
-                this.treeid = treeid;
+            public void setTreeID(String TreeID) {
+                this.TreeID = TreeID;
             }
 
-            public String getTreename() {
-                return treename;
+            public String getCHName() {
+                return CHName;
             }
 
-            public void setTreename(String treename) {
-                this.treename = treename;
+            public void setCHName(String CHName) {
+                this.CHName = CHName;
             }
         }
     }

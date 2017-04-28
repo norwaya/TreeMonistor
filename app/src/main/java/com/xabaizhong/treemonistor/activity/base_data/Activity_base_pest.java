@@ -39,29 +39,33 @@ public class Activity_base_pest extends Activity_base {
         initDB();
         initView();
     }
+
     List<Pest> list;
+
     private void initView() {
-        lv.setAdapter(new SimpleAdapter(this,fillData(),R.layout.activity_base_data_weakness_item,new String[]{"name"},new int[]{R.id.tv}));
+        lv.setAdapter(new SimpleAdapter(this, fillData(), R.layout.simple_text2, new String[]{"name"}, new int[]{R.id.text1}));
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent i = new Intent(getApplicationContext(),Activity_base_weakness_detail.class);
+                Intent i = new Intent(getApplicationContext(), Activity_base_pest_detail.class);
                 i.putExtra("id", list.get(position).getId());
                 startActivity(i);
             }
         });
     }
-    void initDB(){
-        PestDao pestDao = ((App)getApplicationContext()).getDaoSession().getPestDao();
+
+    void initDB() {
+        PestDao pestDao = ((App) getApplicationContext()).getDaoSession().getPestDao();
         list = pestDao.queryBuilder().build().list();
-        Log.d(TAG, "initDB: list len"+list.size());
+        Log.d(TAG, "initDB: list len" + list.size());
     }
-    List<Map<String,Object>> fillData(){
-        List<Map<String,Object>> mapList = new ArrayList<>();
-        Map<String, Object> map ;
-        if(list != null){
-            for (Pest pest:list
-                 ) {
+
+    List<Map<String, Object>> fillData() {
+        List<Map<String, Object>> mapList = new ArrayList<>();
+        Map<String, Object> map;
+        if (list != null) {
+            for (Pest pest : list
+                    ) {
                 map = new HashMap<>();
                 map.put("name", pest.getCname());
                 mapList.add(map);

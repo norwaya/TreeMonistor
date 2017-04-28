@@ -3,7 +3,8 @@ package com.xabaizhong.treemonistor.activity.expert_zd.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,15 +13,13 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 import com.xabaizhong.treemonistor.R;
 import com.xabaizhong.treemonistor.activity.base_data.Activity_pic_vp;
+import com.xabaizhong.treemonistor.base.Fragment_base;
 import com.xabaizhong.treemonistor.service.AsyncTaskRequest;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -31,7 +30,7 @@ import butterknife.Unbinder;
 /**
  * Created by Administrator on 2017/4/24 0024.
  */
-public class Fragment_Expert_Species extends Fragment {
+public class Fragment_Expert_Species extends Fragment_base {
 
 
     @BindView(R.id.text1)
@@ -57,24 +56,30 @@ public class Fragment_Expert_Species extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_expert_species, container);
+        View view = inflater.inflate(R.layout.fragment_expert_species, null);
         unbinder = ButterKnife.bind(this, view);
+//        Log.i(TAG, "instance: "+bean.getResult().getPicList());
         initialView();
         return view;
     }
 
     private void initialView() {
+
         pbLayout.setOnClickListener(null);
         Bean.ResultBean resultBean = bean.getResult();
-        text1.setText("type1:" + resultBean.getA() + "\n" +
-                "type2:" + resultBean.getB() + "\n" +
-                "type3:" + resultBean.getC() + "\n" +
-                "type4:" + resultBean.getD() + "\n");
-        if (resultBean.getPicList() == null && resultBean.getPicList().size() == 0) {
-            showPic.setVisibility(View.VISIBLE);
-        } else {
-            showPic.setVisibility(View.INVISIBLE);
-        }
+        text1.setText("编号:\t" + resultBean.getTID() + "\n" +
+                "area :\t" + resultBean.getAreaID() + "\n" +
+                "花颜色: \t" + resultBean.getFlowerColor() + "\n" +
+                "花: \t" + resultBean.getFlowerType() + "\n" +
+                "叶颜色: \t" + resultBean.getLeafColor() + "\n" +
+                "叶: \t" + resultBean.getLeafShape() + "\n" +
+                "果实: \t" + resultBean.getFruitType() + "\n" +
+                "果实颜色:" + resultBean.getFruitColor() + "\n");
+//        if (resultBean.getPicPath() == null && resultBean.getPicList().size() == 0) {
+//            showPic.setVisibility(View.VISIBLE);
+//        } else {
+//            showPic.setVisibility(View.INVISIBLE);
+//        }
     }
 
     @Override
@@ -90,13 +95,13 @@ public class Fragment_Expert_Species extends Fragment {
             case R.id.submit:
 
                 if (asyncTaskRequest == null) {
-//                    request();
+                    request();
                 }
                 break;
             case R.id.show_pic:
-                Intent i = new Intent(getActivity(), Activity_pic_vp.class);
-                i.putStringArrayListExtra("picList", bean.getResult().getPicList());
-                startActivity(i);
+//                Intent i = new Intent(getActivity(), Activity_pic_vp.class);
+//                i.putStringArrayListExtra("picList", bean.getResult().getPicList());
+//                startActivity(i);
                 break;
         }
     }
@@ -108,12 +113,12 @@ public class Fragment_Expert_Species extends Fragment {
       <TID>int</TID>
       <AreaID>string</AreaID>*/
         Map<String, Object> map = new HashMap<>();
-        map.put("UserID", "");
-        map.put("TID", "");
+        map.put("Type", "");
+        map.put("Tid", "");
         map.put("AreaID", "");
 
         pbLayout.setVisibility(View.VISIBLE);
-        asyncTaskRequest = AsyncTaskRequest.instance("","")
+        asyncTaskRequest = AsyncTaskRequest.instance("UploadTreeInfo", "AuthenticateResultInfo")
                 .setCallBack(new AsyncTaskRequest.CallBack() {
                     @Override
                     public void execute(String s) {
@@ -133,7 +138,7 @@ public class Fragment_Expert_Species extends Fragment {
         /**
          * message : sus
          * error_code : 0
-         * result : {"a":"a","b":"a","c":"a","d":"a","picList":[]}
+         * result : {"TID":2,"TreeID":"61072600150","LeafShape":0,"LeafColor":0,"FlowerType":0,"FlowerColor":0,"FruitType":0,"FruitColor":0,"PicPath":"~/Image/UpTreeFeature/61072600150","AreaID":"610726","IsCheck":1,"CheckID":"2"}
          */
 
         @SerializedName("message")
@@ -169,62 +174,139 @@ public class Fragment_Expert_Species extends Fragment {
 
         public static class ResultBean {
             /**
-             * a : a
-             * b : a
-             * c : a
-             * d : a
-             * picList : []
+             * TID : 2
+             * TreeID : 61072600150
+             * LeafShape : 0
+             * LeafColor : 0
+             * FlowerType : 0
+             * FlowerColor : 0
+             * FruitType : 0
+             * FruitColor : 0
+             * PicPath : ~/Image/UpTreeFeature/61072600150
+             * AreaID : 610726
+             * IsCheck : 1
+             * CheckID : 2
              */
 
-            @SerializedName("a")
-            private String a;
-            @SerializedName("b")
-            private String b;
-            @SerializedName("c")
-            private String c;
-            @SerializedName("d")
-            private String d;
-            @SerializedName("picList")
-            private ArrayList<String> picList;
+            @SerializedName("TID")
+            private int TID;
+            @SerializedName("TreeID")
+            private String TreeID;
+            @SerializedName("LeafShape")
+            private int LeafShape;
+            @SerializedName("LeafColor")
+            private int LeafColor;
+            @SerializedName("FlowerType")
+            private int FlowerType;
+            @SerializedName("FlowerColor")
+            private int FlowerColor;
+            @SerializedName("FruitType")
+            private int FruitType;
+            @SerializedName("FruitColor")
+            private int FruitColor;
+            @SerializedName("PicPath")
+            private String PicPath;
+            @SerializedName("AreaID")
+            private String AreaID;
+            @SerializedName("IsCheck")
+            private int IsCheck;
+            @SerializedName("CheckID")
+            private String CheckID;
 
-            public String getA() {
-                return a;
+            public int getTID() {
+                return TID;
             }
 
-            public void setA(String a) {
-                this.a = a;
+            public void setTID(int TID) {
+                this.TID = TID;
             }
 
-            public String getB() {
-                return b;
+            public String getTreeID() {
+                return TreeID;
             }
 
-            public void setB(String b) {
-                this.b = b;
+            public void setTreeID(String TreeID) {
+                this.TreeID = TreeID;
             }
 
-            public String getC() {
-                return c;
+            public int getLeafShape() {
+                return LeafShape;
             }
 
-            public void setC(String c) {
-                this.c = c;
+            public void setLeafShape(int LeafShape) {
+                this.LeafShape = LeafShape;
             }
 
-            public String getD() {
-                return d;
+            public int getLeafColor() {
+                return LeafColor;
             }
 
-            public void setD(String d) {
-                this.d = d;
+            public void setLeafColor(int LeafColor) {
+                this.LeafColor = LeafColor;
             }
 
-            public ArrayList<String> getPicList() {
-                return picList;
+            public int getFlowerType() {
+                return FlowerType;
             }
 
-            public void setPicList(ArrayList<String> picList) {
-                this.picList = picList;
+            public void setFlowerType(int FlowerType) {
+                this.FlowerType = FlowerType;
+            }
+
+            public int getFlowerColor() {
+                return FlowerColor;
+            }
+
+            public void setFlowerColor(int FlowerColor) {
+                this.FlowerColor = FlowerColor;
+            }
+
+            public int getFruitType() {
+                return FruitType;
+            }
+
+            public void setFruitType(int FruitType) {
+                this.FruitType = FruitType;
+            }
+
+            public int getFruitColor() {
+                return FruitColor;
+            }
+
+            public void setFruitColor(int FruitColor) {
+                this.FruitColor = FruitColor;
+            }
+
+            public String getPicPath() {
+                return PicPath;
+            }
+
+            public void setPicPath(String PicPath) {
+                this.PicPath = PicPath;
+            }
+
+            public String getAreaID() {
+                return AreaID;
+            }
+
+            public void setAreaID(String AreaID) {
+                this.AreaID = AreaID;
+            }
+
+            public int getIsCheck() {
+                return IsCheck;
+            }
+
+            public void setIsCheck(int IsCheck) {
+                this.IsCheck = IsCheck;
+            }
+
+            public String getCheckID() {
+                return CheckID;
+            }
+
+            public void setCheckID(String CheckID) {
+                this.CheckID = CheckID;
             }
         }
     }

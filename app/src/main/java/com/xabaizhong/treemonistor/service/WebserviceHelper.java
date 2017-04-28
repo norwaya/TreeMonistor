@@ -65,6 +65,8 @@ public class WebserviceHelper {
         } catch (IllegalArgumentException e) {
             Log.i(TAG, "GetWebService: IllegalArgumentException");
             e.printStackTrace();
+        } catch (Exception e){
+            e.printStackTrace();
         }
         return null;
 

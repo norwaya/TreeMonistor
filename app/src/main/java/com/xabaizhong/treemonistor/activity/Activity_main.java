@@ -401,7 +401,7 @@ public class Activity_main extends Activity_base implements MyRadio.OnRadioCheck
             if (isServiceRunning(getApplicationContext(), NoticeService.class.getName())) {
                 return;
             }
-            startService(serviceIntent);
+//            startService(serviceIntent);//消息推送
         }
 
         private void stopNoticeService() {

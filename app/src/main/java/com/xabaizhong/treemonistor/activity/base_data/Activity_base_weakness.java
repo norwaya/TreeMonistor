@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -42,30 +43,36 @@ public class Activity_base_weakness extends Activity_base {
         initDB();
         initView();
     }
+
     List<Weakness> list;
+
+    void initDB() {
+        WeaknessDao weaknessDao = ((App) getApplicationContext()).getDaoSession().getWeaknessDao();
+        list = weaknessDao.queryBuilder().build().list();
+
+    }
+
     private void initView() {
-        lv.setAdapter(new SimpleAdapter(this,fillData(),R.layout.activity_base_data_weakness_item,new String[]{"name"},new int[]{R.id.tv}));
+        lv.setAdapter(new SimpleAdapter(this, fillData(), R.layout.simple_text2, new String[]{"name"}, new int[]{R.id.text1}));
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent i = new Intent(getApplicationContext(),Activity_base_weakness_detail.class);
+                Intent i = new Intent(getApplicationContext(), Activity_base_weakness_detail.class);
                 i.putExtra("id", list.get(position).getId());
                 startActivity(i);
             }
         });
     }
-    void initDB(){
-        WeaknessDao weaknessDao = ((App)getApplicationContext()).getDaoSession().getWeaknessDao();
-        list = weaknessDao.queryBuilder().build().list();
-    }
-    List<Map<String,Object>> fillData(){
-        List<Map<String,Object>> mapList = new ArrayList<>();
+
+    List<Map<String, Object>> fillData() {
+        List<Map<String, Object>> mapList = new ArrayList<>();
         Map<String, Object> map ;
-        if(list != null){
-            for (Weakness weakness:list
-                 ) {
+        if (list != null) {
+            for (Weakness weakness : list
+                    ) {
                 map = new HashMap<>();
                 map.put("name", weakness.getName());
+                mapList.add(map);
             }
             return mapList;
         }
