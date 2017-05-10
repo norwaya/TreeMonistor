@@ -13,26 +13,36 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.squareup.picasso.Picasso;
 import com.xabaizhong.treemonistor.R;
+import com.xabaizhong.treemonistor.activity.Activity_main;
 import com.xabaizhong.treemonistor.activity.expert.Activity_expert_age;
-import com.xabaizhong.treemonistor.activity.expert.Activity_expert_bug;
 import com.xabaizhong.treemonistor.activity.expert.Activity_expert_weak;
 import com.xabaizhong.treemonistor.activity.expert.Activity_monitor_growth;
 import com.xabaizhong.treemonistor.activity.expert.Activity_species;
 import com.xabaizhong.treemonistor.adapter.Fragment_expert_adapter;
 import com.xabaizhong.treemonistor.adapter.HeaderAndFooterWrapper;
 import com.xabaizhong.treemonistor.base.Fragment_base;
+import com.xabaizhong.treemonistor.contant.UserSharedField;
 import com.xabaizhong.treemonistor.entity.ResultOfExpert;
 import com.xabaizhong.treemonistor.service.AsyncTaskRequest;
 import com.xabaizhong.treemonistor.utils.RecycleViewDivider;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 import terranovaproductions.newcomicreader.FloatingActionMenu;
 
 import static android.support.v7.widget.RecyclerView.VERTICAL;
@@ -159,47 +169,42 @@ public class Fragment_expert extends Fragment_base {
         );
     }
 
-    private void request(){
-        AsyncTaskRequest.instance("Login","login")
-                .setParams(null)
+
+    private void request() {
+        Activity_main main = ((Activity_main) getActivity());
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("UserID", main.sharedPreferences.getString(UserSharedField.USERID, ""));
+        map.put("AreaID", main.sharedPreferences.getString(UserSharedField.AREAID, ""));
+        AsyncTaskRequest.instance("CheckUp", "Query_CheckResult1")
+                .setParams(map)
                 .setCallBack(new AsyncTaskRequest.CallBack() {
                     @Override
                     public void execute(String s) {
-                        requestData();
+                        Log.i(TAG, "execute: " + s);
                         xRecyclerView.refreshComplete();
+                        if (s == null) {
+                            showToast("数据异常");
+                            return;
+                        }
+                        Observable.just(s)
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribeOn(Schedulers.io())
+                                .subscribe(new Consumer<String>() {
+                                    @Override
+                                    public void accept(String s) throws Exception {
+                                        ResultMessage rm = new Gson().fromJson(s, ResultMessage.class);
+                                        if (rm.getErrorCode() == 0)
+                                            adapter.setResource(rm.getList());
+                                    }
+                                }, new Consumer<Throwable>() {
+                                    @Override
+                                    public void accept(Throwable throwable) throws Exception {
+                                        showToast("解析数据失败");
+                                    }
+                                });
                     }
                 }).create();
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-    ArrayList<ResultOfExpert> list;
-
-    private void requestData() {
-        if (list == null)
-            list = new ArrayList<>();
-        list.clear();
-        ResultOfExpert expert = null;
-        for (int i = 0; i < 10; i++) {
-
-            if (i == 0 || i == 3) {
-                expert = null;
-            } else {
-                expert = new ResultOfExpert(i, "content" + i, null);
-            }
-            list.add(expert);
-        }
-        xRecyclerView.refreshComplete();
-        adapter.refreshList(list);
     }
 
 
@@ -224,18 +229,48 @@ public class Fragment_expert extends Fragment_base {
 
     }
 
+    static class ResultMessage {
 
-    /*@OnClick({R.id.fab_tree_unknow, R.id.fab_tree_weakness})
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.fab_tree_unknow:
-                Log.d(TAG, "onClick: unknow");
-                break;
-            case R.id.fab_tree_weakness:
-                Log.d(TAG, "onClick: weakness");
-                break;
+
+        /**
+         * message : sus
+         * error_code : 0
+         * list : [{"DateTime":"2017-05-04 04:53:52.00","LeafShape":3,"FruitType":2,"LeafColor":1,"JDResult":{"CheckPerson":"陈教授","CheckTime":"2017-05-08 05:00:29.00","Result":"54545454"},"UserID":"test1","AreaID":"610000","FruitColor":5,"TID":"6100002017050404535200","FlowerColor":4,"FlowerType":2,"AuthType":0},{"DateTime":"2017-05-04 04:43:59.00","LeafShape":6,"FruitType":3,"LeafColor":2,"JDResult":{"CheckPerson":"陈教授","CheckTime":"2017-05-08 05:06:23.00","Result":"6545"},"UserID":"test1","AreaID":"610000","FruitColor":5,"TID":"6100002017050404435900","FlowerColor":5,"FlowerType":2,"AuthType":0},{"DateTime":"2017-05-04 04:43:59.00","LeafShape":6,"FruitType":3,"LeafColor":2,"JDResult":{"CheckPerson":"陈教授","CheckTime":"2017-05-09 03:51:07.00","Result":"asdsdasd"},"UserID":"test1","AreaID":"610000","FruitColor":5,"TID":"6100002017050404435900","FlowerColor":5,"FlowerType":2,"AuthType":0},{"DateTime":"2017-05-04 04:49:35.00","LeafShape":1,"FruitType":3,"LeafColor":0,"JDResult":{},"UserID":"test1","AreaID":"610000","FruitColor":4,"TID":"6100002017050404493500","FlowerColor":5,"FlowerType":2,"AuthType":0}]
+         */
+
+        @SerializedName("message")
+        private String message;
+        @SerializedName("error_code")
+        private int errorCode;
+        @SerializedName("list")
+        private List<ResultOfExpert> list;
+
+        public String getMessage() {
+            return message;
         }
-        menuYellow.close(true);
-    }*/
+
+        public void setMessage(String message) {
+            this.message = message;
+        }
+
+        public int getErrorCode() {
+            return errorCode;
+        }
+
+        public void setErrorCode(int errorCode) {
+            this.errorCode = errorCode;
+        }
+
+        public List<ResultOfExpert> getList() {
+            return list;
+        }
+
+        public void setList(List<ResultOfExpert> list) {
+            this.list = list;
+        }
+
+
+    }
+
 
 }

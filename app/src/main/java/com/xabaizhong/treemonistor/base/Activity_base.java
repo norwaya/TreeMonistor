@@ -19,7 +19,7 @@ import java.util.Set;
 
 public class Activity_base extends AppCompatActivity {
     protected String TAG;
-    protected SharedPreferences sharedPreferences;
+    public SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

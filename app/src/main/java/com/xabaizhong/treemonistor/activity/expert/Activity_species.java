@@ -30,6 +30,7 @@ import com.xabaizhong.treemonistor.entity.TreeSpecialDao;
 import com.xabaizhong.treemonistor.myview.C_dialog_radio;
 import com.xabaizhong.treemonistor.myview.C_info_gather_item1;
 import com.xabaizhong.treemonistor.service.AsyncTaskRequest;
+import com.xabaizhong.treemonistor.service.model.ResultMessage;
 import com.xabaizhong.treemonistor.service.model.SpeciesResult;
 import com.xabaizhong.treemonistor.utils.FileUtil;
 import com.xabaizhong.treemonistor.utils.MessageEvent;
@@ -46,8 +47,11 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 import me.nereo.multi_image_selector.MultiImageSelector;
 
 /**
@@ -90,7 +94,6 @@ public class Activity_species extends Activity_base implements C_info_gather_ite
 
     private void initialSource() {
         pb.setOnClickListener(null);
-
         params = new Params();
         disposable = RxBus.getDefault().toObservable(MessageEvent.class).subscribe(new Consumer<MessageEvent>() {
             @Override
@@ -139,6 +142,7 @@ public class Activity_species extends Activity_base implements C_info_gather_ite
 
     @OnClick(R.id.submit)
     public void onViewClicked() {
+
         if (flag) {
             if (params.check()) {
                 pb.setVisibility(View.VISIBLE);
@@ -147,7 +151,8 @@ public class Activity_species extends Activity_base implements C_info_gather_ite
                         .setCallBack(new AsyncTaskRequest.CallBack() {
                             @Override
                             public void execute(String s) {
-
+                                Log.i(TAG, "execute: "+s);
+                                pb.setVisibility(View.INVISIBLE);
                                 if (s == null) {
                                     showToast("请求错误");
                                     return;
@@ -156,23 +161,22 @@ public class Activity_species extends Activity_base implements C_info_gather_ite
                                 SpeciesResult result = new Gson().fromJson(s, SpeciesResult.class);
                                 if (result.getResult() != null && result.getResult().size() > 0) {
                                     speList = result.getResult();
-                                    showSpeciesDialog();
+                                    showSpeciesDialog(true);
                                 } else {
-                                    showToast("系统没有匹配到合适的树种,选择图片");
-                                    display();
+                                    showSpeciesDialog(false);
                                 }
-                                pb.setVisibility(View.INVISIBLE);
                             }
                         })
                         .create();
+            } else {
+                showToast("每一项都是必填项,否则鉴定不出结果");
             }
         } else {
             if (list.size() < 1) {
                 showToast("添加图片");
-
             } else {
+                pb.setVisibility(View.VISIBLE);
                 new AsyncTask<Void, Void, String>() {
-
                     @Override
                     protected String doInBackground(Void... params) {
                         FileUtil.clearFileDir();
@@ -187,12 +191,35 @@ public class Activity_species extends Activity_base implements C_info_gather_ite
                     protected void onPostExecute(String aVoid) {
                         super.onPostExecute(aVoid);
                         // 需要修改 接口 和 json 数据结构
-                        AsyncTaskRequest.instance("CheckUp", "SpeciesIden")
+                        AsyncTaskRequest.instance("UploadTreeInfo", "AuthenticateInfoMethod")
                                 .setParams(getUploadParas())
                                 .setCallBack(new AsyncTaskRequest.CallBack() {
                                     @Override
                                     public void execute(String s) {
-                                        Log.i(TAG, "execute: " + s);
+                                        pb.setVisibility(View.INVISIBLE);
+                                        if (s == null) {
+                                            showToast("请检查网络连接是否异常");
+                                            return;
+                                        }
+                                        Observable.just(s).observeOn(AndroidSchedulers.mainThread())
+                                                .subscribeOn(Schedulers.io())
+                                                .subscribe(new Consumer<String>() {
+                                                    @Override
+                                                    public void accept(String s) throws Exception {
+                                                        ResultMessage rm = new Gson().fromJson(s, ResultMessage.class);
+                                                        if (rm.getError_code() == 0) {
+                                                            showToast("上传成功");
+                                                            Activity_species.this.finish();
+                                                        } else {
+                                                            showToast(rm.getMessage());
+                                                        }
+                                                    }
+                                                }, new Consumer<Throwable>() {
+                                                    @Override
+                                                    public void accept(Throwable throwable) throws Exception {
+                                                        showToast("解析失败");
+                                                    }
+                                                });
                                     }
                                 })
                                 .create();
@@ -209,6 +236,9 @@ public class Activity_species extends Activity_base implements C_info_gather_ite
         params.picList.addAll(FileUtil.getPngFiles());
         String user_id = sharedPreferences.getString(UserSharedField.USERID, "");
         map.put("UserID ", user_id);
+        map.put("date ", getStringDate());
+        map.put("type ", 0);
+        map.put("areaId ", sharedPreferences.getString(UserSharedField.AREAID, ""));
         String json = new Gson().toJson(params);
         Log.i(TAG, "getUploadParas: " + json);
         map.put("JsonStr", json);
@@ -262,13 +292,19 @@ public class Activity_species extends Activity_base implements C_info_gather_ite
     }
 
 
-    void showSpeciesDialog() {
+    void showSpeciesDialog(boolean flag) {
         View view = LayoutInflater.from(this).inflate(R.layout.activity_species_dialog, null);
 
-        initialSpeciesDialogView(view);
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        if (flag) {
+            initialSpeciesDialogView(view);
+            builder.setView(view);
+        } else {
+            builder.setMessage("系统无法鉴定该树种");
+        }
         builder.setTitle("树种鉴定结果")
-                .setView(view)
+
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -276,7 +312,7 @@ public class Activity_species extends Activity_base implements C_info_gather_ite
 
                     }
                 })
-                .setNegativeButton("都不是，上报", new DialogInterface.OnClickListener() {
+                .setNegativeButton("上报给专家", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 

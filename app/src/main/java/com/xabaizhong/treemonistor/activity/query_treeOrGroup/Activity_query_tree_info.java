@@ -1,88 +1,42 @@
 package com.xabaizhong.treemonistor.activity.query_treeOrGroup;
 
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.TextView;
 
+import com.baidu.mapapi.map.Text;
+import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
 import com.xabaizhong.treemonistor.R;
 import com.xabaizhong.treemonistor.base.Activity_base;
 import com.xabaizhong.treemonistor.contant.UserSharedField;
 import com.xabaizhong.treemonistor.service.WebserviceHelper;
 
 import java.net.ConnectException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
 
 /**
  * Created by Administrator on 2017/4/11 0011.
  */
 
 public class Activity_query_tree_info extends Activity_base {
-    @BindView(R.id.tree)
-    RadioButton tree;
-    @BindView(R.id.group)
-    RadioButton group;
-    @BindView(R.id.level1)
-    RadioButton level1;
-    @BindView(R.id.level2)
-    RadioButton level2;
-    @BindView(R.id.level3)
-    RadioButton level3;
-    @BindView(R.id.countryside)
-    RadioButton countryside;
-    @BindView(R.id.city)
-    RadioButton city;
-    @BindView(R.id.country)
-    RadioButton country;
-    @BindView(R.id.unit)
-    RadioButton unit;
-    @BindView(R.id.person)
-    RadioButton person;
-    @BindView(R.id.other)
-    RadioButton other;
-    @BindView(R.id.normal)
-    RadioButton normal;
-    @BindView(R.id.weak)
-    RadioButton weak;
-    @BindView(R.id.weaker)
-    RadioButton weaker;
-    @BindView(R.id.yjyw)
-    RadioButton yjyw;
-    @BindView(R.id.street)
-    RadioButton street;
-    @BindView(R.id.city_area)
-    RadioButton cityArea;
-    @BindView(R.id.fjms)
-    RadioButton fjms;
-    @BindView(R.id.env_lh)
-    RadioButton envLh;
-    @BindView(R.id.evn_c)
-    RadioButton evnC;
-    @BindView(R.id.evn_jc)
-    RadioButton evnJc;
-    @BindView(R.id.tree1)
-    RadioButton tree1;
-    @BindView(R.id.tree2)
-    RadioButton tree2;
-    @BindView(R.id.tree3)
-    RadioButton tree3;
-    @BindView(R.id.tree4)
-    RadioButton tree4;
-    @BindView(R.id.tree5)
-    RadioButton tree5;
-    @BindView(R.id.btn_submit)
-    Button btnSubmit;
+
+    @BindView(R.id.layout)
+    LinearLayout layout;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -90,8 +44,6 @@ public class Activity_query_tree_info extends Activity_base {
         setContentView(R.layout.activity_query_tree_info);
         ButterKnife.bind(this);
         query();
-        initView();
-
     }
 
     AsyncTask asyncTask;
@@ -102,7 +54,7 @@ public class Activity_query_tree_info extends Activity_base {
             protected String doInBackground(Void... params) {
                 try {
                     return WebserviceHelper.GetWebService(
-                            "DataQuerySys", "QueryTreeInfoMethod", getParms());
+                            "DataQuerySys", "QueryTreeInfoMethod1", getParms());
                 } catch (ConnectException e) {
                     e.printStackTrace();
                     return null;
@@ -111,192 +63,141 @@ public class Activity_query_tree_info extends Activity_base {
 
             @Override
             protected void onPostExecute(String s) {
+                Log.i(TAG, "accept: "+s);
                 if (s == null) {
                     showToast("请求错误");
                 }
-                Log.i(TAG, "onPostExecute: " + s);
+                Observable.just(s)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Consumer<String>() {
+                            @Override
+                            public void accept(String s) throws Exception {
+                                Bean bean = new Gson().fromJson(s, Bean.class);
+                                if (bean.getErrorCode() == 0) {
+                                    list = bean.getList();
+                                    initView();
+                                } else {
+                                    showToast("无统计数据");
+                                }
+                            }
+                        }, new Consumer<Throwable>() {
+                            @Override
+                            public void accept(Throwable throwable) throws Exception {
+
+                            }
+                        });
             }
         }.execute();
     }
 
-    /*<TreeInfoListMethod xmlns="http://tempuri.org/">
-     <UserID>string</UserID>
-     <TreeType>int</TreeType>
-     <DetType>int</DetType>
-     <AreaID>string</AreaID>
-   </TreeInfoListMethod>*/
+
     private Map<String, Object> getParms() {
         Map<String, Object> map = new HashMap<>();
-//        map.put("UserID", sharedPreferences.getString(UserSharedField.USERID, ""));
-//        map.put("TreeType", getIntent.getStringExtra("TreeType"));
-//        map.put("DetType", getIntent.getStringExtra("DetType"));
-//        map.put("AreaID", sharedPreferences.getString(UserSharedField.AREAID, ""));
+        map.put("UserID", sharedPreferences.getString(UserSharedField.USERID, ""));
+        map.put("AreaID", sharedPreferences.getString(UserSharedField.AREAID, ""));
         return map;
     }
-    List<RadioButton> list;
+
+    List<Bean.ListBean> list;
 
     private void initView() {
-       fillList();
-
+        for (Bean.ListBean item : list
+                ) {
+            layout.addView(createView(item.getName()+"\n"+item.getClassical(),item.getNum()+""));
+        }
     }
 
-    private void fillList() {
-
-        list = new ArrayList<>();
-        list.add(tree);
-        list.add(group);
-        list.add(level1);
-        list.add(level2);
-        list.add(level3);
-        list.add(countryside);
-        list.add(city);
-        list.add(country);
-        list.add(unit);
-        list.add(person);
-        list.add(other);
-        list.add(normal);
-        list.add(weak);
-        list.add(weaker);
-        list.add(yjyw);
-        list.add(street);
-        list.add(cityArea);
-        list.add(fjms);
-        list.add(envLh);
-        list.add(evnC);
-        list.add(evnJc);
-        list.add(tree1);
-        list.add(tree2);
-        list.add(tree3);
-        list.add(tree4);
-        list.add(tree5);
+    private View createView(String title,String content){
+        View view = LayoutInflater.from(this).inflate(R.layout.activity_statistics_item,null);
+        ViewHolder viewHolder = new ViewHolder(view);
+        viewHolder.title.setText(title);
+        viewHolder.content.setText(content);
+        return view;
     }
+    class ViewHolder{
+        TextView title;
+        TextView content;
+        public ViewHolder(View view){
+            title = ((TextView) view.findViewById(R.id.title));
+            content = ((TextView) view.findViewById(R.id.content));
+        }
+    }
+    static class Bean {
 
-    @OnClick(R.id.btn_submit)
-    public void onViewClicked() {
-        for (RadioButton rb : list) {
-            if (rb.isChecked())
-                getPropAndIntent(rb);
+        /**
+         * message : sus
+         * error_code : 0
+         * list : [{"num":244,"classical":"古树","name":"全部"},{"num":0,"classical":"古树群","name":"全部"},{"num":0,"classical":"特级","name":"等级"},{"num":0,"classical":"特级","name":"等级"},{"num":242,"classical":"一级","name":"等级"},{"num":0,"classical":"一级","name":"等级"},{"num":0,"classical":"二级","name":"等级"},{"num":0,"classical":"二级","name":"等级"},{"num":0,"classical":"三级","name":"等级"},{"num":2,"classical":"三级","name":"等级"},{"num":244,"classical":"农村","name":"区域"},{"num":0,"classical":"城市","name":"区域"},{"num":2,"classical":"个人","name":"权属"},{"num":0,"classical":"个人","name":"权属"},{"num":0,"classical":"集体","name":"权属"},{"num":242,"classical":"集体","name":"权属"},{"num":0,"classical":"国家","name":"权属"},{"num":0,"classical":"国家","name":"权属"},{"num":1,"classical":"正常株","name":"生长势"},{"num":0,"classical":"正常株","name":"生长势"},{"num":0,"classical":"正常株","name":"生长势"},{"num":0,"classical":"衰弱株","name":"生长势"},{"num":5,"classical":"衰弱株","name":"生长势"},{"num":0,"classical":"衰弱株","name":"生长势"},{"num":0,"classical":"濒危株","name":"生长势"},{"num":0,"classical":"濒危株","name":"生长势"},{"num":238,"classical":"濒危株","name":"生长势"},{"num":0,"classical":"死亡株","name":"生长势"},{"num":0,"classical":"死亡株","name":"生长势"},{"num":0,"classical":"死亡株","name":"生长势"},{"num":0,"classical":"远郊野外","name":"生长场所"},{"num":0,"classical":"远郊野外","name":"生长场所"},{"num":6,"classical":"乡村街道","name":"生长场所"},{"num":0,"classical":"乡村街道","name":"生长场所"},{"num":0,"classical":"城区","name":"生长场所"},{"num":238,"classical":"城区","name":"生长场所"},{"num":0,"classical":"历史文化街区","name":"生长场所"},{"num":0,"classical":"历史文化街区","name":"生长场所"},{"num":0,"classical":"风景名胜古区","name":"生长场所"},{"num":0,"classical":"风景名胜古区","name":"生长场所"},{"num":1,"classical":"良好","name":"生长环境"},{"num":0,"classical":"良好","name":"生长环境"},{"num":0,"classical":"差","name":"生长环境"},{"num":0,"classical":"差","name":"生长环境"},{"num":0,"classical":"极差","name":"生长环境"},{"num":0,"classical":"极差","name":"生长环境"}]
+         */
+
+        @SerializedName("message")
+        private String message;
+        @SerializedName("error_code")
+        private int errorCode;
+        @SerializedName("list")
+        private List<ListBean> list;
+
+        public String getMessage() {
+            return message;
         }
 
-    }
-
-    //    TreeType与DetType
-    int TreeType = 0;
-    int DetType = 0;
-
-    public void getPropAndIntent(RadioButton rb) {
-        Intent i = new Intent(this, Activity_query_tree_info_list.class);
-
-        switch (rb.getId()) {
-            case R.id.tree:
-                TreeType = 0;
-                DetType = 1;
-                break;
-            case R.id.group:
-                TreeType = 0;
-                DetType = 2;
-                break;
-            case R.id.level1:
-                TreeType = 1;
-                DetType = 0;
-                break;
-            case R.id.level2:
-                TreeType = 1;
-                DetType = 0;
-                break;
-            case R.id.level3:
-                TreeType = 1;
-                DetType = 0;
-                break;
-            case R.id.countryside:
-                TreeType = 0;
-                DetType = 0;
-                break;
-            case R.id.city:
-                TreeType = 1;
-                DetType = 1;
-                break;
-            case R.id.country:
-                TreeType = 1;
-                DetType = 1;
-                break;
-            case R.id.unit:
-                TreeType = 1;
-                DetType = 2;
-                break;
-            case R.id.person:
-                TreeType = 1;
-                DetType = 2;
-                break;
-            case R.id.other:
-                TreeType = 0;
-                DetType = 0;
-                break;
-            case R.id.normal:
-                TreeType = 0;
-                DetType = 0;
-                break;
-            case R.id.weak:
-                TreeType = 0;
-                DetType = 0;
-                break;
-            case R.id.weaker:
-                TreeType = 0;
-                DetType = 0;
-                break;
-            case R.id.yjyw:
-                TreeType = 0;
-                DetType = 0;
-                break;
-            case R.id.street:
-                TreeType = 0;
-                DetType = 0;
-                break;
-            case R.id.city_area:
-                TreeType = 0;
-                DetType = 0;
-                break;
-            case R.id.fjms:
-                TreeType = 0;
-                DetType = 0;
-                break;
-            case R.id.env_lh:
-                TreeType = 0;
-                DetType = 0;
-                break;
-            case R.id.evn_c:
-                TreeType = 0;
-                DetType = 0;
-                break;
-            case R.id.evn_jc:
-                TreeType = 0;
-                DetType = 0;
-                break;
-            case R.id.tree1:
-                TreeType = 0;
-                DetType = 0;
-                break;
-            case R.id.tree2:
-                TreeType = 0;
-                DetType = 0;
-                break;
-            case R.id.tree3:
-                TreeType = 0;
-                DetType = 0;
-                break;
-            case R.id.tree4:
-                TreeType = 0;
-                DetType = 0;
-                break;
-            case R.id.tree5:
-                TreeType = 0;
-                DetType = 0;
-                break;
-
+        public void setMessage(String message) {
+            this.message = message;
         }
-        i.putExtra("TreeType", TreeType);
-        i.putExtra("DetType", DetType);
-        startActivity(i);
-    }
 
+        public int getErrorCode() {
+            return errorCode;
+        }
+
+        public void setErrorCode(int errorCode) {
+            this.errorCode = errorCode;
+        }
+
+        public List<ListBean> getList() {
+            return list;
+        }
+
+        public void setList(List<ListBean> list) {
+            this.list = list;
+        }
+
+        public static class ListBean {
+            /**
+             * num : 244
+             * classical : 古树
+             * name : 全部
+             */
+
+            @SerializedName("num")
+            private int num;
+            @SerializedName("classical")
+            private String classical;
+            @SerializedName("name")
+            private String name;
+
+            public int getNum() {
+                return num;
+            }
+
+            public void setNum(int num) {
+                this.num = num;
+            }
+
+            public String getClassical() {
+                return classical;
+            }
+
+            public void setClassical(String classical) {
+                this.classical = classical;
+            }
+
+            public String getName() {
+                return name;
+            }
+
+            public void setName(String name) {
+                this.name = name;
+            }
+        }
+    }
 }

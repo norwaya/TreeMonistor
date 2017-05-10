@@ -10,22 +10,28 @@
         android:orientation="horizontal">
 
         <TextView
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-            android:id="@+id/text1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="tid"
-            android:textAlignment="center"/>
+            android:text="类型"
+            android:textAlignment="center"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"/>
 
         <TextView
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-            android:id="@+id/text2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="type"
-            android:textAlignment="center"/>
+            android:text="上传人"
+            android:textAlignment="center"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="时间"
+            android:textAlignment="center"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"/>
     </LinearLayout>
 
     <com.jcodecraeer.xrecyclerview.XRecyclerView

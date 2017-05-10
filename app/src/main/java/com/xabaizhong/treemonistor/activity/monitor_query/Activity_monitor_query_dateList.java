@@ -16,6 +16,7 @@ import com.xabaizhong.treemonistor.activity.query_treeOrGroup.Activity_tree_deta
 import com.xabaizhong.treemonistor.adapter.Activity_monitor_query_dateList_adapter;
 import com.xabaizhong.treemonistor.adapter.CommonRecyclerViewAdapter;
 import com.xabaizhong.treemonistor.base.Activity_base;
+import com.xabaizhong.treemonistor.contant.UserSharedField;
 import com.xabaizhong.treemonistor.service.AsyncTaskRequest;
 
 import java.util.HashMap;
@@ -30,14 +31,14 @@ import butterknife.OnClick;
  * Created by Administrator on 2017/4/24 0024.
  */
 
-public class Activity_monitor_query_dateList extends Activity_base implements CommonRecyclerViewAdapter.CallBack<Activity_monitor_query_dateList.ViewHolder, Activity_monitor_query_dateList.ResultMessage.QueryimportinfolistBean> {
+public class Activity_monitor_query_dateList extends Activity_base implements CommonRecyclerViewAdapter.CallBack<Activity_monitor_query_dateList.ViewHolder, String> {
 
     String treeId;
     @BindView(R.id.rv)
     RecyclerView rv;
 
 
-    List<ResultMessage.QueryimportinfolistBean> list;
+    List<String> list;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,45 +73,34 @@ public class Activity_monitor_query_dateList extends Activity_base implements Co
         AreaID	String	区域ID*/
 
         Map<String, Object> map = new HashMap<>();
-        map.put("UserID", "");
-        map.put("TreeID", "");
-        map.put("QueryType", "1");
-        map.put("AreaID", "");
+        map.put("UserID", sharedPreferences.getString(UserSharedField.USERID,""));
+        map.put("TreeID", treeId);
 
 
-        AsyncTaskRequest.instance("DataQuerySys", "ImportTreelInfo")
+        AsyncTaskRequest.instance("CheckUp", "QueryTimeList_ImportantTree")
                 .setParams(map)
                 .setCallBack(new AsyncTaskRequest.CallBack() {
                     @Override
                     public void execute(String s) {
-                        String result = "{\n" +
-                                "    \"message\": \"sus\",\n" +
-                                "    \"error_code\": \"0\",\n" +
-                                "    \"areaid\": \"6100323\",\n" +
-                                "    \"userid\": \"610323001\",\n" +
-                                "    \"treeid\": \" 61032900001\",\n" +
-                                "    \"queryimportinfolist\": [\n" +
-                                "        { \"updatetime\": 2017-04-01 },\n" +
-                                "        { \"updatetime\": 2017-04-02 },\n" +
-                                "        { \"updatetime\": 2017-04-03 }\n" +
-                                "    ]\n" +
-                                "}\n";
-                        list = new Gson().fromJson(result, ResultMessage.class).getQueryimportinfolist();
+                        Log.i(TAG, "execute: "+s);
+                        if(s == null)
+                            return;
+                        list = new Gson().fromJson(s, ResultMessage.class).getResult();
                         adapter.setSource(list);
                     }
                 }).create(TAG);
     }
 
     @Override
-    public void bindView(ViewHolder holder, int position, List<ResultMessage.QueryimportinfolistBean> list) {
-        holder.text1.setText(list.get(position).getUpdatetime());
+    public void bindView(ViewHolder holder, int position, List<String> list) {
+        holder.text1.setText(list.get(position));
     }
 
     @Override
     public void onItemClickListener(View view, int position) {
         Log.i(TAG, "onItemClickListener: ");
 
-        String date = list.get(position).getUpdatetime();
+        String date = list.get(position);
         Intent i = new Intent(this, Activity_monitor_query_date_pics.class);
         i.putExtra("treeId", treeId);
         i.putExtra("date", date);
@@ -137,27 +127,19 @@ public class Activity_monitor_query_dateList extends Activity_base implements Co
 
     public static class ResultMessage {
 
+
         /**
          * message : sus
          * error_code : 0
-         * areaid : 6100323
-         * userid : 610323001
-         * treeid :  61032900001
-         * queryimportinfolist : [{"updatetime":"2017-04-01"},{"updatetime":"2017-04-02"},{"updatetime":"2017-04-03"}]
+         * result : ["2017/4/15 14:30:01.000"]
          */
 
         @SerializedName("message")
         private String message;
         @SerializedName("error_code")
-        private String errorCode;
-        @SerializedName("areaid")
-        private String areaid;
-        @SerializedName("userid")
-        private String userid;
-        @SerializedName("treeid")
-        private String treeid;
-        @SerializedName("queryimportinfolist")
-        private List<QueryimportinfolistBean> queryimportinfolist;
+        private int errorCode;
+        @SerializedName("result")
+        private List<String> result;
 
         public String getMessage() {
             return message;
@@ -167,61 +149,20 @@ public class Activity_monitor_query_dateList extends Activity_base implements Co
             this.message = message;
         }
 
-        public String getErrorCode() {
+        public int getErrorCode() {
             return errorCode;
         }
 
-        public void setErrorCode(String errorCode) {
+        public void setErrorCode(int errorCode) {
             this.errorCode = errorCode;
         }
 
-        public String getAreaid() {
-            return areaid;
+        public List<String> getResult() {
+            return result;
         }
 
-        public void setAreaid(String areaid) {
-            this.areaid = areaid;
-        }
-
-        public String getUserid() {
-            return userid;
-        }
-
-        public void setUserid(String userid) {
-            this.userid = userid;
-        }
-
-        public String getTreeid() {
-            return treeid;
-        }
-
-        public void setTreeid(String treeid) {
-            this.treeid = treeid;
-        }
-
-        public List<QueryimportinfolistBean> getQueryimportinfolist() {
-            return queryimportinfolist;
-        }
-
-        public void setQueryimportinfolist(List<QueryimportinfolistBean> queryimportinfolist) {
-            this.queryimportinfolist = queryimportinfolist;
-        }
-
-        public static class QueryimportinfolistBean {
-            /**
-             * updatetime : 2017-04-01
-             */
-
-            @SerializedName("updatetime")
-            private String updatetime;
-
-            public String getUpdatetime() {
-                return updatetime;
-            }
-
-            public void setUpdatetime(String updatetime) {
-                this.updatetime = updatetime;
-            }
+        public void setResult(List<String> result) {
+            this.result = result;
         }
     }
 }

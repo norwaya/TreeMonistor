@@ -57,9 +57,6 @@ import io.reactivex.schedulers.Schedulers;
 import static com.xabaizhong.treemonistor.contant.Contant.KV.FIRST_INIT;
 import static com.xabaizhong.treemonistor.contant.Contant.KV.NOTICE_PUSH;
 
-/**
- * Created by admin on 2017/3/3.
- */
 
 public class Activity_welcome extends Activity_base {
     private static final int REQEUST_CODE_WRITER = 0x101;
@@ -69,7 +66,6 @@ public class Activity_welcome extends Activity_base {
     Button btn;
 
     final static int SECOND = 3;
-
     TreeSpecialDao treeSpecialDao;
     AreaCodeDao areaCodeDao;
     PestDao pestDao;

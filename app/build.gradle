@@ -18,7 +18,7 @@ android {
     defaultConfig {
 //        multiDexEnabled true
         applicationId "com.xabaizhong.treemonistor"
-        minSdkVersion 17
+        minSdkVersion 19
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
@@ -97,4 +97,5 @@ dependencies {
     //FloatingActionMenu
     compile 'com.novaapps:FloatingActionMenu:1.0'
     compile files('libs/ksoap2-android-assembly-2.5.2-jar-with-dependencies.jar')
+    compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha2'
 }

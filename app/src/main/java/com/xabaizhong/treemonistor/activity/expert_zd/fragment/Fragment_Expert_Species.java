@@ -13,19 +13,32 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 import com.xabaizhong.treemonistor.R;
 import com.xabaizhong.treemonistor.activity.base_data.Activity_pic_vp;
+import com.xabaizhong.treemonistor.activity.expert.Activity_species;
+import com.xabaizhong.treemonistor.activity.expert_zd.Activity_expert_zd_detail;
 import com.xabaizhong.treemonistor.base.Fragment_base;
+import com.xabaizhong.treemonistor.contant.UserSharedField;
 import com.xabaizhong.treemonistor.service.AsyncTaskRequest;
+import com.xabaizhong.treemonistor.service.model.ResultMessage;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Administrator on 2017/4/24 0024.
@@ -63,23 +76,29 @@ public class Fragment_Expert_Species extends Fragment_base {
         return view;
     }
 
+    String[] leafArray = new String[]{"","椭圆状", "心形", "掌形", "扇形", "菱形", "披针形", "卵形", "圆形", "针形", "鳞形", "匙形", "三角形"};
+    String[] leafColorArray = new String[]{"其他", "绿色", "红色", "黄色", "蓝色"};
+    String[] flowerArray = new String[]{"","乔木花卉", " 灌木花卉", "藤本花卉"};
+    String[] flowerColorArray = new String[]{"其他", "红色", "橙色", "黄色", "绿色", "蓝色", "紫色", "黑色", "褐色", "白色", "粉红色"};
+    String[] fruitArray = new String[]{"","单果", " 聚合果", " 复果"};
+    String[] fruitColorArray = new String[]{"其他", "白色", "红色", "绿色", "紫色", "黄色", "粉色", "褐色", "黑色"};
+
     private void initialView() {
 
         pbLayout.setOnClickListener(null);
         Bean.ResultBean resultBean = bean.getResult();
-        text1.setText("编号:\t" + resultBean.getTID() + "\n" +
-                "area :\t" + resultBean.getAreaID() + "\n" +
-                "花颜色: \t" + resultBean.getFlowerColor() + "\n" +
-                "花: \t" + resultBean.getFlowerType() + "\n" +
-                "叶颜色: \t" + resultBean.getLeafColor() + "\n" +
-                "叶: \t" + resultBean.getLeafShape() + "\n" +
-                "果实: \t" + resultBean.getFruitType() + "\n" +
-                "果实颜色:" + resultBean.getFruitColor() + "\n");
-//        if (resultBean.getPicPath() == null && resultBean.getPicList().size() == 0) {
-//            showPic.setVisibility(View.VISIBLE);
-//        } else {
-//            showPic.setVisibility(View.INVISIBLE);
-//        }
+        text1.setText("鉴定编号\t" + resultBean.getTID() + "\n" +
+                "叶      \t" + leafArray[resultBean.getLeafShape()] + "\n" +
+                "叶颜色  \t" + leafColorArray[resultBean.getLeafColor()] + "\n" +
+                "花      \t" + flowerArray[resultBean.getFlowerType()] + "\n" +
+                "花颜色  \t" + flowerColorArray[resultBean.getFlowerColor()] + "\n" +
+                "果实    \t" + fruitArray[resultBean.getFruitType()] + "\n" +
+                "果实颜色\t" + fruitColorArray[resultBean.getFruitColor()] + "\n");
+        if (resultBean.getPicPath() == null || resultBean.getPicPath().size() == 0) {
+            showPic.setVisibility(View.INVISIBLE);
+        } else {
+            showPic.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -93,38 +112,69 @@ public class Fragment_Expert_Species extends Fragment_base {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.submit:
-
-                if (asyncTaskRequest == null) {
-                    request();
-                }
+                Log.i(TAG, "onViewClicked: ");
+                request();
                 break;
             case R.id.show_pic:
-//                Intent i = new Intent(getActivity(), Activity_pic_vp.class);
-//                i.putStringArrayListExtra("picList", bean.getResult().getPicList());
-//                startActivity(i);
+                Intent i = new Intent(getActivity(), Activity_pic_vp.class);
+                ArrayList<String> picList = new ArrayList<>();
+                picList.addAll(bean.getResult().getPicPath());
+                i.putStringArrayListExtra("picList", picList);
+                startActivity(i);
                 break;
         }
+    }
+
+    private String getStringDate(){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return sdf.format(new Date());
+
     }
 
     AsyncTaskRequest asyncTaskRequest;
 
     private void request() {
-        /*<UserID>string</UserID>
-      <TID>int</TID>
-      <AreaID>string</AreaID>*/
+        /*  <tid>string</tid>
+      <userId>string</userId>
+      <date>string</date>
+      <result>string</result>
+      <checkType>int</checkType>*/
         Map<String, Object> map = new HashMap<>();
-        map.put("Type", "");
-        map.put("Tid", "");
-        map.put("AreaID", "");
+        map.put("tid", bean.getResult().getTID());
+        map.put("userId", sharedPreferences.getString(UserSharedField.USERID,""));
+        map.put("date", getStringDate());
+        map.put("checkType", 0);
+        map.put("result", edit1.getText().toString());
 
         pbLayout.setVisibility(View.VISIBLE);
         asyncTaskRequest = AsyncTaskRequest.instance("UploadTreeInfo", "AuthenticateResultInfo")
                 .setCallBack(new AsyncTaskRequest.CallBack() {
                     @Override
                     public void execute(String s) {
-
                         pbLayout.setVisibility(View.INVISIBLE);
-                        asyncTaskRequest = null;
+                        if (s == null) {
+                            showToast("请检查网络连接是否异常");
+                            return;
+                        }
+                        Observable.just(s).observeOn(AndroidSchedulers.mainThread())
+                                .subscribeOn(Schedulers.io())
+                                .subscribe(new Consumer<String>() {
+                                    @Override
+                                    public void accept(String s) throws Exception {
+                                        ResultMessage rm = new Gson().fromJson(s, ResultMessage.class);
+                                        if (rm.getError_code() == 0) {
+                                            showToast("上传成功");
+                                            getActivity().finish();
+                                        } else {
+                                            showToast(rm.getMessage());
+                                        }
+                                    }
+                                }, new Consumer<Throwable>() {
+                                    @Override
+                                    public void accept(Throwable throwable) throws Exception {
+                                        showToast("解析失败");
+                                    }
+                                });
                     }
                 }).setParams(map)
                 .create();
@@ -189,7 +239,7 @@ public class Fragment_Expert_Species extends Fragment_base {
              */
 
             @SerializedName("TID")
-            private int TID;
+            private String TID;
             @SerializedName("TreeID")
             private String TreeID;
             @SerializedName("LeafShape")
@@ -204,8 +254,8 @@ public class Fragment_Expert_Species extends Fragment_base {
             private int FruitType;
             @SerializedName("FruitColor")
             private int FruitColor;
-            @SerializedName("PicPath")
-            private String PicPath;
+            @SerializedName("picPath")
+            private List<String> PicPath;
             @SerializedName("AreaID")
             private String AreaID;
             @SerializedName("IsCheck")
@@ -213,11 +263,11 @@ public class Fragment_Expert_Species extends Fragment_base {
             @SerializedName("CheckID")
             private String CheckID;
 
-            public int getTID() {
+            public String getTID() {
                 return TID;
             }
 
-            public void setTID(int TID) {
+            public void setTID(String TID) {
                 this.TID = TID;
             }
 
@@ -277,11 +327,11 @@ public class Fragment_Expert_Species extends Fragment_base {
                 this.FruitColor = FruitColor;
             }
 
-            public String getPicPath() {
+            public List<String> getPicPath() {
                 return PicPath;
             }
 
-            public void setPicPath(String PicPath) {
+            public void setPicPath(List<String> PicPath) {
                 this.PicPath = PicPath;
             }
 

@@ -1,9 +1,11 @@
 package com.xabaizhong.treemonistor.fragment;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -148,7 +150,7 @@ public class Fragment_setting extends Fragment_base {
         editor.commit();
     }
 
-    @OnClick({R.id.user_unlogin, R.id.user_logined})
+    @OnClick({R.id.user_unlogin, R.id.user_logined,R.id.text1})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.user_unlogin:
@@ -157,8 +159,33 @@ public class Fragment_setting extends Fragment_base {
             case R.id.user_logined:
                 startActivity(new Intent(getActivity(), Activity_userInfo.class));
                 break;
+            case R.id.text1:
+                exitDialog();
+                break;
         }
     }
+
+    private void exitDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog dialog = builder
+                .setTitle("警告")
+                .setMessage("确定要注销？")
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        startActivity(new Intent(getActivity(), Activity_login.class));
+                        getActivity().finish();
+                    }
+                }).create();
+        dialog.show();
+    }
+
 
     @Override
     public void onPause() {

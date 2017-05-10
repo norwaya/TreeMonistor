@@ -1,6 +1,7 @@
 package com.xabaizhong.treemonistor.activity.expert_zd;
 
 import android.content.Intent;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,6 +20,7 @@ import com.xabaizhong.treemonistor.base.Activity_base;
 import com.xabaizhong.treemonistor.contant.UserSharedField;
 import com.xabaizhong.treemonistor.service.AsyncTaskRequest;
 import com.xabaizhong.treemonistor.service.model.Expert_obtain_list;
+import com.xabaizhong.treemonistor.utils.RecycleViewDivider;
 
 import java.util.HashMap;
 import java.util.List;
@@ -26,6 +28,8 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static android.support.v7.widget.RecyclerView.VERTICAL;
 
 /**
  * Created by Administrator on 2017/4/24 0024.
@@ -46,6 +50,7 @@ public class Activity_expert_zd extends Activity_base implements XRecyclerView.L
     private void initialView() {
         initialAdapter();
         xRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        xRecyclerView.addItemDecoration(new RecycleViewDivider(this, VERTICAL, R.drawable.divider2));
         xRecyclerView.setPullRefreshEnabled(true);
         xRecyclerView.setLoadingListener(this);
         xRecyclerView.setAdapter(adapter);
@@ -98,9 +103,6 @@ public class Activity_expert_zd extends Activity_base implements XRecyclerView.L
                         Expert_obtain_list list = new Gson().fromJson(s, Expert_obtain_list.class);
                         if (list.getError_code() == 0) {
                             mList = list.getCheckinfolist();
-                            for (Expert_obtain_list.CheckinfolistBean bean : list.getCheckinfolist()) {
-                                Log.i(TAG, "execute: " + bean.getTID() + "\t" + bean.getCheckType());
-                            }
                             adapter.setSource(list.getCheckinfolist());
 
                         }
@@ -128,27 +130,46 @@ public class Activity_expert_zd extends Activity_base implements XRecyclerView.L
      */
     @Override
     public void bindView(ViewHolder holder, int position, List<Expert_obtain_list.CheckinfolistBean> list) {
-        holder.text1.setText(list.get(position).getTID() + "");
-        holder.text2.setText(list.get(position).getCheckType() + "");//list.get(position).getCheckType()
+        holder.text1.setText(getType(list.get(position).getAuthType()));
+        holder.text2.setText(list.get(position).getUserID());
+        holder.text3.setText(list.get(position).getDateTime().substring(0, 10));
+    }
+
+    private String getType(int type) {
+        String name = "";
+        switch (type) {
+            case 0:
+                name = "树种鉴定";
+                break;
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+        }
+        return name;
     }
 
 
     @Override
     public void onItemClickListener(View view, int position) {
         Intent i = new Intent(Activity_expert_zd.this, Activity_expert_zd_detail.class);
-        i.putExtra("type", mList.get(position).getCheckType());
-        i.putExtra("tid", mList.get(position).getTID());
+        i.putExtra("type", mList.get(position).getAuthType());
+        i.putExtra("tid", mList.get(position).getTid());
         startActivity(i);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView text1;
         TextView text2;
+        TextView text3;
 
         public ViewHolder(View itemView) {
             super(itemView);
             text1 = ((TextView) itemView.findViewById(R.id.text1));
             text2 = ((TextView) itemView.findViewById(R.id.text2));
+            text3 = ((TextView) itemView.findViewById(R.id.text3));
         }
     }
 

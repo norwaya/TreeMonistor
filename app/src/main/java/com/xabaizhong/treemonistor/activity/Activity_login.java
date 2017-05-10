@@ -1,6 +1,7 @@
 package com.xabaizhong.treemonistor.activity;
 
 import android.content.ComponentName;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -39,6 +40,10 @@ import java.util.Set;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by admin on 2017/3/3.
@@ -77,7 +82,7 @@ public class Activity_login extends Activity_base implements View.OnFocusChangeL
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
-        name.setText("test1");
+        name.setText("lz");
         pwd.setText("admin");
         initObserver();
         initView();
@@ -224,21 +229,35 @@ public class Activity_login extends Activity_base implements View.OnFocusChangeL
                 .setCallBack(new AsyncTaskRequest.CallBack() {
                     @Override
                     public void execute(String s) {
+                        Log.i(TAG, "execute: " + s);
                         pb.setVisibility(View.INVISIBLE);
-                        if (s == null || "-1".equals(s)) {
-                            Log.i(TAG, "onPostExecute: " + s);
-                        } else {
-                            Log.i(TAG, "onPostExecute: " + s);
-                            LoginResultMessage loginResult = new Gson().fromJson(s, LoginResultMessage.class);
-                            Log.i(TAG, "onPostExecute: " + loginResult.getMessage());
-                            if (loginResult.getError_code() == 0) {
-                                writerUserToFile(loginResult.getResult());
-                                finish();
-                            }
-
+                        if (s == null) {
+                            showToast("请检查您的网络");
+                            return;
                         }
+                        Observable.just(s)
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribeOn(Schedulers.io())
+                                .subscribe(new Consumer<String>() {
+                                    @Override
+                                    public void accept(String s) throws Exception {
+                                        LoginResultMessage loginResult = new Gson().fromJson(s, LoginResultMessage.class);
+                                        if (loginResult.getError_code() == 0) {
+                                            writerUserToFile(loginResult.getResult());
+                                            startActivity(new Intent(Activity_login.this, Activity_main.class));
+                                        }
+                                    }
+                                }, new Consumer<Throwable>() {
+                                    @Override
+                                    public void accept(Throwable throwable) throws Exception {
+                                        showToast("解析失败");
+                                    }
+                                });
                     }
-                }).create();
+                }).
+
+                        create();
+
     }
 
     /**

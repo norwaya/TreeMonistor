@@ -1,32 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:background="@android:color/white"
-                android:layout_height="match_parent">
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
 
     <ImageView
         android:id="@+id/activity_welcome_iv"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:src="@drawable/bz"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toTopOf="@id/parent"
+        app:layout_constraintEnd_toStartOf="@id/parent"
+        app:layout_constraintLeft_toRightOf="@id/parent"
+        app:layout_constraintTop_toBottomOf="@id/parent"
+        />
 
     <Button
         android:id="@+id/activity_welcome_btn"
-        android:layout_width="100dp"
-        android:layout_height="30dp"
-        android:layout_alignParentEnd="true"
-        android:layout_marginRight="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
         android:background="@android:color/transparent"
         android:text="@string/welcome_hint"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"/>
-    <TextView
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-        android:textAlignment="center"
-        android:text="welcome \n www.xabaizhong.com"
-        android:layout_centerInParent="true"
+        app:layout_constraintRight_toRightOf="@+id/parent"
+        app:layout_constraintTop_toTopOf="@+id/parent"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintTop_creator="1"/>
+
+    <TextView
+        android:id="@+id/textView2"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-</RelativeLayout>
+        android:layout_height="wrap_content"
+        android:text="welcome \n www.xabaizhong.com"
+        android:textAlignment="center"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+        app:layout_constraintBottom_toBottomOf="@+id/parent"
+        app:layout_constraintLeft_toLeftOf="@+id/parent"
+        app:layout_constraintRight_toRightOf="@+id/parent"
+        app:layout_constraintTop_toTopOf="@+id/parent"
+        app:layout_constraintVertical_bias="0.961"
+        tools:layout_constraintBottom_creator="1"
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintTop_creator="1"/>
+</android.support.constraint.ConstraintLayout>

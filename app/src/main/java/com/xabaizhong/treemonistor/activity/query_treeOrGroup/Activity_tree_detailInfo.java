@@ -23,6 +23,10 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by admin on 2017/2/28.
@@ -60,16 +64,33 @@ public class Activity_tree_detailInfo extends Activity_base {
 
             @Override
             protected void onPostExecute(String s) {
-                Log.i(TAG, "onPostExecute: "+s);
+                Log.i(TAG, "onPostExecute: " + s);
                 if (s == null) {
-                    showToast("请求错误");
+                    showToast("获取古树信息失败");
+                    return;
                 }
-                ResultMessage rm = new Gson().fromJson(s, ResultMessage.class);
-                if (rm.getErrorCode() == 0) {
-                    text1.setText(getTreeInfo(rm));
-                } else {
-                    text1.setText("获取古树信息失败");
-                }
+
+                Observable.just(s)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe(
+                                new Consumer<String>() {
+                                    @Override
+                                    public void accept(String s) throws Exception {
+                                        ResultMessage rm = new Gson().fromJson(s, ResultMessage.class);
+                                        if (rm.getErrorCode() == 0) {
+                                            text1.setText(getTreeInfo(rm));
+                                        } else {
+                                            showToast(rm.getMessage());
+                                        }
+                                    }
+                                },
+                                new Consumer<Throwable>() {
+                                    @Override
+                                    public void accept(Throwable throwable) throws Exception {
+                                        showToast("解析信息失败");
+                                    }
+                                });
             }
         }.execute();
     }
@@ -79,10 +100,16 @@ public class Activity_tree_detailInfo extends Activity_base {
       <TreeID>string</TreeID>
       <AreaID>string</AreaID>*/
     private Map<String, Object> getParms() {
+
+        /* <UserID>string</UserID>
+      <TreeType>int</TreeType>
+      <TreeID>string</TreeID>
+      <AreaID>string</AreaID>*/
+
         Map<String, Object> map = new HashMap<>();
         map.put("UserID", sharedPreferences.getString(UserSharedField.USERID, ""));
-        map.put("TreeType", "0");
-        map.put("TreeID", treeId.trim());
+        map.put("TreeType", 0);
+        map.put("TreeID", treeId);
         map.put("AreaID", sharedPreferences.getString(UserSharedField.AREAID, ""));
         return map;
     }
@@ -110,14 +137,15 @@ public class Activity_tree_detailInfo extends Activity_base {
 
     static class ResultMessage {
 
+
         /**
          * message : sus
          * error_code : 0
-         * treeid : 61032900001
-         * areaid : 610329
+         * treeid : 61011200010
+         * areaid : 610112
          * userid : test1
          * treetype : 0
-         * result : {"treeid":"61032900001","treearea":0,"treetype":1,"treespeid":"T00144","town":"酒房镇","village":"焦家沟村","smallname":"北丰头组殿院","ordinate":"107.652086","abscissa":"34.901403","specialcode":"1.30343016001302e+021","treeheight":13,"treeDBH":86,"crownavg":12,"crownew":8,"crownns":16,"managementunit":"酒房镇焦家沟村北丰头组","managementpersion":"周宝焕","treehistory":"历史不详","grownspace":"0","special":"1","growth":"1","enviorment":"1","slopepos":"中坡","enviorfactor":"(NULL)","specstatdesc":"柳树根部长一槐树，槐树胸径28厘米。","specdesc":"(NULL)","explain":"~/Image/TreeInfo/610000/610300/610329/61032900001","realage":"0","guessage":"500","evevation":"1278","Slope":"缓坡","Protected":"BH","Recovery":"YH","Owner":"2","TreeLevel":"2","TreeStatus":"4","UserID":"赵素侠 席永珍","RecordTime":"2016/8/22 0:00:00"}
+         * result : {"treeid":"61011200010","treearea":0,"treetype":2,"treespeid":"T00025","town":"2","village":"1","smallname":"丈八一路SOHO东南107米","ordinate":"108.89134199999988","abscissa":"34.201390077101095","specialcode":0,"treeheight":14.22,"treeDBH":14.11,"crownavg":21.1,"crownew":14.55,"crownns":14.44,"managementunit":"2828","managementpersion":"J2i2","treehistory":"2k2k","grownspace":"2","special":"2","growth":"3","enviorment":"2","slopepos":"4","enviorfactor":"Wkk2","specstatdesc":"Kwk2","specdesc":"K2k2","explain":"","realage":22.14,"guessage":14.55,"evevation":1.2,"Slope":"5","Protected":"BH12","Recovery":"YH12","Owner":"2","TreeLevel":"2","TreeStatus":"2","UserID":"test1","RecordTime":"2017/4/27 16:45:10","IVST":"0","TypeID":0,"Emphasis":0,"Audit":0,"AreaID":"610112"}
          */
 
         @SerializedName("message")
@@ -134,9 +162,11 @@ public class Activity_tree_detailInfo extends Activity_base {
         private int treetype;
         @SerializedName("result")
         private ResultBean result;
+
         public String getMessage() {
             return message;
         }
+
         public void setMessage(String message) {
             this.message = message;
         }
@@ -191,44 +221,49 @@ public class Activity_tree_detailInfo extends Activity_base {
 
         public static class ResultBean {
             /**
-             * treeid : 61032900001
+             * treeid : 61011200010
              * treearea : 0
-             * treetype : 1
-             * treespeid : T00144
-             * town : 酒房镇
-             * village : 焦家沟村
-             * smallname : 北丰头组殿院
-             * ordinate : 107.652086
-             * abscissa : 34.901403
-             * specialcode : 1.30343016001302e+021
-             * treeheight : 13
-             * treeDBH : 86
-             * crownavg : 12
-             * crownew : 8
-             * crownns : 16
-             * managementunit : 酒房镇焦家沟村北丰头组
-             * managementpersion : 周宝焕
-             * treehistory : 历史不详
-             * grownspace : 0
-             * special : 1
-             * growth : 1
-             * enviorment : 1
-             * slopepos : 中坡
-             * enviorfactor : (NULL)
-             * specstatdesc : 柳树根部长一槐树，槐树胸径28厘米。
-             * specdesc : (NULL)
-             * explain : ~/Image/TreeInfo/610000/610300/610329/61032900001
-             * realage : 0
-             * guessage : 500
-             * evevation : 1278
-             * Slope : 缓坡
-             * Protected : BH
-             * Recovery : YH
+             * treetype : 2
+             * treespeid : T00025
+             * town : 2
+             * village : 1
+             * smallname : 丈八一路SOHO东南107米
+             * ordinate : 108.89134199999988
+             * abscissa : 34.201390077101095
+             * specialcode : 0
+             * treeheight : 14.22
+             * treeDBH : 14.11
+             * crownavg : 21.1
+             * crownew : 14.55
+             * crownns : 14.44
+             * managementunit : 2828
+             * managementpersion : J2i2
+             * treehistory : 2k2k
+             * grownspace : 2
+             * special : 2
+             * growth : 3
+             * enviorment : 2
+             * slopepos : 4
+             * enviorfactor : Wkk2
+             * specstatdesc : Kwk2
+             * specdesc : K2k2
+             * explain :
+             * realage : 22.14
+             * guessage : 14.55
+             * evevation : 1.2
+             * Slope : 5
+             * Protected : BH12
+             * Recovery : YH12
              * Owner : 2
              * TreeLevel : 2
-             * TreeStatus : 4
-             * UserID : 赵素侠 席永珍
-             * RecordTime : 2016/8/22 0:00:00
+             * TreeStatus : 2
+             * UserID : test1
+             * RecordTime : 2017/4/27 16:45:10
+             * IVST : 0
+             * TypeID : 0
+             * Emphasis : 0
+             * Audit : 0
+             * AreaID : 610112
              */
 
             @SerializedName("treeid")
@@ -250,17 +285,17 @@ public class Activity_tree_detailInfo extends Activity_base {
             @SerializedName("abscissa")
             private String abscissa;
             @SerializedName("specialcode")
-            private String specialcode;
+            private int specialcode;
             @SerializedName("treeheight")
-            private int treeheight;
+            private double treeheight;
             @SerializedName("treeDBH")
-            private int treeDBH;
+            private double treeDBH;
             @SerializedName("crownavg")
-            private int crownavg;
+            private double crownavg;
             @SerializedName("crownew")
-            private int crownew;
+            private double crownew;
             @SerializedName("crownns")
-            private int crownns;
+            private double crownns;
             @SerializedName("managementunit")
             private String managementunit;
             @SerializedName("managementpersion")
@@ -286,11 +321,11 @@ public class Activity_tree_detailInfo extends Activity_base {
             @SerializedName("explain")
             private String explain;
             @SerializedName("realage")
-            private String realage;
+            private double realage;
             @SerializedName("guessage")
-            private String guessage;
+            private double guessage;
             @SerializedName("evevation")
-            private String evevation;
+            private double evevation;
             @SerializedName("Slope")
             private String Slope;
             @SerializedName("Protected")
@@ -307,6 +342,16 @@ public class Activity_tree_detailInfo extends Activity_base {
             private String UserID;
             @SerializedName("RecordTime")
             private String RecordTime;
+            @SerializedName("IVST")
+            private String IVST;
+            @SerializedName("TypeID")
+            private int TypeID;
+            @SerializedName("Emphasis")
+            private int Emphasis;
+            @SerializedName("Audit")
+            private int Audit;
+            @SerializedName("AreaID")
+            private String AreaID;
 
             public String getTreeid() {
                 return treeid;
@@ -380,51 +425,51 @@ public class Activity_tree_detailInfo extends Activity_base {
                 this.abscissa = abscissa;
             }
 
-            public String getSpecialcode() {
+            public int getSpecialcode() {
                 return specialcode;
             }
 
-            public void setSpecialcode(String specialcode) {
+            public void setSpecialcode(int specialcode) {
                 this.specialcode = specialcode;
             }
 
-            public int getTreeheight() {
+            public double getTreeheight() {
                 return treeheight;
             }
 
-            public void setTreeheight(int treeheight) {
+            public void setTreeheight(double treeheight) {
                 this.treeheight = treeheight;
             }
 
-            public int getTreeDBH() {
+            public double getTreeDBH() {
                 return treeDBH;
             }
 
-            public void setTreeDBH(int treeDBH) {
+            public void setTreeDBH(double treeDBH) {
                 this.treeDBH = treeDBH;
             }
 
-            public int getCrownavg() {
+            public double getCrownavg() {
                 return crownavg;
             }
 
-            public void setCrownavg(int crownavg) {
+            public void setCrownavg(double crownavg) {
                 this.crownavg = crownavg;
             }
 
-            public int getCrownew() {
+            public double getCrownew() {
                 return crownew;
             }
 
-            public void setCrownew(int crownew) {
+            public void setCrownew(double crownew) {
                 this.crownew = crownew;
             }
 
-            public int getCrownns() {
+            public double getCrownns() {
                 return crownns;
             }
 
-            public void setCrownns(int crownns) {
+            public void setCrownns(double crownns) {
                 this.crownns = crownns;
             }
 
@@ -524,27 +569,27 @@ public class Activity_tree_detailInfo extends Activity_base {
                 this.explain = explain;
             }
 
-            public String getRealage() {
+            public double getRealage() {
                 return realage;
             }
 
-            public void setRealage(String realage) {
+            public void setRealage(double realage) {
                 this.realage = realage;
             }
 
-            public String getGuessage() {
+            public double getGuessage() {
                 return guessage;
             }
 
-            public void setGuessage(String guessage) {
+            public void setGuessage(double guessage) {
                 this.guessage = guessage;
             }
 
-            public String getEvevation() {
+            public double getEvevation() {
                 return evevation;
             }
 
-            public void setEvevation(String evevation) {
+            public void setEvevation(double evevation) {
                 this.evevation = evevation;
             }
 
@@ -610,6 +655,46 @@ public class Activity_tree_detailInfo extends Activity_base {
 
             public void setRecordTime(String RecordTime) {
                 this.RecordTime = RecordTime;
+            }
+
+            public String getIVST() {
+                return IVST;
+            }
+
+            public void setIVST(String IVST) {
+                this.IVST = IVST;
+            }
+
+            public int getTypeID() {
+                return TypeID;
+            }
+
+            public void setTypeID(int TypeID) {
+                this.TypeID = TypeID;
+            }
+
+            public int getEmphasis() {
+                return Emphasis;
+            }
+
+            public void setEmphasis(int Emphasis) {
+                this.Emphasis = Emphasis;
+            }
+
+            public int getAudit() {
+                return Audit;
+            }
+
+            public void setAudit(int Audit) {
+                this.Audit = Audit;
+            }
+
+            public String getAreaID() {
+                return AreaID;
+            }
+
+            public void setAreaID(String AreaID) {
+                this.AreaID = AreaID;
             }
         }
     }

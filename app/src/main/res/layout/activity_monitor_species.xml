@@ -5,106 +5,119 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/submit"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="@dimen/activity_horizontal_margin"
-        android:background="@drawable/button_style_circle"
-        android:text="确定"/>
+        android:layout_height="match_parent">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/submit"
-        android:fitsSystemWindows="true">
-
-        <android.support.v7.widget.LinearLayoutCompat
+        <Button
+            android:id="@+id/submit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
-            android:background="@android:color/white"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:orientation="vertical">
+            android:layout_alignParentBottom="true"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:background="@drawable/button_style_circle"
+            android:text="确定"/>
 
-            <com.xabaizhong.treemonistor.myview.C_info_gather_item1
-                android:id="@+id/leaf"
-                style="@style/custom_edit_text_style"
-                app:left_text="树叶分类"
-                app:mid_font_color="@color/wx_green"
-                app:mid_text_hint="树叶分类"
-                app:mid_type="read"/>
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignBottom="@id/submit"
+            android:fitsSystemWindows="true">
 
-            <com.xabaizhong.treemonistor.myview.C_info_gather_item1
-                android:id="@+id/leaf_color"
-                style="@style/custom_edit_text_style"
-                app:left_text="树叶颜色"
-                app:mid_font_color="@color/wx_green"
-                app:mid_text_hint="树叶颜色"
-                app:mid_type="read"/>
-
-            <com.xabaizhong.treemonistor.myview.C_info_gather_item1
-                android:id="@+id/flower"
-                style="@style/custom_edit_text_style"
-                app:left_text="花"
-                app:mid_font_color="@color/wx_green"
-                app:mid_text_hint="花"
-                app:mid_type="read"/>
-
-            <com.xabaizhong.treemonistor.myview.C_info_gather_item1
-                android:id="@+id/flower_color"
-                style="@style/custom_edit_text_style"
-                app:left_text="花的颜色"
-                app:mid_font_color="@color/wx_green"
-                app:mid_text_hint="花的颜色"
-                app:mid_type="read"/>
-
-            <com.xabaizhong.treemonistor.myview.C_info_gather_item1
-                android:id="@+id/fruit"
-                style="@style/custom_edit_text_style"
-                app:left_text="果实"
-                app:mid_font_color="@color/wx_green"
-                app:mid_text_hint="果实"
-                app:mid_type="read"/>
-
-            <com.xabaizhong.treemonistor.myview.C_info_gather_item1
-                android:id="@+id/fruit_color"
-                style="@style/custom_edit_text_style"
-                app:left_text="果实颜色"
-                app:mid_font_color="@color/wx_green"
-                app:mid_text_hint="果实颜色"
-                app:mid_type="read"/>
-
-            <LinearLayout
-                android:visibility="gone"
-                android:id="@+id/layout_need_upload"
-                android:orientation="vertical"
+            <android.support.v7.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@android:color/white"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="vertical">
 
                 <com.xabaizhong.treemonistor.myview.C_info_gather_item1
-                    android:id="@+id/btn_image"
+                    android:id="@+id/leaf"
                     style="@style/custom_edit_text_style"
-                    app:left_text="选择照片"
+                    app:left_text="树叶分类"
                     app:mid_font_color="@color/wx_green"
-                    app:mid_text_hint="选择照片"
+                    app:mid_text_hint="树叶分类"
                     app:mid_type="read"/>
-            </LinearLayout>
-        </android.support.v7.widget.LinearLayoutCompat>
-    </ScrollView>
+
+                <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+                    android:id="@+id/leaf_color"
+                    style="@style/custom_edit_text_style"
+                    app:left_text="树叶颜色"
+                    app:mid_font_color="@color/wx_green"
+                    app:mid_text_hint="树叶颜色"
+                    app:mid_type="read"/>
+
+                <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+                    android:id="@+id/flower"
+                    style="@style/custom_edit_text_style"
+                    app:left_text="花"
+                    app:mid_font_color="@color/wx_green"
+                    app:mid_text_hint="花"
+                    app:mid_type="read"/>
+
+                <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+                    android:id="@+id/flower_color"
+                    style="@style/custom_edit_text_style"
+                    app:left_text="花的颜色"
+                    app:mid_font_color="@color/wx_green"
+                    app:mid_text_hint="花的颜色"
+                    app:mid_type="read"/>
+
+                <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+                    android:id="@+id/fruit"
+                    style="@style/custom_edit_text_style"
+                    app:left_text="果实"
+                    app:mid_font_color="@color/wx_green"
+                    app:mid_text_hint="果实"
+                    app:mid_type="read"/>
+
+                <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+                    android:id="@+id/fruit_color"
+                    style="@style/custom_edit_text_style"
+                    app:left_text="果实颜色"
+                    app:mid_font_color="@color/wx_green"
+                    app:mid_text_hint="果实颜色"
+                    app:mid_type="read"/>
+
+                <LinearLayout
+                    android:id="@+id/layout_need_upload"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+                        android:id="@+id/btn_image"
+                        style="@style/custom_edit_text_style"
+                        app:left_text="选择照片"
+                        app:mid_font_color="@color/wx_green"
+                        app:mid_text_hint="选择照片"
+                        app:mid_type="read"/>
+                </LinearLayout>
+            </android.support.v7.widget.LinearLayoutCompat>
+        </ScrollView>
+
+    </RelativeLayout>
+
 
     <RelativeLayout
+
         android:id="@+id/pb"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:alpha="0.7"
         android:visibility="invisible">
 
         <ProgressBar
+            style="@android:style/Widget.ProgressBar.Inverse"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"/>
     </RelativeLayout>
+
 </RelativeLayout>

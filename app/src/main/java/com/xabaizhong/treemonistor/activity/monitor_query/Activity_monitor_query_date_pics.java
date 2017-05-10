@@ -20,47 +20,25 @@ import com.xabaizhong.treemonistor.activity.Activity_image_noAction;
 import com.xabaizhong.treemonistor.adapter.Activity_monitor_query_dateList_pics_adapter;
 import com.xabaizhong.treemonistor.adapter.CommonRecyclerViewAdapter;
 import com.xabaizhong.treemonistor.base.Activity_base;
+import com.xabaizhong.treemonistor.contant.UserSharedField;
 import com.xabaizhong.treemonistor.service.AsyncTaskRequest;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 
-public class Activity_monitor_query_date_pics extends Activity_base implements CommonRecyclerViewAdapter.CallBack<Activity_monitor_query_date_pics.ViewHolder, String> {
-    @BindView(R.id.text0)
-    TextView text0;
+public class Activity_monitor_query_date_pics extends Activity_base implements CommonRecyclerViewAdapter.CallBack<Activity_monitor_query_date_pics.ViewHolder, Activity_monitor_query_date_pics.ListItem> {
     @BindView(R.id.rv0)
     RecyclerView rv0;
-    @BindView(R.id.layout0)
-    LinearLayout layout0;
-    @BindView(R.id.text1)
-    TextView text1;
-    @BindView(R.id.rv1)
-    RecyclerView rv1;
-    @BindView(R.id.layout1)
-    LinearLayout layout1;
-    @BindView(R.id.text2)
-    TextView text2;
-    @BindView(R.id.rv2)
-    RecyclerView rv2;
-    @BindView(R.id.layout2)
-    LinearLayout layout2;
-    @BindView(R.id.text3)
-    TextView text3;
-    @BindView(R.id.rv3)
-    RecyclerView rv3;
-    @BindView(R.id.layout3)
-    LinearLayout layout3;
-    @BindView(R.id.text4)
-    TextView text4;
-    @BindView(R.id.rv4)
-    RecyclerView rv4;
-    @BindView(R.id.layout4)
-    LinearLayout layout4;
 
 
     String treeId;
@@ -78,60 +56,35 @@ public class Activity_monitor_query_date_pics extends Activity_base implements C
     }
 
     Activity_monitor_query_dateList_pics_adapter adapter0;
-    Activity_monitor_query_dateList_pics_adapter adapter1;
-    Activity_monitor_query_dateList_pics_adapter adapter2;
-    Activity_monitor_query_dateList_pics_adapter adapter3;
-    Activity_monitor_query_dateList_pics_adapter adapter4;
 
     private void initialView() {
-        initLayout();
         initialAdapter();
         initialRecyclerView();
         request();
     }
 
-    private void initLayout() {
-        layout0.setVisibility(View.GONE);
-        layout1.setVisibility(View.GONE);
-        layout2.setVisibility(View.GONE);
-        layout3.setVisibility(View.GONE);
-        layout4.setVisibility(View.GONE);
-    }
 
     private void initialRecyclerView() {
         rv0.setLayoutManager(new GridLayoutManager(this, 3));
 
-        rv1.setLayoutManager(new GridLayoutManager(this, 3));
-        rv2.setLayoutManager(new GridLayoutManager(this, 3));
-        rv3.setLayoutManager(new GridLayoutManager(this, 3));
-        rv4.setLayoutManager(new GridLayoutManager(this, 3));
         rv0.setAdapter(adapter0);
-        rv1.setAdapter(adapter1);
-        rv2.setAdapter(adapter2);
-        rv3.setAdapter(adapter3);
-        rv4.setAdapter(adapter4);
+
     }
+
 
     private void initialAdapter() {
         adapter0 = new Activity_monitor_query_dateList_pics_adapter(this, R.layout.image_item);
-        adapter1 = new Activity_monitor_query_dateList_pics_adapter(this, R.layout.image_item);
-        adapter2 = new Activity_monitor_query_dateList_pics_adapter(this, R.layout.image_item);
-        adapter3 = new Activity_monitor_query_dateList_pics_adapter(this, R.layout.image_item);
-        adapter4 = new Activity_monitor_query_dateList_pics_adapter(this, R.layout.image_item);
         adapter0.setCallBack(this);
-        adapter1.setCallBack(this);
-        adapter2.setCallBack(this);
-        adapter3.setCallBack(this);
-        adapter4.setCallBack(this);
+
 
     }
 
     @Override
-    public void bindView(ViewHolder holder, int position, List<String> list) {
-        String uri = list.get(position);
-        String muri = "https://www.greenjsq.me/templates/green/images/user-rating-1.jpg";
-        holder.image1.setTag(muri);
-        Picasso.with(Activity_monitor_query_date_pics.this).load(Uri.parse(muri)).into(holder.image1);
+    public void bindView(ViewHolder holder, int position, List<Activity_monitor_query_date_pics.ListItem> list) {
+        Activity_monitor_query_date_pics.ListItem uri = list.get(position);
+        holder.image1.setTag(uri.url);
+        Picasso.with(Activity_monitor_query_date_pics.this).load(Uri.parse(uri.url)).into(holder.image1);
+        holder.text.setText(uri.directory);
     }
 
     @Override
@@ -158,70 +111,54 @@ public class Activity_monitor_query_date_pics extends Activity_base implements C
          <!--Optional:-->
          <tem:AreaID>5</tem:AreaID>*/
         Map<String, Object> map = new HashMap<>();
-        map.put("UserID", "");
-        map.put("TreeID", "");
-        map.put("UpDate", "2017-03-21");
-        map.put("AreaID", "");
-        AsyncTaskRequest.instance("DataQuerySys", "ImportTreelPicInfo")
+        map.put("UserID", sharedPreferences.getString(UserSharedField.USERID, ""));
+        map.put("TreeID", treeId);
+        map.put("RecordTime", date);
+        AsyncTaskRequest.instance("CheckUp", "QueryPicList_ImportantTree")
                 .setParams(map)
                 .setCallBack(new AsyncTaskRequest.CallBack() {
                     @Override
                     public void execute(String s) {
-                        Log.i(TAG, "execute: " + s);
-                        String result = "{\n" +
-                                "  \"treeId\": \"61032201\",\n" +
-                                "  \"UserID\": \"6100000001\",\n" +
-                                "  \"date\": \"2017-03-2113:46:24\",\n" +
-                                "  \"AreaID\": \"610329\",\n" +
-                                "  \"picinfo\": [\n" +
-                                "    {\n" +
-                                "      \"PicPlace\": 1,\n" +
-                                "      \"Explain\": \"213\",\n" +
-                                "      \"piclist\": [\n" +
-                                "        \"image\",\n" +
-                                "        \"image\"\n" +
-                                "      ]\n" +
-                                "    },\n" +
-                                "    {\n" +
-                                "      \"PicPlace\": 2,\n" +
-                                "      \"Explain\": \"213\",\n" +
-                                "      \"piclist\": [\n" +
-                                "        \"image\",\n" +
-                                "        \"image\"\n" +
-                                "      ]\n" +
-                                "    }\n" +
-                                "  ]\n" +
-                                "}";
-                        List<ResultMessage.PicinfoBean> list = new Gson().fromJson(result, ResultMessage.class).getPicinfo();
-                        for (ResultMessage.PicinfoBean bean : list) {
-                            switch (bean.getPicPlace()) {
-                                case 0:
-                                    layout0.setVisibility(View.VISIBLE);
-                                    text0.setText("全部");
-                                    adapter0.setSource(bean.getPiclist());
-                                    break;
-                                case 1:
-                                    layout1.setVisibility(View.VISIBLE);
-                                    text1.setText("方向：东");
-                                    adapter1.setSource(bean.getPiclist());
-                                    break;
-                                case 2:
-                                    layout2.setVisibility(View.VISIBLE);
-                                    text2.setText("方向：南");
-                                    adapter2.setSource(bean.getPiclist());
-                                    break;
-                                case 3:
-                                    layout3.setVisibility(View.VISIBLE);
-                                    text3.setText("方向：西");
-                                    adapter3.setSource(bean.getPiclist());
-                                    break;
-                                case 4:
-                                    layout4.setVisibility(View.VISIBLE);
-                                    text4.setText("方向：北");
-                                    adapter4.setSource(bean.getPiclist());
-                                    break;
-                            }
+//                        Log.i(TAG, "execute: " + s);
+                        if (s == null) {
+                            return;
                         }
+                        Observable.just(s)
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribeOn(Schedulers.io())
+                                .subscribe(new Consumer<String>() {
+                                    @Override
+                                    public void accept(String s) throws Exception {
+                                        ResultMessage rm = new Gson().fromJson(s, ResultMessage.class);
+                                        if (rm.getErrorCode() != 0) {
+                                            showToast("无返回数据");
+                                            finish();
+                                            return;
+                                        }
+                                        List<ResultMessage.ResultBean> list = rm.getResult();
+                                        if (list.size() == 0) {
+                                            showToast("数据被清空");
+                                            finish();
+                                            return;
+                                        }
+                                        List<ListItem> listItem = new ArrayList<ListItem>();
+                                        String[] directoryList = {"全部", "东方", "南方", "西方", "北方"};
+                                        for (ResultMessage.ResultBean bean : list) {
+                                            for (String url : bean.getPiclist()) {
+
+                                                listItem.add(new ListItem(directoryList[bean.getPicPlace()], url));
+                                            }
+                                        }
+                                        adapter0.setSource(listItem);
+                                    }
+                                }, new Consumer<Throwable>() {
+                                    @Override
+                                    public void accept(Throwable throwable) throws Exception {
+                                        showToast("数据类型错误");
+                                    }
+                                });
+
+
                     }
                 }).create();
 
@@ -230,79 +167,93 @@ public class Activity_monitor_query_date_pics extends Activity_base implements C
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView image1;
+        TextView text;
 
         public ViewHolder(View itemView) {
             super(itemView);
             image1 = ((ImageView) itemView.findViewById(R.id.image_item1));
+            text = ((TextView) itemView.findViewById(R.id.text));
         }
     }
 
+    public static class ListItem {
+        String directory;
+        String url;
+
+        public ListItem(String directory, String url) {
+            this.directory = directory;
+            this.url = url;
+        }
+    }
+
+
     public static class ResultMessage {
 
+
         /**
-         * treeId : 61032201
-         * UserID : 6100000001
-         * date : 2017-03-2113:46:24
-         * AreaID : 610329
-         * picinfo : [{"PicPlace":0,"Explain":"213","piclist":["image","image","image"]},{"PicPlace":1,"Explain":"213","piclist":["image","image","image"]},{"PicPlace":2,"Explain":"213","piclist":["image","image","image"]},{"PicPlace":3,"Explain":"213","piclist":["image","image","image"]},{"PicPlace":4,"Explain":"213","piclist":["image","image","image"]}]
+         * message : sus
+         * error_code : 0
+         * userID : test1
+         * treeID : 61011200010
+         * result : [{"PicPlace":0,"piclist":["http://192.168.0.118:8055/Image/UpTreeInfo/ImportTree/100000/610000/610100/610112/61011200010/20170321014624/0/1.jpg"],"Explain":"213"},{"PicPlace":1,"piclist":["http://192.168.0.118:8055/Image/UpTreeInfo/ImportTree/100000/610000/610100/610112/61011200010/20170321014624/1/1.jpg"],"Explain":"213"},{"PicPlace":2,"piclist":["http://192.168.0.118:8055/Image/UpTreeInfo/ImportTree/100000/610000/610100/610112/61011200010/20170321014624/2/1.jpg"],"Explain":"213"},{"PicPlace":3,"piclist":["http://192.168.0.118:8055/Image/UpTreeInfo/ImportTree/100000/610000/610100/610112/61011200010/20170321014624/3/1.jpg"],"Explain":"213"},{"PicPlace":4,"piclist":["http://192.168.0.118:8055/Image/UpTreeInfo/ImportTree/100000/610000/610100/610112/61011200010/20170321014624/4/1.jpg"],"Explain":"213"}]
          */
 
-        @SerializedName("treeId")
-        private String treeId;
-        @SerializedName("UserID")
-        private String UserID;
-        @SerializedName("date")
-        private String date;
-        @SerializedName("AreaID")
-        private String AreaID;
-        @SerializedName("picinfo")
-        private List<PicinfoBean> picinfo;
+        @SerializedName("message")
+        private String message;
+        @SerializedName("error_code")
+        private int errorCode;
+        @SerializedName("userID")
+        private String userID;
+        @SerializedName("treeID")
+        private String treeID;
+        @SerializedName("result")
+        private List<ResultBean> result;
 
-        public String getTreeId() {
-            return treeId;
+        public String getMessage() {
+            return message;
         }
 
-        public void setTreeId(String treeId) {
-            this.treeId = treeId;
+        public void setMessage(String message) {
+            this.message = message;
+        }
+
+        public int getErrorCode() {
+            return errorCode;
+        }
+
+        public void setErrorCode(int errorCode) {
+            this.errorCode = errorCode;
         }
 
         public String getUserID() {
-            return UserID;
+            return userID;
         }
 
-        public void setUserID(String UserID) {
-            this.UserID = UserID;
+        public void setUserID(String userID) {
+            this.userID = userID;
         }
 
-        public String getDate() {
-            return date;
+        public String getTreeID() {
+            return treeID;
         }
 
-        public void setDate(String date) {
-            this.date = date;
+        public void setTreeID(String treeID) {
+            this.treeID = treeID;
         }
 
-        public String getAreaID() {
-            return AreaID;
+        public List<ResultBean> getResult() {
+            return result;
         }
 
-        public void setAreaID(String AreaID) {
-            this.AreaID = AreaID;
+        public void setResult(List<ResultBean> result) {
+            this.result = result;
         }
 
-        public List<PicinfoBean> getPicinfo() {
-            return picinfo;
-        }
-
-        public void setPicinfo(List<PicinfoBean> picinfo) {
-            this.picinfo = picinfo;
-        }
-
-        public static class PicinfoBean {
+        public static class ResultBean {
             /**
              * PicPlace : 0
+             * piclist : ["http://192.168.0.118:8055/Image/UpTreeInfo/ImportTree/100000/610000/610100/610112/61011200010/20170321014624/0/1.jpg"]
              * Explain : 213
-             * piclist : ["image","image","image"]
              */
 
             @SerializedName("PicPlace")

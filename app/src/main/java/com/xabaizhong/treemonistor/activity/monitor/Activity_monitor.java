@@ -45,11 +45,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import me.nereo.multi_image_selector.MultiImageSelector;
 
-import static com.xabaizhong.treemonistor.activity.monitor.Activity_monitor.PicList.AllList;
-import static com.xabaizhong.treemonistor.activity.monitor.Activity_monitor.PicList.EastList;
-import static com.xabaizhong.treemonistor.activity.monitor.Activity_monitor.PicList.NorthList;
-import static com.xabaizhong.treemonistor.activity.monitor.Activity_monitor.PicList.SouthList;
-import static com.xabaizhong.treemonistor.activity.monitor.Activity_monitor.PicList.WestList;
+import static com.xabaizhong.treemonistor.activity.monitor.Activity_monitor.PicList;
 
 /**
  * Created by admin on 2017/2/28.
@@ -84,40 +80,40 @@ public class Activity_monitor extends Activity_base {
     RelativeLayout pbLayout;
 
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
-
         setContentView(R.layout.activity_monitor);
         initSource();
         ButterKnife.bind(this);
         initView();
     }
 
-    private void initSource() {
-        Map<String, Object> map = new HashMap<>();
-        map.put("UserID", sharedPreferences.getString(UserSharedField.USERID,""));
 
-        AsyncTaskRequest.instance("CheckUp","QueryTreeIDList_ImportantTree")
+    PicList picList;
+
+    private void initSource() {
+        picList = new PicList();
+        Map<String, Object> map = new HashMap<>();
+        map.put("UserID", sharedPreferences.getString(UserSharedField.USERID, ""));
+
+        AsyncTaskRequest.instance("CheckUp", "QueryTreeIDList_ImportantTree")
                 .setCallBack(new AsyncTaskRequest.CallBack() {
                     @Override
                     public void execute(String s) {
-                        Log.d(TAG, "execute: "+s);
-                            if(s == null){
-                                return;
-                            }
+                        Log.d(TAG, "execute: " + s);
+                        if (s == null) {
+                            return;
+                        }
                         ImportTreeList importTreeList = new Gson().fromJson(s, ImportTreeList.class);
-                        if(importTreeList.getErrorCode() == 0){
+                        if (importTreeList.getErrorCode() == 0) {
                             if (importTreeList.getResult().size() == 0) {
                                 showToast("没有分配可以监管的古树");
                                 finish();
-                            }else{
+                            } else {
                                 initSpinner(importTreeList.getResult());
                             }
-                        }else{
+                        } else {
                             showToast("没有分配可以监管的古树");
                             finish();
                         }
@@ -127,16 +123,15 @@ public class Activity_monitor extends Activity_base {
 
     boolean flag;
 
-    private void initSpinner(List<String> list){
+    private void initSpinner(List<String> list) {
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list);
         spinnerTreeList.setAdapter(arrayAdapter);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     }
+
     private void initView() {
-
-
         pbLayout.setOnClickListener(null);
-        pbLayout.setVisibility(View.GONE);
+        pbLayout.setVisibility(View.INVISIBLE);
         flag = true;
         rb1.setChecked(true);
         switchOn(true);
@@ -195,12 +190,12 @@ public class Activity_monitor extends Activity_base {
     String json;
 
     private boolean check() {
-        if (hasImage(PicList.AllList) &&
-                hasImage(PicList.EastList) &&
-                hasImage(PicList.WestList) &&
-                hasImage(PicList.SouthList) &&
-                hasImage(PicList.NorthList)) {
-            showToast("亲，您没有添加图片呦-_-");
+        if (hasImage(picList.AllList) &&
+                hasImage(picList.EastList) &&
+                hasImage(picList.WestList) &&
+                hasImage(picList.SouthList) &&
+                hasImage(picList.NorthList)) {
+            showToast("您没有添加图片呦");
             return false;
         }
         int position = spinnerTreeList.getSelectedItemPosition();
@@ -338,30 +333,30 @@ public class Activity_monitor extends Activity_base {
 
     private void scaleImages() {
         if (flag) {
-            if (PicList.EastList != null) {
-                for (int i = 0; i < PicList.EastList.size(); i++) {
-                    ScaleBitmap.getBitmap(PicList.EastList.get(i), "east" + i + ".png");
+            if (picList.EastList != null) {
+                for (int i = 0; i < picList.EastList.size(); i++) {
+                    ScaleBitmap.getBitmap(picList.EastList.get(i), "east" + i + ".png");
                 }
             }
-            if (PicList.WestList != null) {
-                for (int i = 0; i < PicList.WestList.size(); i++) {
-                    ScaleBitmap.getBitmap(PicList.WestList.get(i), "west" + i + ".png");
+            if (picList.WestList != null) {
+                for (int i = 0; i < picList.WestList.size(); i++) {
+                    ScaleBitmap.getBitmap(picList.WestList.get(i), "west" + i + ".png");
                 }
             }
-            if (PicList.SouthList != null) {
-                for (int i = 0; i < PicList.SouthList.size(); i++) {
-                    ScaleBitmap.getBitmap(PicList.SouthList.get(i), "south" + i + ".png");
+            if (picList.SouthList != null) {
+                for (int i = 0; i < picList.SouthList.size(); i++) {
+                    ScaleBitmap.getBitmap(picList.SouthList.get(i), "south" + i + ".png");
                 }
             }
-            if (PicList.NorthList != null) {
-                for (int i = 0; i < PicList.NorthList.size(); i++) {
-                    ScaleBitmap.getBitmap(PicList.NorthList.get(i), "north" + i + ".png");
+            if (picList.NorthList != null) {
+                for (int i = 0; i < picList.NorthList.size(); i++) {
+                    ScaleBitmap.getBitmap(picList.NorthList.get(i), "north" + i + ".png");
                 }
             }
         } else {
-            if (PicList.AllList != null) {
-                for (int i = 0; i < PicList.AllList.size(); i++) {
-                    ScaleBitmap.getBitmap(PicList.AllList.get(i), "all" + i + ".png");
+            if (picList.AllList != null) {
+                for (int i = 0; i < picList.AllList.size(); i++) {
+                    ScaleBitmap.getBitmap(picList.AllList.get(i), "all" + i + ".png");
                 }
             }
         }
@@ -389,13 +384,13 @@ public class Activity_monitor extends Activity_base {
                     showToast("请求错误,请检查网络是否正常");
                     return;
                 }
-                Log.i(TAG, "onPostExecute: "+s);
+                Log.i(TAG, "onPostExecute: " + s);
                 pbLayout.setVisibility(View.GONE);
                 ResultMessage resultMessage = new Gson().fromJson(s, ResultMessage.class);
                 if (resultMessage.getError_code() == 0) {
                     showToast(resultMessage.getMessage());
                     finish();
-                }else{
+                } else {
                     showToast(resultMessage.getMessage());
                 }
             }
@@ -430,22 +425,25 @@ public class Activity_monitor extends Activity_base {
     public void onLayoutClicked(View view) {
         switch (view.getId()) {
             case R.id.east:
-                selectPic(PicList.EastList, RquestCode.EASTCODE);
+                selectPic(picList.EastList, RquestCode.EASTCODE);
                 break;
             case R.id.west:
-                selectPic(PicList.WestList, RquestCode.WESTCDOE);
+                selectPic(picList.WestList, RquestCode.WESTCDOE);
                 break;
             case R.id.south:
-                selectPic(PicList.SouthList, RquestCode.SOUTHCODE);
+                selectPic(picList.SouthList, RquestCode.SOUTHCODE);
                 break;
             case R.id.north:
-                selectPic(PicList.NorthList, RquestCode.NORTHCODE);
+                selectPic(picList.NorthList, RquestCode.NORTHCODE);
                 break;
             case R.id.all:
-                selectPic(AllList, RquestCode.ALLCODE, 5);
+                selectPic(picList.AllList, RquestCode.ALLCODE, 5);
                 break;
         }
     }
+
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -455,35 +453,35 @@ public class Activity_monitor extends Activity_base {
         Log.i(TAG, "onActivityResult: " + requestCode + "\t" + resultCode + "\t" + data.hasExtra("select_result"));
         switch (requestCode) {
             case RquestCode.ALLCODE:
-                AllList = data.getStringArrayListExtra("select_result");
-                tvAll.setText(AllList == null ? "0" : AllList.size() + "");
+                picList.AllList = data.getStringArrayListExtra("select_result");
+                tvAll.setText(picList.AllList == null ? "0" : picList.AllList.size() + "");
                 break;
             case RquestCode.EASTCODE:
-                EastList = data.getStringArrayListExtra("select_result");
-                tvEast.setText(EastList == null ? "0" : EastList.size() + "");
+                picList.EastList = data.getStringArrayListExtra("select_result");
+                tvEast.setText(picList.EastList == null ? "0" : picList.EastList.size() + "");
                 break;
             case RquestCode.WESTCDOE:
-                WestList = data.getStringArrayListExtra("select_result");
-                tvWest.setText(WestList == null ? "0" : WestList.size() + "");
+                picList.WestList = data.getStringArrayListExtra("select_result");
+                tvWest.setText(picList.WestList == null ? "0" : picList.WestList.size() + "");
                 break;
             case RquestCode.SOUTHCODE:
-                SouthList = data.getStringArrayListExtra("select_result");
-                tvSouth.setText(SouthList == null ? "0" : SouthList.size() + "");
+                picList.SouthList = data.getStringArrayListExtra("select_result");
+                tvSouth.setText(picList.SouthList == null ? "0" : picList.SouthList.size() + "");
                 break;
             case RquestCode.NORTHCODE:
-                NorthList = data.getStringArrayListExtra("select_result");
-                tvNorth.setText(NorthList == null ? "0" : NorthList.size() + "");
+                picList.NorthList = data.getStringArrayListExtra("select_result");
+                tvNorth.setText(picList.NorthList == null ? "0" : picList.NorthList.size() + "");
                 break;
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
     public static class PicList {
-        public static ArrayList<String> EastList = new ArrayList<>();
-        public static ArrayList<String> WestList = new ArrayList<>();
-        public static ArrayList<String> SouthList = new ArrayList<>();
-        public static ArrayList<String> NorthList = new ArrayList<>();
-        public static ArrayList<String> AllList = new ArrayList<>();
+        public ArrayList<String> EastList = new ArrayList<>();
+        public ArrayList<String> WestList = new ArrayList<>();
+        public ArrayList<String> SouthList = new ArrayList<>();
+        public ArrayList<String> NorthList = new ArrayList<>();
+        public ArrayList<String> AllList = new ArrayList<>();
 
     }
 
@@ -494,7 +492,8 @@ public class Activity_monitor extends Activity_base {
         int NORTHCODE = 32;
         int ALLCODE = 458;
     }
-    public static class ImportTreeList{
+
+    public static class ImportTreeList {
 
         /**
          * message : sus

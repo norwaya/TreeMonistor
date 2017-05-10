@@ -51,30 +51,79 @@ public class Expert_obtain_list {
 
     public static class CheckinfolistBean {
         /**
-         * TID : 1
-         * treeid :  61032900001
-         * CheckType : 0
+         * DateTime : 2017-04-14 04:39:22
+         * AuthType : 0
+         * UserID : test1
+         * Tid : 14
          */
 
+        @SerializedName("DateTime")
+        private String DateTime;
+        @SerializedName("AuthType")
+        private int AuthType;
+        @SerializedName("UserID")
+        private String UserID;
         @SerializedName("Tid")
-        private int TID;
-        @SerializedName("Type")
-        private int CheckType;
+        private String Tid;
 
-        public int getTID() {
-            return TID;
+        public String getDateTime() {
+            return DateTime;
         }
 
-        public void setTID(int TID) {
-            this.TID = TID;
+        public void setDateTime(String DateTime) {
+            this.DateTime = DateTime;
         }
 
-        public int getCheckType() {
-            return CheckType;
+        public int getAuthType() {
+            return AuthType;
         }
 
-        public void setCheckType(int CheckType) {
-            this.CheckType = CheckType;
+        public void setAuthType(int AuthType) {
+            this.AuthType = AuthType;
         }
+
+        public String getUserID() {
+            return UserID;
+        }
+
+        public void setUserID(String UserID) {
+            this.UserID = UserID;
+        }
+
+        public String getTid() {
+            return Tid;
+        }
+
+        public void setTid(String Tid) {
+            this.Tid = Tid;
+        }
+
+//        /**
+//         * TID : 1
+//         * treeid :  61032900001
+//         * CheckType : 0
+//         */
+//
+//        @SerializedName("Tid")
+//        private String TID;
+//        @SerializedName("Type")
+//        private int CheckType;
+//
+//        public String getTID() {
+//            return TID;
+//        }
+//
+//        public void setTID(String TID) {
+//            this.TID = TID;
+//        }
+//
+//        public int getCheckType() {
+//            return CheckType;
+//        }
+//
+//        public void setCheckType(int CheckType) {
+//            this.CheckType = CheckType;
+//        }
+
     }
 }
