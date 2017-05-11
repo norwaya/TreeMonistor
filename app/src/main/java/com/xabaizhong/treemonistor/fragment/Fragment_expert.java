@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
@@ -33,8 +34,10 @@ import com.xabaizhong.treemonistor.utils.RecycleViewDivider;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -75,10 +78,23 @@ public class Fragment_expert extends Fragment_base {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_expert, container, false);
-        ButterKnife.bind(this, view);
+        Set<String> set = sharedPreferences.getStringSet(UserSharedField.ROLEID, new HashSet<String>());
+        List<String> roles = new ArrayList<>();
+        roles.addAll(set);
+        View view = null;
+        if(roles.contains("3")){
 
-        initView();
+            view = inflater.inflate(R.layout.fragment_expert, container, false);
+            ButterKnife.bind(this, view);
+
+            initView();
+
+        }else{
+            view = inflater.inflate(R.layout.simple_text, container, false);
+            TextView text = (TextView) view.findViewById(R.id.text1);
+            text.setText("此用户不具备该权限，无法使用此功能");
+            showToast("此用户不具备该权限，无法使用此功能");
+        }
         return view;
     }
 

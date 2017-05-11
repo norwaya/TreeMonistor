@@ -5,10 +5,10 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -19,7 +19,7 @@ import com.xabaizhong.treemonistor.entity.Tree;
 import com.xabaizhong.treemonistor.entity.TreeSpecial;
 import com.xabaizhong.treemonistor.entity.TreeTypeInfo;
 import com.xabaizhong.treemonistor.myview.C_dialog_checkbox;
-import com.xabaizhong.treemonistor.myview.C_dialog_date;
+import com.xabaizhong.treemonistor.myview.DateDialog;
 import com.xabaizhong.treemonistor.myview.C_dialog_radio;
 import com.xabaizhong.treemonistor.myview.C_info_gather_item1;
 import com.xabaizhong.treemonistor.service.WebserviceHelper;
@@ -28,12 +28,8 @@ import com.xabaizhong.treemonistor.utils.FileUtil;
 import com.xabaizhong.treemonistor.utils.MessageEvent;
 import com.xabaizhong.treemonistor.utils.RxBus;
 import com.xabaizhong.treemonistor.utils.ScaleBitmap;
-import com.xabaizhong.treemonistor.utils.TreeGroupOp;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.net.ConnectException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -55,8 +51,6 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.nereo.multi_image_selector.MultiImageSelector;
 import me.nereo.multi_image_selector.MultiImageSelectorActivity;
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
 
 import static com.xabaizhong.treemonistor.activity.add_tree.Activity_add_tree.ResultCode.REQUEST_CODE_ASPECT;
 import static com.xabaizhong.treemonistor.activity.add_tree.Activity_add_tree.ResultCode.REQUEST_CODE_CNAME;
@@ -64,7 +58,6 @@ import static com.xabaizhong.treemonistor.activity.add_tree.Activity_add_tree.Re
 import static com.xabaizhong.treemonistor.activity.add_tree.Activity_add_tree.ResultCode.REQUEST_CODE_GROWSPACE;
 import static com.xabaizhong.treemonistor.activity.add_tree.Activity_add_tree.ResultCode.REQUEST_CODE_GROWTH;
 import static com.xabaizhong.treemonistor.activity.add_tree.Activity_add_tree.ResultCode.REQUEST_CODE_GSBZ;
-import static com.xabaizhong.treemonistor.activity.add_tree.Activity_add_tree.ResultCode.REQUEST_CODE_LEVEL;
 import static com.xabaizhong.treemonistor.activity.add_tree.Activity_add_tree.ResultCode.REQUEST_CODE_OWNER;
 import static com.xabaizhong.treemonistor.activity.add_tree.Activity_add_tree.ResultCode.REQUEST_CODE_PROTECTED;
 import static com.xabaizhong.treemonistor.activity.add_tree.Activity_add_tree.ResultCode.REQUEST_CODE_RECOVERY;
@@ -88,16 +81,18 @@ public class Activity_add_tree extends Activity_base {
     C_info_gather_item1 treeId;
     @BindView(R.id.tch)
     C_info_gather_item1 tch;
-    @BindView(R.id.tcr)
-    C_info_gather_item1 tcr;
+    /* @BindView(R.id.tcr)
+     C_info_gather_item1 tcr;*/
     @BindView(R.id.research_date)
     C_info_gather_item1 researchDate;
     @BindView(R.id.region)
     C_info_gather_item1 region;
     @BindView(R.id.detail_address)
     C_info_gather_item1 detailAddress;
+
     @BindView(R.id.cname)
     C_info_gather_item1 cname;
+
     @BindView(R.id.alias)
     C_info_gather_item1 alias;
     @BindView(R.id.height)
@@ -106,6 +101,9 @@ public class Activity_add_tree extends Activity_base {
     C_info_gather_item1 dbh;
     @BindView(R.id.age)
     C_info_gather_item1 age;
+
+
+
     @BindView(R.id.crownEW)
     C_info_gather_item1 crownEW;
     @BindView(R.id.crownNS)
@@ -154,7 +152,6 @@ public class Activity_add_tree extends Activity_base {
     Button btn;
     @BindView(R.id.layout)
     CoordinatorLayout layout;
-
     Tree tree = new Tree();
     TreeTypeInfo treeTypeInfo = new TreeTypeInfo();
     @BindView(R.id.grow_space)
@@ -162,15 +159,23 @@ public class Activity_add_tree extends Activity_base {
     @BindView(R.id.tree_area)
     C_info_gather_item1 treeArea;
 
+    @BindView(R.id.layout_pb)
+    RelativeLayout layoutPb;
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
         ButterKnife.bind(this);
         init();
+
     }
 
     private void init() {
+
+        layoutPb.setOnClickListener(null);
+        layoutPb.setVisibility(View.INVISIBLE);
         initCallBack();
     }
 
@@ -330,19 +335,101 @@ public class Activity_add_tree extends Activity_base {
         try {
             fillTree();
         } catch (Exception e) {
-
+            showToast(e.getMessage());
         }
         String checkResult = check();
         if (checkResult == null) {
-            //deal with pic
-//            saveTree();
+            layoutPb.setVisibility(View.VISIBLE);
             checkLevel();
             upload();
         } else {
             showToast(checkResult);
         }
     }
-
+    String check() {
+        if (!treeId.getText().matches("\\d{11}")) {
+            return "古树编号为 11 位";
+        }
+        if (!tch.getText().matches("\\d{5}")) {
+            return "调查号为5位数字";
+        }
+        if (!researchDate.getText().matches("\\w{4}-\\w{2}-\\w{2}")) {
+            return "请选择日期";
+        }
+        if (region.getText().equals("") || detailAddress.getText().equals("")) {
+            return "请完善地理信息";
+        }
+        if (cname.getText().equals("")) {
+            return "选择树种类";
+        }
+        if (height.getText().equals("")) {
+            return "请填写树高";
+        }
+        if (dbh.getText().equals("")) {
+            return "请填写胸径";
+        }
+        if (age.getText().equals("")) {
+            return "请填写树龄";
+        }
+        if (crownEW.getText().equals("")) {
+            return "请填写东西冠幅";
+        }
+        if (crownNS.getText().equals("")) {
+            return "请填写南北冠幅";
+        }
+        if (growth.getText().equals("")) {
+            return "请选择生长势";
+        }
+        if (environment.getText().equals("")) {
+            return "请选择生长环境";
+        }
+        if (status.getText().equals("")) {
+            return "请选择状况";
+        }
+        if (special.getText().equals("")) {
+            return "请选择散生群状";
+        }
+        if (gsbz.getText().equals("")) {
+            return "请选择古树标志";
+        }
+        if (owner.getText().equals("")) {
+            return "请选择权属";
+        }
+        if (growSpace.getText().equals("")) {
+            return "请选择生长场所";
+        }
+        if (treeArea.getText().equals("")) {
+            return "请选择生长地";
+        }
+        if (aspect.getText().equals("")) {
+            return "请选择坡向";
+        }
+        if (slope.getText().equals("")) {
+            return "请选择坡度";
+        }
+        if (slopePos.getText().equals("")) {
+            return "请选择坡位";
+        }
+        if (soil.getText().equals("")) {
+            return "请选择土壤";
+        }
+        if (protect.getText().equals("")) {
+            return "请选择保护现状";
+        }
+        if (recovery.getText().equals("")) {
+            return "请选择养护现状";
+        }
+        if (managerPerson.equals("") && mangerUnit.equals("")) {
+            return "管护单位和管护人不能同时为空";
+        }
+        if (environmentFactor.equals("")) {
+            return "请填写环境因素";
+        }
+        if (history.equals("")) {
+            return "请填写历史因素";
+        }
+        return null;
+    }
     private void checkLevel() {
 
         int treeAge = (int) tree.getRealAge();
@@ -393,7 +480,7 @@ public class Activity_add_tree extends Activity_base {
 
             @Override
             public void onError(Throwable e) {
-
+                layoutPb.setVisibility(View.INVISIBLE);
             }
 
             @Override
@@ -440,16 +527,32 @@ public class Activity_add_tree extends Activity_base {
 
             @Override
             protected void onPostExecute(String s) {
+                layoutPb.setVisibility(View.INVISIBLE);
                 if (s == null) {
                     showToast("请求错误");
                     return;
                 }
-                ResultMessage msg = new Gson().fromJson(s, ResultMessage.class);
-                Log.i(TAG, "onPostExecute: " + msg.getMessage());
-                if (msg.getError_code() == 0) {
-                    showToast("古树信息上传成功.");
-                    Activity_add_tree.this.finish();
-                }
+                Observable.just(s)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe(new Consumer<String>() {
+                                       @Override
+                                       public void accept(String s) throws Exception {
+                                           ResultMessage msg = new Gson().fromJson(s, ResultMessage.class);
+                                           if (msg.getError_code() == 0) {
+                                               showToast("古树信息上传成功.");
+                                               Activity_add_tree.this.finish();
+                                           } else {
+                                               showToast(msg.getMessage());
+                                           }
+                                       }
+                                   },
+                                new Consumer<Throwable>() {
+                                    @Override
+                                    public void accept(Throwable throwable) throws Exception {
+                                        showToast("解析失败");
+                                    }
+                                });
             }
         }.execute();
     }
@@ -458,30 +561,11 @@ public class Activity_add_tree extends Activity_base {
     private Map<String, Object> getParms() {
         Map<String, Object> map = new HashMap<>();
         String user_id = sharedPreferences.getString(UserSharedField.USERID, "");
-        Log.i(TAG, "getParms: "+user_id.length());
+        Log.i(TAG, "getParms: " + user_id.length());
         map.put("UserID", user_id.trim());
         map.put("TreeType", 0);
         map.put("JsonStr", json);
         return map;
-    }
-
-
-    String check() {
-        String typeResult = treeTypeInfo.check();
-        if (typeResult != null)
-            return typeResult;
-
-        String treeResult = tree.check();
-        if (treeResult != null)
-            return treeResult;
-        return null;
-
-    }
-
-
-    private void saveTree() {
-//        initDao();
-        /*save();*/
     }
 
 
@@ -514,7 +598,6 @@ public class Activity_add_tree extends Activity_base {
         tree.setEnviorFactor(environmentFactor.getText());
         tree.setSpecStatDesc(specStatDesc.getText());
         tree.setSpecDesc(specDesc.getText());
-
 
 
         tree.setUserID(userId());
@@ -708,8 +791,8 @@ public class Activity_add_tree extends Activity_base {
     }
 
     public void showDateDialog() {
-        C_dialog_date dateDialog = new C_dialog_date(this);
-        dateDialog.setDateDialogListener(new C_dialog_date.DateDialogListener() {
+        DateDialog dateDialog = new DateDialog(this);
+        dateDialog.setDateDialogListener(new DateDialog.DateDialogListener() {
             @Override
             public void getDate(Date date) {
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -718,7 +801,6 @@ public class Activity_add_tree extends Activity_base {
                 tree.setDate(date);
             }
         });
-        dateDialog.show();
     }
 
 

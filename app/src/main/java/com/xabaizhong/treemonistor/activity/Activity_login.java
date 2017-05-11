@@ -82,8 +82,6 @@ public class Activity_login extends Activity_base implements View.OnFocusChangeL
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
-        name.setText("lz");
-        pwd.setText("admin");
         initObserver();
         initView();
     }
@@ -324,6 +322,7 @@ public class Activity_login extends Activity_base implements View.OnFocusChangeL
         editor.putStringSet(UserSharedField.ROLEID, set);
         editor.putString(UserSharedField.AREAID, user.getAreaID());
         editor.putString(UserSharedField.REALNAME, user.getRealName());
+
         editor.apply();
         editor.commit();
     }

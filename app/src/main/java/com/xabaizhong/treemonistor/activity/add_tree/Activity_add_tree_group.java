@@ -16,8 +16,9 @@ import com.xabaizhong.treemonistor.R;
 import com.xabaizhong.treemonistor.base.Activity_base;
 import com.xabaizhong.treemonistor.contant.UserSharedField;
 import com.xabaizhong.treemonistor.entity.TreeGroup;
+import com.xabaizhong.treemonistor.entity.TreeSpecial;
 import com.xabaizhong.treemonistor.entity.TreeTypeInfo;
-import com.xabaizhong.treemonistor.myview.C_dialog_date;
+import com.xabaizhong.treemonistor.myview.DateDialog;
 import com.xabaizhong.treemonistor.myview.C_dialog_radio;
 import com.xabaizhong.treemonistor.myview.C_info_gather_item1;
 import com.xabaizhong.treemonistor.myview.DynamicView;
@@ -61,10 +62,9 @@ public class Activity_add_tree_group extends Activity_base {
     private static final int REQUEST_IMAGE = 0x100;
     ArrayList<String> list;
     Disposable disposable;
+
     @BindView(R.id.tree_id)
     C_info_gather_item1 treeId;
-    @BindView(R.id.research_persion)
-    C_info_gather_item1 researchPersion;
     @BindView(R.id.research_date)
     C_info_gather_item1 researchDate;
     @BindView(R.id.region)
@@ -208,7 +208,11 @@ public class Activity_add_tree_group extends Activity_base {
         int REQUEST_CODE_ASPECT = 0x103;
         int REQUEST_CODE_SLOPE = 0x104;
         int REQUEST_CODE_SOIL = 0x105;
+
+
     }
+
+    public static final int REQUEST_CODE_TREESPECIES = 0x105;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -232,6 +236,13 @@ public class Activity_add_tree_group extends Activity_base {
                 }
 
                 break;
+            case REQUEST_CODE_TREESPECIES:
+                TreeSpecial tree = data.getParcelableExtra("special");
+                if (tree != null) {
+                    Log.i(TAG, "onActivityResult: " + tree.getCname());
+                    treeMap.setMapViewValue(tree);
+                }
+                break;
             default:
                 break;
         }
@@ -245,11 +256,12 @@ public class Activity_add_tree_group extends Activity_base {
         } catch (Exception e) {
 
         }
-        if (check() == null) {
+        String checkStr = check();
+        if (checkStr == null) {
             layoutPb.setVisibility(View.VISIBLE);
             upload();
         } else {
-
+            showToast(checkStr);
         }
     }
 
@@ -267,7 +279,7 @@ public class Activity_add_tree_group extends Activity_base {
 
             @Override
             public void onError(Throwable e) {
-
+                layoutPb.setVisibility(View.INVISIBLE);
             }
 
             @Override
@@ -315,19 +327,34 @@ public class Activity_add_tree_group extends Activity_base {
             protected void onPostExecute(String s) {
                 layoutPb.setVisibility(View.INVISIBLE);
                 if (s == null) {
-                    Log.i(TAG, "onPostExecute: error");
+                    showToast("请求出现错误，连接服务器失败");
                     return;
                 }
-                ResultMessage msg = new Gson().fromJson(s, ResultMessage.class);
-                Log.i(TAG, "onPostExecute: " + msg.getMessage());
-                if (msg.getError_code() == 0) {
-                    showToast("suc");
-                }
+                Observable.just(s)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe(new Consumer<String>() {
+                                       @Override
+                                       public void accept(String s) throws Exception {
+                                           ResultMessage msg = new Gson().fromJson(s, ResultMessage.class);
+                                           Log.i(TAG, "onPostExecute: " + msg.getMessage());
+                                           if (msg.getError_code() == 0) {
+                                               showToast("suc");
+                                           } else {
+                                                showToast(msg.getMessage());
+                                           }
+                                       }
+                                   },
+                                new Consumer<Throwable>() {
+                                    @Override
+                                    public void accept(Throwable throwable) throws Exception {
+                                        showToast("解析失败");
+                                    }
+                                });
+
             }
         }.execute();
     }
-
-
     private Map<String, Object> getParms() {
         Map<String, Object> map = new HashMap<>();
         String user_id = sharedPreferences.getString(UserSharedField.USERID, "");
@@ -350,6 +377,66 @@ public class Activity_add_tree_group extends Activity_base {
     }
 
     private String check() {
+        if (!treeId.getText().matches("\\d{8}")) {
+            return "古树群编号位 8 位数字（6位地区编号+2位序号）";
+        }
+        if (researchDate.getText().equals("")) {
+            return "选择调查日期";
+        }
+        if (region.getText().equals("")) {
+            return "请选择地理信息";
+        }
+        if (gSTreeNum.getText().equals("")) {
+            return "请填写古树数量";
+        }
+        if (mainTreeName.getText().equals("")) {
+            return "请填写主要树种";
+        }
+        if (szjx.getText().equals("")) {
+            return "请填写四至界限";
+        }
+        if (yBDInfo.getText().equals("")) {
+            return "请填写郁闭度";
+        }
+        if (xiaMuDensity.getText().equals("")) {
+            return "请填写下木密度";
+        }
+        if (xiaMuType.getText().equals("")) {
+            return "请填写下木种类";
+        }
+        if (dBWDensity.getText().equals("")) {
+            return "请填写地被物密度";
+        }
+        if (dBWType.getText().equals("")) {
+            return "请填写地被物种类";
+        }
+        if (slope.getText().equals("")) {
+            return "请选择坡度";
+        }
+        if (aspect.getText().equals("")) {
+            return "请选择坡向";
+        }
+        if (averageAge.getText().equals("")) {
+            return "请填写平均树龄";
+        }
+        if (averageDiameter.getText().equals("")) {
+            return "请填写平均胸径";
+        }
+        if (averageHeight.getText().equals("")) {
+            return "请填写平均树高";
+        }
+        if (soil.getText().equals("")) {
+            return "请选择土壤种类";
+        }
+        if (soilHeight.getText().equals("")) {
+            return "请填写土壤厚度";
+        }
+        if (area.getText().equals("")) {
+            return "请填写面积";
+        }
+        if (managementUnit.getText().equals("")) {
+            return "请填写管护单位";
+        }
         return null;
     }
 
@@ -398,8 +485,8 @@ public class Activity_add_tree_group extends Activity_base {
     }
 
     public void showDateDialog() {
-        C_dialog_date dateDialog = new C_dialog_date(this);
-        dateDialog.setDateDialogListener(new C_dialog_date.DateDialogListener() {
+        DateDialog dateDialog = new DateDialog(this);
+        dateDialog.setDateDialogListener(new DateDialog.DateDialogListener() {
             @Override
             public void getDate(Date date) {
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -408,7 +495,6 @@ public class Activity_add_tree_group extends Activity_base {
                 treeGroup.setDate(date);
             }
         });
-        dateDialog.show();
     }
 
     @Override

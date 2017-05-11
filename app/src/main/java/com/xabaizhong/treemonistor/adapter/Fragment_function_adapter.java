@@ -27,12 +27,15 @@ public class Fragment_function_adapter extends RecyclerView.Adapter<Fragment_fun
     private LayoutInflater inflater;
     private Context context;
 
+    private List<String> permissions = new ArrayList<>();
+
     public Fragment_function_adapter(Context context) {
         this.context = context;
         inflater = LayoutInflater.from(context);
     }
 
-    public void setResource(List<Integer> images, List<String> items) {
+    public void setResource(List<String> permissions,List<Integer> images, List<String> items) {
+        this.permissions = permissions;
         this.imageIdList = images;
         this.itemList = items;
         notifyDataSetChanged();
@@ -50,20 +53,54 @@ public class Fragment_function_adapter extends RecyclerView.Adapter<Fragment_fun
         //权限控制 ，根据权限 控制显示的功能选项
 //        boolean flag = position != 2;
 //        if (flag) {
-            Picasso.with(context)
-                    .load(imageIdList.get(position))
-                    .into(holder.iv);
-            holder.tv.setText(itemList.get(position));
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(onItemClickListener!=null)
-                        onItemClickListener.onItemClick(v,position);
-                }
-            });
+        Picasso.with(context)
+                .load(imageIdList.get(position))
+                .into(holder.iv);
+        holder.tv.setText(itemList.get(position));
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (onItemClickListener != null)
+                    onItemClickListener.onItemClick(v, position);
+            }
+        });
 //        }
 //        holder.setVisibility(flag);
-        holder.setVisibility(true);
+        switch (position) {
+            case 0:
+                if (permissions.contains("3"))
+                    holder.setVisibility(true);
+                else
+                    holder.setVisibility(false);
+                break;
+            case 1:
+                if (permissions.contains("3"))
+                    holder.setVisibility(true);
+                else
+                    holder.setVisibility(false);
+                break;
+            case 2:
+                if (permissions.contains("50"))
+                    holder.setVisibility(true);
+                else
+                    holder.setVisibility(false);
+                break;
+            case 3:
+                if (permissions.contains("3")||permissions.contains("50"))
+                    holder.setVisibility(true);
+                else
+                    holder.setVisibility(false);
+                break;
+            case 4:
+                if (permissions.contains("40"))
+                    holder.setVisibility(true);
+                else
+                    holder.setVisibility(false);
+                break;
+            default:
+                holder.setVisibility(true);
+                break;
+        }
 
     }
 

@@ -23,9 +23,15 @@ import com.xabaizhong.treemonistor.activity.query_treeOrGroup.Activity_query_tre
 import com.xabaizhong.treemonistor.adapter.Fragment_function_adapter;
 import com.xabaizhong.treemonistor.adapter.HeaderAndFooterWrapper;
 import com.xabaizhong.treemonistor.base.Fragment_base;
+import com.xabaizhong.treemonistor.contant.UserSharedField;
 import com.xabaizhong.treemonistor.utils.RecycleViewDivider;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -75,7 +81,17 @@ public class Fragment_function extends Fragment_base implements Fragment_functio
 
         String[] contentArray = mContext.getResources().getStringArray(R.array.function_array);
 
-        function_adapter.setResource(Arrays.asList(
+        Set<String> set = sharedPreferences.getStringSet(UserSharedField.ROLEID, new HashSet<String>());
+        List<String> roles = new ArrayList<>();
+        roles.addAll(set);
+        for (String str:roles
+             ) {
+            Log.i(TAG, "initView: "+str);
+        }
+        Log.i(TAG, "initView: "+roles.contains("50"));
+        Log.i(TAG, "initView: "+roles.contains("40"));
+        Log.i(TAG, "initView: "+roles.contains("3"));
+        function_adapter.setResource(roles,Arrays.asList(
                 R.drawable.ic_fragment_functin_tree,
                 R.drawable.ic_fragment_function_query,
                 R.drawable.ic_fragment_function_monistor,

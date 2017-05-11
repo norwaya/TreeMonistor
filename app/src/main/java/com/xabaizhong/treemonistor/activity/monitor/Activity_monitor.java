@@ -401,10 +401,12 @@ public class Activity_monitor extends Activity_base {
     private Map<String, Object> getParms() {
         Map<String, Object> map = new HashMap<>();
         String user_id = sharedPreferences.getString(UserSharedField.USERID, "");
+        String area_id = sharedPreferences.getString(UserSharedField.AREAID, "");
 
         map.put("UserID ", user_id);
         map.put("TreeType", 1);
         map.put("JsonStr", json);
+        map.put("AreaID",area_id);
         return map;
     }
 

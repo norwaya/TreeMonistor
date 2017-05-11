@@ -1,6 +1,8 @@
 package com.xabaizhong.treemonistor.myview;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
@@ -9,11 +11,16 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.xabaizhong.treemonistor.R;
+import com.xabaizhong.treemonistor.activity.add_tree.Activity_add_tree_group;
+import com.xabaizhong.treemonistor.activity.add_tree.Activity_tree_cname;
+import com.xabaizhong.treemonistor.entity.TreeSpecial;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,13 +37,14 @@ import butterknife.ButterKnife;
 public class DynamicView extends LinearLayout {
 
     List<MapView> list = new ArrayList<>();
-
+    MapView currentMapView;
     Context context;
+
 
     public DynamicView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         this.context = context;
-        MapView mapView = new MapView(context, true);
+        MapView mapView = new MapView(context, true, this);
         mapView.setCallback(new MapView.Callback() {
             @Override
             public void onClickListener(View v) {
@@ -46,6 +54,10 @@ public class DynamicView extends LinearLayout {
 
         list.add(mapView);
         addView(mapView.getView());
+    }
+
+    public void setMapViewValue(TreeSpecial treeSpecial) {
+        currentMapView.setValue(treeSpecial);
     }
 
     public List<Map<String, Object>> getTreeMap() {
@@ -61,7 +73,7 @@ public class DynamicView extends LinearLayout {
     }
 
     private void addItem() {
-        final MapView mapView = new MapView(context, false);
+        final MapView mapView = new MapView(context, false, this);
         mapView.setCallback(new MapView.Callback() {
             @Override
             public void onClickListener(View v) {
@@ -81,20 +93,27 @@ public class DynamicView extends LinearLayout {
     }
 
 
-    static class MapView {
+    public static class MapView {
         LayoutInflater inflater;
         private Callback callback;
         Context context;
 
-        public MapView(Context context, boolean tag) {
+        DynamicView dynamicView;
+
+        public MapView(Context context, boolean tag, DynamicView dynamicView) {
             this.context = context;
             this.tag = tag;
             inflater = LayoutInflater.from(context);
+            this.dynamicView = dynamicView;
             initItem();
         }
 
         boolean tag;
 
+        public void setValue(TreeSpecial treeSpecial) {
+            viewHolder.name.setText(treeSpecial.getCname());
+            viewHolder.code.setText(treeSpecial.getTreeSpeId());
+        }
 
         public void setCallback(Callback callback) {
             this.callback = callback;
@@ -119,16 +138,25 @@ public class DynamicView extends LinearLayout {
                     }
                 }
             });
+            viewHolder.name.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((Activity) context).startActivityForResult(new Intent(context, Activity_tree_cname.class),
+                            Activity_add_tree_group.REQUEST_CODE_TREESPECIES);
+                    dynamicView.currentMapView = MapView.this;
+                }
+            });
 
         }
 
-        public Map<String, Object> getKV() {
+        private Map<String, Object> getKV() {
             Map<String, Object> map = null;
-            String name = viewHolder.name.getText().toString();
+            String name = viewHolder.code.getText().toString();
             String num = viewHolder.num.getText().toString();
             if (!TextUtils.isEmpty(name) && !TextUtils.isEmpty(num)) {
                 map = new HashMap<>();
                 try {
+                    System.out.println(name + "\t" + num);
                     map.put("name", name);
                     map.put("num", Integer.parseInt(num));
                 } catch (Exception e) {
@@ -142,13 +170,15 @@ public class DynamicView extends LinearLayout {
             return view;
         }
 
-        public interface Callback {
+        private interface Callback {
             void onClickListener(View v);
         }
 
         static class ViewHolder {
             @BindView(R.id.name)
-            EditText name;
+            Button name;
+            @BindView(R.id.tree_code)
+            TextView code;
             @BindView(R.id.num)
             EditText num;
             @BindView(R.id.btn)

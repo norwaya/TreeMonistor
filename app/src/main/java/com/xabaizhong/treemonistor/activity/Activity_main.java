@@ -416,7 +416,7 @@ public class Activity_main extends Activity_base implements MyRadio.OnRadioCheck
             List<ActivityManager.RunningServiceInfo> serviceList = activityManager
                     .getRunningServices(30);
 
-            if (!(serviceList.size() > 0)) {
+            if ((serviceList.size() <= 0)) {
                 return false;
             }
 

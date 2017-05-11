@@ -7,13 +7,16 @@
     android:gravity="center_vertical"
     android:orientation="horizontal">
 
-    <EditText
+    <Button
         android:hint="树种"
         android:id="@+id/name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="5"/>
-
+    <TextView
+        android:id="@+id/tree_code"
+        android:layout_width="0dp"
+        android:layout_height="0dp"/>
     <EditText
         android:hint="数量"
         android:id="@+id/num"
