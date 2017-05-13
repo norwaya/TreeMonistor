@@ -3,14 +3,24 @@ package com.xabaizhong.treemonistor.entity;
 
 import com.google.gson.annotations.SerializedName;
 
+import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.Index;
+import org.greenrobot.greendao.annotation.ToMany;
+import org.greenrobot.greendao.annotation.Transient;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
+import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.DaoException;
+@Entity(indexes = {
+        @Index(value = "id DESC", unique = true)
+})
 public class TreeGroup {
+    @Id
     private Long id;
-
     private String treeId = "";
     private String placeName = "";           //	地点
     private String mainTreeName = "";   //	主要树种
@@ -40,10 +50,67 @@ public class TreeGroup {
     private String explain = "";//	照片及说明
     private Date date;
 
+    @ToMany(referencedJoinProperty = "treeGroup_id")
+    private List<TreeMap> treeMaps;
+
+    @Transient
     private List<Map<String, Object>> treeMap;
     @SerializedName("piclist")
+    @Transient
     private List<String> picList = new ArrayList<>();
     private String UserID;
+    /** Used to resolve relations */
+    @Generated(hash = 2040040024)
+    private transient DaoSession daoSession;
+    /** Used for active entity operations. */
+    @Generated(hash = 153211498)
+    private transient TreeGroupDao myDao;
+
+    @Generated(hash = 1293141976)
+    public TreeGroup(Long id, String treeId, String placeName, String mainTreeName,
+            String SZJX, double area, double gSTreeNum, double averageHeight,
+            double averageDiameter, double averageAge, double yBDInfo,
+            String evevation, String aspect, double slope, String soilName,
+            double soilHeight, String xiaMuType, double xiaMuDensity,
+            String dBWType, double dBWDensity, String managementUnit,
+            String managementState, String aimsTree, String aimsFamily,
+            String aimsBelong, String rWJYInfo, String suggest, String explain,
+            Date date, String UserID) {
+        this.id = id;
+        this.treeId = treeId;
+        this.placeName = placeName;
+        this.mainTreeName = mainTreeName;
+        this.SZJX = SZJX;
+        this.area = area;
+        this.gSTreeNum = gSTreeNum;
+        this.averageHeight = averageHeight;
+        this.averageDiameter = averageDiameter;
+        this.averageAge = averageAge;
+        this.yBDInfo = yBDInfo;
+        this.evevation = evevation;
+        this.aspect = aspect;
+        this.slope = slope;
+        this.soilName = soilName;
+        this.soilHeight = soilHeight;
+        this.xiaMuType = xiaMuType;
+        this.xiaMuDensity = xiaMuDensity;
+        this.dBWType = dBWType;
+        this.dBWDensity = dBWDensity;
+        this.managementUnit = managementUnit;
+        this.managementState = managementState;
+        this.aimsTree = aimsTree;
+        this.aimsFamily = aimsFamily;
+        this.aimsBelong = aimsBelong;
+        this.rWJYInfo = rWJYInfo;
+        this.suggest = suggest;
+        this.explain = explain;
+        this.date = date;
+        this.UserID = UserID;
+    }
+
+    @Generated(hash = 1161991029)
+    public TreeGroup() {
+    }
 
     public Date getDate() {
         return date;
@@ -300,5 +367,116 @@ public class TreeGroup {
 
     public void setPicList(List<String> picList) {
         this.picList = picList;
+    }
+
+    public double getGSTreeNum() {
+        return this.gSTreeNum;
+    }
+
+    public void setGSTreeNum(double gSTreeNum) {
+        this.gSTreeNum = gSTreeNum;
+    }
+
+    public double getYBDInfo() {
+        return this.yBDInfo;
+    }
+
+    public void setYBDInfo(double yBDInfo) {
+        this.yBDInfo = yBDInfo;
+    }
+
+    public String getDBWType() {
+        return this.dBWType;
+    }
+
+    public void setDBWType(String dBWType) {
+        this.dBWType = dBWType;
+    }
+
+    public double getDBWDensity() {
+        return this.dBWDensity;
+    }
+
+    public void setDBWDensity(double dBWDensity) {
+        this.dBWDensity = dBWDensity;
+    }
+
+    public String getRWJYInfo() {
+        return this.rWJYInfo;
+    }
+
+    public void setRWJYInfo(String rWJYInfo) {
+        this.rWJYInfo = rWJYInfo;
+    }
+
+    /**
+     * To-many relationship, resolved on first access (and after reset).
+     * Changes to to-many relations are not persisted, make changes to the target entity.
+     */
+    @Generated(hash = 601427714)
+    public List<TreeMap> getTreeMaps() {
+        if (treeMaps == null) {
+            final DaoSession daoSession = this.daoSession;
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            TreeMapDao targetDao = daoSession.getTreeMapDao();
+            List<TreeMap> treeMapsNew = targetDao._queryTreeGroup_TreeMaps(id);
+            synchronized (this) {
+                if (treeMaps == null) {
+                    treeMaps = treeMapsNew;
+                }
+            }
+        }
+        return treeMaps;
+    }
+
+    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
+    @Generated(hash = 946287398)
+    public synchronized void resetTreeMaps() {
+        treeMaps = null;
+    }
+
+    /**
+     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#delete(Object)}.
+     * Entity must attached to an entity context.
+     */
+    @Generated(hash = 128553479)
+    public void delete() {
+        if (myDao == null) {
+            throw new DaoException("Entity is detached from DAO context");
+        }
+        myDao.delete(this);
+    }
+
+    /**
+     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#refresh(Object)}.
+     * Entity must attached to an entity context.
+     */
+    @Generated(hash = 1942392019)
+    public void refresh() {
+        if (myDao == null) {
+            throw new DaoException("Entity is detached from DAO context");
+        }
+        myDao.refresh(this);
+    }
+
+    /**
+     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#update(Object)}.
+     * Entity must attached to an entity context.
+     */
+    @Generated(hash = 713229351)
+    public void update() {
+        if (myDao == null) {
+            throw new DaoException("Entity is detached from DAO context");
+        }
+        myDao.update(this);
+    }
+
+    /** called by internal mechanisms, do not call yourself. */
+    @Generated(hash = 961300266)
+    public void __setDaoSession(DaoSession daoSession) {
+        this.daoSession = daoSession;
+        myDao = daoSession != null ? daoSession.getTreeGroupDao() : null;
     }
 }

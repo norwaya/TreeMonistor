@@ -44,15 +44,16 @@
 
                 <com.xabaizhong.treemonistor.myview.C_info_gather_item1
                     android:id="@+id/tch"
+                    app:input_type="number"
                     style="@style/custom_edit_text_style"
                     app:left_text="调查号"
                     app:mid_text_hint="调查号"/>
 
-              <!--  <com.xabaizhong.treemonistor.myview.C_info_gather_item1
-                    android:id="@+id/tcr"
-                    style="@style/custom_edit_text_style"
-                    app:left_text="调查人"
-                    app:mid_text_hint="调查人"/>-->
+                <!--  <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+                      android:id="@+id/tcr"
+                      style="@style/custom_edit_text_style"
+                      app:left_text="调查人"
+                      app:mid_text_hint="调查人"/>-->
 
                 <com.xabaizhong.treemonistor.myview.C_info_gather_item1
                     android:id="@+id/research_date"
@@ -67,14 +68,31 @@
                     style="@style/custom_edit_text_style"
                     app:left_text="地区信息"
                     app:mid_font_color="@color/wx_green"
-                    app:mid_text_hint="省市县"
-                    app:mid_type="read"/>
+                    app:mid_text_hint="XX省XX市XX县"
+                    app:mid_type="read"
+                    app:right_icon="@drawable/text_right"
+                    app:right_type="button"/>
 
                 <com.xabaizhong.treemonistor.myview.C_info_gather_item1
                     android:id="@+id/detail_address"
                     style="@style/custom_edit_text_style"
                     app:left_text="详细信息"
                     app:mid_text_hint="[乡镇][村]街道"/>
+                // 经度
+
+                <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+                    android:id="@+id/longitude"
+                    style="@style/custom_edit_text_style"
+                    app:input_type="decimal"
+                    app:left_text="经度"
+                    app:mid_text_hint="经度 示例: 108.891298"/>
+
+                <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+                    android:id="@+id/latitude"
+                    style="@style/custom_edit_text_style"
+                    app:input_type="decimal"
+                    app:left_text="纬度"
+                    app:mid_text_hint="纬度 示例: 34.201424"/>
 
                 <com.xabaizhong.treemonistor.myview.C_info_gather_item1
                     android:id="@+id/cname"
@@ -308,14 +326,18 @@
                     app:mid_type="read"/>
             </LinearLayout>
         </ScrollView>
+
         <RelativeLayout
             android:id="@+id/layout_pb"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true">
+
             <ProgressBar
-                android:layout_centerInParent="true"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"/>
         </RelativeLayout>
     </RelativeLayout>
 

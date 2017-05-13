@@ -14,14 +14,20 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.xabaizhong.treemonistor.R;
 import com.xabaizhong.treemonistor.base.Activity_base;
+import com.xabaizhong.treemonistor.base.App;
 import com.xabaizhong.treemonistor.contant.UserSharedField;
+import com.xabaizhong.treemonistor.entity.DaoSession;
+import com.xabaizhong.treemonistor.entity.Pic;
+import com.xabaizhong.treemonistor.entity.PicDao;
 import com.xabaizhong.treemonistor.entity.Tree;
+import com.xabaizhong.treemonistor.entity.TreeDao;
 import com.xabaizhong.treemonistor.entity.TreeSpecial;
 import com.xabaizhong.treemonistor.entity.TreeTypeInfo;
+import com.xabaizhong.treemonistor.entity.TreeTypeInfoDao;
 import com.xabaizhong.treemonistor.myview.C_dialog_checkbox;
-import com.xabaizhong.treemonistor.myview.DateDialog;
 import com.xabaizhong.treemonistor.myview.C_dialog_radio;
 import com.xabaizhong.treemonistor.myview.C_info_gather_item1;
+import com.xabaizhong.treemonistor.myview.DateDialog;
 import com.xabaizhong.treemonistor.service.WebserviceHelper;
 import com.xabaizhong.treemonistor.service.model.ResultMessage;
 import com.xabaizhong.treemonistor.utils.FileUtil;
@@ -45,6 +51,7 @@ import butterknife.OnClick;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
@@ -75,24 +82,20 @@ import static com.xabaizhong.treemonistor.activity.add_tree.Activity_add_tree.Re
  */
 
 public class Activity_add_tree extends Activity_base {
-    ArrayList<String> list;
+    ArrayList<String> mList;
 
     @BindView(R.id.tree_id)
     C_info_gather_item1 treeId;
     @BindView(R.id.tch)
     C_info_gather_item1 tch;
-    /* @BindView(R.id.tcr)
-     C_info_gather_item1 tcr;*/
     @BindView(R.id.research_date)
     C_info_gather_item1 researchDate;
     @BindView(R.id.region)
     C_info_gather_item1 region;
     @BindView(R.id.detail_address)
     C_info_gather_item1 detailAddress;
-
     @BindView(R.id.cname)
     C_info_gather_item1 cname;
-
     @BindView(R.id.alias)
     C_info_gather_item1 alias;
     @BindView(R.id.height)
@@ -101,9 +104,6 @@ public class Activity_add_tree extends Activity_base {
     C_info_gather_item1 dbh;
     @BindView(R.id.age)
     C_info_gather_item1 age;
-
-
-
     @BindView(R.id.crownEW)
     C_info_gather_item1 crownEW;
     @BindView(R.id.crownNS)
@@ -152,28 +152,49 @@ public class Activity_add_tree extends Activity_base {
     Button btn;
     @BindView(R.id.layout)
     CoordinatorLayout layout;
-    Tree tree = new Tree();
-    TreeTypeInfo treeTypeInfo = new TreeTypeInfo();
     @BindView(R.id.grow_space)
     C_info_gather_item1 growSpace;
     @BindView(R.id.tree_area)
     C_info_gather_item1 treeArea;
-
     @BindView(R.id.layout_pb)
     RelativeLayout layoutPb;
-
+    @BindView(R.id.longitude)
+    C_info_gather_item1 longitude;
+    @BindView(R.id.latitude)
+    C_info_gather_item1 latitude;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
         ButterKnife.bind(this);
+        initResoutce();
         init();
+    }
+
+    Tree tree;
+    TreeTypeInfo treeTypeInfo = new TreeTypeInfo();
+
+    private void initResoutce() {
+
+        long id = getIntent().getLongExtra("id", -1);
+        if (id == -1) {
+            tree = new Tree();
+            treeTypeInfo = new TreeTypeInfo();
+        } else {
+            initViews();
+        }
+    }
+
+    /**
+     * 数据库 -> views
+     */
+    private void initViews() {
+
 
     }
 
     private void init() {
-
         layoutPb.setOnClickListener(null);
         layoutPb.setVisibility(View.INVISIBLE);
         initCallBack();
@@ -214,11 +235,13 @@ public class Activity_add_tree extends Activity_base {
                 showRadioDialog(REQUEST_CODE_ENVIRONMENT);
             }
         });
-        //地区信息
-        region.setCallback_mid(new C_info_gather_item1.Mid_CallBack() {
+
+        region.setCallback_right(new C_info_gather_item1.Right_CallBack() {
             @Override
-            public void onClickListener(View et) {
+            public void onClickListener(View view) {
+                Log.i(TAG, "onClickListener: right icon onclick");
                 startActivityForResult(new Intent(Activity_add_tree.this, Activity_map.class), REQUEST_CODE_REGION);
+
             }
         });
         status.setCallback_mid(new C_info_gather_item1.Mid_CallBack() {
@@ -316,9 +339,6 @@ public class Activity_add_tree extends Activity_base {
 
     }
 
-    private void initCNameDialog() {
-
-    }
 
     private void selectPic() {
         MultiImageSelector.create(getApplicationContext())
@@ -326,7 +346,7 @@ public class Activity_add_tree extends Activity_base {
                 .count(4) // max select image size, 9 by default. used width #.multi()
                 .single() // single mode
                 .multi() // multi mode, default mode;
-                .origin(list) // original select data set, used width #.multi()
+                .origin(mList) // original select data set, used width #.multi()
                 .start(Activity_add_tree.this, REQUEST_IMAGE);
     }
 
@@ -339,13 +359,53 @@ public class Activity_add_tree extends Activity_base {
         }
         String checkResult = check();
         if (checkResult == null) {
-            layoutPb.setVisibility(View.VISIBLE);
             checkLevel();
-            upload();
+            saveDao();
+            showToast("保存成功");
+            restartActivity();
+
+//            layoutPb.setVisibility(View.VISIBLE);
+           /* checkLevel();
+            upload();*/
         } else {
             showToast(checkResult);
         }
     }
+
+    private void restartActivity() {
+
+        startActivity(new Intent(this, Activity_add_tree.class));
+        finish();
+    }
+
+    /**
+     * save bean to database
+     */
+    private void saveDao() {
+        initDaoSession();
+        treeDao.save(tree);
+        treeTypeInfo.setTreeTableID(tree.getId());
+        treeTypeInfoDao.save(treeTypeInfo);
+        Log.i(TAG, "saveDao: "+treeTypeInfo.getId() +"\t"+tree.getId());
+        Pic pic;
+        for (String str : mList) {
+            pic = new Pic(null, tree.getId(), str);
+            picDao.save(pic);
+        }
+    }
+
+    PicDao picDao;
+    TreeDao treeDao;
+    TreeTypeInfoDao treeTypeInfoDao;
+
+    private void initDaoSession() {
+        DaoSession daoSession = ((App) getApplication()).getDaoSession();
+        picDao = daoSession.getPicDao();
+        treeDao = daoSession.getTreeDao();
+        treeTypeInfoDao = daoSession.getTreeTypeInfoDao();
+
+    }
+
     String check() {
         if (!treeId.getText().matches("\\d{11}")) {
             return "古树编号为 11 位";
@@ -358,6 +418,9 @@ public class Activity_add_tree extends Activity_base {
         }
         if (region.getText().equals("") || detailAddress.getText().equals("")) {
             return "请完善地理信息";
+        }
+        if(latitude.getText().equals("")||longitude.getText().equals("")){
+            return "经纬度不能为空";
         }
         if (cname.getText().equals("")) {
             return "选择树种类";
@@ -430,6 +493,7 @@ public class Activity_add_tree extends Activity_base {
         }
         return null;
     }
+
     private void checkLevel() {
 
         int treeAge = (int) tree.getRealAge();
@@ -467,7 +531,7 @@ public class Activity_add_tree extends Activity_base {
 
     private void upload() {
 
-        io.reactivex.Observer<Object> observer = new io.reactivex.Observer<Object>() {
+        Observer<Object> observer = new Observer<Object>() {
             @Override
             public void onSubscribe(Disposable d) {
 
@@ -496,10 +560,10 @@ public class Activity_add_tree extends Activity_base {
             @Override
             public void subscribe(ObservableEmitter<Object> e) throws Exception {
                 FileUtil.clearFileDir();
-                if (list != null)
-                    for (int i = 0; i < list.size(); i++) {
+                if (mList != null)
+                    for (int i = 0; i < mList.size(); i++) {
                         Log.i(TAG, "subscribe: image" + i);
-                        ScaleBitmap.getBitmap(list.get(i), "image" + i + ".png");
+                        ScaleBitmap.getBitmap(mList.get(i), "image" + i + ".png");
                         Log.i(TAG, "subscribe: complete" + i);
                     }
                 e.onComplete();
@@ -579,8 +643,9 @@ public class Activity_add_tree extends Activity_base {
         treeTypeInfo.setTree(tree);
         treeTypeInfo.setTreeId(id);
         treeTypeInfo.setIvst(tch.getText());
-//        treeTypeInfo.setRecoredPerson(tcr.getText());
 
+        tree.setAbscissa(latitude.getText());
+        tree.setOrdinate(longitude.getText());
         tree.setTreeHeight(Double.parseDouble(height.getText()));
         tree.setTreeDBH(Integer.parseInt(dbh.getText()));
         String strCrownEW = crownEW.getText();
@@ -671,10 +736,10 @@ public class Activity_add_tree extends Activity_base {
 
             case REQUEST_IMAGE:
                 if (resultCode == RESULT_OK) {
-                    // Get the result list of select image paths
-                    list = data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
+                    // Get the result mList of select image paths
+                    mList = data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
                     // do your logic ....
-                    pic.setText(list.size() + "");
+                    pic.setText(mList.size() + "");
                 }
             case REQUEST_CODE_REGION:
                 if (resultCode == 100) {
@@ -684,6 +749,8 @@ public class Activity_add_tree extends Activity_base {
 
                         region.setText(box.getProvince() + box.getCity() + box.getDistrict());
                         detailAddress.setText(box.getStreet() + box.getSematicDescription());
+                        latitude.setText(box.getLat()+"");
+                        longitude.setText(box.getLon()+"");
                         tree.setSmallName(box.getStreet() + box.getSematicDescription());
                         tree.setAbscissa(box.getLat() + "");
                         tree.setOrdinate(box.getLon() + "");

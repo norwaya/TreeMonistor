@@ -97,7 +97,7 @@ public class C_info_gather_item1 extends LinearLayout {
                 listener = new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.d(TAG, "onClick: ");
+                        Log.d(TAG, "onClick: " +(callback_right == null));
                         if (callback_right != null)
                             callback_right.onClickListener(v);
                     }
@@ -234,6 +234,9 @@ public class C_info_gather_item1 extends LinearLayout {
                     Log.d(TAG, "onClick: layout onclick");
                     if (callback_mid != null)
                         callback_mid.onClickListener(v);
+                    if(callback_right != null){
+                        callback_right.onClickListener(v);
+                    }
                 }
             });
         left = (TextView) view.findViewById(R.id.left);

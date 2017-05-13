@@ -219,7 +219,7 @@ public class Activity_add_tree_group extends Activity_base {
         switch (requestCode) {
             case Result_Code.REQUEST_IMAGE:
                 if (resultCode == RESULT_OK) {
-                    // Get the result list of select image paths
+                    // Get the result mList of select image paths
                     list = data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
                     // do your logic ....
                     explain.setText(list.size() + "");
@@ -341,7 +341,7 @@ public class Activity_add_tree_group extends Activity_base {
                                            if (msg.getError_code() == 0) {
                                                showToast("suc");
                                            } else {
-                                                showToast(msg.getMessage());
+                                               showToast(msg.getMessage());
                                            }
                                        }
                                    },
@@ -355,6 +355,7 @@ public class Activity_add_tree_group extends Activity_base {
             }
         }.execute();
     }
+
     private Map<String, Object> getParms() {
         Map<String, Object> map = new HashMap<>();
         String user_id = sharedPreferences.getString(UserSharedField.USERID, "");
@@ -443,6 +444,8 @@ public class Activity_add_tree_group extends Activity_base {
     String json;
 
     private void fillData() {
+
+
         treeTypeInfo.setTypeId(1);
 //        treeTypeInfo.setRecoredPerson(researchPersion.getText());
         treeTypeInfo.setTreeId(treeId.getText());
@@ -457,7 +460,7 @@ public class Activity_add_tree_group extends Activity_base {
         treeGroup.setrWJYInfo(rWJYInfo.getText());
         treeGroup.setSuggest(suggest.getText());
         treeTypeInfo.setTreeGroup(treeGroup);
-        treeTypeInfo.setAreaId("610322");
+        treeTypeInfo.setAreaId(areaId());
         treeGroup.setUserID(userId());
         treeGroup.setTreeId(sharedPreferences.getString(UserSharedField.USERID, ""));
         treeGroup.setgSTreeNum(Double.parseDouble(gSTreeNum.getText()));
@@ -472,6 +475,9 @@ public class Activity_add_tree_group extends Activity_base {
 
     private String userId() {
         return sharedPreferences.getString(UserSharedField.USERID, "");
+    }
+    private String areaId() {
+        return sharedPreferences.getString(UserSharedField.AREAID, "");
     }
 
     private void selectPhoto() {

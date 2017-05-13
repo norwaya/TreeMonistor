@@ -7,6 +7,7 @@ import org.greenrobot.greendao.annotation.Index;
 import java.util.List;
 
 import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.NotNull;
 
 /**
  * Created by admin on 2017/3/15.
@@ -17,13 +18,14 @@ import org.greenrobot.greendao.annotation.Generated;
 public class Pic {
     @Id
     private Long id;
-    private long treeId;// 此treeId 不是彼 treeId  其实 是 tree 的 id
+    @NotNull
+    private long tree_id;// 此treeId 不是彼 treeId  其实 是 tree 的 id
     private String path;
 
-    @Generated(hash = 123517054)
-    public Pic(Long id, long treeId, String path) {
+    @Generated(hash = 1454652516)
+    public Pic(Long id, long tree_id, String path) {
         this.id = id;
-        this.treeId = treeId;
+        this.tree_id = tree_id;
         this.path = path;
     }
 
@@ -39,12 +41,12 @@ public class Pic {
         this.id = id;
     }
 
-    public long getTreeId() {
-        return this.treeId;
+    public long getTree_id() {
+        return this.tree_id;
     }
 
-    public void setTreeId(long treeId) {
-        this.treeId = treeId;
+    public void setTree_id(long tree_id) {
+        this.tree_id = tree_id;
     }
 
     public String getPath() {
@@ -54,4 +56,5 @@ public class Pic {
     public void setPath(String path) {
         this.path = path;
     }
+
 }
