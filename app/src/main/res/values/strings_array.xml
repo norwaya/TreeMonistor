@@ -7,9 +7,9 @@
         <item>实时监管查询</item>
         <item>专家诊断</item>
         <item>基础数据库</item>
-        <item>应急通讯</item>
+       <!-- <item>应急通讯</item>
         <item>通知公告</item>
-        <item>使用说明</item>
+        <item>使用说明</item>-->
     </string-array>
 
     <string-array name="add_tree_list">
@@ -106,6 +106,7 @@
         <item>无坡</item>
         <item>北坡</item>
         <item>东北坡</item>
+        <item>东坡</item>
         <item>东南坡</item>
         <item>南坡</item>
         <item>西南坡</item>

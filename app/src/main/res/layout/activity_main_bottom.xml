@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:myradio="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="60dp"
-    android:background="@android:color/white">
+                xmlns:myradio="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@android:color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_alignParentTop="true"
         android:background="@android:color/black"
-        android:orientation="vertical" />
+        android:orientation="vertical"/>
 
-    <RadioGroup
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/radioGroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
@@ -23,56 +25,77 @@
 
         <com.xabaizhong.treemonistor.myview.MyRadio
             android:id="@+id/tab_news"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:button="@null"
             android:clickable="true"
             android:gravity="center"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
             android:text="@string/news"
             android:textSize="@dimen/main_menu_buttom_font_size"
             myradio:drawableSize="@dimen/main_menu_buttom_size"
-            myradio:drawableTop="@drawable/ic_menu_news_selector" />
+            myradio:drawableTop="@drawable/ic_menu_news_selector"
+            myradio:layout_constraintLeft_toLeftOf="@+id/radioGroup"
+            myradio:layout_constraintRight_toLeftOf="@+id/tab_function"
+            tools:layout_constraintBaseline_creator="1"
+            />
 
         <com.xabaizhong.treemonistor.myview.MyRadio
             android:id="@+id/tab_function"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:button="@null"
             android:clickable="true"
             android:gravity="center"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
             android:text="@string/function"
             android:textSize="@dimen/main_menu_buttom_font_size"
             myradio:drawableSize="@dimen/main_menu_buttom_size"
-            myradio:drawableTop="@drawable/ic_menu_function_selector" />
+            myradio:drawableTop="@drawable/ic_menu_function_selector"
+            myradio:layout_constraintBottom_toBottomOf="@+id/tab_news"
+            myradio:layout_constraintLeft_toRightOf="@+id/tab_news"
+            myradio:layout_constraintRight_toLeftOf="@+id/tab_expert"
+            myradio:layout_constraintTop_toTopOf="@+id/tab_news"/>
 
         <com.xabaizhong.treemonistor.myview.MyRadio
             android:id="@+id/tab_expert"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:button="@null"
             android:clickable="true"
             android:gravity="center"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
             android:text="@string/expert"
             android:textSize="@dimen/main_menu_buttom_font_size"
             myradio:drawableSize="@dimen/main_menu_buttom_size"
-            myradio:drawableTop="@drawable/ic_menu_expert_selector" />
+            myradio:drawableTop="@drawable/ic_menu_expert_selector"
+            myradio:layout_constraintLeft_toRightOf="@+id/tab_function"
+            myradio:layout_constraintRight_toLeftOf="@+id/tab_setting"/>
 
         <com.xabaizhong.treemonistor.myview.MyRadio
             android:id="@+id/tab_setting"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:button="@null"
+            android:checked="false"
             android:clickable="true"
             android:gravity="center"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
             android:text="@string/me"
             android:textSize="@dimen/main_menu_buttom_font_size"
             myradio:drawableSize="@dimen/main_menu_buttom_size"
-            myradio:drawableTop="@drawable/ic_menu_setting_selector" />
-    </RadioGroup>
+            myradio:drawableTop="@drawable/ic_menu_setting_selector"
+            myradio:layout_constraintBottom_toBottomOf="@+id/tab_expert"
+            myradio:layout_constraintLeft_toRightOf="@+id/tab_expert"
+            myradio:layout_constraintRight_toRightOf="@+id/radioGroup"
+            myradio:layout_constraintTop_toTopOf="@+id/tab_expert"
+            myradio:layout_constraintVertical_bias="0.0"
+            tools:layout_constraintBaseline_creator="1"/>
+    </android.support.constraint.ConstraintLayout>
 
 
 </RelativeLayout>

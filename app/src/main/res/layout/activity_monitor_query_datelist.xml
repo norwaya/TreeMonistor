@@ -2,9 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+              xmlns:tools="http://schemas.android.com/tools"
               android:orientation="vertical">
 
     <RelativeLayout
+        android:layout_margin="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -14,20 +16,15 @@
             android:layout_alignBaseline="@+id/button"
             android:layout_alignBottom="@+id/button"
             android:layout_alignParentStart="true"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:layout_marginStart="20dp"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
             android:text="监管时间列表"/>
 
         <Button
-            android:background="@android:color/transparent"
             android:id="@+id/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_margin="@dimen/activity_horizontal_margin"
-            android:text="查看古树详细信息"
+            android:text="古树详细信息"
             android:textColor="@color/wx_green"
             android:textSize="18sp"/>
     </RelativeLayout>

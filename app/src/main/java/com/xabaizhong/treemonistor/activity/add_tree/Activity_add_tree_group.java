@@ -14,10 +14,19 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.xabaizhong.treemonistor.R;
 import com.xabaizhong.treemonistor.base.Activity_base;
+import com.xabaizhong.treemonistor.base.App;
 import com.xabaizhong.treemonistor.contant.UserSharedField;
+import com.xabaizhong.treemonistor.entity.DaoSession;
+import com.xabaizhong.treemonistor.entity.TreeGroupPic;
+import com.xabaizhong.treemonistor.entity.TreeGroupPicDao;
+import com.xabaizhong.treemonistor.entity.TreePic;
 import com.xabaizhong.treemonistor.entity.TreeGroup;
+import com.xabaizhong.treemonistor.entity.TreeGroupDao;
+import com.xabaizhong.treemonistor.entity.TreeMap;
+import com.xabaizhong.treemonistor.entity.TreeMapDao;
 import com.xabaizhong.treemonistor.entity.TreeSpecial;
 import com.xabaizhong.treemonistor.entity.TreeTypeInfo;
+import com.xabaizhong.treemonistor.entity.TreeTypeInfoDao;
 import com.xabaizhong.treemonistor.myview.DateDialog;
 import com.xabaizhong.treemonistor.myview.C_dialog_radio;
 import com.xabaizhong.treemonistor.myview.C_info_gather_item1;
@@ -133,12 +142,14 @@ public class Activity_add_tree_group extends Activity_base {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_group);
         ButterKnife.bind(this);
+        initialDao();
         initClickListener();
         init();
 
 
     }
 
+    private static final int CNAME_CODE = 831;
     private void initClickListener() {
         researchDate.setCallback_mid(new C_info_gather_item1.Mid_CallBack() {
             @Override
@@ -150,6 +161,12 @@ public class Activity_add_tree_group extends Activity_base {
             @Override
             public void onClickListener(View et) {
                 startActivityForResult(new Intent(Activity_add_tree_group.this, Activity_map.class), Result_Code.REQUEST_CODE_REGION);
+            }
+        });
+        mainTreeName.setCallback_mid(new C_info_gather_item1.Mid_CallBack() {
+            @Override
+            public void onClickListener(View et) {
+                startActivityForResult(new Intent(Activity_add_tree_group.this,Activity_tree_cname.class),CNAME_CODE);
             }
         });
         aspect.setCallback_mid(new C_info_gather_item1.Mid_CallBack() {
@@ -228,19 +245,32 @@ public class Activity_add_tree_group extends Activity_base {
                 if (resultCode == 100) {
                     Activity_map.LocationBox box = data.getParcelableExtra("location");
                     if (box != null) {
-                        region.setText(box.getProvince() + box.getCity() + box.getDistrict());
-                        placeName.setText(box.getStreet() + box.getSematicDescription());
+                        
                         treeGroup.setPlaceName(box.getStreet() + box.getSematicDescription());
+                        treeGroup.setRegion(box.getProvince() + box.getCity() + box.getDistrict());
 
+                        region.setText(treeGroup.getRegion());
+                        placeName.setText(treeGroup.getPlaceName());
                     }
                 }
 
                 break;
-            case REQUEST_CODE_TREESPECIES:
+            case CNAME_CODE:
                 TreeSpecial tree = data.getParcelableExtra("special");
                 if (tree != null) {
-                    Log.i(TAG, "onActivityResult: " + tree.getCname());
-                    treeMap.setMapViewValue(tree);
+                    mainTreeName.setText(tree.getCname());
+
+                    treeGroup.setMainTreeName(tree.getCname());
+                    treeGroup.setAimsBelong(tree.getBelong());
+                    treeGroup.setAimsTree(tree.getCname());
+                    treeGroup.setAimsFamily(tree.getFamily());
+                }
+                break;
+
+            case REQUEST_CODE_TREESPECIES:
+                TreeSpecial treeSpecial = data.getParcelableExtra("special");
+                if (treeSpecial != null) {
+                    treeMap.setMapViewValue(treeSpecial);
                 }
                 break;
             default:
@@ -251,18 +281,52 @@ public class Activity_add_tree_group extends Activity_base {
 
     @OnClick(R.id.submit)
     public void onClick() {
-        try {
-            fillData();
-        } catch (Exception e) {
-
-        }
         String checkStr = check();
         if (checkStr == null) {
-            layoutPb.setVisibility(View.VISIBLE);
-            upload();
+            fillData();
+            saveDao();
+            showToast("保存成功");
+            startActivity(new Intent(this,Activity_add_tree_group.class));
+            finish();
         } else {
             showToast(checkStr);
         }
+    }
+
+    private void saveDao() {
+        treeGroupDao.save(treeGroup);
+        long id = treeGroup.getId();
+        treeTypeInfo.setTreeGroup_id(id);
+        treeTypeInfoDao.save(treeTypeInfo);
+
+        TreeGroupPic pic;
+        if (list != null) {
+            for (String path : list) {
+                pic = new TreeGroupPic();
+                pic.setTree_id(id);
+                pic.setPath(path);
+                picDao.save(pic);
+            }
+        }
+
+        List<Map<String, Object>> maps = treeMap.getTreeMap();
+        TreeMap treeMap;
+        for (Map<String, Object> map : maps) {
+            treeMap = new TreeMap(null, id, map.get("name").toString(), Integer.parseInt(map.get("num").toString()));
+            treeMapDao.save(treeMap);
+        }
+    }
+
+    TreeTypeInfoDao treeTypeInfoDao;
+    TreeGroupDao treeGroupDao;
+    TreeGroupPicDao picDao;
+    TreeMapDao treeMapDao;
+    private void initialDao() {
+        DaoSession daoSession = ((App) getApplication()).getDaoSession();
+        treeTypeInfoDao = daoSession.getTreeTypeInfoDao();
+        treeGroupDao = daoSession.getTreeGroupDao();
+        picDao = daoSession.getTreeGroupPicDao();
+        treeMapDao = daoSession.getTreeMapDao();
     }
 
     private void upload() {
@@ -360,7 +424,7 @@ public class Activity_add_tree_group extends Activity_base {
         Map<String, Object> map = new HashMap<>();
         String user_id = sharedPreferences.getString(UserSharedField.USERID, "");
         map.put("UserID ", user_id);
-        map.put("TreeType", "0");
+        map.put("TreeType", 0);
         map.put("JsonStr", json);
         return map;
     }
@@ -451,22 +515,21 @@ public class Activity_add_tree_group extends Activity_base {
         treeTypeInfo.setTreeId(treeId.getText());
         treeGroup.setEvevation(evevation.getText());
         treeGroup.setMainTreeName(mainTreeName.getText());
-        treeGroup.setTreeMap(treeMap.getTreeMap());
         treeGroup.setSZJX(szjx.getText());
         treeGroup.setXiaMuType(xiaMuType.getText());
-        treeGroup.setdBWType(dBWType.getText());
+        treeGroup.setDBWType(dBWType.getText());
         treeGroup.setManagementUnit(managementUnit.getText());
         treeGroup.setManagementState(managementState.getText());
-        treeGroup.setrWJYInfo(rWJYInfo.getText());
+        treeGroup.setRWJYInfo(rWJYInfo.getText());
         treeGroup.setSuggest(suggest.getText());
         treeTypeInfo.setTreeGroup(treeGroup);
         treeTypeInfo.setAreaId(areaId());
         treeGroup.setUserID(userId());
-        treeGroup.setTreeId(sharedPreferences.getString(UserSharedField.USERID, ""));
-        treeGroup.setgSTreeNum(Double.parseDouble(gSTreeNum.getText()));
-        treeGroup.setyBDInfo(Double.parseDouble(yBDInfo.getText()));
+        treeGroup.setTreeId(treeId.getText());
+        treeGroup.setGSTreeNum(Double.parseDouble(gSTreeNum.getText()));
+        treeGroup.setYBDInfo(Double.parseDouble(yBDInfo.getText()));
         treeGroup.setXiaMuDensity(Double.parseDouble(xiaMuDensity.getText()));
-        treeGroup.setdBWDensity(Double.parseDouble(dBWDensity.getText()));
+        treeGroup.setDBWDensity(Double.parseDouble(dBWDensity.getText()));
         treeGroup.setAverageAge(Double.parseDouble(averageAge.getText()));
         treeGroup.setAverageDiameter(Double.parseDouble(averageDiameter.getText()));
         treeGroup.setAverageHeight(Double.parseDouble(averageHeight.getText()));
@@ -476,6 +539,7 @@ public class Activity_add_tree_group extends Activity_base {
     private String userId() {
         return sharedPreferences.getString(UserSharedField.USERID, "");
     }
+
     private String areaId() {
         return sharedPreferences.getString(UserSharedField.AREAID, "");
     }

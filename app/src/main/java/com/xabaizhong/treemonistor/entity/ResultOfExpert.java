@@ -20,8 +20,8 @@ public class ResultOfExpert {
 
     @SerializedName("DateTime")
     private String DateTime;
-    @SerializedName("JDResult")
-    private JDResultBean JDResult;
+    @SerializedName("checked")
+    private boolean checked;
     @SerializedName("UserID")
     private String UserID;
     @SerializedName("AreaID")
@@ -39,13 +39,6 @@ public class ResultOfExpert {
         this.DateTime = DateTime;
     }
 
-    public JDResultBean getJDResult() {
-        return JDResult;
-    }
-
-    public void setJDResult(JDResultBean JDResult) {
-        this.JDResult = JDResult;
-    }
 
     public String getUserID() {
         return UserID;
@@ -79,42 +72,16 @@ public class ResultOfExpert {
         this.AuthType = AuthType;
     }
 
-    public static class JDResultBean {
-        /**
-         * CheckPerson : 陈教授
-         * CheckTime : 2017-05-08 05:00:29.00
-         * Result : 54545454
-         */
+    public boolean isChecked() {
+        return checked;
+    }
 
-        @SerializedName("CheckPerson")
-        private String CheckPerson;
-        @SerializedName("CheckTime")
-        private String CheckTime;
-        @SerializedName("Result")
-        private String Result;
+    public void setChecked(boolean checked) {
+        this.checked = checked;
+    }
 
-        public String getCheckPerson() {
-            return CheckPerson;
-        }
-
-        public void setCheckPerson(String CheckPerson) {
-            this.CheckPerson = CheckPerson;
-        }
-
-        public String getCheckTime() {
-            return CheckTime;
-        }
-
-        public void setCheckTime(String CheckTime) {
-            this.CheckTime = CheckTime;
-        }
-
-        public String getResult() {
-            return Result;
-        }
-
-        public void setResult(String Result) {
-            this.Result = Result;
-        }
+    @Override
+    public int hashCode() {
+        return this.getTID().hashCode() * 3 + 7 * (isChecked() ? 0 : 1);
     }
 }

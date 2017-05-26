@@ -34,7 +34,7 @@ public class WebserviceHelper {
         String url = base + url_d + ".asmx?wsdl";
 
         SoapObject soapObj = new SoapObject(nameSpace, methodName);
-        /*soapObj.addProperty(parameter, action);*/
+        Log.i(TAG, "GetWebService: " + url_d + "\t" + methodName);
         if (map != null)
             for (String key : map.keySet()) {
                 soapObj.addProperty(key, map.get(key));
@@ -65,7 +65,7 @@ public class WebserviceHelper {
         } catch (IllegalArgumentException e) {
             Log.i(TAG, "GetWebService: IllegalArgumentException");
             e.printStackTrace();
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;

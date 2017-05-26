@@ -45,6 +45,7 @@
             android:value="fBHis1xlWjQjZ08jDPogZpBNzZ653Fhm"/>
 
         <activity
+            android:launchMode="singleTask"
             android:name=".activity.Activity_main"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
@@ -59,11 +60,6 @@
             android:name=".activity.add_tree.Activity_add_tree"
             android:label="古树"
             android:screenOrientation="portrait"/>
-        <activity
-            android:name=".activity.query_treeOrGroup.Activity_query"
-            android:label="古树查询"
-            android:screenOrientation="portrait">
-        </activity>
         <activity
             android:name=".activity.monitor.Activity_monitor"
             android:label="古树监管"
@@ -179,7 +175,7 @@
             android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.base_data.Activity_pic_vp"
-            android:label="病害鉴定"
+            android:label="图片"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.expert_zd.Activity_expert_zd"
@@ -213,6 +209,14 @@
         <activity
             android:name=".activity.expert.Activity_expert_age"
             android:label="树龄鉴定"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.expert.Activity_expert_detail"
+            android:label="鉴定对象详细信息"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.query_treeOrGroup.Activity_tree_group_detailInfo"
+            android:label="古树群"
             android:screenOrientation="portrait"/>
         <!-- service -->
         <service

@@ -80,7 +80,7 @@ public class Activity_main extends Activity_base implements MyRadio.OnRadioCheck
      * 请求所需要的权限
      */
     @RequiresApi(api = Build.VERSION_CODES.M)
-    private void rquestPermission() {
+    private void requestPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 == PackageManager.PERMISSION_GRANTED) {
             tabNews.setChecked(true);
@@ -106,19 +106,16 @@ public class Activity_main extends Activity_base implements MyRadio.OnRadioCheck
         tabFunction.setOnRadioCheckedListenter(this, MyRadio.OnRadioCheckedListenter.FUNCTION);
         tabExpert.setOnRadioCheckedListenter(this, MyRadio.OnRadioCheckedListenter.EXPERT);
         tabSetting.setOnRadioCheckedListenter(this, MyRadio.OnRadioCheckedListenter.SETTING);
-
+        list = new ArrayList<>();
+        list.add(tabNews);
+        list.add(tabFunction);
+        list.add(tabExpert);
+        list.add(tabSetting);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            list = new ArrayList<>();
-            list.add(tabNews);
-            list.add(tabFunction);
-            list.add(tabExpert);
-            list.add(tabSetting);
-            rquestPermission();
+            requestPermission();
         } else {
             tabNews.setChecked(true);
         }
-//        tabNews.setChecked(true);
-//        showFragment(R.id.tab_news);
         initReceiver();
 
     }
@@ -179,7 +176,7 @@ public class Activity_main extends Activity_base implements MyRadio.OnRadioCheck
 
     @OnClick({R.id.tab_news, R.id.tab_function, R.id.tab_expert, R.id.tab_setting})
     public void onClick(MyRadio view) {
-
+        clearState();
         switch (view.getId()) {
             case R.id.tab_news:
                 tabNews.setChecked(true);
@@ -203,6 +200,13 @@ public class Activity_main extends Activity_base implements MyRadio.OnRadioCheck
                 break;
         }
         CHECKED_RADIO_ID = view.getId();
+    }
+
+    private void clearState() {
+
+        for (MyRadio btn : list) {
+            btn.setChecked(false);
+        }
     }
 
 
@@ -295,8 +299,7 @@ public class Activity_main extends Activity_base implements MyRadio.OnRadioCheck
      * 申请权限时，下面的tab不可用
      */
     private void setMyRadioUnable() {
-        for (MyRadio myRadio :
-                list) {
+        for (MyRadio myRadio : list) {
             myRadio.setEnabled(false);
         }
     }
@@ -421,7 +424,7 @@ public class Activity_main extends Activity_base implements MyRadio.OnRadioCheck
             }
 
             for (int i = 0; i < serviceList.size(); i++) {
-                if (serviceList.get(i).service.getClassName().equals(className) == true) {
+                if (serviceList.get(i).service.getClassName().equals(className)) {
                     isRunning = true;
                     break;
                 }

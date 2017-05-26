@@ -21,6 +21,7 @@ import com.squareup.picasso.Picasso;
 import com.xabaizhong.treemonistor.R;
 import com.xabaizhong.treemonistor.activity.Activity_main;
 import com.xabaizhong.treemonistor.activity.expert.Activity_expert_age;
+import com.xabaizhong.treemonistor.activity.expert.Activity_expert_detail;
 import com.xabaizhong.treemonistor.activity.expert.Activity_expert_weak;
 import com.xabaizhong.treemonistor.activity.expert.Activity_monitor_growth;
 import com.xabaizhong.treemonistor.activity.expert.Activity_species;
@@ -30,6 +31,7 @@ import com.xabaizhong.treemonistor.base.Fragment_base;
 import com.xabaizhong.treemonistor.contant.UserSharedField;
 import com.xabaizhong.treemonistor.entity.ResultOfExpert;
 import com.xabaizhong.treemonistor.service.AsyncTaskRequest;
+import com.xabaizhong.treemonistor.service.WebserviceHelper;
 import com.xabaizhong.treemonistor.utils.RecycleViewDivider;
 
 import java.util.ArrayList;
@@ -43,7 +45,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import terranovaproductions.newcomicreader.FloatingActionMenu;
@@ -54,7 +60,7 @@ import static android.support.v7.widget.RecyclerView.VERTICAL;
  * Created by admin on 2017/2/24.
  */
 
-public class Fragment_expert extends Fragment_base {
+public class Fragment_expert extends Fragment_base implements Fragment_expert_adapter.OnClickListener {
 
     String TAG = "fragment-expert";
     /* @BindView(R.id.menu_yellow)
@@ -82,14 +88,11 @@ public class Fragment_expert extends Fragment_base {
         List<String> roles = new ArrayList<>();
         roles.addAll(set);
         View view = null;
-        if(roles.contains("3")){
-
+        if (roles.contains("3")) {
             view = inflater.inflate(R.layout.fragment_expert, container, false);
             ButterKnife.bind(this, view);
-
             initView();
-
-        }else{
+        } else {
             view = inflater.inflate(R.layout.simple_text, container, false);
             TextView text = (TextView) view.findViewById(R.id.text1);
             text.setText("此用户不具备该权限，无法使用此功能");
@@ -98,38 +101,16 @@ public class Fragment_expert extends Fragment_base {
         return view;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        request();
+    }
+
     Fragment_expert_adapter adapter;
 
     private void initView() {
-        fabFather.setIsCircle(false);
-        fabFather.setmItemGap(20);
-        fabFather.setOnMenuItemClickListener(new FloatingActionMenu.OnMenuItemClickListener() {
-            @Override
-            public void onMenuItemClick(FloatingActionMenu floatingActionMenu, int i, FloatingActionButton floatingActionButton) {
-                switch (floatingActionButton.getId()) {
-                    case R.id.fab_tree_weakness:
-                        Log.d(TAG, "onMenuItemClick: fab_tree_weakness");
-                        startActivity(new Intent(context, Activity_expert_weak.class));
-                        break;
-                 /*   case R.id.fab_tree_bug:
-                        Log.d(TAG, "onMenuItemClick: fab_tree_bug");
-                        startActivity(new Intent(context, Activity_expert_bug.class));
-                        break;*/
-                    case R.id.fab_tree_unknow:
-                        startActivity(new Intent(context, Activity_species.class));
-                        Log.d(TAG, "onMenuItemClick: fab_tree_unknow");
-                        break;
-                    case R.id.fab_tree_growth:
-                        startActivity(new Intent(context, Activity_monitor_growth.class));
-                        Log.d(TAG, "onMenuItemClick: fab_tree_growth");
-                        break;
-                    case R.id.fab_tree_age:
-                        startActivity(new Intent(context, Activity_expert_age.class));
-                        Log.d(TAG, "onMenuItemClick: fab_tree_age");
-                        break;
-                }
-            }
-        });
+        initialFloatView();
        /* menuYellow.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
             @Override
             public void onMenuToggle(boolean opened) {
@@ -144,16 +125,16 @@ public class Fragment_expert extends Fragment_base {
                 .load(R.drawable.tree_header)
                 .into(iv);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        xRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL));
-        xRecyclerView.addItemDecoration(new RecycleViewDivider(context, VERTICAL, R.drawable.divider));
+       /* LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);*/
       /*  xRecyclerView.addHeaderView(view);*/
         adapter = new Fragment_expert_adapter(context);
-
+        adapter.setOnClickListener(this);
         HeaderAndFooterWrapper headerAdapter = new HeaderAndFooterWrapper(adapter);
         headerAdapter.addHeaderView(view);
 
+        xRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL));
+        xRecyclerView.addItemDecoration(new RecycleViewDivider(context, VERTICAL, R.drawable.divider));
         xRecyclerView.setAdapter(headerAdapter);
         xRecyclerView.setPullRefreshEnabled(true);
         xRecyclerView.setLoadingMoreEnabled(true);
@@ -185,42 +166,85 @@ public class Fragment_expert extends Fragment_base {
         );
     }
 
+    private void initialFloatView() {
+
+        fabFather.setIsCircle(false);
+        fabFather.setmItemGap(20);
+        fabFather.setOnMenuItemClickListener(new FloatingActionMenu.OnMenuItemClickListener() {
+            @Override
+            public void onMenuItemClick(FloatingActionMenu floatingActionMenu, int i, FloatingActionButton floatingActionButton) {
+                switch (floatingActionButton.getId()) {
+                    case R.id.fab_tree_weakness:
+                        Log.d(TAG, "onMenuItemClick: fab_tree_weakness");
+                        startActivity(new Intent(context, Activity_expert_weak.class));
+                        break;
+                 /*   case R.id.fab_tree_bug:
+                        Log.d(TAG, "onMenuItemClick: fab_tree_bug");
+                        startActivity(new Intent(context, Activity_expert_bug.class));
+                        break;*/
+                    case R.id.fab_tree_unknow:
+                        startActivity(new Intent(context, Activity_species.class));
+                        Log.d(TAG, "onMenuItemClick: fab_tree_unknow");
+                        break;
+                    case R.id.fab_tree_growth:
+                        startActivity(new Intent(context, Activity_monitor_growth.class));
+                        Log.d(TAG, "onMenuItemClick: fab_tree_growth");
+                        break;
+                    case R.id.fab_tree_age:
+                        startActivity(new Intent(context, Activity_expert_age.class));
+                        Log.d(TAG, "onMenuItemClick: fab_tree_age");
+                        break;
+                }
+            }
+        });
+    }
+
 
     private void request() {
         Activity_main main = ((Activity_main) getActivity());
-
-        Map<String, Object> map = new HashMap<>();
+        final Map<String, Object> map = new HashMap<>();
         map.put("UserID", main.sharedPreferences.getString(UserSharedField.USERID, ""));
         map.put("AreaID", main.sharedPreferences.getString(UserSharedField.AREAID, ""));
-        AsyncTaskRequest.instance("CheckUp", "Query_CheckResult1")
-                .setParams(map)
-                .setCallBack(new AsyncTaskRequest.CallBack() {
+        Observable
+                .create(new ObservableOnSubscribe<String>() {
                     @Override
-                    public void execute(String s) {
-                        Log.i(TAG, "execute: " + s);
-                        xRecyclerView.refreshComplete();
-                        if (s == null) {
-                            showToast("数据异常");
-                            return;
+                    public void subscribe(ObservableEmitter<String> e) throws Exception {
+                        String result = WebserviceHelper.GetWebService("CheckUp", "Query_CheckResult1", map);
+                        if (result == null) {
+                            e.onError(new RuntimeException("error"));
+                        } else {
+                            e.onNext(result);
                         }
-                        Observable.just(s)
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribeOn(Schedulers.io())
-                                .subscribe(new Consumer<String>() {
-                                    @Override
-                                    public void accept(String s) throws Exception {
-                                        ResultMessage rm = new Gson().fromJson(s, ResultMessage.class);
-                                        if (rm.getErrorCode() == 0)
-                                            adapter.setResource(rm.getList());
-                                    }
-                                }, new Consumer<Throwable>() {
-                                    @Override
-                                    public void accept(Throwable throwable) throws Exception {
-                                        showToast("解析数据失败");
-                                    }
-                                });
+                        e.onComplete();
                     }
-                }).create();
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<String>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(String value) {
+                        Log.i(TAG, "onNext: " + value);
+                        ResultMessage rm = new Gson().fromJson(value, ResultMessage.class);
+                        if (rm.getErrorCode() == 0) {
+                            adapter.setResource(rm.getList());
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        showToast("解析数据失败");
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        xRecyclerView.refreshComplete();
+                    }
+                });
     }
 
 
@@ -243,6 +267,16 @@ public class Fragment_expert extends Fragment_base {
             fabFather.open();
         }
 
+    }
+
+    @Override
+    public void onClick(View view, int position, Object obj) {
+        ResultOfExpert resultOfExpert = (ResultOfExpert) obj;
+        Log.i(TAG, "onClick: " + resultOfExpert.getTID());
+        Intent i = new Intent(getActivity(), Activity_expert_detail.class);
+        i.putExtra("tid", resultOfExpert.getTID());
+        i.putExtra("type", resultOfExpert.getAuthType());
+        startActivity(i);
     }
 
     static class ResultMessage {

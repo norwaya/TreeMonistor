@@ -41,14 +41,14 @@ public class Activity_pic_vp extends Activity_base {
     }
 
     ViewPagerAdapter adapter;
-
+    int currentItem ;
     private void initialView() {
         picList = getIntent().getStringArrayListExtra("picList");
+        currentItem = getIntent().getIntExtra("current", 0);
         adapter = new ViewPagerAdapter(this);
         adapter.setSource(picList);
         vp.setAdapter(adapter);
-
-
+        vp.setCurrentItem(currentItem);
     }
 
     private class ViewPagerAdapter extends PagerAdapter {

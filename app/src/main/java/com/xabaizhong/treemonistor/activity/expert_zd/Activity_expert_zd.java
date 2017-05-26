@@ -108,7 +108,7 @@ public class Activity_expert_zd extends Activity_base implements XRecyclerView.L
                         }
                         asyncTaskRequest = null;//do anything before this;
                     }
-                }).setParams(null)
+                }).setParams(params)
                 .create();
     }
 
@@ -135,6 +135,7 @@ public class Activity_expert_zd extends Activity_base implements XRecyclerView.L
         holder.text3.setText(list.get(position).getDateTime().substring(0, 10));
     }
 
+    // Type (0,树种；1,生长势；2,树龄；3树病；4虫害)
     private String getType(int type) {
         String name = "";
         switch (type) {
@@ -142,10 +143,18 @@ public class Activity_expert_zd extends Activity_base implements XRecyclerView.L
                 name = "树种鉴定";
                 break;
             case 1:
+                name = "生长势";
                 break;
             case 2:
+                name = "树龄";
                 break;
             case 3:
+                name = "树病";
+                break;
+            case 4:
+                name = "虫害";
+                break;
+            default:
                 break;
         }
         return name;

@@ -50,9 +50,16 @@ public class Activity_base extends AppCompatActivity {
         return true;
     }
 
-    protected String getStringDate(){
+    protected String getStringDate() {
+        return getStringDate(null);
+
+    }
+
+    protected String getStringDate(Date date) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        return sdf.format(new Date());
+        if (date == null)
+            date = new Date();
+        return sdf.format(date);
 
     }
 }

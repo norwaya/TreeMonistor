@@ -1,25 +1,36 @@
 package com.xabaizhong.treemonistor.activity.query_treeOrGroup;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 import com.xabaizhong.treemonistor.R;
+import com.xabaizhong.treemonistor.activity.base_data.Activity_pic_vp;
+import com.xabaizhong.treemonistor.activity.monitor_query.Activity_monitor_query_date_pics;
 import com.xabaizhong.treemonistor.base.Activity_base;
 import com.xabaizhong.treemonistor.base.App;
 import com.xabaizhong.treemonistor.contant.UserSharedField;
 import com.xabaizhong.treemonistor.entity.AreaCode;
 import com.xabaizhong.treemonistor.entity.AreaCodeDao;
+import com.xabaizhong.treemonistor.myview.C_info_gather_item1;
 import com.xabaizhong.treemonistor.service.WebserviceHelper;
 
 import java.net.ConnectException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,8 +45,10 @@ import io.reactivex.schedulers.Schedulers;
 
 public class Activity_tree_detailInfo extends Activity_base {
     String treeId;
-    @BindView(R.id.text1)
-    TextView text1;
+    //    @BindView(R.id.text1)
+//    TextView text1;
+    @BindView(R.id.layout)
+    LinearLayout layout;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -79,7 +92,8 @@ public class Activity_tree_detailInfo extends Activity_base {
                                     public void accept(String s) throws Exception {
                                         ResultMessage rm = new Gson().fromJson(s, ResultMessage.class);
                                         if (rm.getErrorCode() == 0) {
-                                            text1.setText(getTreeInfo(rm));
+                                            getTreeInfo(rm);
+//                                            text1.setText(getTreeInfo(rm));
                                         } else {
                                             showToast(rm.getMessage());
                                         }
@@ -88,6 +102,7 @@ public class Activity_tree_detailInfo extends Activity_base {
                                 new Consumer<Throwable>() {
                                     @Override
                                     public void accept(Throwable throwable) throws Exception {
+                                        throwable.printStackTrace();
                                         showToast("解析信息失败");
                                     }
                                 });
@@ -123,16 +138,159 @@ public class Activity_tree_detailInfo extends Activity_base {
         return "";
     }
 
-    public String getTreeInfo(ResultMessage rm) {
-        return "古树编号：" + rm.treeid + "\n" +
+    public void getTreeInfo(ResultMessage rm) {
+        ResultMessage.ResultBean tree = rm.result;
+        int grownIndex = Integer.parseInt(tree.getGrowth()) - 1;
+        String grownth = getResources().getStringArray(R.array.growth)[grownIndex];
+
+        int environmentIndex = Integer.parseInt(tree.getEnviorment()) - 1;
+        String environment = getResources().getStringArray(R.array.environment)[environmentIndex];
+
+        int statusIndex = Integer.parseInt(tree.getTreeStatus()) - 1;
+        String status = getResources().getStringArray(R.array.status)[statusIndex];
+
+        int specialIndex = Integer.parseInt(tree.getSpecial());
+        String special = getResources().getStringArray(R.array.special)[specialIndex];
+
+        int gsbzIndex = tree.getTreetype();
+        String gsbz = getResources().getStringArray(R.array.gsbz)[gsbzIndex];
+
+        int ownIndex = Integer.parseInt(tree.getOwner()) - 1;
+        String owner = getResources().getStringArray(R.array.owner)[ownIndex];
+
+        int aspectIndex = Integer.parseInt(tree.getAspect());
+        String aspect = getResources().getStringArray(R.array.aspect)[aspectIndex];
+
+        int slopeIndex = Integer.parseInt(tree.getSlope());
+        String slope = getResources().getStringArray(R.array.slope)[slopeIndex];
+
+        int slopePosIndex = Integer.parseInt(tree.getSlopepos());
+        String slopePos = getResources().getStringArray(R.array.slope_pos)[slopePosIndex];
+
+        int soilIndex = Integer.parseInt(tree.getSoil());
+        String soil = getResources().getStringArray(R.array.soil)[soilIndex];
+
+        int grownSpaceIndex = Integer.parseInt(tree.getGrownspace());
+        String growSpace = getResources().getStringArray(R.array.grown_space)[grownSpaceIndex];
+
+        int treeAreaIndex = tree.getTreearea();
+        String treeArea = getResources().getStringArray(R.array.tree_area)[treeAreaIndex];
+
+        String protecteArrayIndex = tree.getProtected();
+        StringBuilder protecteSbu = new StringBuilder();
+        String[] protectArray = getResources().getStringArray(R.array.protect);
+        Pattern proPattern = Pattern.compile("\\d");
+        Matcher proM = proPattern.matcher(protecteArrayIndex);
+        while (proM.find()) {
+            final int i = Integer.parseInt(proM.group());
+            protecteSbu.append(protectArray[i - 1]).append(",");
+        }
+        String protect = protecteSbu.toString();
+
+        String recoveryArrayIndex = tree.getRecovery();
+        StringBuilder recoverySbu = new StringBuilder();
+        String[] recoveryArray = getResources().getStringArray(R.array.recovery);
+        Pattern recPattern = Pattern.compile("\\d");
+        Matcher recM = recPattern.matcher(recoveryArrayIndex);
+        while (recM.find()) {
+            final int i = Integer.parseInt(recM.group());
+            recoverySbu.append(recoveryArray[i - 1]).append(",");
+        }
+        String recovery = recoverySbu.toString();
+        addView("古树编号：", rm.treeid);
+        addView("位置：", Activity_tree_detailInfo.this.getAreaName(rm.areaid));
+        addView("地址：", rm.result.town + rm.result.village + rm.result.smallname);
+        addView("树高(m)：", rm.result.getTreeheight() + "");
+        addView("树高(m)：", rm.result.getTreeheight() + "");
+        addView("胸径(cm)：", rm.result.getTreeDBH() + "");
+        addView("经度：", rm.result.getOrdinate());
+        addView("纬度：", rm.result.getAbscissa());
+        addView("树龄：", rm.result.getRealage() + "(估测树龄:" + rm.result.getGuessage() + ")");
+        addView("生长势：", grownth);
+        addView("生长环境：", environment);
+        addView("状况：", status);
+        addView("散生群状：", special);
+        addView("古树标识：", gsbz);
+        addView("权属：", owner);
+        addView("生长场所：", growSpace);
+        addView("生长地：", treeArea);
+        addView("坡向：", aspect);
+        addView("坡位：", slopePos);
+        addView("坡度：", slope);
+        addView("土壤：", soil);
+        addView("保护现状：", protect);
+        addView("养护现状：", recovery);
+        addView("管护人/单位：", rm.result.getManagementunit() + tree.getManagementpersion());
+        addView("记录人：", rm.result.getUserID());
+        addPicView(rm.result);
+       /* String result =  "古树编号：" + rm.treeid + "\n" +
                 "位置：" + Activity_tree_detailInfo.this.getAreaName(rm.areaid) + "\n" +
                 "地址：" + rm.result.town + rm.result.village + rm.result.smallname + "\n" +
                 "树高(m)：" + rm.result.getTreeheight() + "\n" +
                 "树高(m)：" + rm.result.getTreeheight() + "\n" +
                 "胸径(cm)：" + rm.result.getTreeDBH() + "\n" +
-                "东西冠幅：" + rm.result.getCrownew() + "\n" +
-                "南北冠幅：" + rm.result.getCrownew() + "\n" +
-                "记录人：" + rm.result.getUserID();
+                "经度：" + rm.result.getOrdinate() + "\n" +
+                "纬度：" + rm.result.getAbscissa() + "\n" +
+                "树龄：" + rm.result.getRealage() + "(估测树龄:" + rm.result.getGuessage() + ")" + "\n" +
+                "生长势：" + grownth + "\n" +
+                "生长环境：" + environment + "\n" +
+                "状况：" + status + "\n" +
+                "散生群状：" + special + "\n" +
+                "古树标识：" + gsbz + "\n" +
+                "权属：" + owner + "\n" +
+                "生长场所：" + growSpace + "\n" +
+                "生长地：" + treeArea + "\n" +
+                "坡向：" + aspect + "\n" +
+                "坡位：" + slopePos + "\n" +
+                "坡度：" + slope + "\n" +
+                "土壤：" + soil + "\n" +
+                "保护现状：" + protect + "\n" +
+                "养护现状：" + recovery + "\n" +
+                "管护人/单位：" + rm.result.getManagementunit() + tree.getManagementpersion() + "\n" +
+                "记录人：" + rm.result.getUserID();*/
+    }
+    private void addPicView(final ResultMessage.ResultBean bean) {
+        View view = getView("图片", bean.getPicInfo() != null ? bean.getPicInfo().size() + "" : "0");
+        C_info_gather_item1 cv = (C_info_gather_item1) view.findViewById(R.id.cv);
+        cv.setCallback_mid(new C_info_gather_item1.Mid_CallBack() {
+            @Override
+            public void onClickListener(View et) {
+                Log.i(TAG, "onClickListener: pic");
+                Intent i = new Intent(Activity_tree_detailInfo.this, Activity_pic_vp.class);
+                i.putStringArrayListExtra("picList", bean.getPicInfo());
+                startActivity(i);
+            }
+        });
+        layout.addView(view);
+    }
+
+//    int index = 0;
+   /* LinearLayout linearLayout;
+
+    private void initLinearLayout() {
+        linearLayout = new LinearLayout(this);
+        linearLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
+    }*/
+
+    private void addView(String left, String mid) {
+        layout.addView(getView(left, mid));
+    }
+
+
+    LayoutInflater inflater;
+
+    private View getView(String left, String mid) {
+        if (inflater == null) {
+            inflater = LayoutInflater.from(this);
+        }
+
+        View view = inflater.inflate(R.layout.c_view, null);
+        C_info_gather_item1 cv = (C_info_gather_item1) view.findViewById(R.id.cv);
+        cv.setLeftText(left);
+        cv.setText(mid);
+        Log.i(TAG, "getView: " + view);
+        return view;
     }
 
     static class ResultMessage {
@@ -265,7 +423,10 @@ public class Activity_tree_detailInfo extends Activity_base {
              * Audit : 0
              * AreaID : 610112
              */
-
+            @SerializedName("soil")
+            private String soil;
+            @SerializedName("aspect")
+            private String aspect;
             @SerializedName("treeid")
             private String treeid;
             @SerializedName("treearea")
@@ -352,6 +513,32 @@ public class Activity_tree_detailInfo extends Activity_base {
             private int Audit;
             @SerializedName("AreaID")
             private String AreaID;
+            @SerializedName("picInfo")
+            private ArrayList<String> picInfo;
+
+            public ArrayList<String> getPicInfo() {
+                return picInfo;
+            }
+
+            public void setPicInfo(ArrayList<String> picInfo) {
+                this.picInfo = picInfo;
+            }
+
+            public String getSoil() {
+                return soil;
+            }
+
+            public void setSoil(String soil) {
+                this.soil = soil;
+            }
+
+            public String getAspect() {
+                return aspect;
+            }
+
+            public void setAspect(String aspect) {
+                this.aspect = aspect;
+            }
 
             public String getTreeid() {
                 return treeid;

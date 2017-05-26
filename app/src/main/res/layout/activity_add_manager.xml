@@ -6,11 +6,11 @@
                 android:layout_height="match_parent">
 
     <RelativeLayout
-        android:background="@color/white"
         android:id="@+id/layout_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:background="@color/white">
 
         <View
             android:layout_width="match_parent"
@@ -35,12 +35,13 @@
                 android:text="添加古树"/>
 
             <Button
-                android:layout_marginRight="5dp"
                 android:id="@+id/btn_treeGroup"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
                 android:background="@drawable/button_style_circle"
                 android:text="添加古树群"/>
+
             <Button
                 android:id="@+id/btn_submit"
                 android:layout_width="100dp"
@@ -61,4 +62,16 @@
         android:divider="@drawable/list_divider"
         android:dividerHeight="1px"/>
 
+    <RelativeLayout
+        android:id="@+id/layout_pb"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"/>
+    </RelativeLayout>
 </RelativeLayout>

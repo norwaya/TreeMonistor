@@ -1,5 +1,7 @@
 package com.xabaizhong.treemonistor.service.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 /**
@@ -8,23 +10,19 @@ import java.util.List;
 
 public class QueryTreeInfoList {
 
+
     /**
      * message : sus
      * error_code : 0
-     * areaid : 610323001
-     * userid : 6100323
-     * TreeType : 0
-     * DetType : 0
-     * queryinfolist : [{"treeid":"61032900001","treename":"huaishu","areaname":"xian"},{"treeid":"61032900002","treename":"liushu","areaname":"weinan"},{"treeid":"61032900003","treename":"songshu","areaname":"xianyang"}]
+     * list : [{"CHName":"","date":"","AreaID":"","TreeID":"","UserID":""}]
      */
 
+    @SerializedName("message")
     private String message;
-    private String error_code;
-    private String areaid;
-    private String userid;
-    private int TreeType;
-    private int DetType;
-    private List<QueryinfolistBean> queryinfolist;
+    @SerializedName("error_code")
+    private int errorCode;
+    @SerializedName("list")
+    private List<ListBean> list;
 
     public String getMessage() {
         return message;
@@ -34,87 +32,80 @@ public class QueryTreeInfoList {
         this.message = message;
     }
 
-    public String getError_code() {
-        return error_code;
+    public int getErrorCode() {
+        return errorCode;
     }
 
-    public void setError_code(String error_code) {
-        this.error_code = error_code;
+    public void setErrorCode(int errorCode) {
+        this.errorCode = errorCode;
     }
 
-    public String getAreaid() {
-        return areaid;
+    public List<ListBean> getList() {
+        return list;
     }
 
-    public void setAreaid(String areaid) {
-        this.areaid = areaid;
+    public void setList(List<ListBean> list) {
+        this.list = list;
     }
 
-    public String getUserid() {
-        return userid;
-    }
-
-    public void setUserid(String userid) {
-        this.userid = userid;
-    }
-
-    public int getTreeType() {
-        return TreeType;
-    }
-
-    public void setTreeType(int TreeType) {
-        this.TreeType = TreeType;
-    }
-
-    public int getDetType() {
-        return DetType;
-    }
-
-    public void setDetType(int DetType) {
-        this.DetType = DetType;
-    }
-
-    public List<QueryinfolistBean> getQueryinfolist() {
-        return queryinfolist;
-    }
-
-    public void setQueryinfolist(List<QueryinfolistBean> queryinfolist) {
-        this.queryinfolist = queryinfolist;
-    }
-
-    public static class QueryinfolistBean {
+    public static class ListBean {
         /**
-         * treeid : 61032900001
-         * treename : huaishu
-         * areaname : xian
+         * CHName :
+         * date :
+         * AreaID :
+         * TreeID :
+         * UserID :
          */
 
-        private String treeid;
-        private String treename;
-        private String areaname;
+        @SerializedName("CHName")
+        private String CHName;
+        @SerializedName("date")
+        private String date;
+        @SerializedName("AreaID")
+        private String AreaID;
+        @SerializedName("TreeID")
+        private String TreeID;
+        @SerializedName("UserID")
+        private String UserID;
 
-        public String getTreeid() {
-            return treeid;
+        public String getCHName() {
+            return CHName;
         }
 
-        public void setTreeid(String treeid) {
-            this.treeid = treeid;
+        public void setCHName(String CHName) {
+            this.CHName = CHName;
         }
 
-        public String getTreename() {
-            return treename;
+        public String getDate() {
+            return date;
         }
 
-        public void setTreename(String treename) {
-            this.treename = treename;
+        public void setDate(String date) {
+            this.date = date;
         }
 
-        public String getAreaname() {
-            return areaname;
+        public String getAreaID() {
+            return AreaID;
         }
 
-        public void setAreaname(String areaname) {
-            this.areaname = areaname;
+        public void setAreaID(String AreaID) {
+            this.AreaID = AreaID;
+        }
+
+        public String getTreeID() {
+            return TreeID;
+        }
+
+        public void setTreeID(String TreeID) {
+            this.TreeID = TreeID;
+        }
+
+        public String getUserID() {
+            return UserID;
+        }
+
+        public void setUserID(String UserID) {
+            this.UserID = UserID;
         }
     }
 }

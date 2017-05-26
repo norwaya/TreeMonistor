@@ -48,17 +48,7 @@ public class FileUtil {
 
     public static void clearFileDir() {
         File file = new File(picPath);
-        if (!file.exists()) {
-            file.mkdirs();
-            File nomedia = new File(".nomedia");
-            if (!nomedia.exists()) {
-                try {
-                    nomedia.createNewFile();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        } else {
+        if (file.exists()) {
             for (File f : file.listFiles()
                     ) {
                 Log.i("file list", "clearFileDir: " + f.getName());
@@ -66,8 +56,10 @@ public class FileUtil {
                     f.delete();
                 }
             }
-            checkNoMediaFile();
+        } else {
+            file.mkdirs();
         }
+        checkNoMediaFile();
     }
 
     public static void checkNoMediaFile() {
@@ -83,10 +75,9 @@ public class FileUtil {
 
     public static List<File> getFiles() {
         File file = new File(picPath);
-        if (file.exists()) {
-            return Arrays.asList(file.listFiles());
-        }
-        return null;
+        if (!file.exists())
+            throw new RuntimeException("File is  not  exitst");
+        return Arrays.asList(file.listFiles());
     }
 
     public static File createFile(String file) {
@@ -106,7 +97,7 @@ public class FileUtil {
         try {
             File f = new File(basePath, "log.txt");
             f.createNewFile();
-            FileOutputStream fos = new FileOutputStream(f, true);
+            FileOutputStream fos = new FileOutputStream(f, false);
             PrintWriter pw = new PrintWriter(fos);
             pw.write(text);
             pw.close();
@@ -116,13 +107,15 @@ public class FileUtil {
     }
 
     public static String bitmapToBase64Str(File file) {
+        if (file == null || !file.exists()) {
+            return null;
+        }
         Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-
         ByteArrayOutputStream bStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, bStream);
         byte[] bytes = bStream.toByteArray();
         String string = Base64.encodeToString(bytes, Base64.DEFAULT);
-        wf(string);
+//        wf(string);
         return string;
     }
 

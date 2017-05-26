@@ -6,13 +6,12 @@ import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Index;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.ToOne;
 import org.greenrobot.greendao.DaoException;
-import org.greenrobot.greendao.annotation.NotNull;
 
 @Entity(indexes = {
         @Index(value = "id DESC", unique = true)
@@ -20,78 +19,133 @@ import org.greenrobot.greendao.annotation.NotNull;
 public class TreeTypeInfo {
     @Id
     private Long id;
+    @Expose
     private String ivst = "0";
+    @Expose
     private int typeId = 0;  // 0 古树 1 古树群
+    @Expose
     private String treeId;
+    @Expose
     private Date date;
+    @Expose
     private String areaId;
     private long gsTree;// tree  id  属相  not  treeId
 
-
-
-
-    public String check() {
-        if (treeId == null)
-            return "古树(群)编号为空";
-        if (date == null)
-            return "调查日期为空";
-        return null;
-    }
     public Long getId() {
         return this.id;
     }
+
     public void setId(Long id) {
         this.id = id;
     }
+
     public String getIvst() {
         return this.ivst;
     }
+
     public void setIvst(String ivst) {
         this.ivst = ivst;
     }
+
     public int getTypeId() {
         return this.typeId;
     }
+
     public void setTypeId(int typeId) {
         this.typeId = typeId;
     }
+
     public String getTreeId() {
         return this.treeId;
     }
+
     public void setTreeId(String treeId) {
         this.treeId = treeId;
     }
+
     public Date getDate() {
         return this.date;
     }
+
     public void setDate(Date date) {
         this.date = date;
     }
+
     public String getAreaId() {
         return this.areaId;
     }
+
     public void setAreaId(String areaId) {
         this.areaId = areaId;
     }
+
     public long getGsTree() {
         return this.gsTree;
     }
+
     public void setGsTree(long gsTree) {
         this.gsTree = gsTree;
     }
+
     public Long getTreeTableID() {
         return this.treeTableID;
     }
+
     public void setTreeTableID(Long treeTableID) {
         this.treeTableID = treeTableID;
     }
+
     public Long getTreeGroup_id() {
         return this.treeGroup_id;
     }
+
     public void setTreeGroup_id(Long treeGroup_id) {
         this.treeGroup_id = treeGroup_id;
     }
-    /** To-one relationship, resolved on first access. */
+
+    public void del() {
+        if (this.id == null) {
+            throw new RuntimeException("entity is detached from DAO econtext");
+        }
+        final TreeTypeInfoDao treeTypeInfoDao = this.daoSession.getTreeTypeInfoDao();
+        Tree tree = getTree();
+        if (tree != null) {
+            List<TreePic> list = tree.getPics();
+            if (list != null) {
+                TreePicDao picDao = this.daoSession.getTreePicDao();
+                for (TreePic pic : list) {
+                    picDao.delete(pic);
+                }
+            }
+            TreeDao treeDao = this.daoSession.getTreeDao();
+            treeDao.delete(tree);
+        }
+        TreeGroup treeGroup = getTreeGroup();
+        if (treeGroup != null) {
+            List<TreeGroupPic> list = treeGroup.getPics();
+            if (list != null) {
+                TreeGroupPicDao picDao = this.daoSession.getTreeGroupPicDao();
+                for (TreeGroupPic pic : list) {
+                    picDao.delete(pic);
+                }
+            }
+            List<TreeMap> treeMapList = treeGroup.getTreeMaps();
+            if (treeMapList != null) {
+                TreeMapDao treeMapDao = this.daoSession.getTreeMapDao();
+                for (TreeMap treemap : treeMapList) {
+                    treeMapDao.delete(treemap);
+                }
+            }
+            TreeGroupDao treeGroupdao = this.daoSession.getTreeGroupDao();
+            treeGroupdao.delete(treeGroup);
+        }
+        treeTypeInfoDao.delete(this);
+    }
+
+
+    /**
+     * To-one relationship, resolved on first access.
+     */
     @Generated(hash = 221856822)
     public Tree getTree() {
         Long __key = this.treeTableID;
@@ -109,7 +163,10 @@ public class TreeTypeInfo {
         }
         return tree;
     }
-    /** called by internal mechanisms, do not call yourself. */
+
+    /**
+     * called by internal mechanisms, do not call yourself.
+     */
     @Generated(hash = 1305667952)
     public void setTree(Tree tree) {
         synchronized (this) {
@@ -118,7 +175,10 @@ public class TreeTypeInfo {
             tree__resolvedKey = treeTableID;
         }
     }
-    /** To-one relationship, resolved on first access. */
+
+    /**
+     * To-one relationship, resolved on first access.
+     */
     @Generated(hash = 1486164824)
     public TreeGroup getTreeGroup() {
         Long __key = this.treeGroup_id;
@@ -137,7 +197,10 @@ public class TreeTypeInfo {
         }
         return treeGroup;
     }
-    /** called by internal mechanisms, do not call yourself. */
+
+    /**
+     * called by internal mechanisms, do not call yourself.
+     */
     @Generated(hash = 1547466380)
     public void setTreeGroup(TreeGroup treeGroup) {
         synchronized (this) {
@@ -146,6 +209,7 @@ public class TreeTypeInfo {
             treeGroup__resolvedKey = treeGroup_id;
         }
     }
+
     /**
      * Convenient call for {@link org.greenrobot.greendao.AbstractDao#delete(Object)}.
      * Entity must attached to an entity context.
@@ -157,6 +221,7 @@ public class TreeTypeInfo {
         }
         myDao.delete(this);
     }
+
     /**
      * Convenient call for {@link org.greenrobot.greendao.AbstractDao#refresh(Object)}.
      * Entity must attached to an entity context.
@@ -168,6 +233,7 @@ public class TreeTypeInfo {
         }
         myDao.refresh(this);
     }
+
     /**
      * Convenient call for {@link org.greenrobot.greendao.AbstractDao#update(Object)}.
      * Entity must attached to an entity context.
@@ -179,6 +245,7 @@ public class TreeTypeInfo {
         }
         myDao.update(this);
     }
+
     /** called by internal mechanisms, do not call yourself. */
     @Generated(hash = 1186362298)
     public void __setDaoSession(DaoSession daoSession) {
@@ -187,24 +254,28 @@ public class TreeTypeInfo {
     }
 
     private Long treeTableID;
+    @Expose
     @ToOne(joinProperty = "treeTableID")
     private Tree tree;
     private Long treeGroup_id;
+    @Expose
     @ToOne(joinProperty = "treeGroup_id")
     private TreeGroup treeGroup;
-    /** Used to resolve relations */
+    /**
+     * Used to resolve relations
+     */
     @Generated(hash = 2040040024)
     private transient DaoSession daoSession;
-    /** Used for active entity operations. */
+    /**
+     * Used for active entity operations.
+     */
     @Generated(hash = 747255772)
     private transient TreeTypeInfoDao myDao;
 
 
-
-
     @Generated(hash = 1534781139)
     public TreeTypeInfo(Long id, String ivst, int typeId, String treeId, Date date,
-            String areaId, long gsTree, Long treeTableID, Long treeGroup_id) {
+                        String areaId, long gsTree, Long treeTableID, Long treeGroup_id) {
         this.id = id;
         this.ivst = ivst;
         this.typeId = typeId;
@@ -215,6 +286,7 @@ public class TreeTypeInfo {
         this.treeTableID = treeTableID;
         this.treeGroup_id = treeGroup_id;
     }
+
     @Generated(hash = 1444053980)
     public TreeTypeInfo() {
     }
@@ -223,7 +295,6 @@ public class TreeTypeInfo {
     private transient Long tree__resolvedKey;
     @Generated(hash = 371016317)
     private transient Long treeGroup__resolvedKey;
-
 
 
 }

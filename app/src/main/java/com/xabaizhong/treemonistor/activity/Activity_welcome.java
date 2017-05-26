@@ -17,6 +17,7 @@ import com.google.gson.Gson;
 import com.xabaizhong.treemonistor.R;
 import com.xabaizhong.treemonistor.base.Activity_base;
 import com.xabaizhong.treemonistor.base.App;
+import com.xabaizhong.treemonistor.contant.UserSharedField;
 import com.xabaizhong.treemonistor.dbhelper.AreaCodeHelper;
 import com.xabaizhong.treemonistor.dbhelper.PestHelper;
 import com.xabaizhong.treemonistor.dbhelper.TreeSpecialHelper;
@@ -173,13 +174,18 @@ public class Activity_welcome extends Activity_base {
     }
 
     private void work() {
-        if (true) {
+        if (logined()) {
             startActivity(new Intent(Activity_welcome.this, Activity_main.class));
         } else {
-            startActivity(new Intent(Activity_welcome.this, Activity_login2.class));
+            startActivity(new Intent(Activity_welcome.this, Activity_login.class));
         }
         finish();
     }
+
+    private boolean logined() {
+        return sharedPreferences.getString(UserSharedField.USERID, null) != null;
+    }
+
 
     boolean flag = false;
 
@@ -222,7 +228,7 @@ public class Activity_welcome extends Activity_base {
         ArrayList<Tree_age> ageList = new ArrayList<>();
         for (Json_tree_age.RECORDSBean bean : json_tree_weak.getRECORDS()) {
             ageList.add(bean.convertToTreeAge());
-            Log.i(TAG, "age compute: "+bean.getCHName());
+            Log.i(TAG, "age compute: " + bean.getCHName());
         }
         tree_ageDao.saveInTx(ageList);
 
@@ -308,7 +314,6 @@ public class Activity_welcome extends Activity_base {
     }
 
 
-
     private void writeWeakness() {
         String json = getAssetFile("tree_weak.json");
         Json_tree_weak json_tree_weak = new Gson().fromJson(json, Json_tree_weak.class);
@@ -318,7 +323,6 @@ public class Activity_welcome extends Activity_base {
         }
         weaknessDao.saveInTx(weakList);
     }
-
 
 
     private void writePestClass() {

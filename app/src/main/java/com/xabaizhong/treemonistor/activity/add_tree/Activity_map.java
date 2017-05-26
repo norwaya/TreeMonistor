@@ -53,8 +53,6 @@ import static com.baidu.mapapi.map.MyLocationConfiguration.LocationMode.FOLLOWIN
  */
 
 public class Activity_map extends Activity_base {
-
-
     @BindView(R.id.bmapView)
     MapView bmapView;
     @BindView(R.id.flag_center)
@@ -86,18 +84,20 @@ public class Activity_map extends Activity_base {
         n();
         flag.setAnimation(null);
     }
+
     BitmapDescriptor mIconLocation;
+
     void initBaiduMap() {
         baiduMap.setMyLocationEnabled(true);
         mLocationMode = FOLLOWING;
         BitmapDescriptor mIconLocation = BitmapDescriptorFactory.fromResource(R.drawable.icon_gcoding);
-        baiduMap.setMyLocationConfigeration(new MyLocationConfiguration(mLocationMode,true,mIconLocation));
+        baiduMap.setMyLocationConfigeration(new MyLocationConfiguration(mLocationMode, true, mIconLocation));
         btnMode.setText("跟随模式");
     }
 
     private void initilize() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            requestpermission();
+            requestPermission();
         } else {
             init();
         }
@@ -117,15 +117,16 @@ public class Activity_map extends Activity_base {
     private static final int BAIDU_READ_PHONE_STATE = 100;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
-    private void requestpermission() {
-        if (checkSelfPermission(Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+    private void requestPermission() {
+        if (checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
             // 申请一个（或多个）权限，并提供用于回调返回的获取码（用户定义)
 
             requestPermissions(new String[]{
                     Manifest.permission.WRITE_EXTERNAL_STORAGE,
                     Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.READ_PHONE_STATE}, BAIDU_READ_PHONE_STATE);
+                    Manifest.permission.READ_PHONE_STATE,
+                    Manifest.permission.ACCESS_COARSE_LOCATION}, BAIDU_READ_PHONE_STATE);
 
 
         } else {
@@ -287,8 +288,8 @@ public class Activity_map extends Activity_base {
                         locationBox.setSematicDescription(reverseGeoCodeResult.getSematicDescription());
                         locationBox.setLon(reverseGeoCodeResult.getLocation().longitude);
                         locationBox.setLat(reverseGeoCodeResult.getLocation().latitude);
-                        Log.i(TAG, "onGetReverseGeoCodeResult: "+reverseGeoCodeResult.getLocation().longitude
-                        +"\t"+reverseGeoCodeResult.getLocation().latitude);
+                        Log.i(TAG, "onGetReverseGeoCodeResult: " + reverseGeoCodeResult.getLocation().longitude
+                                + "\t" + reverseGeoCodeResult.getLocation().latitude);
                     }
                 });
 
@@ -343,13 +344,13 @@ public class Activity_map extends Activity_base {
         switch (view.getId()) {
             case R.id.btn:
                 Intent i = new Intent();
-                i.putExtra("location", locationBox);
-                setResult(100, i);
                 if (locationBox.check()) {
-                    finish();
+                    i.putExtra("location", locationBox);
+                    setResult(100, i);
                 } else {
                     showToast("未获取到地理位置的信息,请检查网络是否连接");
                 }
+                finish();
                 break;
             case R.id.btn_mode:
                 switch (mLocationMode) {
@@ -362,7 +363,7 @@ public class Activity_map extends Activity_base {
                         btnMode.setText("跟随模式");
                         break;
                 }
-                baiduMap.setMyLocationConfigeration(new MyLocationConfiguration(mLocationMode,true,mIconLocation));
+                baiduMap.setMyLocationConfigeration(new MyLocationConfiguration(mLocationMode, true, mIconLocation));
                 break;
         }
     }
@@ -554,7 +555,6 @@ public class Activity_map extends Activity_base {
             }
             return true;
         }
-
 
 
         public String getProvince() {

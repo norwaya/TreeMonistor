@@ -97,7 +97,7 @@ public class Activity_tree_base_detail extends Activity_base {
             protected String doInBackground(Void... params) {
                 try {
                     return WebserviceHelper.GetWebService(
-                            "Pic", "SpeciesPicList", getParms());
+                            "TreePic", "SpeciesPicList", getParms());
                 } catch (ConnectException e) {
                     e.printStackTrace();
                     return null;
@@ -108,7 +108,7 @@ public class Activity_tree_base_detail extends Activity_base {
             protected void onPostExecute(String s) {
                 Log.i(TAG, "onPostExecute: " + s);
                 if (s == null) {
-                    showToast("请求错误");
+//                    showToast("请求错误");
                     return;
                 }
                 showToast(s);

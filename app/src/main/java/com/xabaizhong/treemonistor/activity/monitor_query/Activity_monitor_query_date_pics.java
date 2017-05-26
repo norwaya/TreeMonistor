@@ -17,6 +17,7 @@ import com.google.gson.annotations.SerializedName;
 import com.squareup.picasso.Picasso;
 import com.xabaizhong.treemonistor.R;
 import com.xabaizhong.treemonistor.activity.Activity_image_noAction;
+import com.xabaizhong.treemonistor.activity.base_data.Activity_pic_vp;
 import com.xabaizhong.treemonistor.adapter.Activity_monitor_query_dateList_pics_adapter;
 import com.xabaizhong.treemonistor.adapter.CommonRecyclerViewAdapter;
 import com.xabaizhong.treemonistor.base.Activity_base;
@@ -92,9 +93,12 @@ public class Activity_monitor_query_date_pics extends Activity_base implements C
         ImageView iv = (ImageView) view.findViewById(R.id.image_item1);
         Log.i(TAG, "onItemClickListener: " + (iv == null ? "" : iv.getTag()));
 
-        Intent i = new Intent(this, Activity_image_noAction.class);
-        i.putExtra("uri", (iv.getTag() == null ? "" : iv.getTag().toString()));
+        Intent i = new Intent(this, Activity_pic_vp.class);
+        i.putStringArrayListExtra("picList", mList);
+        i.putExtra("current", position);
         startActivity(i);
+        /*i.putExtra("uri", (iv.getTag() == null ? "" : iv.getTag().toString()));
+        startActivity(i);*/
 
     }
 
@@ -102,7 +106,7 @@ public class Activity_monitor_query_date_pics extends Activity_base implements C
     private void initView(int index) {
 
     }
-
+    ArrayList<String> mList ;
     private void request() {
         /*  <tem:UserID>12</tem:UserID>
          <!--Optional:-->
@@ -142,10 +146,11 @@ public class Activity_monitor_query_date_pics extends Activity_base implements C
                                             return;
                                         }
                                         List<ListItem> listItem = new ArrayList<ListItem>();
+                                        mList = new ArrayList<String>();
                                         String[] directoryList = {"全部", "东方", "南方", "西方", "北方"};
                                         for (ResultMessage.ResultBean bean : list) {
                                             for (String url : bean.getPiclist()) {
-
+                                                mList.add(url);
                                                 listItem.add(new ListItem(directoryList[bean.getPicPlace()], url));
                                             }
                                         }

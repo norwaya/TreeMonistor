@@ -6,7 +6,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
-    <dimen name="main_menu_buttom_size">35dp</dimen>
+    <dimen name="main_menu_buttom_size">30dp</dimen>
     <dimen name="main_menu_buttom_font_size">13sp</dimen>
     <dimen name="fragment_function_list_item_image_size">30dp</dimen>
     <dimen name="list_divider_margin">8px</dimen>

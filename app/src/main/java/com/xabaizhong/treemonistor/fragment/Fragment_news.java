@@ -98,7 +98,7 @@ public class Fragment_news extends Fragment_base {
             public void bindView(Fragment_news_adapter_viewHold holder, int position, List<Data_news> list) {
                 this.list = list;
                 Data_news data = list.get(position);
-                holder.tv_content.setText(data.getCategory() + "\t" + data.getDate() + "\t" + data.getTitle());
+                holder.tv_content.setText( data.getTitle());
                 String url = data.getThumbnail_pic_s();
                 if (!TextUtils.isEmpty(url))
                     Picasso.with(context).load(Uri.parse(url)).into(holder.image);
@@ -128,7 +128,7 @@ public class Fragment_news extends Fragment_base {
 
     private void requestNews() {
         RetrofitUtil.instance().create(ApiService.class)
-                .obtainNews("guoji", Contant.NEW.APP_KEY)
+                .obtainNews("shehui", Contant.NEW.APP_KEY)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Response_news>() {

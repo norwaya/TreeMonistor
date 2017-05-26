@@ -31,16 +31,6 @@
                 android:padding="@dimen/activity_horizontal_margin"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"/>
 
-            <Button
-                android:id="@+id/show_pic"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:padding="@dimen/activity_horizontal_margin"
-                android:text="查看图片"
-                android:textAlignment="center"
-                android:textColor="@color/wx_green"
-                android:textSize="18sp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -55,16 +45,28 @@
                     android:text="鉴定结果"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"/>
 
-                <EditText
-                    android:id="@+id/edit1"
+                <Button
+                    android:id="@+id/show_pic"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/activity_horizontal_margin"
-                    android:background="@drawable/button_style_circle"
-                    android:gravity="top"
-                    android:minLines="5"
-                    android:padding="@dimen/activity_horizontal_margin"/>
+                    android:background="@android:color/transparent"
+                    android:padding="@dimen/activity_horizontal_margin"
+                    android:text="查看图片"
+                    android:textAlignment="center"
+                    android:textColor="@color/wx_green"
+                    android:textSize="18sp"/>
+
             </LinearLayout>
+
+            <EditText
+                android:id="@+id/edit1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/activity_horizontal_margin"
+                android:background="@drawable/button_style_circle"
+                android:gravity="top"
+                android:minLines="5"
+                android:padding="@dimen/activity_horizontal_margin"/>
         </LinearLayout>
     </ScrollView>
 

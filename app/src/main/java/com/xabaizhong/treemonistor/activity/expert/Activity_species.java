@@ -100,7 +100,7 @@ public class Activity_species extends Activity_base implements C_info_gather_ite
             public void accept(MessageEvent messageEvent) throws Exception {
                 switch (messageEvent.getCode()) {
                     case LEAF_CODE:
-                        params.leaf = messageEvent.getId() + 1;
+                        params.leaf = messageEvent.getId();
                         leaf.setText(messageEvent.getText());
                         break;
                     case LEAF_COLOR_CODE:
@@ -108,7 +108,7 @@ public class Activity_species extends Activity_base implements C_info_gather_ite
                         leafColor.setText(messageEvent.getText());
                         break;
                     case FLOWER_CODE:
-                        params.flower = messageEvent.getId() + 1;
+                        params.flower = messageEvent.getId();
                         flower.setText(messageEvent.getText());
                         break;
                     case FLOWER_COLOR_CODE:
@@ -116,7 +116,7 @@ public class Activity_species extends Activity_base implements C_info_gather_ite
                         flowerColor.setText(messageEvent.getText());
                         break;
                     case FRUIT_CODE:
-                        params.fruit = messageEvent.getId() + 1;
+                        params.fruit = messageEvent.getId();
                         fruit.setText(messageEvent.getText());
                         break;
                     case FRUIT_COLOR_CODE:
@@ -146,12 +146,13 @@ public class Activity_species extends Activity_base implements C_info_gather_ite
         if (flag) {
             if (params.check()) {
                 pb.setVisibility(View.VISIBLE);
-                AsyncTaskRequest.instance("CheckUp", "SpeciesIden")
+                AsyncTaskRequest
+                        .instance("CheckUp", "SpeciesIden")
                         .setParams(getParms())
                         .setCallBack(new AsyncTaskRequest.CallBack() {
                             @Override
                             public void execute(String s) {
-                                Log.i(TAG, "execute: "+s);
+                                Log.i(TAG, "execute: " + s);
                                 pb.setVisibility(View.INVISIBLE);
                                 if (s == null) {
                                     showToast("请求错误");
@@ -191,7 +192,8 @@ public class Activity_species extends Activity_base implements C_info_gather_ite
                     protected void onPostExecute(String aVoid) {
                         super.onPostExecute(aVoid);
                         // 需要修改 接口 和 json 数据结构
-                        AsyncTaskRequest.instance("UploadTreeInfo", "AuthenticateInfoMethod")
+                        AsyncTaskRequest
+                                .instance("UploadTreeInfo", "AuthenticateInfoMethod")
                                 .setParams(getUploadParas())
                                 .setCallBack(new AsyncTaskRequest.CallBack() {
                                     @Override
@@ -201,25 +203,29 @@ public class Activity_species extends Activity_base implements C_info_gather_ite
                                             showToast("请检查网络连接是否异常");
                                             return;
                                         }
-                                        Observable.just(s).observeOn(AndroidSchedulers.mainThread())
+                                        Observable
+                                                .just(s)
+                                                .observeOn(AndroidSchedulers.mainThread())
                                                 .subscribeOn(Schedulers.io())
-                                                .subscribe(new Consumer<String>() {
-                                                    @Override
-                                                    public void accept(String s) throws Exception {
-                                                        ResultMessage rm = new Gson().fromJson(s, ResultMessage.class);
-                                                        if (rm.getError_code() == 0) {
-                                                            showToast("上传成功");
-                                                            Activity_species.this.finish();
-                                                        } else {
-                                                            showToast(rm.getMessage());
-                                                        }
-                                                    }
-                                                }, new Consumer<Throwable>() {
-                                                    @Override
-                                                    public void accept(Throwable throwable) throws Exception {
-                                                        showToast("解析失败");
-                                                    }
-                                                });
+                                                .subscribe(
+                                                        new Consumer<String>() {
+                                                            @Override
+                                                            public void accept(String s) throws Exception {
+                                                                ResultMessage rm = new Gson().fromJson(s, ResultMessage.class);
+                                                                if (rm.getError_code() == 0) {
+                                                                    showToast("上传成功");
+                                                                    Activity_species.this.finish();
+                                                                } else {
+                                                                    showToast(rm.getMessage());
+                                                                }
+                                                            }
+                                                        },
+                                                        new Consumer<Throwable>() {
+                                                            @Override
+                                                            public void accept(Throwable throwable) throws Exception {
+                                                                showToast("解析失败");
+                                                            }
+                                                        });
                                     }
                                 })
                                 .create();
@@ -229,18 +235,16 @@ public class Activity_species extends Activity_base implements C_info_gather_ite
         }
     }
 
-
     private Map<String, Object> getUploadParas() {
         Map<String, Object> map = new HashMap<>();
         params.picList.clear();
         params.picList.addAll(FileUtil.getPngFiles());
         String user_id = sharedPreferences.getString(UserSharedField.USERID, "");
-        map.put("UserID ", user_id);
-        map.put("date ", getStringDate());
-        map.put("type ", 0);
-        map.put("areaId ", sharedPreferences.getString(UserSharedField.AREAID, ""));
+        map.put("UserID", user_id);
+        map.put("date", getStringDate());
+        map.put("Type", 0);
+        map.put("areaId", sharedPreferences.getString(UserSharedField.AREAID, ""));
         String json = new Gson().toJson(params);
-        Log.i(TAG, "getUploadParas: " + json);
         map.put("JsonStr", json);
         return map;
     }
@@ -401,10 +405,10 @@ public class Activity_species extends Activity_base implements C_info_gather_ite
     }
 
 
-    String[] leafArray = new String[]{"椭圆状", "心形", "掌形", "扇形", "菱形", "披针形", "卵形", "圆形", "针形", "鳞形", "匙形", "三角形"
+    String[] leafArray = new String[]{"其他", "椭圆状", "心形", "掌形", "扇形", "菱形", "披针形", "卵形", "圆形", "针形", "鳞形", "匙形", "三角形"
     };
     String[] leafColorArray = new String[]{"其他", "绿色", "红色", "黄色", "蓝色"};
-    String[] flowerArray = new String[]{"乔木花卉", " 灌木花卉", "藤本花卉"};
+    String[] flowerArray = new String[]{"其他", "乔木花卉", " 灌木花卉", "藤本花卉"};
     String[] flowerColorArray = new String[]{"其他",
             "红色",
             "橙色",
@@ -417,7 +421,7 @@ public class Activity_species extends Activity_base implements C_info_gather_ite
             "白色",
             "粉红色"
     };
-    String[] fruitArray = new String[]{"单果", " 聚合果", " 复果"};
+    String[] fruitArray = new String[]{"其他", "单果", " 聚合果", " 复果"};
     String[] fruitColorArray = new String[]{"其他",
             "白色",
             "红色",

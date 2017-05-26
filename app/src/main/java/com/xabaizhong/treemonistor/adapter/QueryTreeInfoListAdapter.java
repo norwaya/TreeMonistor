@@ -9,7 +9,7 @@ import com.xabaizhong.treemonistor.service.model.QueryTreeInfoList;
  * Created by norwaya on 17-4-14.
  */
 
-public class QueryTreeInfoListAdapter extends CommonRecyclerViewAdapter<Activity_query_tree_info_list.ViewHolder, QueryTreeInfoList.QueryinfolistBean> {
+public class QueryTreeInfoListAdapter extends CommonRecyclerViewAdapter<Activity_query_tree_info_list.ViewHolder, QueryTreeInfoList.ListBean> {
     public QueryTreeInfoListAdapter(Context context, int layout) {
         super(context, layout);
     }

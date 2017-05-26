@@ -7,7 +7,9 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
 import com.xabaizhong.treemonistor.R;
+import com.xabaizhong.treemonistor.activity.expert_zd.fragment.Fragment_Expert_Ill;
 import com.xabaizhong.treemonistor.activity.expert_zd.fragment.Fragment_Expert_Species;
 import com.xabaizhong.treemonistor.base.Activity_base;
 import com.xabaizhong.treemonistor.service.AsyncTaskRequest;
@@ -58,16 +60,23 @@ public class Activity_expert_zd_detail extends Activity_base {
                     public void execute(String s) {
                         Log.i(TAG, "execute+++: " + s);
                         if (s != null)
-                            Observable.just(s)
+                            Observable
+                                    .just(s)
                                     .subscribeOn(Schedulers.io())
                                     .observeOn(AndroidSchedulers.mainThread())
                                     .subscribe(new Consumer<String>() {
                                         @Override
                                         public void accept(String s) throws Exception {
-
-                                            Fragment_Expert_Species.Bean bean = new Gson().fromJson(s, Fragment_Expert_Species.Bean.class);
+                                            ResultMsg bean = new Gson().fromJson(s, ResultMsg.class);
                                             if (bean.getErrorCode() == 0) {
-                                                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_replace, Fragment_Expert_Species.instance(bean)).commit();
+                                                if (bean.getType() == 0){
+                                                    Fragment_Expert_Species.Bean instance = new Gson().fromJson(s, Fragment_Expert_Species.Bean.class);
+                                                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_replace, Fragment_Expert_Species.instance(instance)).commit();
+                                                }
+                                                else if (bean.getType() == 3){
+                                                    Fragment_Expert_Ill.Bean instance = new Gson().fromJson(s, Fragment_Expert_Ill.Bean.class);
+                                                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_replace, Fragment_Expert_Ill.instance(instance)).commit();
+                                                }
                                             }
                                         }
                                     }, new Consumer<Throwable>() {
@@ -82,4 +91,46 @@ public class Activity_expert_zd_detail extends Activity_base {
                 .create();
     }
 
+    static class ResultMsg {
+        @SerializedName("message")
+        private String message;
+        @SerializedName("error_code")
+        private int errorCode;
+        @SerializedName("result")
+        private Fragment_Expert_Species.Bean.ResultBean result;
+        @SerializedName("type")
+        private int type;
+
+        public String getMessage() {
+            return message;
+        }
+
+        public void setMessage(String message) {
+            this.message = message;
+        }
+
+        public int getErrorCode() {
+            return errorCode;
+        }
+
+        public void setErrorCode(int errorCode) {
+            this.errorCode = errorCode;
+        }
+
+        public Fragment_Expert_Species.Bean.ResultBean getResult() {
+            return result;
+        }
+
+        public void setResult(Fragment_Expert_Species.Bean.ResultBean result) {
+            this.result = result;
+        }
+
+        public int getType() {
+            return type;
+        }
+
+        public void setType(int type) {
+            this.type = type;
+        }
+    }
 }

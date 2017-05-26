@@ -23,17 +23,18 @@ import butterknife.ButterKnife;
  */
 
 public class Fragment_expert_adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    List<ResultOfExpert> list = new ArrayList<>();
-
-    LayoutInflater inflate;
+    private List<ResultOfExpert> list = new ArrayList<>();
+    private LayoutInflater inflate;
 
     public void setResource(List<ResultOfExpert> list) {
-        this.list = list;
+        this.list.clear();
+        this.list.addAll(list);
+        notifyDataSetChanged();
     }
-
     public Fragment_expert_adapter(Context context) {
         inflate = LayoutInflater.from(context);
     }
+
 
 
     @Override
@@ -42,20 +43,19 @@ public class Fragment_expert_adapter extends RecyclerView.Adapter<RecyclerView.V
                 inflate.inflate(R.layout.fragment_expert_item2, parent, false));
     }
 
-/*    private static final int VIEWHOLDER_HEAD = 0x123;
-    private static final int VIEWHOLDER_CONTENT = 0x122;
 
     @Override
-    public int getItemViewType(int position) {
-        if (list.get(position) == null)
-            return VIEWHOLDER_HEAD;
-        return VIEWHOLDER_CONTENT;
-    }*/
-
-    @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        ResultOfExpert roe = list.get(position);
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+        final ResultOfExpert roe = list.get(position);
         Fragment_expert_adapter_viewHold viewHolder = (Fragment_expert_adapter_viewHold) holder;
+        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (onClickListener != null) {
+                    onClickListener.onClick(v, position, list.get(position));
+                }
+            }
+        });
         viewHolder.viewHolder.tid.setText(roe.getTID());
         String type = "";
         switch (roe.getAuthType()) {
@@ -63,30 +63,39 @@ public class Fragment_expert_adapter extends RecyclerView.Adapter<RecyclerView.V
                 type = "树种鉴定";
                 break;
             case 1:
+                type="";
                 break;
             case 2:
+                type="";
+                break;
+            case 3:
+                type="树病鉴定";
+                break;
+            case 4:
+                type="";
+                break;
+            default:
                 break;
 
         }
-
         viewHolder.viewHolder.type.setText(type);
         viewHolder.viewHolder.date.setText(roe.getDateTime().substring(0, 10));
-        if (roe.getJDResult() == null) {
-            viewHolder.viewHolder.checked.setText("否");
-            viewHolder.viewHolder.layoutChecked.setVisibility(View.GONE);
-        } else {
+        Log.i("isChecked", "onBindViewHolder: "+roe.isChecked());
+        if (roe.isChecked()) {
             viewHolder.viewHolder.checked.setText("是");
-            viewHolder.viewHolder.layoutChecked.setVisibility(View.VISIBLE);
-            viewHolder.viewHolder.dateJd.setText(roe.getJDResult().getCheckTime());
-            viewHolder.viewHolder.result.setText(roe.getJDResult().getResult());
+        } else {
+            viewHolder.viewHolder.checked.setText("否");
         }
-
 
     }
 
     @Override
     public int getItemCount() {
         return list.size();
+    }
+
+    public void setOnClickListener(OnClickListener onClickListener) {
+        this.onClickListener = onClickListener;
     }
 
 
@@ -110,15 +119,15 @@ public class Fragment_expert_adapter extends RecyclerView.Adapter<RecyclerView.V
         TextView type;
         @BindView(R.id.checked)
         TextView checked;
-        @BindView(R.id.date_jd)
-        TextView dateJd;
-        @BindView(R.id.result)
-        TextView result;
-        @BindView(R.id.layout_checked)
-        LinearLayout layoutChecked;
 
         ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
+    }
+
+    private OnClickListener onClickListener;
+
+    public  interface OnClickListener {
+        void onClick(View view, int position, Object obj);
     }
 }

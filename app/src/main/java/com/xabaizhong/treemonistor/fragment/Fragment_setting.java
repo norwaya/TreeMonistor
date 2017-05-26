@@ -23,6 +23,7 @@ import com.xabaizhong.treemonistor.activity.Activity_userInfo;
 import com.xabaizhong.treemonistor.base.Fragment_base;
 import com.xabaizhong.treemonistor.contant.UserSharedField;
 import com.xabaizhong.treemonistor.myview.CircleImageView;
+import com.xabaizhong.treemonistor.service.model.User;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -150,7 +151,7 @@ public class Fragment_setting extends Fragment_base {
         editor.commit();
     }
 
-    @OnClick({R.id.user_unlogin, R.id.user_logined,R.id.text1})
+    @OnClick({R.id.user_unlogin, R.id.user_logined, R.id.text1})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.user_unlogin:
@@ -179,11 +180,22 @@ public class Fragment_setting extends Fragment_base {
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        clear();
                         startActivity(new Intent(getActivity(), Activity_login.class));
                         getActivity().finish();
                     }
                 }).create();
         dialog.show();
+    }
+
+    private void clear() {
+        SharedPreferences.Editor edit = sharedPreferences.edit();
+        edit.remove(UserSharedField.AREAID);
+        edit.remove(UserSharedField.USERID);
+        edit.remove(UserSharedField.ROLEID);
+        edit.remove(UserSharedField.REALNAME);
+        edit.apply();
+        edit.commit();
     }
 
 

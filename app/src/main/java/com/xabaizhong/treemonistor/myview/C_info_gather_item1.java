@@ -76,7 +76,6 @@ public class C_info_gather_item1 extends LinearLayout {
     private void init() {
         view = LayoutInflater.from(context).inflate(R.layout.custom_view_edit_view, null);
         finView();
-
         initLeft();
         initLayout();
         initMid();
@@ -220,7 +219,9 @@ public class C_info_gather_item1 extends LinearLayout {
         left.setTextSize(spToPx(context, left_font_size));
         left.setTextColor(left_font_color);
     }
-
+    public void setLeftText(String text){
+        left.setText(text);
+    }
     private void initLayout() {
         layout.setBackground(getResources().getDrawable(R.drawable.edittext_style_line_normal));
     }

@@ -41,7 +41,6 @@ public class MyRadio extends RadioButton {
             switch (attr) {
                 case R.styleable.MyRadio_drawableSize:
                     mDrawableSize = a.getDimensionPixelSize(R.styleable.MyRadio_drawableSize, 50);
-                    Log.i("MyRadio", "mDrawableSize:" + mDrawableSize);
                     break;
                 case R.styleable.MyRadio_drawableTop:
                     drawableTop = a.getDrawable(attr);

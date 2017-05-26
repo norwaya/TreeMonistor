@@ -1,6 +1,7 @@
 package com.xabaizhong.treemonistor.entity;
 
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import org.greenrobot.greendao.annotation.Entity;
@@ -63,88 +64,131 @@ public class Tree {
      */
     @Id
     private Long id;
+    @Expose
     @SerializedName("UserID")
     private String UserID;
+    @Expose
     @SerializedName("abscissa")
     private String abscissa;
+    @Expose
     @SerializedName("aspect")
     private String aspect;
+    @Expose
     @SerializedName("crownAvg")
     private double crownAvg = 0.0;
+    @Expose
     @SerializedName("crownEW")
     private double crownEW = 0.0;
+    @Expose
     @SerializedName("crownNS")
     private double crownNS = 0.0;
+    @Expose
     @SerializedName("date")
     private Date date = new Date();
+    @Expose
     @SerializedName("enviorFactor")
     private String enviorFactor = "";
+    @Expose
     @SerializedName("enviorment")
     private String enviorment = "";
+    @Expose
     @SerializedName("evevation")
     private double evevation = 0.0;
+    @Expose
     @SerializedName("grownSpace")
     private String grownSpace = "";
+    @Expose
     @SerializedName("growth")
     private String growth = "";
+    @Expose
     @SerializedName("guessAge")
     private double guessAge = 0.0;
+    @Expose
     @SerializedName("managementPersion")
     private String managementPersion = "";
+    @Expose
     @SerializedName("managementUnit")
     private String managementUnit = "";
+    @Expose
     @SerializedName("ordinate")
     private String ordinate = "";
+    @Expose
     @SerializedName("owner")
     private String owner = "";
+    @Expose
     @SerializedName("protecte")
     private String protecte = "";
+    @Expose
     @SerializedName("realAge")
     private double realAge = 0.0;
+    @Expose
     @SerializedName("recovery")
     private String recovery = "";
+    @Expose
     @SerializedName("slope")
     private String slope = "";
+    @Expose
     @SerializedName("slopePos")
     private String slopePos = "";
+    @Expose
     @SerializedName("smallName")
     private String smallName = "";
+    @Expose
     @SerializedName("soil")
     private String soil = "";
+    @Expose
     @SerializedName("specDesc")
     private String specDesc = "";
+    @Expose
     @SerializedName("specStatDesc")
     private String specStatDesc = "";
+    @Expose
     @SerializedName("special")
     private String special = "";
+    @Expose
     @SerializedName("treeDBH")
     private double treeDBH = 0.0;
+    @Expose
     @SerializedName("treeHeight")
     private double treeHeight = 0.0;
+    @Expose
     @SerializedName("treeHistory")
     private String treeHistory = "";
+    @Expose
     @SerializedName("treeId")
     private String treeId = "";
+    @Expose
     @SerializedName("treeLevel")
     private String treeLevel = "";
+    @Expose
     @SerializedName("treespeid")
     private String treespeid = "";
+    @Expose
     @SerializedName("treeStatus")
     private String treeStatus = "";
+    @Expose
     @SerializedName("treearea")
     private int treearea = 0;
+    @Expose
     @SerializedName("treetype")
     private int treetype = 0;
+    @Expose
     private String town = "";
+    @Expose
     private String village = "";
+    @Expose
     private String explain = "";
+    @Expose
     private double specialCode = 0;
+    @Expose
+    private String region;
 
+    @Expose
     @ToMany(referencedJoinProperty = "tree_id")
     @OrderBy("id ASC")
-    private List<Pic> pics;
+    private List<TreePic> pics;
 
-
+    @Expose
     @Transient
     @SerializedName("piclist")
     private List<String> piclist;
@@ -159,7 +203,7 @@ public class Tree {
     @Generated(hash = 948839816)
     private transient TreeDao myDao;
 
-    @Generated(hash = 681080893)
+    @Generated(hash = 1213388059)
     public Tree(Long id, String UserID, String abscissa, String aspect,
                 double crownAvg, double crownEW, double crownNS, Date date,
                 String enviorFactor, String enviorment, double evevation,
@@ -170,7 +214,8 @@ public class Tree {
                 String specDesc, String specStatDesc, String special, double treeDBH,
                 double treeHeight, String treeHistory, String treeId, String treeLevel,
                 String treespeid, String treeStatus, int treearea, int treetype,
-                String town, String village, String explain, double specialCode) {
+                String town, String village, String explain, double specialCode,
+                String region) {
         this.id = id;
         this.UserID = UserID;
         this.abscissa = abscissa;
@@ -212,431 +257,436 @@ public class Tree {
         this.village = village;
         this.explain = explain;
         this.specialCode = specialCode;
+        this.region = region;
     }
+
 
     @Generated(hash = 439989092)
     public Tree() {
     }
 
-    public String getTown() {
-        return town;
+
+    public Long getId() {
+        return this.id;
     }
 
-    public void setTown(String town) {
-        this.town = town;
+
+    public void setId(Long id) {
+        this.id = id;
     }
-
-    public String getVillage() {
-        return village;
-    }
-
-    public void setVillage(String village) {
-        this.village = village;
-    }
-
-    public String getExplain() {
-        return explain;
-    }
-
-    public void setExplain(String explain) {
-        this.explain = explain;
-    }
-    /* private String TreeId;     //古树编号  -----unique
-     private String Ivst;     //调查号
-     private String CHName;     //中文名
-     private String Alias;     //别名
-     private String LatinName;     //拉丁名
-     private String Family;     //科
-     private String Belong;     //属
-     private String Town;     //乡镇
-     private String Village;     //村
-     private String SmallName;     //小地名
-     private double Ordinate;     //纵坐标
-     private double Abscissa;     //横坐标 纬度
-     private String SpecialCode;     //特征代码
-     private double TreeHeight;     //树高
-     private double TreeDBH;     //胸径
-     private double CrownAvg;     //冠幅平均
-     private double CrownEW;     //冠幅东西
-     private double CrownNS;     //冠幅南北
-     private String ManagementUnit;     //管护单位
-     private String ManagementPersion;     //管护人
-     private String TreeHistory;     //古树历史
-     private String GrownSpace;     //生长场所
-     private String Special;     //特点
-     private String bzdm; //标志代码
-     private String Owner;     //权属
-     private String Level;     //古树等级
-     private String Growth;     //生长势
-     private String Environment;     //生长环境
-     private String Status;     //现存状态
-     private double RealAge;     //真实树龄
-     private double GuessAge;     //估测树龄
-     private double Evevation;     //海拔
-     private String aspect;     //坡向
-     private String slope;     //坡度
-     private String slopePos;     //坡位
-     private String soil;     //土壤名称
-     private String EnviorFactor;     //影响生长环境因素
-     private String SpecStatDesc;     //树木特殊状况描述
-     private String SpecDesc;     //树种鉴定记载
-     private String Explain;     //照片及说明
-     private String Protected;     //地上保护现状
-     private String Recovery;     //养护复壮现状
-     private String Remark;  //备注*/
-
-
-    /*public String check() {
-        if (isNull(treeId)) {
-            return "古树/群编号为空";
-        }
-        if (isNull(treespeid)) {
-            return "树种为空";
-        }
-        if (isNull(treeHeight + "")) {
-            return "树高为空";
-        }
-        if (isNull(treeDBH + "")) {
-            return "胸径为空";
-        }
-        if (isNull(crownEW + "")) {
-            return "error";
-        }
-        if (isNull(crownNS + "")) {
-            return "error";
-        }
-        if (isNull(managementUnit) && isNull(managementPersion)) {
-            return "管护单位/人为空";
-        }
-        if (isNull(treeHistory)) {
-            return "古树历史为空";
-        }
-        if (isNull(grownSpace)) {
-            return "生长场所为空";
-        }
-        if (isNull(growth)) {
-            return "生长势为空";
-        }
-        if (isNull(realAge + "")) {
-            return "年龄为空";
-        }
-        if (isNull(aspect)) {
-            return "坡向为空";
-        }
-        if (isNull(slope)) {
-            return "坡度为空";
-        }
-        if (isNull(slopePos)) {
-            return "坡位为空";
-        }
-        if (isNull(soil)) {
-            return "土壤为空";
-        }
-        if (isNull(protecte)) {
-            return "error";
-        }
-        if (isNull(recovery)) {
-            return "error";
-        }
-        if (isNull(owner)) {
-            return "owner";
-        }
-        if (isNull(treeStatus)) {
-            return "treestatus";
-        }
-        return null;
-    }*/
 
 
     public String getUserID() {
-        return UserID;
+        return this.UserID;
     }
+
 
     public void setUserID(String UserID) {
         this.UserID = UserID;
     }
 
+
     public String getAbscissa() {
-        return abscissa;
+        return this.abscissa;
     }
+
 
     public void setAbscissa(String abscissa) {
         this.abscissa = abscissa;
     }
 
+
     public String getAspect() {
-        return aspect;
+        return this.aspect;
     }
+
 
     public void setAspect(String aspect) {
         this.aspect = aspect;
     }
 
+
     public double getCrownAvg() {
-        return crownAvg;
+        return this.crownAvg;
     }
+
 
     public void setCrownAvg(double crownAvg) {
         this.crownAvg = crownAvg;
     }
 
+
     public double getCrownEW() {
-        return crownEW;
+        return this.crownEW;
     }
+
 
     public void setCrownEW(double crownEW) {
         this.crownEW = crownEW;
     }
 
+
     public double getCrownNS() {
-        return crownNS;
+        return this.crownNS;
     }
+
 
     public void setCrownNS(double crownNS) {
         this.crownNS = crownNS;
     }
 
+
     public Date getDate() {
-        return date;
+        return this.date;
     }
+
 
     public void setDate(Date date) {
         this.date = date;
     }
 
+
     public String getEnviorFactor() {
-        return enviorFactor;
+        return this.enviorFactor;
     }
+
 
     public void setEnviorFactor(String enviorFactor) {
         this.enviorFactor = enviorFactor;
     }
 
+
     public String getEnviorment() {
-        return enviorment;
+        return this.enviorment;
     }
+
 
     public void setEnviorment(String enviorment) {
         this.enviorment = enviorment;
     }
 
+
     public double getEvevation() {
-        return evevation;
+        return this.evevation;
     }
+
 
     public void setEvevation(double evevation) {
         this.evevation = evevation;
     }
 
+
     public String getGrownSpace() {
-        return grownSpace;
+        return this.grownSpace;
     }
+
 
     public void setGrownSpace(String grownSpace) {
         this.grownSpace = grownSpace;
     }
 
+
     public String getGrowth() {
-        return growth;
+        return this.growth;
     }
+
 
     public void setGrowth(String growth) {
         this.growth = growth;
     }
 
+
     public double getGuessAge() {
-        return guessAge;
+        return this.guessAge;
     }
+
 
     public void setGuessAge(double guessAge) {
         this.guessAge = guessAge;
     }
 
+
     public String getManagementPersion() {
-        return managementPersion;
+        return this.managementPersion;
     }
+
 
     public void setManagementPersion(String managementPersion) {
         this.managementPersion = managementPersion;
     }
 
+
     public String getManagementUnit() {
-        return managementUnit;
+        return this.managementUnit;
     }
+
 
     public void setManagementUnit(String managementUnit) {
         this.managementUnit = managementUnit;
     }
 
+
     public String getOrdinate() {
-        return ordinate;
+        return this.ordinate;
     }
+
 
     public void setOrdinate(String ordinate) {
         this.ordinate = ordinate;
     }
 
+
     public String getOwner() {
-        return owner;
+        return this.owner;
     }
+
 
     public void setOwner(String owner) {
         this.owner = owner;
     }
 
+
     public String getProtecte() {
-        return protecte;
+        return this.protecte;
     }
+
 
     public void setProtecte(String protecte) {
         this.protecte = protecte;
     }
 
+
     public double getRealAge() {
-        return realAge;
+        return this.realAge;
     }
+
 
     public void setRealAge(double realAge) {
         this.realAge = realAge;
     }
 
+
     public String getRecovery() {
-        return recovery;
+        return this.recovery;
     }
+
 
     public void setRecovery(String recovery) {
         this.recovery = recovery;
     }
 
+
     public String getSlope() {
-        return slope;
+        return this.slope;
     }
+
 
     public void setSlope(String slope) {
         this.slope = slope;
     }
 
+
     public String getSlopePos() {
-        return slopePos;
+        return this.slopePos;
     }
+
 
     public void setSlopePos(String slopePos) {
         this.slopePos = slopePos;
     }
 
+
     public String getSmallName() {
-        return smallName;
+        return this.smallName;
     }
+
 
     public void setSmallName(String smallName) {
         this.smallName = smallName;
     }
 
+
     public String getSoil() {
-        return soil;
+        return this.soil;
     }
+
 
     public void setSoil(String soil) {
         this.soil = soil;
     }
 
+
     public String getSpecDesc() {
-        return specDesc;
+        return this.specDesc;
     }
+
 
     public void setSpecDesc(String specDesc) {
         this.specDesc = specDesc;
     }
 
+
     public String getSpecStatDesc() {
-        return specStatDesc;
+        return this.specStatDesc;
     }
+
 
     public void setSpecStatDesc(String specStatDesc) {
         this.specStatDesc = specStatDesc;
     }
 
+
     public String getSpecial() {
-        return special;
+        return this.special;
     }
+
 
     public void setSpecial(String special) {
         this.special = special;
     }
 
+
     public double getTreeDBH() {
-        return treeDBH;
+        return this.treeDBH;
     }
+
 
     public void setTreeDBH(double treeDBH) {
         this.treeDBH = treeDBH;
     }
 
+
     public double getTreeHeight() {
-        return treeHeight;
+        return this.treeHeight;
     }
+
 
     public void setTreeHeight(double treeHeight) {
         this.treeHeight = treeHeight;
     }
 
+
     public String getTreeHistory() {
-        return treeHistory;
+        return this.treeHistory;
     }
+
 
     public void setTreeHistory(String treeHistory) {
         this.treeHistory = treeHistory;
     }
 
+
     public String getTreeId() {
-        return treeId;
+        return this.treeId;
     }
+
 
     public void setTreeId(String treeId) {
         this.treeId = treeId;
     }
 
+
     public String getTreeLevel() {
-        return treeLevel;
+        return this.treeLevel;
     }
+
 
     public void setTreeLevel(String treeLevel) {
         this.treeLevel = treeLevel;
     }
 
+
     public String getTreespeid() {
-        return treespeid;
+        return this.treespeid;
     }
+
 
     public void setTreespeid(String treespeid) {
         this.treespeid = treespeid;
     }
 
+
     public String getTreeStatus() {
-        return treeStatus;
+        return this.treeStatus;
     }
+
 
     public void setTreeStatus(String treeStatus) {
         this.treeStatus = treeStatus;
     }
 
+
     public int getTreearea() {
-        return treearea;
+        return this.treearea;
     }
+
 
     public void setTreearea(int treearea) {
         this.treearea = treearea;
     }
 
+
     public int getTreetype() {
-        return treetype;
+        return this.treetype;
     }
+
 
     public void setTreetype(int treetype) {
         this.treetype = treetype;
     }
 
-    public List<?> getPiclist() {
+
+    public String getTown() {
+        return this.town;
+    }
+
+
+    public void setTown(String town) {
+        this.town = town;
+    }
+
+
+    public String getVillage() {
+        return this.village;
+    }
+
+
+    public void setVillage(String village) {
+        this.village = village;
+    }
+
+
+    public String getExplain() {
+        return this.explain;
+    }
+
+
+    public void setExplain(String explain) {
+        this.explain = explain;
+    }
+
+
+    public double getSpecialCode() {
+        return this.specialCode;
+    }
+
+
+    public void setSpecialCode(double specialCode) {
+        this.specialCode = specialCode;
+    }
+
+
+    public String getRegion() {
+        return this.region;
+    }
+
+
+    public void setRegion(String region) {
+        this.region = region;
+    }
+
+
+    public List<String> getPiclist() {
         return piclist;
     }
 
@@ -644,35 +694,20 @@ public class Tree {
         this.piclist = piclist;
     }
 
-    public Long getId() {
-        return this.id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public double getSpecialCode() {
-        return this.specialCode;
-    }
-
-    public void setSpecialCode(double specialCode) {
-        this.specialCode = specialCode;
-    }
 
     /**
      * To-many relationship, resolved on first access (and after reset).
      * Changes to to-many relations are not persisted, make changes to the target entity.
      */
-    @Generated(hash = 612066960)
-    public List<Pic> getPics() {
+    @Generated(hash = 123928770)
+    public List<TreePic> getPics() {
         if (pics == null) {
             final DaoSession daoSession = this.daoSession;
             if (daoSession == null) {
                 throw new DaoException("Entity is detached from DAO context");
             }
-            PicDao targetDao = daoSession.getPicDao();
-            List<Pic> picsNew = targetDao._queryTree_Pics(id);
+            TreePicDao targetDao = daoSession.getTreePicDao();
+            List<TreePic> picsNew = targetDao._queryTree_Pics(id);
             synchronized (this) {
                 if (pics == null) {
                     pics = picsNew;
@@ -682,6 +717,7 @@ public class Tree {
         return pics;
     }
 
+
     /**
      * Resets a to-many relationship, making the next get call to query for a fresh result.
      */
@@ -689,6 +725,7 @@ public class Tree {
     public synchronized void resetPics() {
         pics = null;
     }
+
 
     /**
      * Convenient call for {@link org.greenrobot.greendao.AbstractDao#delete(Object)}.
@@ -702,6 +739,7 @@ public class Tree {
         myDao.delete(this);
     }
 
+
     /**
      * Convenient call for {@link org.greenrobot.greendao.AbstractDao#refresh(Object)}.
      * Entity must attached to an entity context.
@@ -714,6 +752,7 @@ public class Tree {
         myDao.refresh(this);
     }
 
+
     /**
      * Convenient call for {@link org.greenrobot.greendao.AbstractDao#update(Object)}.
      * Entity must attached to an entity context.
@@ -725,6 +764,7 @@ public class Tree {
         }
         myDao.update(this);
     }
+
 
     /** called by internal mechanisms, do not call yourself. */
     @Generated(hash = 1935359770)

@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-          android:id="@+id/text1"
-          android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-          android:textColor="@color/wx_green"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:padding="@dimen/activity_horizontal_margin"/>
+<TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/text1"
+    android:layout_margin="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:drawableLeft="@drawable/time"
+    android:gravity="center_vertical"
+    android:textAlignment="gravity"
+    android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+    android:textColor="@color/black"/>

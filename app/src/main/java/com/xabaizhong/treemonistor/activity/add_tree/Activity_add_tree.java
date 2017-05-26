@@ -17,11 +17,12 @@ import com.xabaizhong.treemonistor.base.Activity_base;
 import com.xabaizhong.treemonistor.base.App;
 import com.xabaizhong.treemonistor.contant.UserSharedField;
 import com.xabaizhong.treemonistor.entity.DaoSession;
-import com.xabaizhong.treemonistor.entity.Pic;
-import com.xabaizhong.treemonistor.entity.PicDao;
+import com.xabaizhong.treemonistor.entity.TreePic;
 import com.xabaizhong.treemonistor.entity.Tree;
 import com.xabaizhong.treemonistor.entity.TreeDao;
+import com.xabaizhong.treemonistor.entity.TreePicDao;
 import com.xabaizhong.treemonistor.entity.TreeSpecial;
+import com.xabaizhong.treemonistor.entity.TreeSpecialDao;
 import com.xabaizhong.treemonistor.entity.TreeTypeInfo;
 import com.xabaizhong.treemonistor.entity.TreeTypeInfoDao;
 import com.xabaizhong.treemonistor.myview.C_dialog_checkbox;
@@ -37,13 +38,14 @@ import com.xabaizhong.treemonistor.utils.ScaleBitmap;
 
 import java.io.File;
 import java.net.ConnectException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -168,30 +170,129 @@ public class Activity_add_tree extends Activity_base {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
         ButterKnife.bind(this);
-        initResoutce();
+        initDaoSession();
+        initResource();
         init();
     }
 
     Tree tree;
-    TreeTypeInfo treeTypeInfo = new TreeTypeInfo();
+    TreeTypeInfo treeTypeInfo ;
 
-    private void initResoutce() {
+    private void initResource() {
 
         long id = getIntent().getLongExtra("id", -1);
         if (id == -1) {
             tree = new Tree();
             treeTypeInfo = new TreeTypeInfo();
         } else {
+            queryBeanFromDb(id);
             initViews();
         }
+    }
+
+    private void queryBeanFromDb(long id) {
+        treeTypeInfo = treeTypeInfoDao.load(id);
+        tree = treeTypeInfo.getTree();
+        List<TreePic> pics = tree.getPics();
+        if (mList == null) {
+            mList = new ArrayList<>();
+        }
+        for (TreePic pic : pics) {
+            mList.add(pic.getPath());
+        }
+        pic.setText(mList.size() + "");
     }
 
     /**
      * 数据库 -> views
      */
     private void initViews() {
+        treeId.setText(tree.getTreeId());
+        tch.setText(treeTypeInfo.getIvst());
+        researchDate.setText(getStringDate(treeTypeInfo.getDate()));
+        region.setText(tree.getRegion());
+        detailAddress.setText(tree.getSmallName());
+        longitude.setText(tree.getOrdinate());
+        latitude.setText(tree.getAbscissa());
+        initialTreeSpeciesInfo();
+        height.setText(String.valueOf(tree.getTreeHeight()));
+        dbh.setText(String.valueOf(tree.getTreeDBH()));
+        age.setText(String.valueOf(tree.getRealAge()));
+        crownEW.setText(String.valueOf(tree.getCrownEW()));
+        crownNS.setText(String.valueOf(tree.getCrownNS()));
 
+        int grownIndex = Integer.parseInt(tree.getGrowth()) - 1;
+        growth.setText(getResources().getStringArray(R.array.growth)[grownIndex]);
 
+        int environmentIndex = Integer.parseInt(tree.getEnviorment()) - 1;
+        environment.setText(getResources().getStringArray(R.array.environment)[environmentIndex]);
+
+        int statusIndex = Integer.parseInt(tree.getTreeStatus()) - 1;
+        status.setText(getResources().getStringArray(R.array.status)[statusIndex]);
+
+        int specialIndex = Integer.parseInt(tree.getSpecial());
+        special.setText(getResources().getStringArray(R.array.special)[specialIndex]);
+
+        int gsbzIndex = tree.getTreetype();
+        gsbz.setText(getResources().getStringArray(R.array.gsbz)[gsbzIndex]);
+
+        int ownIndex = Integer.parseInt(tree.getOwner()) - 1;
+        owner.setText(getResources().getStringArray(R.array.owner)[ownIndex]);
+
+        int aspectIndex = Integer.parseInt(tree.getAspect());
+        aspect.setText(getResources().getStringArray(R.array.aspect)[aspectIndex]);
+
+        int slopeIndex = Integer.parseInt(tree.getSlope());
+        slope.setText(getResources().getStringArray(R.array.slope)[slopeIndex]);
+
+        int slopePosIndex = Integer.parseInt(tree.getSlopePos());
+        slopePos.setText(getResources().getStringArray(R.array.slope_pos)[slopePosIndex]);
+
+        int soilIndex = Integer.parseInt(tree.getSoil());
+        soil.setText(getResources().getStringArray(R.array.soil)[soilIndex]);
+
+        int grownSpaceIndex = Integer.parseInt(tree.getGrownSpace());
+        growSpace.setText(getResources().getStringArray(R.array.grown_space)[grownSpaceIndex]);
+
+        int treeAreaIndex = tree.getTreearea();
+        treeArea.setText(getResources().getStringArray(R.array.tree_area)[treeAreaIndex]);
+
+        String protecteArrayIndex = tree.getProtecte();
+        StringBuilder protecteSbu = new StringBuilder();
+        String[] protectArray = getResources().getStringArray(R.array.protect);
+        Pattern proPattern = Pattern.compile("\\d");
+        Matcher proM = proPattern.matcher(protecteArrayIndex);
+        while (proM.find()) {
+            final int i = Integer.parseInt(proM.group());
+            protecteSbu.append(protectArray[i - 1]).append(",");
+        }
+        protect.setText(protecteSbu.toString());
+
+        String recoveryArrayIndex = tree.getRecovery();
+        StringBuilder recoverySbu = new StringBuilder();
+        String[] recoveryArray = getResources().getStringArray(R.array.recovery);
+        Pattern recPattern = Pattern.compile("\\d");
+        Matcher recM = recPattern.matcher(recoveryArrayIndex);
+        while (recM.find()) {
+            final int i = Integer.parseInt(recM.group());
+            recoverySbu.append(recoveryArray[i - 1]).append(",");
+        }
+        recovery.setText(recoverySbu.toString());
+
+        mangerUnit.setText(tree.getManagementUnit());
+        managerPerson.setText(tree.getManagementPersion());
+        environmentFactor.setText(tree.getEnviorFactor());
+        history.setText(tree.getTreeHistory());
+        specDesc.setText(tree.getSpecDesc());
+        specStatDesc.setText(tree.getSpecStatDesc());
+    }
+
+    private void initialTreeSpeciesInfo() {
+        List<TreeSpecial> sList = treeSepcialDao.queryBuilder().where(TreeSpecialDao.Properties.TreeSpeId.eq(tree.getTreespeid())).build().list();
+        if (sList.size() > 0) {
+            cname.setText(sList.get(0).getCname());
+            alias.setText(sList.get(0).getAlias());
+        }
     }
 
     private void init() {
@@ -382,44 +483,49 @@ public class Activity_add_tree extends Activity_base {
      * save bean to database
      */
     private void saveDao() {
-        initDaoSession();
         treeDao.save(tree);
         treeTypeInfo.setTreeTableID(tree.getId());
         treeTypeInfoDao.save(treeTypeInfo);
-        Log.i(TAG, "saveDao: "+treeTypeInfo.getId() +"\t"+tree.getId());
-        Pic pic;
-        for (String str : mList) {
-            pic = new Pic(null, tree.getId(), str);
-            picDao.save(pic);
-        }
+        Log.i(TAG, "saveDao: " + treeTypeInfo.getId() + "\t" + tree.getId());
+        picDao.deleteInTx(tree.getPics());
+        TreePic pic;
+        if (mList != null)
+            for (String str : mList) {
+                pic = new TreePic(null, tree.getId(), str);
+                picDao.save(pic);
+            }
     }
 
-    PicDao picDao;
+    TreePicDao picDao;
     TreeDao treeDao;
     TreeTypeInfoDao treeTypeInfoDao;
+    TreeSpecialDao treeSepcialDao;
 
     private void initDaoSession() {
         DaoSession daoSession = ((App) getApplication()).getDaoSession();
-        picDao = daoSession.getPicDao();
+        picDao = daoSession.getTreePicDao();
         treeDao = daoSession.getTreeDao();
         treeTypeInfoDao = daoSession.getTreeTypeInfoDao();
-
+        treeSepcialDao = daoSession.getTreeSpecialDao();
     }
 
     String check() {
         if (!treeId.getText().matches("\\d{11}")) {
             return "古树编号为 11 位";
         }
+        if (!treeId.getText().startsWith(areaId())) {
+            return "古树编号要以 " + areaId() + " 开头";
+        }
         if (!tch.getText().matches("\\d{5}")) {
             return "调查号为5位数字";
         }
-        if (!researchDate.getText().matches("\\w{4}-\\w{2}-\\w{2}")) {
+        if (!researchDate.getText().matches("^\\w{4}-\\w{2}-\\w{2}.*")) {
             return "请选择日期";
         }
-        if (region.getText().equals("") || detailAddress.getText().equals("")) {
+        if (detailAddress.getText().equals("")) {
             return "请完善地理信息";
         }
-        if(latitude.getText().equals("")||longitude.getText().equals("")){
+        if (latitude.getText().equals("") || longitude.getText().equals("")) {
             return "经纬度不能为空";
         }
         if (cname.getText().equals("")) {
@@ -482,13 +588,13 @@ public class Activity_add_tree extends Activity_base {
         if (recovery.getText().equals("")) {
             return "请选择养护现状";
         }
-        if (managerPerson.equals("") && mangerUnit.equals("")) {
+        if (managerPerson.getText().equals("") && mangerUnit.getText().equals("")) {
             return "管护单位和管护人不能同时为空";
         }
-        if (environmentFactor.equals("")) {
+        if (environmentFactor.getText().equals("")) {
             return "请填写环境因素";
         }
-        if (history.equals("")) {
+        if (history.getText().equals("")) {
             return "请填写历史因素";
         }
         return null;
@@ -498,33 +604,35 @@ public class Activity_add_tree extends Activity_base {
 
         int treeAge = (int) tree.getRealAge();
 
-        if (tree.getTreetype() != 1) {
-            tree.setTreeLevel(2 + "");
-
-        } else {
+        if (tree.getTreetype() == 0) {
             switch (treeAge / 100) {
+                case 0:
                 case 1:
                 case 2:
                     tree.setTreeLevel("4");
                     break;
                 case 3:
                 case 4:
-                    tree.setTreeLevel(3 + "");
+                    tree.setTreeLevel("3");
+                    break;
                 case 5:
                 case 6:
                 case 7:
                 case 8:
                 case 9:
-                    tree.setTreeLevel(2 + "");
+                    tree.setTreeLevel("2");
                     break;
                 default:
-                    tree.setTreeLevel(4 + "");
+                    tree.setTreeLevel("1");
                     break;
             }
 
-        }
-        if (treeAge / 100 > 10) {
-            tree.setTreeLevel(1 + "");
+        } else {
+            tree.setTreeLevel("2");
+            if (treeAge / 100 > 10) {
+                tree.setTreeLevel("1");
+                tree.setTreetype(2);
+            }
         }
 
     }
@@ -625,7 +733,6 @@ public class Activity_add_tree extends Activity_base {
     private Map<String, Object> getParms() {
         Map<String, Object> map = new HashMap<>();
         String user_id = sharedPreferences.getString(UserSharedField.USERID, "");
-        Log.i(TAG, "getParms: " + user_id.length());
         map.put("UserID", user_id.trim());
         map.put("TreeType", 0);
         map.put("JsonStr", json);
@@ -689,21 +796,6 @@ public class Activity_add_tree extends Activity_base {
         return list;
     }
 
-   /* private String encode64base(File file) {
-        FileInputStream inputFile = null;
-        try {
-            inputFile = new FileInputStream(file);
-            byte[] buffer = new byte[(int) file.length()];
-            inputFile.read(buffer);
-            inputFile.close();
-            return Base64.encodeToString(buffer, Base64.DEFAULT);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }*/
 
     private void computeCrownAvg(String ew, String ns) {
         if ("".equals(ew) || "".equals(ns))
@@ -723,13 +815,6 @@ public class Activity_add_tree extends Activity_base {
     }
 
 
-    /**
-     * result for activity
-     *
-     * @param requestCode
-     * @param resultCode
-     * @param data
-     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
@@ -745,15 +830,15 @@ public class Activity_add_tree extends Activity_base {
                 if (resultCode == 100) {
                     Activity_map.LocationBox box = data.getParcelableExtra("location");
                     if (box != null) {
-
-
-                        region.setText(box.getProvince() + box.getCity() + box.getDistrict());
-                        detailAddress.setText(box.getStreet() + box.getSematicDescription());
-                        latitude.setText(box.getLat()+"");
-                        longitude.setText(box.getLon()+"");
+                        tree.setRegion(box.getProvince() + box.getCity() + box.getDistrict());
                         tree.setSmallName(box.getStreet() + box.getSematicDescription());
                         tree.setAbscissa(box.getLat() + "");
                         tree.setOrdinate(box.getLon() + "");
+
+                        region.setText(tree.getRegion());
+                        detailAddress.setText(tree.getSmallName());
+                        latitude.setText(tree.getAbscissa());
+                        longitude.setText(tree.getOrdinate());
                     }
                 }
                 break;
@@ -761,6 +846,8 @@ public class Activity_add_tree extends Activity_base {
                 if (resultCode == Activity_tree_cname.REQUEST_CODE_CNAME_RESULT) {
                     TreeSpecial treeSpecial = data.getParcelableExtra("special");
                     tree.setTreespeid(treeSpecial.getTreeSpeId());
+
+
                     cname.setText(treeSpecial.getCname());
                     alias.setText(treeSpecial.getAlias());
                 }
@@ -862,9 +949,9 @@ public class Activity_add_tree extends Activity_base {
         dateDialog.setDateDialogListener(new DateDialog.DateDialogListener() {
             @Override
             public void getDate(Date date) {
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                researchDate.setText(format.format(date));
+                researchDate.setText(getStringDate(date));
                 treeTypeInfo.setDate(date);
+
                 tree.setDate(date);
             }
         });
@@ -890,15 +977,16 @@ public class Activity_add_tree extends Activity_base {
                         break;
                     case REQUEST_CODE_STATUS:
                         status.setText(array[messageEvent.getId()]);
+
                         tree.setTreeStatus((messageEvent.getId() + 1) + "");
                         break;
                     case REQUEST_CODE_SPECIAL:
                         special.setText(array[messageEvent.getId()]);
-                        tree.setSpecial((messageEvent.getId() + 1) + "");
+                        tree.setSpecial((messageEvent.getId()) + "");
                         break;
                     case REQUEST_CODE_GSBZ:
                         gsbz.setText(array[messageEvent.getId()]);
-                        tree.setTreetype((messageEvent.getId() + 1));
+                        tree.setTreetype((messageEvent.getId()));
                         break;
                     case REQUEST_CODE_OWNER:
                         owner.setText(array[messageEvent.getId()]);

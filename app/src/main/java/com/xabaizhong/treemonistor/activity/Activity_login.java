@@ -220,9 +220,9 @@ public class Activity_login extends Activity_base implements View.OnFocusChangeL
 
     private void attemptLogin() {
         if (!verification()) {
+            pb.setVisibility(View.INVISIBLE);
             showToast("error");
         }
-//        login();
         asyncTaskRequest = AsyncTaskRequest.instance("Login", "login").setParams(getLoginInfo())
                 .setCallBack(new AsyncTaskRequest.CallBack() {
                     @Override

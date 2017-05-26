@@ -26,7 +26,6 @@ public class Fragment_monitor_growth_detail extends Fragment {
     @BindView(R.id.trunk)
     TextView trunk;
     Unbinder unbinder;
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -34,7 +33,6 @@ public class Fragment_monitor_growth_detail extends Fragment {
         unbinder = ButterKnife.bind(this, view);
         return view;
     }
-
     @Override
     public void onStart() {
         super.onStart();

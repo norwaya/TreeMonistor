@@ -63,8 +63,7 @@ public class DynamicView extends LinearLayout {
     public List<Map<String, Object>> getTreeMap() {
         List<Map<String, Object>> mapList = new ArrayList<>();
         Map<String, Integer> map = new HashMap<>();
-        for (MapView mapView : list
-                ) {
+        for (MapView mapView : list) {
             Map<String, Object> l = mapView.getKV();
             if (l != null)
                 mapList.add(l);
