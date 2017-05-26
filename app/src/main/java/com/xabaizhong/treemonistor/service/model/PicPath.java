@@ -20,7 +20,7 @@ public class PicPath{
     private String message;
     @SerializedName("error_code")
     private int errorCode;
-    @SerializedName("result")
+    @SerializedName("piclist")
     private List<String> result;
 
     public String getMessage() {

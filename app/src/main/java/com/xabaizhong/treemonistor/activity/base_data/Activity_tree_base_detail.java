@@ -6,24 +6,21 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.xabaizhong.treemonistor.R;
+import com.xabaizhong.treemonistor.activity.query_treeOrGroup.Activity_tree_detailInfo;
 import com.xabaizhong.treemonistor.base.Activity_base;
 import com.xabaizhong.treemonistor.base.App;
-import com.xabaizhong.treemonistor.contant.UserSharedField;
 import com.xabaizhong.treemonistor.entity.TreeSpecial;
 import com.xabaizhong.treemonistor.entity.TreeSpecialDao;
+import com.xabaizhong.treemonistor.myview.C_info_gather_item1;
 import com.xabaizhong.treemonistor.service.WebserviceHelper;
 import com.xabaizhong.treemonistor.service.model.PicPath;
 
 import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -35,32 +32,21 @@ import butterknife.OnClick;
  */
 
 public class Activity_tree_base_detail extends Activity_base {
+
     @BindView(R.id.cname)
-    TextView cname;
-    @BindView(R.id.layout_name)
-    LinearLayout layoutName;
+    C_info_gather_item1 cname;
     @BindView(R.id.latin)
-    TextView latin;
-    @BindView(R.id.layout_latin)
-    LinearLayout layoutLatin;
+    C_info_gather_item1 latin;
     @BindView(R.id.family)
-    TextView family;
-    @BindView(R.id.layout_family)
-    LinearLayout layoutFamily;
+    C_info_gather_item1 family;
     @BindView(R.id.belong)
-    TextView belong;
-    @BindView(R.id.layout_belong)
-    LinearLayout layoutBelong;
+    C_info_gather_item1 belong;
     @BindView(R.id.alias)
-    TextView alias;
-    @BindView(R.id.layout_alias)
-    LinearLayout layoutAlias;
-    @BindView(R.id.desc)
-    TextView desc;
-    @BindView(R.id.layout_desc)
-    LinearLayout layoutDesc;
-    @BindView(R.id.show_pic)
-    Button showPic;
+    C_info_gather_item1 alias;
+    @BindView(R.id.explain)
+    C_info_gather_item1 explain;
+    @BindView(R.id.pic)
+    C_info_gather_item1 pic;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -75,9 +61,19 @@ public class Activity_tree_base_detail extends Activity_base {
     ArrayList<String> picList = new ArrayList<>();
 
     private void initView() {
+
         id = getIntent().getLongExtra("id", 0);
-        if (id == 0)
-            return;
+        pic.setCallback_mid(new C_info_gather_item1.Mid_CallBack() {
+            @Override
+            public void onClickListener(View et) {
+                if (pic.getText().equals("0")) {
+                    return;
+                }
+                Intent i = new Intent(Activity_tree_base_detail.this, Activity_pic_vp.class);
+                i.putStringArrayListExtra("picList", picList);
+                startActivity(i);
+            }
+        });
         initDao();
         if (treeSpecial != null) {
             fillData();
@@ -97,7 +93,7 @@ public class Activity_tree_base_detail extends Activity_base {
             protected String doInBackground(Void... params) {
                 try {
                     return WebserviceHelper.GetWebService(
-                            "TreePic", "SpeciesPicList", getParms());
+                            "Pic", "GetTreeSpeInfoPic", getParms());
                 } catch (ConnectException e) {
                     e.printStackTrace();
                     return null;
@@ -108,14 +104,12 @@ public class Activity_tree_base_detail extends Activity_base {
             protected void onPostExecute(String s) {
                 Log.i(TAG, "onPostExecute: " + s);
                 if (s == null) {
-//                    showToast("请求错误");
                     return;
                 }
-                showToast(s);
                 PicPath picPath = new Gson().fromJson(s, PicPath.class);
                 if (picPath.getResult() != null && picPath.getResult().size() > 0) {
                     picList.addAll(picPath.getResult());
-                    showPic.setVisibility(View.VISIBLE);
+                    pic.setText(picList.size() + "");
                 }
             }
         }.execute();
@@ -131,7 +125,7 @@ public class Activity_tree_base_detail extends Activity_base {
       <flowerColor>int</flowerColor>
       <fruitType>int</fruitType>
       <fruitColor>int</fruitColor>*/
-        map.put("TreeSpeID ", treeSpecial.getTreeSpeId());
+        map.put("TreeSpeID", treeSpecial.getTreeSpeId());
         return map;
     }
 
@@ -141,40 +135,16 @@ public class Activity_tree_base_detail extends Activity_base {
         String familyStr = treeSpecial.getFamily();
         String belongStr = treeSpecial.getBelong();
         String aliasStr = treeSpecial.getAlias();
-        if (cnameStr.equals(""))
-            layoutName.setVisibility(View.GONE);
-        else
-            cname.setText(cnameStr);
-        if (cnameStr.equals(""))
-            layoutLatin.setVisibility(View.GONE);
-        else
-            latin.setText(latinStr);
-        if (cnameStr.equals(""))
-            layoutFamily.setVisibility(View.GONE);
-        else
-            family.setText(familyStr);
-        if (cnameStr.equals(""))
-            layoutBelong.setVisibility(View.GONE);
-        else
-            belong.setText(belongStr);
-        if (cnameStr.equals(""))
-            layoutAlias.setVisibility(View.GONE);
-        else
-            alias.setText(aliasStr);
+        cname.setText(cnameStr);
+        latin.setText(latinStr);
+        family.setText(familyStr);
+        belong.setText(belongStr);
+        alias.setText(aliasStr);
+        pic.setText("0");
     }
 
     private void initDao() {
-
-
         TreeSpecialDao dao = ((App) getApplicationContext()).getDaoSession().getTreeSpecialDao();
         treeSpecial = dao.load(id);
-    }
-
-
-    @OnClick(R.id.show_pic)
-    public void onViewClicked() {
-        Intent i = new Intent(this,Activity_pic_vp.class);
-        i.putStringArrayListExtra("picList", picList);
-        startActivity(i);
     }
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -10,152 +11,57 @@
         android:divider="@drawable/divider"
         android:dividerPadding="1px"
         android:orientation="vertical"
-        android:padding="@dimen/activity_horizontal_margin"
         android:showDividers="middle">
 
-        <LinearLayout
+        <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+            android:id="@+id/cname"
+            style="@style/custom_edit_text_style"
+            app:left_text="中文名"
+            app:mid_font_color="@color/wx_green"
+            app:mid_type="read"/>
 
-            android:id="@+id/layout_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+        <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+            android:id="@+id/latin"
+            style="@style/custom_edit_text_style"
+            app:left_text="拉丁名"
+            app:mid_font_color="@color/wx_green"
+            app:mid_type="read"/>
 
-            <TextView
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:text="中文名"
-                android:textSize="18dp"/>
+        <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+            android:id="@+id/family"
+            style="@style/custom_edit_text_style"
+            app:left_text="科"
+            app:mid_font_color="@color/wx_green"
+            app:mid_type="read"/>
 
-            <TextView
-                android:id="@+id/cname"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginStart="8dp"
-                android:textSize="18dp"/>
-        </LinearLayout>
+        <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+            android:id="@+id/belong"
+            style="@style/custom_edit_text_style"
+            app:left_text="属"
+            app:mid_font_color="@color/wx_green"
+            app:mid_type="read"/>
 
-        <LinearLayout
-            android:id="@+id/layout_latin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+        <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+            android:id="@+id/alias"
+            style="@style/custom_edit_text_style"
+            app:left_text="别名"
+            app:mid_font_color="@color/wx_green"
+            app:mid_type="read"/>
 
-            <TextView
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:text="拉丁名"
-                android:textSize="18dp"/>
+        <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+            android:id="@+id/explain"
+            style="@style/custom_edit_text_style"
+            app:left_text="描述"
+            app:mid_font_color="@color/wx_green"
+            app:mid_type="read"/>
 
-            <TextView
-                android:id="@+id/latin"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginStart="8dp"
-                android:textSize="18dp"/>
-        </LinearLayout>
+        <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+            android:id="@+id/pic"
+            style="@style/custom_edit_text_style"
+            app:left_text="图片"
+            app:mid_font_color="@color/wx_green"
+            app:mid_type="read"/>
 
-        <LinearLayout
-            android:id="@+id/layout_family"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:text="科"
-                android:textSize="18dp"/>
-
-            <TextView
-                android:id="@+id/family"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginStart="8dp"
-                android:textSize="18dp"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/layout_belong"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:text="属"
-                android:textSize="18dp"/>
-
-            <TextView
-                android:id="@+id/belong"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginStart="8dp"
-                android:textSize="18dp"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/layout_alias"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:text="别名"
-                android:textSize="18dp"/>
-
-            <TextView
-                android:id="@+id/alias"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginStart="8dp"
-                android:textSize="18dp"/>
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:id="@+id/layout_desc"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:text="描述"
-                android:textSize="18dp"/>
-
-            <TextView
-                android:id="@+id/desc"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginStart="8dp"
-                android:textSize="18dp"/>
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/show_pic"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:padding="@dimen/activity_horizontal_margin"
-            android:text="查看图片"
-            android:textColor="@color/wx_green"
-            android:visibility="invisible"/>
 
     </LinearLayout>
 </ScrollView>

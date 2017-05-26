@@ -11,6 +11,7 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SearchView;
@@ -83,7 +84,7 @@ import static android.support.v7.widget.RecyclerView.VERTICAL;
  * Created by admin on 2017/3/13.
  */
 
-public class Activity_tree_base extends Activity_base implements View.OnClickListener {
+public class Activity_tree_base extends Activity_base {
 
     @BindView(R.id.sv)
     SearchView sv;
@@ -134,7 +135,6 @@ public class Activity_tree_base extends Activity_base implements View.OnClickLis
             }
         });
         rv.setLayoutManager(new LinearLayoutManager(this));
-        rv.addItemDecoration(new RecycleViewDivider(this, VERTICAL, R.drawable.divider2));
         rv.setAdapter(adapter);
     }
 
@@ -173,7 +173,7 @@ public class Activity_tree_base extends Activity_base implements View.OnClickLis
             public boolean onQueryTextSubmit(String query) {
                 if (query != null && !query.trim().equals("")) {
                     queryStr = query;
-                    Log.i(TAG, "onQueryTextSubmit: ");
+                    Log.i(TAG, "onQueryTextSubmit: " +query);
                     adapter.setSource(getList(query));
                 }
                 return false;
@@ -185,12 +185,15 @@ public class Activity_tree_base extends Activity_base implements View.OnClickLis
                 return false;
             }
         });
-        sv.setOnSearchClickListener(this);
+
     }
 
     @Override
-    public void onClick(View v) {
-
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == android.R.id.home){
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     List<TreeSpecial> list;
@@ -198,7 +201,7 @@ public class Activity_tree_base extends Activity_base implements View.OnClickLis
     public List<TreeSpecial> getList(String query) {
         Query<TreeSpecial> queryDao = dao.queryBuilder().whereOr(
                 TreeSpecialDao.Properties.Cname.like("%" + query + "%"),
-                TreeSpecialDao.Properties.Alias.like("%" + query + "%")).where(TreeSpecialDao.Properties.Family.notEq("")).build();
+                TreeSpecialDao.Properties.Alias.like("%" + query + "%")).build();
         list = queryDao.list();
         return list;
     }

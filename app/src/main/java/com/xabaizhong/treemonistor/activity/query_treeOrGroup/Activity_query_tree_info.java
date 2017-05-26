@@ -138,23 +138,25 @@ public class Activity_query_tree_info extends Activity_base implements AdapterVi
         Intent i = new Intent(this, Activity_query_tree_info_list.class);
         i.putExtra("index", index);
         if (index == -1) {
-            i.putExtra("type",1);
-        }else{
-            i.putExtra("type",0);
+            i.putExtra("type", 1);
+        } else {
+            i.putExtra("type", 0);
         }
         startActivity(i);
     }
 
-
+/*
     class ViewHolder {
         TextView title;
+        TextView mid;
         TextView content;
 
         public ViewHolder(View view) {
             title = ((TextView) view.findViewById(R.id.title));
+            mid = ((TextView) view.findViewById(R.id.mid));
             content = ((TextView) view.findViewById(R.id.content));
         }
-    }
+    }*/
 
     static class Bean {
         /**
@@ -286,19 +288,21 @@ public class Activity_query_tree_info extends Activity_base implements AdapterVi
             }
             Bean.ListBean listBean = list.get(position);
 //            viewHoler.title.setText(listBean.getName()+"\t"+listBean.getClassical());
-            viewHoler.title.setText(mContext.getString(R.string.two_item_t,
-                    listBean.getName(), listBean.getClassical()));
+            viewHoler.title.setText(listBean.getName());
+            viewHoler.mid.setText(listBean.getClassical());
             viewHoler.content.setText(String.valueOf(listBean.getNum()));
             return convertView;
         }
 
         static class ViewHolder {
             TextView title;
+            TextView mid;
             TextView content;
 
-            public ViewHolder(View itemview) {
-                title = (TextView) itemview.findViewById(R.id.title);
-                content = (TextView) itemview.findViewById(R.id.content);
+            public ViewHolder(View view) {
+                title = ((TextView) view.findViewById(R.id.title));
+                mid = ((TextView) view.findViewById(R.id.mid));
+                content = ((TextView) view.findViewById(R.id.content));
             }
         }
     }

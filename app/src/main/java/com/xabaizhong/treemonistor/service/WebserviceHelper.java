@@ -15,7 +15,8 @@ import java.net.ConnectException;
 import java.util.Map;
 
 public class WebserviceHelper {
-    static String base = "http://192.168.0.118:8055/";
+//    static String base = "http://192.168.0.118:8055/";
+    static String base = "http://117.34.105.28:8055/";
     static String TAG = "GetWebService";
 
     /**

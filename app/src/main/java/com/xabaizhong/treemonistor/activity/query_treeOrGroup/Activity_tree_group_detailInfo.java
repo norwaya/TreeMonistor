@@ -426,17 +426,17 @@ public class Activity_tree_group_detailInfo extends Activity_base {
             @SerializedName("SZJX")
             private String SZJX;
             @SerializedName("Area")
-            private int Area;
+            private double Area;
             @SerializedName("GSTreeNum")
-            private int GSTreeNum;
+            private double GSTreeNum;
             @SerializedName("AverageHeight")
             private double AverageHeight;
             @SerializedName("AverageDiameter")
-            private int AverageDiameter;
+            private double AverageDiameter;
             @SerializedName("AverageAge")
-            private int AverageAge;
+            private double AverageAge;
             @SerializedName("YBDInfo")
-            private int YBDInfo;
+            private double YBDInfo;
             @SerializedName("Evevation")
             private String Evevation;
             @SerializedName("Aspect")
@@ -527,15 +527,15 @@ public class Activity_tree_group_detailInfo extends Activity_base {
                 this.SZJX = SZJX;
             }
 
-            public int getArea() {
+            public double getArea() {
                 return Area;
             }
 
-            public void setArea(int Area) {
+            public void setArea(float Area) {
                 this.Area = Area;
             }
 
-            public int getGSTreeNum() {
+            public double getGSTreeNum() {
                 return GSTreeNum;
             }
 
@@ -551,7 +551,7 @@ public class Activity_tree_group_detailInfo extends Activity_base {
                 this.AverageHeight = AverageHeight;
             }
 
-            public int getAverageDiameter() {
+            public double getAverageDiameter() {
                 return AverageDiameter;
             }
 
@@ -559,7 +559,7 @@ public class Activity_tree_group_detailInfo extends Activity_base {
                 this.AverageDiameter = AverageDiameter;
             }
 
-            public int getAverageAge() {
+            public double getAverageAge() {
                 return AverageAge;
             }
 
@@ -567,7 +567,7 @@ public class Activity_tree_group_detailInfo extends Activity_base {
                 this.AverageAge = AverageAge;
             }
 
-            public int getYBDInfo() {
+            public double getYBDInfo() {
                 return YBDInfo;
             }
 

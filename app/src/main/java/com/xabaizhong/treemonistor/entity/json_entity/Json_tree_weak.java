@@ -10,19 +10,14 @@ import java.util.List;
  */
 
 public class Json_tree_weak {
-
-
     @SerializedName("RECORDS")
     private List<RECORDSBean> RECORDS;
-
     public List<RECORDSBean> getRECORDS() {
         return RECORDS;
     }
-
     public void setRECORDS(List<RECORDSBean> RECORDS) {
         this.RECORDS = RECORDS;
     }
-
     public static class RECORDSBean {
         /**
          * TID : 1

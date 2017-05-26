@@ -191,12 +191,12 @@ public class Activity_welcome extends Activity_base {
 
     @OnClick(R.id.activity_welcome_btn)
     public void onClick() {
-       /* if(flag){
+        if(flag){
             if(disposable != null){
                 disposable.dispose();
                 work();
             }
-        }*/
+        }
     }
 
     @Override
