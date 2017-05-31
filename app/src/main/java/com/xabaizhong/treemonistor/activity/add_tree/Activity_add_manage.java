@@ -333,6 +333,7 @@ public class Activity_add_manage extends Activity_base {
         if (mDisposable != null && !mDisposable.isDisposed()) {
             layoutPb.setVisibility(View.INVISIBLE);
             mDisposable.dispose();
+            mDisposable = null;
         } else {
             super.onBackPressed();
         }

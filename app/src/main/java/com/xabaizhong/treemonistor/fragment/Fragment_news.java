@@ -166,6 +166,7 @@ public class Fragment_news extends Fragment_base {
                     dao.save(data);
             }
         }
+        dao.deleteInTx(dao.queryBuilder().orderDesc(Data_newsDao.Properties.Id).limit(500).offset(100).build().list());
     }
 
     private boolean findNews(Data_news news) {
@@ -178,14 +179,14 @@ public class Fragment_news extends Fragment_base {
 
     private List<Data_news> queryNews() {
         limit = Contant.NEW.LOADING_NEWS_SIZE;
-        List<Data_news> list = dao.queryBuilder().limit(limit).build().list();
+        List<Data_news> list = dao.queryBuilder().limit(limit).orderDesc(Data_newsDao.Properties.Id).build().list();
         Log.d(TAG, "queryNews: " + list.size());
         return list;
     }
 
     private List<Data_news> loadMore() {
         Data_newsDao dao = ((App) context.getApplicationContext()).getDaoSession().getData_newsDao();
-        List<Data_news> list = dao.queryBuilder().limit(limit += 5).build().list();
+        List<Data_news> list = dao.queryBuilder().limit(limit += 5).orderDesc(Data_newsDao.Properties.Id).build().list();
         limit = list.size();
         return list;
     }

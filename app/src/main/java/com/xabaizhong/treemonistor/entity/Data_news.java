@@ -11,7 +11,7 @@ import org.greenrobot.greendao.annotation.Unique;
  */
 
 @Entity(indexes = {
-        @Index(value = "id,date DESC", unique = true)
+        @Index(value = "id DESC", unique = true)
 })
 public class Data_news {
     /**

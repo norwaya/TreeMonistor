@@ -139,6 +139,7 @@ public class Activity_species extends Activity_base implements C_info_gather_ite
     }
 
     boolean flag = true;
+    AsyncTaskRequest asyncTaskRequest;
 
     @OnClick(R.id.submit)
     public void onViewClicked() {
@@ -192,7 +193,7 @@ public class Activity_species extends Activity_base implements C_info_gather_ite
                     protected void onPostExecute(String aVoid) {
                         super.onPostExecute(aVoid);
                         // 需要修改 接口 和 json 数据结构
-                        AsyncTaskRequest
+                        asyncTaskRequest = AsyncTaskRequest
                                 .instance("UploadTreeInfo", "AuthenticateInfoMethod")
                                 .setParams(getUploadParas())
                                 .setCallBack(new AsyncTaskRequest.CallBack() {
@@ -223,7 +224,7 @@ public class Activity_species extends Activity_base implements C_info_gather_ite
                                                         new Consumer<Throwable>() {
                                                             @Override
                                                             public void accept(Throwable throwable) throws Exception {
-                                                                showToast("解析失败");
+                                                                Log.i(TAG, "解析失败");
                                                             }
                                                         });
                                     }
@@ -250,7 +251,13 @@ public class Activity_species extends Activity_base implements C_info_gather_ite
     }
 
 
-
+    @Override
+    public void onBackPressed() {
+        if (asyncTaskRequest != null) {
+            asyncTaskRequest.cancel();
+        }
+        super.onBackPressed();
+    }
 
 
 

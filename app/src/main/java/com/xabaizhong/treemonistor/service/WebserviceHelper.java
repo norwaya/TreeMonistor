@@ -1,5 +1,7 @@
 package com.xabaizhong.treemonistor.service;
 
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.util.Log;
 
 import org.ksoap2.SoapEnvelope;
@@ -30,8 +32,8 @@ public class WebserviceHelper {
 */
     public static String GetWebService(String url_d, String methodName, Map<String, Object> map)
             throws ConnectException {
+
         String nameSpace = "http://tempuri.org/";
-//        String nameSpace = "http://tempuri.org/";
         String url = base + url_d + ".asmx?wsdl";
 
         SoapObject soapObj = new SoapObject(nameSpace, methodName);

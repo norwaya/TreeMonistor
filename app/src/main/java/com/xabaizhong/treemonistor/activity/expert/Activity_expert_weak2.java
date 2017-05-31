@@ -2,6 +2,8 @@ package com.xabaizhong.treemonistor.activity.expert;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -230,11 +232,12 @@ public class Activity_expert_weak2 extends Activity_base implements CommonRecycl
                     }
                 });
     }
-   /* <UserID>string</UserID>
-      <date>string</date>
-      <Type>int</Type>
-      <areaId>string</areaId>
-      <JsonStr>string</JsonStr>*/
+
+    /* <UserID>string</UserID>
+       <date>string</date>
+       <Type>int</Type>
+       <areaId>string</areaId>
+       <JsonStr>string</JsonStr>*/
     private Map<String, Object> getUploadParas() {
         Map<String, Object> map = new HashMap<>();
         RequestBean bean = new RequestBean();
@@ -252,6 +255,15 @@ public class Activity_expert_weak2 extends Activity_base implements CommonRecycl
         return map;
     }
 
+    @Override
+    public void onBackPressed() {
+        if (mDisposable != null && !mDisposable.isDisposed()) {
+            mDisposable.dispose();
+            mDisposable = null;
+            return;
+        }
+        super.onBackPressed();
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -262,7 +274,7 @@ public class Activity_expert_weak2 extends Activity_base implements CommonRecycl
         }
     }
 
-     class RequestBean {
+    class RequestBean {
 
         /**
          * picList : [""]
@@ -279,7 +291,7 @@ public class Activity_expert_weak2 extends Activity_base implements CommonRecycl
         @SerializedName("Feature2")
         private int Feature2;
         @SerializedName("Explain")
-        private String Explain="";
+        private String Explain = "";
         @SerializedName("picList")
         private List<String> picList = new ArrayList<>();
 
