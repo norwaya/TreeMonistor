@@ -1,5 +1,7 @@
 package com.xabaizhong.treemonistor.activity;
 
+import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.KeyEvent;
@@ -18,7 +20,7 @@ import butterknife.ButterKnife;
  * Created by admin on 2017/3/7.
  */
 
-public class Activity_news_show extends Activity_base {
+public class Activity_news_show extends Activity {
     String url;
     String title;
 
@@ -29,11 +31,21 @@ public class Activity_news_show extends Activity_base {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_show);
+        initialFullScreen();
         ButterKnife.bind(this);
         url = getIntent().getStringExtra("url");
         title = getIntent().getStringExtra("title");
-        getSupportActionBar().setTitle(title);
+
         initWebView();
+    }
+
+    private void initialFullScreen() {
+        getWindow().setNavigationBarColor(Color.TRANSPARENT);
+        getWindow().setStatusBarColor(Color.TRANSPARENT);
+        getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
     }
 
     private void initWebView() {
