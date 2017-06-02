@@ -6,8 +6,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +21,7 @@ import com.xabaizhong.treemonistor.activity.Activity_userInfo;
 import com.xabaizhong.treemonistor.base.Fragment_base;
 import com.xabaizhong.treemonistor.contant.UserSharedField;
 import com.xabaizhong.treemonistor.myview.CircleImageView;
-import com.xabaizhong.treemonistor.service.model.User;
+import com.xabaizhong.treemonistor.service.WebserviceHelper;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -62,6 +60,10 @@ public class Fragment_setting extends Fragment_base {
     RelativeLayout destroy;
     @BindView(R.id.text1)
     TextView text1;
+    @BindView(R.id.ip_add)
+    TextView ipAdd;
+    @BindView(R.id.switch_ip)
+    Switch switchIp;
 
     @Override
     public void onStart() {
@@ -121,7 +123,7 @@ public class Fragment_setting extends Fragment_base {
 
         boolean noticeS = sharedPreferences.getBoolean(NOTICE_PUSH, true);
         informationS.setChecked(noticeS);
-
+        switchIp.setChecked(true);
     }
 
     private void initView() {
@@ -140,8 +142,19 @@ public class Fragment_setting extends Fragment_base {
 
             }
         });
-
-
+        switchIp.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                WebserviceHelper.switch_ip = isChecked;
+                Log.i(TAG, "onCheckedChanged: "+WebserviceHelper.getIp());
+            }
+        });
+        ipAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i(TAG, "onCheckedChanged: "+switchIp.isChecked()+"\t"+WebserviceHelper.getIp());
+            }
+        });
     }
 
     private void changeNoticeSwitch(boolean s) {

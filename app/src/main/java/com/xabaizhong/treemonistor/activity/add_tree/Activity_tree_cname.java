@@ -85,7 +85,7 @@ public class Activity_tree_cname extends Activity_base implements View.OnClickLi
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                finish();
+                Activity_tree_cname.this.finish();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -108,9 +108,6 @@ public class Activity_tree_cname extends Activity_base implements View.OnClickLi
                 Intent i = new Intent();
                 i.putExtra("special", list.get(position));
                 setResult(REQUEST_CODE_CNAME_RESULT, i);
-
-
-
                 Activity_tree_cname.this.finish();
             }
         });

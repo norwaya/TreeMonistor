@@ -90,7 +90,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:theme="@style/AppTheme2"
+            android:theme="@style/AppTheme"
             android:name=".activity.Activity_news_show"
             android:label="新闻资讯"
             android:screenOrientation="portrait"/>

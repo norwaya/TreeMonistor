@@ -35,16 +35,14 @@ public class Activity_news_show extends Activity {
         ButterKnife.bind(this);
         url = getIntent().getStringExtra("url");
         title = getIntent().getStringExtra("title");
-
         initWebView();
     }
 
     private void initialFullScreen() {
-        getWindow().setNavigationBarColor(Color.TRANSPARENT);
-        getWindow().setStatusBarColor(Color.TRANSPARENT);
+      /*  getWindow().setNavigationBarColor(Color.TRANSPARENT);
+        getWindow().setStatusBarColor(Color.TRANSPARENT);*/
         getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
     }
 

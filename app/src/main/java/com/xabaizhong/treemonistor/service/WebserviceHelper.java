@@ -2,6 +2,8 @@ package com.xabaizhong.treemonistor.service;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.os.Debug;
+import android.util.DebugUtils;
 import android.util.Log;
 
 import org.ksoap2.SoapEnvelope;
@@ -17,9 +19,15 @@ import java.net.ConnectException;
 import java.util.Map;
 
 public class WebserviceHelper {
-//    static String base = "http://192.168.0.118:8055/";
-    static String base = "http://117.34.105.28:8055/";
+    static String local = "http://192.168.0.118:8055/";
+    static String remote = "http://117.34.105.28:8055/";
     static String TAG = "GetWebService";
+
+    public static boolean switch_ip = true;
+
+    public static String getIp(){
+        return switch_ip ? remote : local;
+    }
 
     /**
      * @param url_d      接口名称
@@ -34,7 +42,7 @@ public class WebserviceHelper {
             throws ConnectException {
 
         String nameSpace = "http://tempuri.org/";
-        String url = base + url_d + ".asmx?wsdl";
+        String url = switch_ip ? remote : local + url_d + ".asmx?wsdl";
 
         SoapObject soapObj = new SoapObject(nameSpace, methodName);
         Log.i(TAG, "GetWebService: " + url_d + "\t" + methodName);

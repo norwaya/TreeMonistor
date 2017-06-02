@@ -4,36 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-
-    <View
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="24dp"/>
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
 
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ellipsize="marquee"
-        android:paddingEnd="24dp"
-        android:paddingLeft="24dp"
-        android:text="abc"
-        android:textSize="24dp"/>
-
-   <LinearLayout
-       android:orientation="vertical"
-       android:layout_width="match_parent"
-       android:layout_height="match_parent">
-       <ScrollView
-           android:layout_width="match_parent"
-           android:layout_height="match_parent"
-           android:fillViewport="true"
-           android:fitsSystemWindows="false"
-           android:focusable="true"
-           android:focusableInTouchMode="true">
-           <WebView
-               android:id="@+id/webv"
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"/>
-       </ScrollView>
-   </LinearLayout>
+        <WebView
+            android:id="@+id/webv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </ScrollView>
 </LinearLayout>

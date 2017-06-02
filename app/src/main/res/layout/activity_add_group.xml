@@ -70,9 +70,8 @@
                 <com.xabaizhong.treemonistor.myview.C_info_gather_item1
                     android:id="@+id/evevation"
                     style="@style/custom_edit_text_style"
-                    app:input_type="decimal"
                     app:left_text="海拔"
-                    app:mid_text_hint="平均海拔（米）示例: 800-1000"/>
+                    app:mid_text_hint="平均海拔（米）示例: 800 1000"/>
 
                 <com.xabaizhong.treemonistor.myview.C_info_gather_item1
                     android:id="@+id/gSTreeNum"

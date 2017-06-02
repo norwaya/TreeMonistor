@@ -111,7 +111,27 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"/>
             </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:padding="@dimen/activity_horizontal_margin">
 
+                <TextView
+                    android:id="@+id/ip_add"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="远程服务器"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+
+                <Switch
+                    android:id="@+id/switch_ip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"/>
+            </RelativeLayout>
             <RelativeLayout
                 android:id="@+id/destroy"
                 android:layout_width="match_parent"

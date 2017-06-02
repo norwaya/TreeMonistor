@@ -287,13 +287,11 @@ public class Activity_add_manage extends Activity_base {
 
                     @Override
                     public void onError(Throwable e) {
-
                         showToast(current.getTreeId() + "error");
                     }
 
                     @Override
                     public void onComplete() {
-
                         test();
                         layoutPb.setVisibility(View.INVISIBLE);
                     }

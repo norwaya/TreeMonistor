@@ -164,6 +164,12 @@ public class Activity_add_tree extends Activity_base {
     C_info_gather_item1 longitude;
     @BindView(R.id.latitude)
     C_info_gather_item1 latitude;
+    @BindView(R.id.town)
+    C_info_gather_item1 town;
+    @BindView(R.id.village)
+    C_info_gather_item1 village;
+    @BindView(R.id.elevation)
+    C_info_gather_item1 elevation;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -176,7 +182,7 @@ public class Activity_add_tree extends Activity_base {
     }
 
     Tree tree;
-    TreeTypeInfo treeTypeInfo ;
+    TreeTypeInfo treeTypeInfo;
 
     private void initResource() {
 
@@ -197,6 +203,7 @@ public class Activity_add_tree extends Activity_base {
         if (mList == null) {
             mList = new ArrayList<>();
         }
+        mList.clear();
         for (TreePic pic : pics) {
             mList.add(pic.getPath());
         }
@@ -214,6 +221,9 @@ public class Activity_add_tree extends Activity_base {
         detailAddress.setText(tree.getSmallName());
         longitude.setText(tree.getOrdinate());
         latitude.setText(tree.getAbscissa());
+        elevation.setText(tree.getEvevation() + "");
+        town.setText(tree.getTown());
+        village.setText(tree.getVillage());
         initialTreeSpeciesInfo();
         height.setText(String.valueOf(tree.getTreeHeight()));
         dbh.setText(String.valueOf(tree.getTreeDBH()));
@@ -453,13 +463,15 @@ public class Activity_add_tree extends Activity_base {
 
     @OnClick(R.id.btn)
     public void onClick() {
-        try {
-            fillTree();
-        } catch (Exception e) {
-            showToast(e.getMessage());
-        }
+
         String checkResult = check();
         if (checkResult == null) {
+            try {
+                fillTree();
+            } catch (Exception e) {
+
+                Log.i(TAG, "onClick: +error+++"+e.getMessage());
+            }
             checkLevel();
             saveDao();
             showToast("保存成功");
@@ -486,23 +498,27 @@ public class Activity_add_tree extends Activity_base {
         treeDao.save(tree);
         treeTypeInfo.setTreeTableID(tree.getId());
         treeTypeInfoDao.save(treeTypeInfo);
-        Log.i(TAG, "saveDao: " + treeTypeInfo.getId() + "\t" + tree.getId());
+        Log.i(TAG, "saveDao: " + treeTypeInfo.getId() + "\t" + tree.getId() + "\t" + tree.getPics().size());
         picDao.deleteInTx(tree.getPics());
         TreePic pic;
         if (mList != null)
             for (String str : mList) {
                 pic = new TreePic(null, tree.getId(), str);
                 picDao.save(pic);
+                Log.i(TAG, "saveDao: save pics" + pic.getTree_id());
             }
+        Log.i(TAG, "saveDao: " + tree.getPics());
+        daoSession.clear();
     }
 
     TreePicDao picDao;
     TreeDao treeDao;
     TreeTypeInfoDao treeTypeInfoDao;
     TreeSpecialDao treeSepcialDao;
+    DaoSession daoSession;
 
     private void initDaoSession() {
-        DaoSession daoSession = ((App) getApplication()).getDaoSession();
+        daoSession = ((App) getApplication()).getDaoSession();
         picDao = daoSession.getTreePicDao();
         treeDao = daoSession.getTreeDao();
         treeTypeInfoDao = daoSession.getTreeTypeInfoDao();
@@ -527,6 +543,9 @@ public class Activity_add_tree extends Activity_base {
         }
         if (latitude.getText().equals("") || longitude.getText().equals("")) {
             return "经纬度不能为空";
+        }
+        if (town.getText().trim().equals("") || village.getText().trim().equals("")) {
+            return "城镇/村庄不能为空";
         }
         if (cname.getText().equals("")) {
             return "选择树种类";
@@ -739,7 +758,6 @@ public class Activity_add_tree extends Activity_base {
         return map;
     }
 
-
     String json;
 
     private void fillTree() {
@@ -751,10 +769,17 @@ public class Activity_add_tree extends Activity_base {
         treeTypeInfo.setTreeId(id);
         treeTypeInfo.setIvst(tch.getText());
 
+
+        tree.setTown(town.getText());
+        tree.setVillage(village.getText());
         tree.setAbscissa(latitude.getText());
         tree.setOrdinate(longitude.getText());
+        String elevationStr = elevation.getText();
+        if (elevationStr.length() != 0) {
+            tree.setEvevation(Double.parseDouble(elevationStr));
+        }
         tree.setTreeHeight(Double.parseDouble(height.getText()));
-        tree.setTreeDBH(Integer.parseInt(dbh.getText()));
+        tree.setTreeDBH(Double.parseDouble(dbh.getText()));
         String strCrownEW = crownEW.getText();
         String strCrownNS = crownNS.getText();
         tree.setCrownEW(Double.parseDouble(strCrownEW));

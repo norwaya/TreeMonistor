@@ -451,6 +451,9 @@ public class Activity_add_tree_group extends Activity_base {
         if (region.getText().equals("")) {
             return "请选择地理信息";
         }
+        if (!evevation.getText().matches("^\\d+[^\\d]+\\d+$")) {
+            return "海拔格式错误";
+        }
         if (gSTreeNum.getText().equals("")) {
             return "请填写古树数量";
         }
@@ -513,7 +516,7 @@ public class Activity_add_tree_group extends Activity_base {
         treeTypeInfo.setTypeId(1);
 //        treeTypeInfo.setRecoredPerson(researchPersion.getText());
         treeTypeInfo.setTreeId(treeId.getText());
-        treeGroup.setEvevation(evevation.getText());
+        initialElvation();
         treeGroup.setMainTreeName(mainTreeName.getText());
         treeGroup.setSZJX(szjx.getText());
         treeGroup.setXiaMuType(xiaMuType.getText());
@@ -534,6 +537,10 @@ public class Activity_add_tree_group extends Activity_base {
         treeGroup.setAverageDiameter(Double.parseDouble(averageDiameter.getText()));
         treeGroup.setAverageHeight(Double.parseDouble(averageHeight.getText()));
         treeGroup.setArea(Double.parseDouble(area.getText()));
+    }
+
+    private void initialElvation() {
+        treeGroup.setEvevation(evevation.getText().replaceFirst("[^\\d]+",":"));
     }
 
     private String userId() {

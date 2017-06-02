@@ -135,36 +135,49 @@ public class Activity_tree_group_detailInfo extends Activity_base {
         }
         return "";
     }
+
     public void getTreeInfo(ResultMessage rm) {
         ResultMessage.ResultBean tree = rm.result;
-        addView("古树群编号",tree.getTreeListID());
-        addView("位置",Activity_tree_group_detailInfo.this.getAreaName(rm.areaid));
-        addView("详细信息",tree.getPlaceName());
-        addView("主要树种",tree.getMainTreeName());
-        addView("树种类",tree.getTreeSpelNum());
-        addView("四至界限",tree.getSZJX());
-        addView("面积",tree.getArea()+"");
-        addView("古树数量",tree.getGSTreeNum()+"");
-        addView("平均高度",""+tree.getAverageHeight());
-        addView("平均胸径",""+tree.getAverageDiameter());
-        addView("平均年龄",""+tree.getAverageAge());
-        addView("郁闭度",""+tree.getYBDInfo());
-        addView("海拔",""+tree.getEvevation());
-        addView("坡向",""+tree.getAspect());
-        addView("坡度",""+tree.getSlope());
-        addView("土壤",""+tree.getSoilName());
-        addView("土壤厚度",""+tree.getSoilHeight());
-        addView("下木种类",""+tree.getXiaMuType());
-        addView("下木密度",""+tree.getXiaMuDensity());
-        addView("地被物种类",""+tree.getDBWType());
-        addView("地被物密度",""+tree.getDBWDensity());
-        addView("管理单位",""+tree.getManagementUnit());
-        addView("状态",""+tree.getManagementState());
-        addView("科",""+tree.getAimsFamily());
-        addView("属",""+tree.getAimsBelong());
-        addView("人为经营情况",""+tree.getRWJYInfo());
-        addView("建议",""+tree.getSuggest());
-        addView("记录人",""+tree.getRecordPerson());
+        addView("古树群编号", tree.getTreeListID());
+        addView("位置", Activity_tree_group_detailInfo.this.getAreaName(rm.areaid));
+        addView("详细信息", tree.getPlaceName());
+        addView("主要树种", tree.getMainTreeName());
+        addView("树种类", tree.getTreeSpelNum());
+        addView("四至界限", tree.getSZJX());
+        addView("面积", tree.getArea() + "");
+        addView("古树数量", tree.getGSTreeNum() + "");
+        addView("平均高度", "" + tree.getAverageHeight());
+        addView("平均胸径", "" + tree.getAverageDiameter());
+        addView("平均年龄", "" + tree.getAverageAge());
+        addView("郁闭度", "" + tree.getYBDInfo());
+        addView("海拔", "" + tree.getEvevation());
+        String aspect = tree.getAspect();
+        if (aspect.matches("\\d+")) {
+            aspect = getResources().getStringArray(R.array.aspect)[Integer.parseInt(aspect)];
+        }
+        addView("坡向", "" + aspect);
+        String slope = tree.getSlope();
+        if (slope.matches("\\d+")) {
+            slope = getResources().getStringArray(R.array.slope)[Integer.parseInt(slope)];
+        }
+        addView("坡度", "" + slope);
+        String soilStr = tree.getSoilName();
+        if (soilStr.matches("\\d+")) {
+            soilStr = getResources().getStringArray(R.array.soil)[Integer.parseInt(soilStr)];
+        }
+        addView("土壤", "" + soilStr);
+        addView("土壤厚度", "" + tree.getSoilHeight());
+        addView("下木种类", "" + tree.getXiaMuType());
+        addView("下木密度", "" + tree.getXiaMuDensity());
+        addView("地被物种类", "" + tree.getDBWType());
+        addView("地被物密度", "" + tree.getDBWDensity());
+        addView("管理单位", "" + tree.getManagementUnit());
+        addView("状态", "" + tree.getManagementState());
+        addView("科", "" + tree.getAimsFamily());
+        addView("属", "" + tree.getAimsBelong());
+        addView("人为经营情况", "" + tree.getRWJYInfo());
+        addView("建议", "" + tree.getSuggest());
+        addView("记录人", "" + tree.getRecordPerson());
         addPicView(rm.getResult());
         /**
          * ManagementUnit : 西安索菲特人民大厦
@@ -264,6 +277,7 @@ public class Activity_tree_group_detailInfo extends Activity_base {
                 "管护人/单位：" + rm.result.getManagementunit() + tree.getManagementpersion() + "\n" +
                 "记录人：" + rm.result.getUserID();*/
     }
+
     private void addPicView(final Activity_tree_group_detailInfo.ResultMessage.ResultBean bean) {
         View view = getView("图片", bean.getPicInfo() != null ? bean.getPicInfo().size() + "" : "0");
         C_info_gather_item1 cv = (C_info_gather_item1) view.findViewById(R.id.cv);
@@ -278,6 +292,7 @@ public class Activity_tree_group_detailInfo extends Activity_base {
         });
         layout.addView(view);
     }
+
     private void addView(String left, String mid) {
         layout.addView(getView(left, mid));
     }
@@ -297,6 +312,7 @@ public class Activity_tree_group_detailInfo extends Activity_base {
         Log.i(TAG, "getView: " + view);
         return view;
     }
+
     static class ResultMessage {
 
         /**
@@ -383,8 +399,8 @@ public class Activity_tree_group_detailInfo extends Activity_base {
         public static class ResultBean {
             /**
              * TreeListID : 61010201
-             * PlaceName : 索菲特人民大厦　
-             * MainTreeName : 油橄榄　
+             * PlaceName : 索菲特人民大厦
+             * MainTreeName : 油橄榄
              * TreeSpelNum : 1
              * SZJX : 西安索菲特人民大厦后楼东西两侧
              * Area : 0
@@ -487,6 +503,7 @@ public class Activity_tree_group_detailInfo extends Activity_base {
             public void setPicInfo(ArrayList<String> picInfo) {
                 this.picInfo = picInfo;
             }
+
             public String getTreeListID() {
                 return TreeListID;
             }

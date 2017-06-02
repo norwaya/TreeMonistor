@@ -78,7 +78,6 @@
                     style="@style/custom_edit_text_style"
                     app:left_text="详细信息"
                     app:mid_text_hint="[乡镇][村]街道"/>
-                // 经度
 
                 <com.xabaizhong.treemonistor.myview.C_info_gather_item1
                     android:id="@+id/longitude"
@@ -93,7 +92,22 @@
                     app:input_type="decimal"
                     app:left_text="纬度"
                     app:mid_text_hint="纬度 示例: 34.201424"/>
-
+                <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+                    android:id="@+id/elevation"
+                    style="@style/custom_edit_text_style"
+                    app:input_type="decimal"
+                    app:left_text="海拔"
+                    app:mid_text_hint="海拔"/>
+                <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+                    android:id="@+id/town"
+                    style="@style/custom_edit_text_style"
+                    app:left_text="城镇"
+                    app:mid_text_hint="城镇"/>
+                <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+                    android:id="@+id/village"
+                    style="@style/custom_edit_text_style"
+                    app:left_text="村庄"
+                    app:mid_text_hint="村庄"/>
                 <com.xabaizhong.treemonistor.myview.C_info_gather_item1
                     android:id="@+id/cname"
                     style="@style/custom_edit_text_style"
@@ -284,7 +298,6 @@
                     android:id="@+id/manger_unit"
                     style="@style/custom_edit_text_style"
                     app:left_text="管护单位"
-                    app:mid_font_color="@color/wx_green"
                     app:mid_text_hint="管护单位"/>
 
                 <com.xabaizhong.treemonistor.myview.C_info_gather_item1
