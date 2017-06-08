@@ -98,7 +98,7 @@ public class Activity_welcome extends Activity_base {
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQEUST_CODE_WRITER);
+            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.INTERNET}, REQEUST_CODE_WRITER);
 
         } else {
             initAll();
@@ -120,7 +120,11 @@ public class Activity_welcome extends Activity_base {
     void initAll() {
 
         long stat = System.nanoTime();
-        initDB();
+        try {
+            initDB();
+        } catch (Exception ex) {
+            showToast("数据库读写出现问题，请重新安装");
+        }
         long end = System.nanoTime();
         Log.i(TAG, "initAll: " + (end - stat));
         initImage();
@@ -191,12 +195,12 @@ public class Activity_welcome extends Activity_base {
 
     @OnClick(R.id.activity_welcome_btn)
     public void onClick() {
-        if(flag){
+       /* if(flag){
             if(disposable != null){
                 disposable.dispose();
                 work();
             }
-        }
+        }*/
     }
 
     @Override
@@ -214,7 +218,7 @@ public class Activity_welcome extends Activity_base {
         writeAreaCode("area_code.json");
         writePest("pest_classify.json");
         writeTrrAge();
-        writePestClass();
+//        writePestClass();
         writeTreePart();
         writeWeakness();
         writeToShare();
@@ -325,18 +329,18 @@ public class Activity_welcome extends Activity_base {
     }
 
 
-    private void writePestClass() {
-       /* 食叶性害虫	1
-        刺吸性害虫	2
-        蛀食性害虫	3
-        食根性害虫	4*/
-        String[] array = {"食叶性害虫", "刺吸性害虫", "蛀食性害虫", "食根性害虫"};
-        ArrayList<PestClass> pestClassList = new ArrayList<>();
-        for (int i = 0; i < array.length; i++) {
-            pestClassList.add(new PestClass(null, (i + 1), array[i]));
-        }
-        pestClassDao.saveInTx(pestClassList);
-    }
+//    private void writePestClass() {
+//       /* 食叶性害虫	1
+//        刺吸性害虫	2
+//        蛀食性害虫	3
+//        食根性害虫	4*/
+//        String[] array = {"食叶性害虫", "刺吸性害虫", "蛀食性害虫", "食根性害虫"};
+//        ArrayList<PestClass> pestClassList = new ArrayList<>();
+//        for (int i = 0; i < array.length; i++) {
+//            pestClassList.add(new PestClass(null, (i + 1), array[i]));
+//        }
+//        pestClassDao.saveInTx(pestClassList);
+//    }
 
     private String getAssetFile(String file) {
         String json = null;

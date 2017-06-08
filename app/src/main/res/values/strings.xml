@@ -6,7 +6,7 @@
 
     <string name="action_settings">Settings</string>
     <string name="me">我</string>
-    <string name="expert">专家</string>
+    <string name="expert">鉴定</string>
     <string name="function">功能</string>
     <string name="news">资讯</string>
 
@@ -40,6 +40,19 @@
     </string>
     <string name="real_name">姓名: %1$s</string>
     <string name="two_item_t">%1$-10s%2$s</string>
+    <!-- activity_title -->
+    <string name="tree_info_detail">古树详细信息</string>
+    <string name="app_title">古树名木信息系统</string>
+    <string name="activity_tree_query">古树信息查询</string>
+    <string name="acitivty_important_query">重点古树查询</string>
+    <string name="activity_import_monitor">重点古树监管</string>
+    <string name="activity_expert_base_info">专家诊断信息库</string>
+    <string name="icon_name">古树名木</string>
+    <string name="fab_label_add_tree">添加古树</string>
+    <string name="fab_label_add_group">添加古树群</string>
+    <string name="show_tree">显示古树</string>
+    <string name="show_tree_group">显示古树群</string>
+    <string name="tree_monitor">重点古树监管</string>
 
     <!-- Strings related to Settings -->
 

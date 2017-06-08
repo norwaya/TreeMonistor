@@ -92,6 +92,8 @@ public class Activity_login extends Activity_base implements View.OnFocusChangeL
     }
 
     private void initView() {
+        name.setText("610102001");
+        pwd.setText("admin");
         pb.setVisibility(View.INVISIBLE);
 
         /*ivAreaClose.setVisibility(View.INVISIBLE);*/
@@ -243,7 +245,9 @@ public class Activity_login extends Activity_base implements View.OnFocusChangeL
                                         if (loginResult.getError_code() == 0) {
                                             writerUserToFile(loginResult.getResult());
                                             startActivity(new Intent(Activity_login.this, Activity_main.class));
+
                                         }
+                                        showToast(loginResult.getMessage());
                                     }
                                 }, new Consumer<Throwable>() {
                                     @Override

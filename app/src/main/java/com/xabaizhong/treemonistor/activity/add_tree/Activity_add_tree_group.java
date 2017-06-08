@@ -217,6 +217,7 @@ public class Activity_add_tree_group extends Activity_base {
     private void init() {
         layoutPb.setOnClickListener(null);
         layoutPb.setVisibility(View.INVISIBLE);
+        treeId.setText(areaId());
     }
 
     interface Result_Code {
@@ -259,7 +260,6 @@ public class Activity_add_tree_group extends Activity_base {
                 TreeSpecial tree = data.getParcelableExtra("special");
                 if (tree != null) {
                     mainTreeName.setText(tree.getCname());
-
                     treeGroup.setMainTreeName(tree.getCname());
                     treeGroup.setAimsBelong(tree.getBelong());
                     treeGroup.setAimsTree(tree.getCname());
@@ -327,97 +327,6 @@ public class Activity_add_tree_group extends Activity_base {
         treeGroupDao = daoSession.getTreeGroupDao();
         picDao = daoSession.getTreeGroupPicDao();
         treeMapDao = daoSession.getTreeMapDao();
-    }
-
-    private void upload() {
-        Observer<Object> observer = new Observer<Object>() {
-            @Override
-            public void onSubscribe(Disposable d) {
-
-            }
-
-            @Override
-            public void onNext(Object value) {
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                layoutPb.setVisibility(View.INVISIBLE);
-            }
-
-            @Override
-            public void onComplete() {
-                treeGroup.setPicList(fillPic());
-                json = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create().toJson(treeTypeInfo);
-                Log.i(TAG, "fillData: " + json);
-                submitTreeInfo();
-            }
-        };
-
-        Observable.create(new ObservableOnSubscribe<Object>() {
-            @Override
-            public void subscribe(ObservableEmitter<Object> e) throws Exception {
-                FileUtil.clearFileDir();
-                if (list != null)
-                    for (int i = 0; i < list.size(); i++) {
-                        ScaleBitmap.getBitmap(list.get(i), "image" + i + ".png");
-                    }
-                e.onComplete();
-                Log.i(TAG, "subscribe: over");
-            }
-        }).observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(observer);
-
-    }
-
-    AsyncTask asyncTask;
-
-    private void submitTreeInfo() {
-        asyncTask = new AsyncTask<Void, Void, String>() {
-            @Override
-            protected String doInBackground(Void... params) {
-                try {
-                    return WebserviceHelper.GetWebService(
-                            "UploadTreeInfo", "UploadTreeInfoMethod", getParms());
-                } catch (ConnectException e) {
-                    e.printStackTrace();
-                    return null;
-                }
-            }
-
-            @Override
-            protected void onPostExecute(String s) {
-                layoutPb.setVisibility(View.INVISIBLE);
-                if (s == null) {
-                    showToast("请求出现错误，连接服务器失败");
-                    return;
-                }
-                Observable.just(s)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribeOn(Schedulers.io())
-                        .subscribe(new Consumer<String>() {
-                                       @Override
-                                       public void accept(String s) throws Exception {
-                                           ResultMessage msg = new Gson().fromJson(s, ResultMessage.class);
-                                           Log.i(TAG, "onPostExecute: " + msg.getMessage());
-                                           if (msg.getError_code() == 0) {
-                                               showToast("suc");
-                                           } else {
-                                               showToast(msg.getMessage());
-                                           }
-                                       }
-                                   },
-                                new Consumer<Throwable>() {
-                                    @Override
-                                    public void accept(Throwable throwable) throws Exception {
-                                        showToast("解析失败");
-                                    }
-                                });
-
-            }
-        }.execute();
     }
 
     private Map<String, Object> getParms() {
@@ -511,8 +420,6 @@ public class Activity_add_tree_group extends Activity_base {
     String json;
 
     private void fillData() {
-
-
         treeTypeInfo.setTypeId(1);
 //        treeTypeInfo.setRecoredPerson(researchPersion.getText());
         treeTypeInfo.setTreeId(treeId.getText());

@@ -1,52 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:app="http://schemas.android.com/apk/res-auto"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             android:layout_margin="@dimen/activity_horizontal_margin">
 
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="match_parent"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    tools:layout_editor_absoluteX="0dp"
+    tools:layout_editor_absoluteY="81dp">
+
+    <TextView
+        android:id="@+id/tv1"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:text="11111"
+        android:textAlignment="center"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
+        app:layout_constraintLeft_toLeftOf="@+id/linearLayout"
+        app:layout_constraintRight_toLeftOf="@+id/tv2"
+        app:layout_constraintTop_toTopOf="@+id/linearLayout"/>
 
-        <TextView
-            android:id="@+id/tv1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.SearchResult.Title"
-            android:textColor="@color/black"
-            app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
-            app:layout_constraintLeft_toLeftOf="@+id/linearLayout"
-            app:layout_constraintRight_toLeftOf="@+id/tv2"
-            app:layout_constraintTop_toTopOf="@+id/linearLayout"/>
+    <TextView
+        android:id="@+id/tv2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="22222"
+        android:textAlignment="center"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
+        app:layout_constraintLeft_toRightOf="@+id/tv1"
+        app:layout_constraintRight_toLeftOf="@+id/tv3"
+        app:layout_constraintTop_toTopOf="@+id/linearLayout"/>
 
-        <TextView
-            android:id="@+id/tv2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.SearchResult.Title"
-            android:textColor="@color/black"
-            app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
-            app:layout_constraintLeft_toRightOf="@+id/tv1"
-            app:layout_constraintRight_toLeftOf="@+id/tv3"
-            app:layout_constraintTop_toTopOf="@+id/linearLayout"/>
-
-        <TextView
-            android:id="@+id/tv3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.SearchResult.Title"
-            android:textColor="@color/black"
-            app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
-            app:layout_constraintLeft_toRightOf="@+id/tv2"
-            app:layout_constraintRight_toRightOf="@+id/linearLayout"
-            app:layout_constraintTop_toTopOf="@+id/linearLayout"/>
-    </android.support.constraint.ConstraintLayout>
-</FrameLayout>
+    <TextView
+        android:id="@+id/tv3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="33333"
+        android:textAlignment="center"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
+        app:layout_constraintLeft_toRightOf="@+id/tv2"
+        app:layout_constraintRight_toLeftOf="@+id/cb"
+        app:layout_constraintTop_toTopOf="@+id/linearLayout"/>
+    <CheckBox
+        style="@style/Base.Widget.AppCompat.CompoundButton.CheckBox"
+        android:id="@+id/cb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
+        app:layout_constraintLeft_toRightOf="@+id/tv3"
+        app:layout_constraintRight_toRightOf="@+id/linearLayout"
+        app:layout_constraintTop_toTopOf="@+id/linearLayout"/>
+</android.support.constraint.ConstraintLayout>

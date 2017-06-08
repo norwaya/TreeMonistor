@@ -1,14 +1,18 @@
 package com.xabaizhong.treemonistor.activity.add_tree;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -25,13 +29,11 @@ import com.xabaizhong.treemonistor.base.Activity_base;
 import com.xabaizhong.treemonistor.base.App;
 import com.xabaizhong.treemonistor.contant.UserSharedField;
 import com.xabaizhong.treemonistor.entity.DaoSession;
-import com.xabaizhong.treemonistor.entity.TreeGroup;
-import com.xabaizhong.treemonistor.entity.TreeGroupDao;
+import com.xabaizhong.treemonistor.entity.TreeDao;
 import com.xabaizhong.treemonistor.entity.TreeGroupPic;
 import com.xabaizhong.treemonistor.entity.TreeGroupPicDao;
 import com.xabaizhong.treemonistor.entity.TreeMap;
 import com.xabaizhong.treemonistor.entity.TreePic;
-import com.xabaizhong.treemonistor.entity.TreeDao;
 import com.xabaizhong.treemonistor.entity.TreePicDao;
 import com.xabaizhong.treemonistor.entity.TreeTypeInfo;
 import com.xabaizhong.treemonistor.entity.TreeTypeInfoDao;
@@ -54,7 +56,9 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
+import terranovaproductions.newcomicreader.FloatingActionMenu;
 
 /**
  * Created by admin on 2017/2/28.
@@ -65,26 +69,24 @@ public class Activity_add_manage extends Activity_base {
     final static int LOAD_NUM = 20;
     @BindView(R.id.lv)
     ListView lv;
-    @BindView(R.id.btn_submit)
-    Button btnSubmit;
-    @BindView(R.id.layout_pb)
-    RelativeLayout layoutPb;
+    @BindView(R.id.fab_father)
+    FloatingActionMenu fabFather;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_manager);
         ButterKnife.bind(this);
+        initDaoSession();
         initView();
         registerForContextMenu(lv);
     }
 
 
-    int size;
-
     @Override
     protected void onStart() {
         super.onStart();
+        Log.i(TAG, "onStart: ");
         test();
     }
 
@@ -98,8 +100,7 @@ public class Activity_add_manage extends Activity_base {
 
 
     private void initView() {
-        layoutPb.setOnClickListener(null);
-        layoutPb.setVisibility(View.INVISIBLE);
+        initialFabMenu();
         initAdapter();
         contentArray = getResources().getStringArray(R.array.add_tree_list);
         View view = LayoutInflater.from(this).inflate(R.layout.activity_add_manager_item, null);
@@ -107,6 +108,43 @@ public class Activity_add_manage extends Activity_base {
         lv.addHeaderView(view);
         lv.setAdapter(adapter);
 
+    }
+
+    private void initialFabMenu() {
+        fabFather.setIsCircle(false);
+        fabFather.setmItemGap(20);
+        fabFather.setOnMenuItemClickListener(new FloatingActionMenu.OnMenuItemClickListener() {
+            @Override
+            public void onMenuItemClick(FloatingActionMenu floatingActionMenu, int i, FloatingActionButton floatingActionButton) {
+                switch (floatingActionButton.getId()) {
+                    case R.id.fab_main:
+                        if (fabFather.isOpened()) {
+                            fabFather.close();
+                        } else {
+                            fabFather.open();
+                        }
+                        break;
+                    case R.id.tree_add:
+                        startActivity(new Intent(Activity_add_manage.this, Activity_add_tree.class));
+                        break;
+                    case R.id.group_add:
+                        startActivity(new Intent(Activity_add_manage.this, Activity_add_tree_group.class));
+                        break;
+                    case R.id.show_group:
+                        if (mType == 1)
+                            return;
+                        setType(1);
+                        test();
+                        break;
+                    case R.id.show_tree:
+                        if (mType == 0)
+                            return;
+                        setType(0);
+                        test();
+                        break;
+                }
+            }
+        });
     }
 
     private void initHeaderView(View view) {
@@ -122,25 +160,31 @@ public class Activity_add_manage extends Activity_base {
     }
 
     List<TreeTypeInfo> mList;
+    int mType = 0;
+
+    public void setType(int type) {
+        mType = type;
+    }
 
     private void test() {
-        initDaoSession();
         try {
-            mList = treeTypeInfoDao.queryBuilder().build().list();
-            if (mList == null || mList.size() == 0) {
-                btnSubmit.setVisibility(View.GONE);
-            } else {
-                btnSubmit.setVisibility(View.VISIBLE);
-            }
+            mList = treeTypeInfoDao.queryBuilder().where(TreeTypeInfoDao.Properties.TypeId.eq(mType)).build().list();
+            if (mMenu != null)
+                if (mList == null || mList.size() == 0) {
+                    mMenu.setGroupVisible(R.id.choose_and_upload, false);
+                } else {
+                    mMenu.setGroupVisible(R.id.choose_and_upload, true);
+                }
             /*for (TreeTypeInfo type : mList
                     ) {
                 Log.i(TAG, "test: " + type.getTreeId());
 
             }*/
             adapter.setSource(mList);
-
+            Log.i(TAG, "test:++ " + mType);
         } catch (Exception e) {
-
+            e.printStackTrace();
+            Log.i(TAG, "test: " + e.getMessage());
         }
     }
 
@@ -157,6 +201,73 @@ public class Activity_add_manage extends Activity_base {
         treeGroupPicDao = daoSession.getTreeGroupPicDao();
     }
 
+
+    Menu mMenu;
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_tree_manager, menu);
+        mMenu = menu;
+        if (mList == null || mList.size() == 0) {
+            mMenu.setGroupVisible(R.id.choose_and_upload, false);
+        }
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.select:
+                adapter.setFlag();
+                if (adapter.getFlag()) {
+                    fabFather.setVisibility(View.INVISIBLE);
+                    item.setTitle("取消选择");
+                } else {
+                    fabFather.setVisibility(View.VISIBLE);
+                    item.setTitle("选择");
+                }
+                break;
+            case R.id.all:
+                if (adapter.getFlag())
+                    adapter.setChooseAll(true);
+                break;
+            case R.id.upload:
+                if (adapter.getFlag()) {
+                    showProgressDialog();
+                    submit();
+                } else {
+                    showToast("请先选择需要上传的古树/群");
+                }
+
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    ProgressDialog progressDialog;
+
+    private void showProgressDialog() {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.setMessage("uploading...");
+        progressDialog.show();
+        progressDialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                if (event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
+                    Log.i(TAG, "onKey: progress dialog");
+                    if (mDisposable != null && !mDisposable.isDisposed()) {
+                        mDisposable.dispose();
+                        mDisposable = null;
+                    }
+                    progressDialog.dismiss();
+                    return true;
+                }
+                return false;
+            }
+        });
+
+    }
 
     @Override
     protected void onPause() {
@@ -223,37 +334,23 @@ public class Activity_add_manage extends Activity_base {
     }
 
 
-    @OnClick({R.id.btn_tree, R.id.btn_treeGroup, R.id.btn_submit})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.btn_tree:
-                startActivity(new Intent(this, Activity_add_tree.class));
-                break;
-            case R.id.btn_treeGroup:
-                startActivity(new Intent(this, Activity_add_tree_group.class));
-                break;
-            case R.id.btn_submit:
-
-                submit();
-                break;
-        }
-    }
-
     TreeTypeInfo current;
     Disposable mDisposable;
 
     private void submit() {
-        int v = layoutPb.getVisibility();
-        if (v == View.VISIBLE) {
-            Log.i(TAG, "submit: it is works");
-            return;
-        }
-        layoutPb.setVisibility(View.VISIBLE);
         Observable.fromIterable(mList)
+                .filter(new Predicate<TreeTypeInfo>() {
+                    @Override
+                    public boolean test(TreeTypeInfo treeTypeInfo) throws Exception {
+//                        Log.i(TAG, "test: " + adapter.getCheckItem().contains(mList.indexOf(treeTypeInfo)));
+                        return adapter.getCheckItem().contains(mList.indexOf(treeTypeInfo));
+                    }
+                })
                 .map(new Function<TreeTypeInfo, String>() {
 
                     @Override
                     public String apply(TreeTypeInfo treeTypeInfo) throws Exception {
+                        Log.i(TAG, "apply: " + "map++");
                         Map<String, Object> params = pkg(treeTypeInfo);
                         current = treeTypeInfo;
                         Log.i(TAG, "apply: " + Thread.currentThread().getName());
@@ -288,12 +385,19 @@ public class Activity_add_manage extends Activity_base {
                     @Override
                     public void onError(Throwable e) {
                         showToast(current.getTreeId() + "error");
+                        if (progressDialog != null) {
+                            progressDialog.dismiss();
+                            progressDialog = null;
+                        }
                     }
 
                     @Override
                     public void onComplete() {
                         test();
-                        layoutPb.setVisibility(View.INVISIBLE);
+                        if (progressDialog != null) {
+                            progressDialog.dismiss();
+                            progressDialog = null;
+                        }
                     }
                 });
 
@@ -328,13 +432,13 @@ public class Activity_add_manage extends Activity_base {
 
     @Override
     public void onBackPressed() {
-        if (mDisposable != null && !mDisposable.isDisposed()) {
-            layoutPb.setVisibility(View.INVISIBLE);
-            mDisposable.dispose();
-            mDisposable = null;
-        } else {
-            super.onBackPressed();
-        }
+        
+//        if (mDisposable != null && !mDisposable.isDisposed()) {
+//            mDisposable.dispose();
+//            mDisposable = null;
+//        }
+        super.onBackPressed();
+
     }
 
     private void doPics(TreeTypeInfo treeTypeInfo) {
@@ -394,4 +498,6 @@ public class Activity_add_manage extends Activity_base {
 
         return stringList;
     }
+
+
 }

@@ -47,7 +47,7 @@ public class AsyncTaskRequest {
                 try {
                     return WebserviceHelper.GetWebService(
                             interfaceName, methodName, map);
-                } catch (ConnectException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                     return null;
                 }

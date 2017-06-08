@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/tree_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical">
+
+    <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+        android:id="@+id/tch"
+        style="@style/custom_edit_text_style"
+        app:input_type="number"
+        app:left_text="调查号"
+        app:mid_text_hint="调查号"/>
+
+    <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+        android:id="@+id/research_date"
+        style="@style/custom_edit_text_style"
+        app:left_text="调查日期"
+        app:mid_text_hint="调查日期"
+        app:mid_type="read"/>
+
+
+    <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+        android:id="@+id/region"
+        style="@style/custom_edit_text_style"
+        app:left_text="地区信息"
+        app:mid_font_color="@color/wx_green"
+        app:mid_text_hint="XX省XX市XX县\n(无网络的状态下可不填)"
+        app:mid_type="read"
+        app:right_icon="@drawable/text_right"
+        app:right_type="button"/>
+
+    <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+        android:id="@+id/detail_address"
+        style="@style/custom_edit_text_style"
+        app:left_text="详细信息"
+        app:mid_text_hint="[乡镇][村]街道"/>
+
+    <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+        android:id="@+id/longitude"
+        style="@style/custom_edit_text_style"
+        app:input_type="decimal"
+        app:left_text="经度"
+        app:mid_text_hint="经度 示例: 108.891298"/>
+
+    <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+        android:id="@+id/latitude"
+        style="@style/custom_edit_text_style"
+        app:input_type="decimal"
+        app:left_text="纬度"
+        app:mid_text_hint="纬度 示例: 34.201424"/>
+
+    <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+        android:id="@+id/elevation"
+        style="@style/custom_edit_text_style"
+        app:input_type="decimal"
+        app:left_text="海拔"
+        app:mid_text_hint="海拔"/>
+
+    <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+        android:id="@+id/town"
+        style="@style/custom_edit_text_style"
+        app:left_text="城镇"
+        app:mid_text_hint="城镇"/>
+
+    <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+        android:id="@+id/village"
+        style="@style/custom_edit_text_style"
+        app:left_text="村庄"
+        app:mid_text_hint="村庄"/>
+
+    <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+        android:id="@+id/cname"
+        style="@style/custom_edit_text_style"
+        app:left_text="中文名"
+        app:mid_font_color="@color/wx_green"
+        app:mid_text_hint="中文名称"
+        app:mid_type="read"/>
+
+    <!-- <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+         android:id="@+id/special_code"
+         style="@style/custom_edit_text_style"
+         app:left_text="树种代码"
+         app:mid_text_hint="树种代码"/>-->
+
+    <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+        android:id="@+id/alias"
+        style="@style/custom_edit_text_style"
+        app:left_text="别名"
+        app:mid_text_hint="别名"/>
+
+    <!--  <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+         android:id="@+id/latin"
+         style="@style/custom_edit_text_style"
+         app:left_text="拉丁名"
+         app:mid_text_hint="拉丁名"/>
+
+    <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+         android:id="@+id/family"
+         style="@style/custom_edit_text_style"
+         app:left_text="科"
+         app:mid_text_hint="科"/>
+
+     <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+         android:id="@+id/belong"
+         style="@style/custom_edit_text_style"
+         app:left_text="属"
+         app:mid_text_hint="属"/>-->
+
+    <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+        android:id="@+id/height"
+        style="@style/custom_edit_text_style"
+        app:input_type="decimal"
+        app:left_text="高度"
+        app:mid_text_hint="古树高度（米）"/>
+
+    <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+        android:id="@+id/dbh"
+        style="@style/custom_edit_text_style"
+        app:input_type="decimal"
+        app:left_text="胸径"
+        app:mid_text_hint="胸径（厘米）"/>
+
+    <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+        android:id="@+id/age"
+        style="@style/custom_edit_text_style"
+        app:input_type="decimal"
+        app:left_text="树龄"
+        app:mid_text_hint="树龄（年）"/>
+
+    <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+        android:id="@+id/crownEW"
+        style="@style/custom_edit_text_style"
+        app:input_type="decimal"
+        app:left_text="东西冠幅"
+        app:mid_text_hint="东西冠幅（米）"/>
+
+    <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+        android:id="@+id/crownNS"
+        style="@style/custom_edit_text_style"
+        app:input_type="decimal"
+        app:left_text="南北冠幅"
+        app:mid_text_hint="南北冠幅（米）"/>
+
+    <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+        android:id="@+id/growth"
+        style="@style/custom_edit_text_style"
+        app:left_text="生长势"
+        app:mid_font_color="@color/wx_green"
+        app:mid_text_hint="生长势"
+        app:mid_type="read"/>
+
+    <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+        android:id="@+id/environment"
+        style="@style/custom_edit_text_style"
+        app:left_text="生长环境"
+        app:mid_font_color="@color/wx_green"
+        app:mid_text_hint="生长环境"
+        app:mid_type="read"/>
+
+    <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+        android:id="@+id/status"
+        style="@style/custom_edit_text_style"
+        app:left_text="状况"
+        app:mid_font_color="@color/wx_green"
+        app:mid_text_hint="生长状况"
+        app:mid_type="read"/>
+
+    <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+        android:id="@+id/special"
+        style="@style/custom_edit_text_style"
+        app:left_text="散生群状"
+        app:mid_font_color="@color/wx_green"
+        app:mid_text_hint="散生群状"
+        app:mid_type="read"/>
+
+    <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+        android:id="@+id/gsbz"
+        style="@style/custom_edit_text_style"
+        app:left_text="古树标志"
+        app:mid_font_color="@color/wx_green"
+        app:mid_text_hint="古树标志"
+        app:mid_type="read"
+        />
+
+    <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+        android:id="@+id/owner"
+        style="@style/custom_edit_text_style"
+        app:left_text="权属"
+        app:mid_font_color="@color/wx_green"
+        app:mid_text_hint="权属"
+        app:mid_type="read"/>
+
+    <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+        android:id="@+id/grow_space"
+        style="@style/custom_edit_text_style"
+        app:left_text="生长场所"
+        app:mid_font_color="@color/wx_green"
+        app:mid_text_hint="生长场所"
+        app:mid_type="read"/>
+
+    <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+        android:id="@+id/tree_area"
+        style="@style/custom_edit_text_style"
+        app:left_text="生长地"
+        app:mid_font_color="@color/wx_green"
+        app:mid_text_hint="生长地"
+        app:mid_type="read"/>
+
+    <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+        android:id="@+id/aspect"
+        style="@style/custom_edit_text_style"
+        app:left_text="坡向"
+        app:mid_font_color="@color/wx_green"
+        app:mid_text_hint="坡向"
+        app:mid_type="read"/>
+
+    <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+        android:id="@+id/slope"
+        style="@style/custom_edit_text_style"
+        app:left_text="坡度"
+        app:mid_font_color="@color/wx_green"
+        app:mid_text_hint="坡度"
+        app:mid_type="read"/>
+
+    <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+        android:id="@+id/slope_pos"
+        style="@style/custom_edit_text_style"
+        app:left_text="坡位"
+        app:mid_font_color="@color/wx_green"
+        app:mid_text_hint="坡位"
+        app:mid_type="read"/>
+
+    <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+        android:id="@+id/soil"
+        style="@style/custom_edit_text_style"
+        app:left_text="土壤"
+        app:mid_font_color="@color/wx_green"
+        app:mid_text_hint="土壤名称"
+        app:mid_type="read"/>
+
+    <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+        android:id="@+id/protect"
+        style="@style/custom_edit_text_style"
+        app:left_text="保护现状"
+        app:mid_font_color="@color/wx_green"
+        app:mid_text_hint="保护现状（多选）"
+        app:mid_type="read"/>
+
+    <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+        android:id="@+id/recovery"
+        style="@style/custom_edit_text_style"
+        app:left_text="养护现状"
+        app:mid_font_color="@color/wx_green"
+        app:mid_text_hint="养护复壮现状（多选）"
+        app:mid_type="read"/>
+
+    <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+        android:id="@+id/manger_unit"
+        style="@style/custom_edit_text_style"
+        app:left_text="管护单位"
+        app:mid_text_hint="管护单位"/>
+
+    <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+        android:id="@+id/manager_person"
+        style="@style/custom_edit_text_style"
+        app:left_text="管护人"
+        app:mid_text_hint="管护人"/>
+
+    <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+        android:id="@+id/environment_factor"
+        style="@style/custom_edit_text_style"
+        app:left_text="环境因素"
+        app:mid_text_hint="影响生长环境的因素"/>
+
+    <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+        android:id="@+id/history"
+        style="@style/custom_edit_text_style"
+        app:left_text="历史"
+        app:mid_text_hint="古树的历史"/>
+
+    <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+        android:id="@+id/spec_stat_desc"
+        style="@style/custom_edit_text_style"
+        app:left_text="特殊情况"
+        app:mid_text_hint="特殊情况描述"/>
+
+    <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+        android:id="@+id/spec_desc"
+        style="@style/custom_edit_text_style"
+        app:left_text="鉴定记载"
+        app:mid_text_hint="古树鉴定记载"/>
+
+    <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+        android:id="@+id/pic"
+        style="@style/custom_edit_text_style"
+        app:left_text="图片"
+        app:mid_text_hint=""
+        app:mid_type="read"/>
+    <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+        android:id="@+id/pic_new"
+        style="@style/custom_edit_text_style"
+        app:left_text="图片"
+        app:mid_text_hint="选择图片"
+        app:mid_type="read"/>
+</LinearLayout>

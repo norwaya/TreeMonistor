@@ -37,7 +37,6 @@ import com.xabaizhong.treemonistor.utils.MessageEvent;
 import com.xabaizhong.treemonistor.utils.RxBus;
 import com.xabaizhong.treemonistor.utils.ScaleBitmap;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -304,7 +303,7 @@ public class Activity_species extends Activity_base implements C_info_gather_ite
 
 
     void showSpeciesDialog(boolean flag) {
-        View view = LayoutInflater.from(this).inflate(R.layout.activity_species_dialog, null);
+        View view = LayoutInflater.from(this).inflate(R.layout.listview, null);
 
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

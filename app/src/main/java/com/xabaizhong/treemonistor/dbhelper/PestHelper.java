@@ -1,5 +1,6 @@
 package com.xabaizhong.treemonistor.dbhelper;
 
+import com.google.gson.annotations.SerializedName;
 import com.xabaizhong.treemonistor.entity.Pest;
 
 import java.util.List;
@@ -10,7 +11,10 @@ import java.util.List;
 
 public class PestHelper {
 
+
+    @SerializedName("RECORDS")
     private List<RECORDSBean> RECORDS;
+
 
     public List<RECORDSBean> getRECORDS() {
         return RECORDS;
@@ -20,62 +24,70 @@ public class PestHelper {
         this.RECORDS = RECORDS;
     }
 
+
     public static class RECORDSBean {
         /**
-         * pest_name : 活辣子
-         * pest_type : 1
-         * pest_explain : 一种躯体像树叶颜色的有毒虫子。幼虫肥短，蛞蝓状。无腹足，代以吸盘。行动时不是爬行而是滑行。幼虫体色鲜艳，人碰到虫身上的有毒刺毛就会被蛰，并引起皮疹，被扎后有疼、痒、辛、辣、麻、热等感觉，可伴随长时间肿胀。
-         * harm_peculiarity : 以植物为食。在卵圆形的茧中化蛹，茧附著在叶间
-         * step : 可以喷洒1500倍液的氯氰菊酯或1000倍液的辛硫磷乳油防治。
+         * HexapodID : 1
+         * HexapodType : 0
+         * HexapodName : 线茸毒蛾
+         * Trait : 幼虫主要为害叶片,该虫食量大,食性杂,严重时可将全树叶片吃光。
+         * Method : 在毒蛾类害虫发生的年份，毒蛾的卵一般大量集中的石崖下、树干、草丛等处，卵期长达9个月，所以容易人工采集并集中销毁。
          */
 
-        private String pest_name;
-        private int pest_type;
-        private String pest_explain;
-        private String harm_peculiarity;
-        private String step;
+        @SerializedName("HexapodID")
+        private String HexapodID;
+        @SerializedName("HexapodType")
+        private int HexapodType;
+        @SerializedName("HexapodName")
+        private String HexapodName;
+        @SerializedName("Trait")
+        private String Trait;
+        @SerializedName("Method")
+        private String Method;
 
-        public String getPest_name() {
-            return pest_name;
+        public Pest toPest() {
+            return new Pest(null, HexapodID, HexapodType, HexapodName,
+                    Trait, Method);
         }
 
-        public void setPest_name(String pest_name) {
-            this.pest_name = pest_name;
+        public String getHexapodID() {
+            return HexapodID;
         }
 
-        public int getPest_type() {
-            return pest_type;
+        public void setHexapodID(String HexapodID) {
+            this.HexapodID = HexapodID;
         }
 
-        public void setPest_type(int pest_type) {
-            this.pest_type = pest_type;
+        public int getHexapodType() {
+            return HexapodType;
         }
 
-        public String getPest_explain() {
-            return pest_explain;
+        public void setHexapodType(int HexapodType) {
+            this.HexapodType = HexapodType;
         }
 
-        public void setPest_explain(String pest_explain) {
-            this.pest_explain = pest_explain;
+        public String getHexapodName() {
+            return HexapodName;
         }
 
-        public String getHarm_peculiarity() {
-            return harm_peculiarity;
+        public void setHexapodName(String HexapodName) {
+            this.HexapodName = HexapodName;
         }
 
-        public void setHarm_peculiarity(String harm_peculiarity) {
-            this.harm_peculiarity = harm_peculiarity;
+        public String getTrait() {
+            return Trait;
         }
 
-        public String getStep() {
-            return step;
+        public void setTrait(String Trait) {
+            this.Trait = Trait;
         }
 
-        public void setStep(String step) {
-            this.step = step;
+        public String getMethod() {
+            return Method;
         }
-        public Pest toPest(){
-            return new Pest(null,pest_name,pest_type,pest_explain,harm_peculiarity,step);
+
+        public void setMethod(String Method) {
+            this.Method = Method;
         }
     }
 }

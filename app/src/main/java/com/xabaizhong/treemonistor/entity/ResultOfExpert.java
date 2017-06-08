@@ -80,8 +80,4 @@ public class ResultOfExpert {
         this.checked = checked;
     }
 
-    @Override
-    public int hashCode() {
-        return this.getTID().hashCode() * 3 + 7 * (isChecked() ? 0 : 1);
-    }
 }

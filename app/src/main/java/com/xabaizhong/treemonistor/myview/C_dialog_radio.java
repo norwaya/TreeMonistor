@@ -31,7 +31,7 @@ public class C_dialog_radio {
 
     AlertDialog.Builder builder;
     int RESULT = -1;
-
+    AlertDialog dialog;
     public C_dialog_radio(Context context, CharSequence title, List<String> list,  int dialog_code) {
         this.context = context;
         this.mList = list;
@@ -48,7 +48,8 @@ public class C_dialog_radio {
             }
         });
         builder.setCancelable(false);
-        builder.show();
+        dialog = builder.create();
+        dialog.show();
     }
 
 
@@ -86,6 +87,8 @@ public class C_dialog_radio {
                 @Override
                 public void onClick(View v) {
                     RESULT = finalI;
+                    RxBus.getDefault().send(new MessageEvent(RESULT, mList.get(RESULT),mDialog_code));
+                    dialog.dismiss();
                 }
             });
         }

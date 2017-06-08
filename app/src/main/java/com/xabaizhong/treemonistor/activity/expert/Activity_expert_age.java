@@ -105,7 +105,7 @@ public class Activity_expert_age extends Activity_base {
     private void compute(String s) {
 
         float a = Float.parseFloat(s);
-        int tree_bj = (int) (a / Math.PI / 2f);
+        int tree_bj = (int) (a *1.0f/ 2);
         String cname = mList.get(mPosition);
         int bj = (tree_bj / 10 + 1) * 10;
         Log.i(TAG, "compute: " + s + "\t" + tree_bj + "\t" + bj);

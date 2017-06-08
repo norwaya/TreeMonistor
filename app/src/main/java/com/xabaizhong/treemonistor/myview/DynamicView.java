@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +21,9 @@ import android.widget.TextView;
 import com.xabaizhong.treemonistor.R;
 import com.xabaizhong.treemonistor.activity.add_tree.Activity_add_tree_group;
 import com.xabaizhong.treemonistor.activity.add_tree.Activity_tree_cname;
+import com.xabaizhong.treemonistor.base.App;
 import com.xabaizhong.treemonistor.entity.TreeSpecial;
+import com.xabaizhong.treemonistor.entity.TreeSpecialDao;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,21 +43,35 @@ public class DynamicView extends LinearLayout {
     MapView currentMapView;
     Context context;
 
-
     public DynamicView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         this.context = context;
-        MapView mapView = new MapView(context, true, this);
-        mapView.setCallback(new MapView.Callback() {
+        currentMapView = new MapView(context, true, this);
+        currentMapView.setCallback(new MapView.Callback() {
             @Override
             public void onClickListener(View v) {
                 addItem();
             }
         });
-
-        list.add(mapView);
-        addView(mapView.getView());
+        list.add(currentMapView);
+        addView(currentMapView.getView());
     }
+
+    boolean baseViewHasData = false;
+
+    public void initWithData(List<Map<String, String>> list) {
+        for (Map<String, String> map : list) {
+            if (baseViewHasData) {
+                addItem();
+            }else{
+                baseViewHasData = true;
+            }
+            Log.i("init with data", "initWithData: "+map.get("name")+"\t"+ map.get("num"));
+            currentMapView.setValue(map.get("name"), map.get("num"));
+
+        }
+    }
+
 
     public void setMapViewValue(TreeSpecial treeSpecial) {
         currentMapView.setValue(treeSpecial);
@@ -73,6 +90,7 @@ public class DynamicView extends LinearLayout {
 
     private void addItem() {
         final MapView mapView = new MapView(context, false, this);
+        currentMapView = mapView;
         mapView.setCallback(new MapView.Callback() {
             @Override
             public void onClickListener(View v) {
@@ -113,6 +131,23 @@ public class DynamicView extends LinearLayout {
             viewHolder.name.setText(treeSpecial.getCname());
             viewHolder.code.setText(treeSpecial.getTreeSpeId());
         }
+
+        public void setValue(String speciesId, String num) {
+            viewHolder.name.setText(getCname(speciesId));
+            viewHolder.code.setText(speciesId);
+            viewHolder.num.setText(num );
+        }
+
+        private String getCname(String speciesId) {
+            TreeSpecialDao treeSpecialDao = ((App) context.getApplicationContext()).getDaoSession().getTreeSpecialDao();
+            List<TreeSpecial> list = treeSpecialDao.queryBuilder().where(TreeSpecialDao.Properties.TreeSpeId.eq(speciesId)).build().list();
+
+            if (list.size() > 0) {
+                return list.get(0).getCname();
+            }
+            return "";
+        }
+
 
         public void setCallback(Callback callback) {
             this.callback = callback;

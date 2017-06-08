@@ -31,7 +31,10 @@ public class FileUtil {
 
     private static String picPath = basePath + File.separator + "pic";
 
-
+    /**
+     *
+     * @return
+     */
     public static List<String> getPngFiles() {
         List<String> list = new ArrayList<>();
         List<File> files = getFiles();
@@ -116,6 +119,8 @@ public class FileUtil {
         byte[] bytes = bStream.toByteArray();
         String string = Base64.encodeToString(bytes, Base64.DEFAULT);
 //        wf(string);
+        bitmap.recycle();
+        bitmap = null;
         return string;
     }
 

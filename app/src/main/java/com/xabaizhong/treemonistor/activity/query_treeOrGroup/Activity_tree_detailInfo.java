@@ -35,7 +35,11 @@ import java.util.regex.Pattern;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
@@ -60,54 +64,110 @@ public class Activity_tree_detailInfo extends Activity_base {
 
     }
 
-    AsyncTask asyncTask;
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if (disposable != null) {
+            disposable.dispose();
+            disposable = null;
+        }
+    }
+
+    Disposable disposable;
 
     private void query() {
-        asyncTask = new AsyncTask<Void, Void, String>() {
+        Observable.create(new ObservableOnSubscribe<String>() {
+
             @Override
-            protected String doInBackground(Void... params) {
+            public void subscribe(ObservableEmitter<String> e) throws Exception {
+                String result = null;
                 try {
-                    return WebserviceHelper.GetWebService(
+                    result = WebserviceHelper.GetWebService(
                             "DataQuerySys", "TreeDelInfo", getParms());
-                } catch (ConnectException e) {
-                    e.printStackTrace();
-                    return null;
+                } catch (Exception ex) {
+                    e.onError(ex);
                 }
+                if (result == null) {
+                    e.onError(new RuntimeException("返回为空"));
+                } else {
+                    e.onNext(result);
+                }
+                e.onComplete();
             }
+        }).observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Observer<String>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        disposable = d;
+                    }
 
-            @Override
-            protected void onPostExecute(String s) {
-                Log.i(TAG, "onPostExecute: " + s);
-                if (s == null) {
-                    showToast("获取古树信息失败");
-                    return;
-                }
-
-                Observable.just(s)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribeOn(Schedulers.io())
-                        .subscribe(
-                                new Consumer<String>() {
-                                    @Override
-                                    public void accept(String s) throws Exception {
-                                        ResultMessage rm = new Gson().fromJson(s, ResultMessage.class);
-                                        if (rm.getErrorCode() == 0) {
-                                            getTreeInfo(rm);
+                    @Override
+                    public void onNext(String value) {
+                        ResultMessage rm = new Gson().fromJson(value, ResultMessage.class);
+                        if (rm.getErrorCode() == 0) {
+                            getTreeInfo(rm);
 //                                            text1.setText(getTreeInfo(rm));
-                                        } else {
-                                            showToast(rm.getMessage());
-                                        }
-                                    }
-                                },
-                                new Consumer<Throwable>() {
-                                    @Override
-                                    public void accept(Throwable throwable) throws Exception {
-                                        throwable.printStackTrace();
-                                        showToast("解析信息失败");
-                                    }
-                                });
-            }
-        }.execute();
+                        } else {
+                            showToast(rm.getMessage());
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        disposable = null;
+                    }
+                });
+//        asyncTask = new AsyncTask<Void, Void, String>() {
+//            @Override
+//            protected String doInBackground(Void... params) {
+//                try {
+//                    return WebserviceHelper.GetWebService(
+//                            "DataQuerySys", "TreeDelInfo", getParms());
+//                } catch (ConnectException e) {
+//                    e.printStackTrace();
+//                    return null;
+//                }
+//            }
+//
+//            @Override
+//            protected void onPostExecute(String s) {
+//                Log.i(TAG, "onPostExecute: " + s);
+//                if (s == null) {
+//                    showToast("获取古树信息失败");
+//                    return;
+//                }
+//
+//                Observable.just(s)
+//                        .observeOn(AndroidSchedulers.mainThread())
+//                        .subscribeOn(Schedulers.io())
+//                        .subscribe(
+//                                new Consumer<String>() {
+//                                    @Override
+//                                    public void accept(String s) throws Exception {
+//                                        ResultMessage rm = new Gson().fromJson(s, ResultMessage.class);
+//                                        if (rm.getErrorCode() == 0) {
+//                                            getTreeInfo(rm);
+////                                            text1.setText(getTreeInfo(rm));
+//                                        } else {
+//                                            showToast(rm.getMessage());
+//                                        }
+//                                    }
+//                                },
+//                                new Consumer<Throwable>() {
+//                                    @Override
+//                                    public void accept(Throwable throwable) throws Exception {
+//                                        throwable.printStackTrace();
+//                                        showToast("解析信息失败");
+//                                    }
+//                                });
+//            }
+//        }.execute();
     }
 
     /* <UserID>string</UserID>
@@ -115,12 +175,6 @@ public class Activity_tree_detailInfo extends Activity_base {
       <TreeID>string</TreeID>
       <AreaID>string</AreaID>*/
     private Map<String, Object> getParms() {
-
-        /* <UserID>string</UserID>
-      <TreeType>int</TreeType>
-      <TreeID>string</TreeID>
-      <AreaID>string</AreaID>*/
-
         Map<String, Object> map = new HashMap<>();
         map.put("UserID", sharedPreferences.getString(UserSharedField.USERID, ""));
         map.put("TreeType", 0);
@@ -201,7 +255,6 @@ public class Activity_tree_detailInfo extends Activity_base {
         addView("位置：", Activity_tree_detailInfo.this.getAreaName(rm.areaid));
         addView("地址：", rm.result.town + rm.result.village + rm.result.smallname);
         addView("树高(m)：", rm.result.getTreeheight() + "");
-        addView("树高(m)：", rm.result.getTreeheight() + "");
         addView("胸径(cm)：", rm.result.getTreeDBH() + "");
         addView("经度：", rm.result.getOrdinate());
         addView("纬度：", rm.result.getAbscissa());
@@ -249,6 +302,7 @@ public class Activity_tree_detailInfo extends Activity_base {
                 "管护人/单位：" + rm.result.getManagementunit() + tree.getManagementpersion() + "\n" +
                 "记录人：" + rm.result.getUserID();*/
     }
+
     private void addPicView(final ResultMessage.ResultBean bean) {
         View view = getView("图片", bean.getPicInfo() != null ? bean.getPicInfo().size() + "" : "0");
         C_info_gather_item1 cv = (C_info_gather_item1) view.findViewById(R.id.cv);

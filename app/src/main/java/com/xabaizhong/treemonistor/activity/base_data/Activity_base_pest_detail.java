@@ -41,10 +41,9 @@ public class Activity_base_pest_detail extends Activity_base {
     C_info_gather_item1 explain;
     @BindView(R.id.harm)
     C_info_gather_item1 harm;
-    @BindView(R.id.step)
-    C_info_gather_item1 step;
     @BindView(R.id.pic)
     C_info_gather_item1 pic;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,11 +62,10 @@ public class Activity_base_pest_detail extends Activity_base {
     }
 
     private void initialView() {
-        cname.setText(pest.getCname());
-        type.setText(pest.getPestClass().getCname());
-        explain.setText(pest.getExplain());
-        harm.setText(pest.getSpecial());
-        step.setText(pest.getStep());
+        cname.setText(pest.getHexapodname());
+        type.setText(pest.getHexapodType() == 0 ? "咀嚼式" : "刺吸式");
+        explain.setText(pest.getTrait());
+        harm.setText(pest.getMethod());
         pic.setText("0");
         pic.setCallback_mid(new C_info_gather_item1.Mid_CallBack() {
             @Override
@@ -84,6 +82,7 @@ public class Activity_base_pest_detail extends Activity_base {
 
 
     }
+
     ArrayList<String> list = new ArrayList<>();
 
     private void requestPic() {

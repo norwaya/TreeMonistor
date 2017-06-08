@@ -5,13 +5,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -21,6 +25,7 @@ import com.squareup.picasso.Picasso;
 import com.xabaizhong.treemonistor.R;
 import com.xabaizhong.treemonistor.activity.Activity_main;
 import com.xabaizhong.treemonistor.activity.expert.Activity_expert_age;
+import com.xabaizhong.treemonistor.activity.expert.Activity_expert_bug;
 import com.xabaizhong.treemonistor.activity.expert.Activity_expert_detail;
 import com.xabaizhong.treemonistor.activity.expert.Activity_expert_weak;
 import com.xabaizhong.treemonistor.activity.expert.Activity_monitor_growth;
@@ -61,7 +66,6 @@ import static android.support.v7.widget.RecyclerView.VERTICAL;
  */
 
 public class Fragment_expert extends Fragment_base implements Fragment_expert_adapter.OnClickListener {
-
     String TAG = "fragment-expert";
     /* @BindView(R.id.menu_yellow)
      FloatingActionMenu menuYellow;
@@ -70,16 +74,21 @@ public class Fragment_expert extends Fragment_base implements Fragment_expert_ad
      @BindView(R.id.fab_tree_weakness)
      FloatingActionButton fabTreeWeakness;
      private Context context;*/
-    @BindView(R.id.xRecyclerView)
-    XRecyclerView xRecyclerView;
+    @BindView(R.id.swipe_layout)
+    SwipeRefreshLayout refreshLayout;
+    @BindView(R.id.lv)
+    ListView lv;
     @BindView(R.id.fab_father)
     FloatingActionMenu fabFather;
+
 
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
+
+    boolean isShow;
 
     @Nullable
     @Override
@@ -92,11 +101,13 @@ public class Fragment_expert extends Fragment_base implements Fragment_expert_ad
             view = inflater.inflate(R.layout.fragment_expert, container, false);
             ButterKnife.bind(this, view);
             initView();
+            isShow = true;
         } else {
             view = inflater.inflate(R.layout.simple_text, container, false);
             TextView text = (TextView) view.findViewById(R.id.text1);
             text.setText("此用户不具备该权限，无法使用此功能");
             showToast("此用户不具备该权限，无法使用此功能");
+            isShow = false;
         }
         return view;
     }
@@ -104,7 +115,8 @@ public class Fragment_expert extends Fragment_base implements Fragment_expert_ad
     @Override
     public void onStart() {
         super.onStart();
-        request();
+        if (isShow)
+            request();
     }
 
     Fragment_expert_adapter adapter;
@@ -130,46 +142,23 @@ public class Fragment_expert extends Fragment_base implements Fragment_expert_ad
       /*  xRecyclerView.addHeaderView(view);*/
         adapter = new Fragment_expert_adapter(context);
         adapter.setOnClickListener(this);
-        HeaderAndFooterWrapper headerAdapter = new HeaderAndFooterWrapper(adapter);
-        headerAdapter.addHeaderView(view);
+        lv.setAdapter(adapter);
+//        recyclerView.setPullRefreshEnabled(true);
+//        recyclerView.setLoadingMoreEnabled(true);
+        lv.addHeaderView(view);
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                request();
+            }
+        });
 
-        xRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL));
-        xRecyclerView.addItemDecoration(new RecycleViewDivider(context, VERTICAL, R.drawable.divider));
-        xRecyclerView.setAdapter(headerAdapter);
-        xRecyclerView.setPullRefreshEnabled(true);
-        xRecyclerView.setLoadingMoreEnabled(true);
-
-
-        xRecyclerView.setLoadingListener(
-                new XRecyclerView.LoadingListener() {
-                    @Override
-                    public void onRefresh() {
-                        request();
-                    }
-
-                    @Override
-                    public void onLoadMore() {
-                        new Thread() {
-                            @Override
-                            public void run() {
-                                super.run();
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        xRecyclerView.loadMoreComplete();
-                                    }
-                                });
-                            }
-                        }.start();
-                    }
-                }
-        );
     }
 
     private void initialFloatView() {
-
         fabFather.setIsCircle(false);
         fabFather.setmItemGap(20);
+
         fabFather.setOnMenuItemClickListener(new FloatingActionMenu.OnMenuItemClickListener() {
             @Override
             public void onMenuItemClick(FloatingActionMenu floatingActionMenu, int i, FloatingActionButton floatingActionButton) {
@@ -178,10 +167,10 @@ public class Fragment_expert extends Fragment_base implements Fragment_expert_ad
                         Log.d(TAG, "onMenuItemClick: fab_tree_weakness");
                         startActivity(new Intent(context, Activity_expert_weak.class));
                         break;
-                 /*   case R.id.fab_tree_bug:
+                    case R.id.fab_tree_bug:
                         Log.d(TAG, "onMenuItemClick: fab_tree_bug");
                         startActivity(new Intent(context, Activity_expert_bug.class));
-                        break;*/
+                        break;
                     case R.id.fab_tree_unknow:
                         startActivity(new Intent(context, Activity_species.class));
                         Log.d(TAG, "onMenuItemClick: fab_tree_unknow");
@@ -232,6 +221,7 @@ public class Fragment_expert extends Fragment_base implements Fragment_expert_ad
                         ResultMessage rm = new Gson().fromJson(value, ResultMessage.class);
                         if (rm.getErrorCode() == 0) {
                             adapter.setResource(rm.getList());
+                            Log.i(TAG, "onNext: "+Thread.currentThread().getName());
                         }
                     }
 
@@ -242,10 +232,11 @@ public class Fragment_expert extends Fragment_base implements Fragment_expert_ad
 
                     @Override
                     public void onComplete() {
-                        xRecyclerView.refreshComplete();
+                        refreshLayout.setRefreshing(false);
                     }
                 });
     }
+
 
 
     @Override
@@ -269,15 +260,16 @@ public class Fragment_expert extends Fragment_base implements Fragment_expert_ad
 
     }
 
+
     @Override
     public void onClick(View view, int position, Object obj) {
         ResultOfExpert resultOfExpert = (ResultOfExpert) obj;
-        Log.i(TAG, "onClick: " + resultOfExpert.getTID());
         Intent i = new Intent(getActivity(), Activity_expert_detail.class);
         i.putExtra("tid", resultOfExpert.getTID());
         i.putExtra("type", resultOfExpert.getAuthType());
         startActivity(i);
     }
+
 
     static class ResultMessage {
 

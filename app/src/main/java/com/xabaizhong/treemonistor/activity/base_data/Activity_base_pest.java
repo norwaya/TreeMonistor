@@ -67,7 +67,7 @@ public class Activity_base_pest extends Activity_base {
             for (Pest pest : list
                     ) {
                 map = new HashMap<>();
-                map.put("name", pest.getCname());
+                map.put("name", pest.getHexapodname());
                 mapList.add(map);
             }
             return mapList;

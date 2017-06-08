@@ -114,8 +114,8 @@ public class Fragment_setting extends Fragment_base {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_setting, container, false);
         ButterKnife.bind(this, view);
-        initNotice();
         initView();
+        initNotice();
         return view;
     }
 
@@ -123,7 +123,7 @@ public class Fragment_setting extends Fragment_base {
 
         boolean noticeS = sharedPreferences.getBoolean(NOTICE_PUSH, true);
         informationS.setChecked(noticeS);
-        switchIp.setChecked(true);
+        WebserviceHelper.switch_ip = noticeS;
     }
 
     private void initView() {
@@ -139,20 +139,7 @@ public class Fragment_setting extends Fragment_base {
                 }
                 getContext().sendBroadcast(i);
                 changeNoticeSwitch(isChecked);
-
-            }
-        });
-        switchIp.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 WebserviceHelper.switch_ip = isChecked;
-                Log.i(TAG, "onCheckedChanged: "+WebserviceHelper.getIp());
-            }
-        });
-        ipAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.i(TAG, "onCheckedChanged: "+switchIp.isChecked()+"\t"+WebserviceHelper.getIp());
             }
         });
     }

@@ -5,10 +5,11 @@
 
     <me.nereo.multi_image_selector.view.SquaredImageView
         android:id="@+id/image_item1"
+        android:src="@drawable/tree_header"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
-        android:scaleType="centerCrop"/>
+        android:scaleType="fitCenter"/>
 
     <TextView
         android:background="@color/white"

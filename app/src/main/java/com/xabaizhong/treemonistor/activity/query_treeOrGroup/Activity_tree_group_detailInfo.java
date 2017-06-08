@@ -33,7 +33,11 @@ import java.util.regex.Pattern;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
@@ -59,53 +63,108 @@ public class Activity_tree_group_detailInfo extends Activity_base {
 
     }
 
-    AsyncTask asyncTask;
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if (disposable != null) {
+            disposable.dispose();
+            disposable = null;
+        }
+    }
+
+    Disposable disposable;
 
     private void query() {
-        asyncTask = new AsyncTask<Void, Void, String>() {
+
+        Observable.create(new ObservableOnSubscribe<String>() {
             @Override
-            protected String doInBackground(Void... params) {
+            public void subscribe(ObservableEmitter<String> e) throws Exception {
+                String result = null;
                 try {
-                    return WebserviceHelper.GetWebService(
+                    result = WebserviceHelper.GetWebService(
                             "DataQuerySys", "TreeDelInfo", getParms());
-                } catch (ConnectException e) {
-                    e.printStackTrace();
-                    return null;
+                } catch (Exception ex) {
+                    e.onError(ex);
                 }
-            }
-
-            @Override
-            protected void onPostExecute(String s) {
-                Log.i(TAG, "onPostExecute: " + s);
-                if (s == null) {
-                    showToast("获取古树信息失败");
-                    return;
+                if (result == null) {
+                    e.onError(new RuntimeException("返回为空"));
+                } else {
+                    e.onNext(result);
                 }
-
-                Observable.just(s)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribeOn(Schedulers.io())
-                        .subscribe(
-                                new Consumer<String>() {
-                                    @Override
-                                    public void accept(String s) throws Exception {
-                                        ResultMessage rm = new Gson().fromJson(s, ResultMessage.class);
-                                        if (rm.getErrorCode() == 0) {
-                                            getTreeInfo(rm);
-                                        } else {
-                                            showToast(rm.getMessage());
-                                        }
-                                    }
-                                },
-                                new Consumer<Throwable>() {
-                                    @Override
-                                    public void accept(Throwable throwable) throws Exception {
-                                        throwable.printStackTrace();
-                                        showToast("解析信息失败");
-                                    }
-                                });
+                e.onComplete();
             }
-        }.execute();
+        }).observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Observer<String>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(String value) {
+                        ResultMessage rm = new Gson().fromJson(value, ResultMessage.class);
+                        if (rm.getErrorCode() == 0) {
+                            getTreeInfo(rm);
+                        } else {
+                            showToast(rm.getMessage());
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        disposable = null;
+                    }
+                });
+//        asyncTask = new AsyncTask<Void, Void, String>() {
+//            @Override
+//            protected String doInBackground(Void... params) {
+//                try {
+//                    return WebserviceHelper.GetWebService(
+//                            "DataQuerySys", "TreeDelInfo", getParms());
+//                } catch (ConnectException e) {
+//                    e.printStackTrace();
+//                    return null;
+//                }
+//            }
+//
+//            @Override
+//            protected void onPostExecute(String s) {
+//                Log.i(TAG, "onPostExecute: " + s);
+//                if (s == null) {
+//                    showToast("获取古树信息失败");
+//                    return;
+//                }
+//
+//                Observable.just(s)
+//                        .observeOn(AndroidSchedulers.mainThread())
+//                        .subscribeOn(Schedulers.io())
+//                        .subscribe(
+//                                new Consumer<String>() {
+//                                    @Override
+//                                    public void accept(String s) throws Exception {
+//                                        ResultMessage rm = new Gson().fromJson(s, ResultMessage.class);
+//                                        if (rm.getErrorCode() == 0) {
+//                                            getTreeInfo(rm);
+//                                        } else {
+//                                            showToast(rm.getMessage());
+//                                        }
+//                                    }
+//                                },
+//                                new Consumer<Throwable>() {
+//                                    @Override
+//                                    public void accept(Throwable throwable) throws Exception {
+//                                        throwable.printStackTrace();
+//                                        showToast("解析信息失败");
+//                                    }
+//                                });
+//            }
+//        }.execute();
     }
 
     /* <UserID>string</UserID>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+    <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+        android:id="@+id/c1"
+        style="@style/custom_edit_text_style"
+        app:left_text="生长势"
+        app:mid_type="read"/>
+    <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+        android:id="@+id/c2"
+        style="@style/custom_edit_text_style"
+        app:left_text="叶片"
+        app:mid_type="read"/>
+    <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+        android:id="@+id/c3"
+        style="@style/custom_edit_text_style"
+        app:left_text="枝条"
+        app:mid_type="read"/>
+    <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+        android:id="@+id/c4"
+        style="@style/custom_edit_text_style"
+        app:left_text="树干"
+        app:mid_type="read"/>
+</LinearLayout>

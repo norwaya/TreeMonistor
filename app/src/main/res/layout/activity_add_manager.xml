@@ -1,77 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:fab="http://schemas.android.com/apk/res-auto"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:id="@+id/layout_bottom"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@color/white">
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="@android:color/darker_gray"/>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:orientation="horizontal"
-            android:paddingBottom="5dp"
-            android:paddingTop="5dp"
-            >
-
-            <Button
-                android:id="@+id/btn_tree"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="5dp"
-                android:background="@drawable/button_style_circle"
-                android:text="添加古树"/>
-
-            <Button
-                android:id="@+id/btn_treeGroup"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="5dp"
-                android:background="@drawable/button_style_circle"
-                android:text="添加古树群"/>
-
-            <Button
-                android:id="@+id/btn_submit"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/button_style_circle"
-                android:text="全部上传"/>
-        </LinearLayout>
-
-    </RelativeLayout>
 
     <ListView
         android:id="@+id/lv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/layout_bottom"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:divider="@drawable/list_divider"
         android:dividerHeight="1px"/>
 
-    <RelativeLayout
-        android:id="@+id/layout_pb"
+    <terranovaproductions.newcomicreader.FloatingActionMenu
+        android:id="@+id/fab_father"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true">
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp">
 
-        <ProgressBar
+        <!--First button as menu button-->
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_main"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"/>
-    </RelativeLayout>
+            android:src="@drawable/close"
+            fab:backgroundTint="@color/wx_green"
+            fab:fabSize="normal"/>
+
+        <!-- Other button as menu items-->
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/tree_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/fab_label_add_tree"
+            android:src="@drawable/ic_edit"
+            fab:backgroundTint="@color/wx_green"
+            fab:fabSize="mini"/>
+        <!-- <android.support.design.widget.FloatingActionButton
+             android:id="@+id/fab_tree_bug"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:contentDescription="@string/tree_bug"
+             android:src="@drawable/ic_edit"
+             fab:backgroundTint="@color/wx_green"
+             fab:fabSize="mini"/>-->
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/group_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/fab_label_add_group"
+            android:src="@drawable/ic_edit"
+            fab:backgroundTint="@color/wx_green"
+            fab:fabSize="mini"/>
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/show_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/show_tree_group"
+            android:src="@drawable/ic_edit"
+            fab:backgroundTint="@color/wx_green"
+            fab:fabSize="mini"/>
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/show_tree"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/show_tree"
+            android:src="@drawable/ic_edit"
+            fab:backgroundTint="@color/wx_green"
+            fab:fabSize="mini"/>
+
+    </terranovaproductions.newcomicreader.FloatingActionMenu>
 </RelativeLayout>

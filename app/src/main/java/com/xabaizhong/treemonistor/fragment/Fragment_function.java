@@ -18,6 +18,7 @@ import com.xabaizhong.treemonistor.activity.expert_zd.Activity_expert_zd;
 import com.xabaizhong.treemonistor.activity.monitor.Activity_monitor;
 import com.xabaizhong.treemonistor.activity.add_tree.Activity_add_manage;
 import com.xabaizhong.treemonistor.activity.base_data.Activity_base_data;
+import com.xabaizhong.treemonistor.activity.monitor.Activity_monitor_with_treeInfo;
 import com.xabaizhong.treemonistor.activity.monitor_query.Activity_monitor_query;
 import com.xabaizhong.treemonistor.activity.query_treeOrGroup.Activity_query_tree_info;
 import com.xabaizhong.treemonistor.adapter.Fragment_function_adapter;
@@ -94,10 +95,10 @@ public class Fragment_function extends Fragment_base implements Fragment_functio
         function_adapter.setResource(roles,Arrays.asList(
                 R.drawable.ic_fragment_functin_tree,
                 R.drawable.ic_fragment_function_query,
-                R.drawable.ic_fragment_function_monistor,
-                R.drawable.ic_fragment_function_monistor,
-                R.drawable.ic_fragment_function_monistor,
-                R.drawable.ic_fragment_function_monistor,
+                R.drawable.import_tree,
+                R.drawable.import_query,
+                R.drawable.expert,
+                R.drawable.ku,
                 R.drawable.ic_fragment_function_monistor,
                 R.drawable.ic_fragment_function_monistor,
                 R.drawable.ic_fragment_function_monistor), Arrays.asList(contentArray));
@@ -139,7 +140,7 @@ public class Fragment_function extends Fragment_base implements Fragment_functio
                 getActivity().startActivity(i);
                 break;
             case ACTIVITY_REGULATION:
-                i.setClass(getContext(), Activity_monitor.class);
+                i.setClass(getContext(), Activity_monitor_with_treeInfo.class);
                 getActivity().startActivity(i);
                 break;
             case ACTIVITY_REGULATION_QUERY:

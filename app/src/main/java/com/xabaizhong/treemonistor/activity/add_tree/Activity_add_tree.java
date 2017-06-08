@@ -190,6 +190,7 @@ public class Activity_add_tree extends Activity_base {
         if (id == -1) {
             tree = new Tree();
             treeTypeInfo = new TreeTypeInfo();
+            treeId.setText(areaId());
         } else {
             queryBeanFromDb(id);
             initViews();
@@ -610,9 +611,6 @@ public class Activity_add_tree extends Activity_base {
         if (managerPerson.getText().equals("") && mangerUnit.getText().equals("")) {
             return "管护单位和管护人不能同时为空";
         }
-        if (environmentFactor.getText().equals("")) {
-            return "请填写环境因素";
-        }
         if (history.getText().equals("")) {
             return "请填写历史因素";
         }
@@ -654,98 +652,6 @@ public class Activity_add_tree extends Activity_base {
             }
         }
 
-    }
-
-    private void upload() {
-
-        Observer<Object> observer = new Observer<Object>() {
-            @Override
-            public void onSubscribe(Disposable d) {
-
-            }
-
-            @Override
-            public void onNext(Object value) {
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                layoutPb.setVisibility(View.INVISIBLE);
-            }
-
-            @Override
-            public void onComplete() {
-                tree.setPiclist(fillPic());
-                json = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create().toJson(treeTypeInfo);
-                Log.i(TAG, "fillTree: " + json);
-                submitTreeInfo();
-            }
-        };
-
-        Observable.create(new ObservableOnSubscribe<Object>() {
-            @Override
-            public void subscribe(ObservableEmitter<Object> e) throws Exception {
-                FileUtil.clearFileDir();
-                if (mList != null)
-                    for (int i = 0; i < mList.size(); i++) {
-                        Log.i(TAG, "subscribe: image" + i);
-                        ScaleBitmap.getBitmap(mList.get(i), "image" + i + ".png");
-                        Log.i(TAG, "subscribe: complete" + i);
-                    }
-                e.onComplete();
-                Log.i(TAG, "subscribe: over");
-            }
-        }).observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(observer);
-    }
-
-    AsyncTask asyncTask;
-
-    private void submitTreeInfo() {
-        asyncTask = new AsyncTask<Void, Void, String>() {
-            @Override
-            protected String doInBackground(Void... params) {
-                try {
-                    return WebserviceHelper.GetWebService(
-                            "UploadTreeInfo", "UploadTreeInfoMethod", getParms());
-                } catch (ConnectException e) {
-                    e.printStackTrace();
-                    return null;
-                }
-            }
-
-            @Override
-            protected void onPostExecute(String s) {
-                layoutPb.setVisibility(View.INVISIBLE);
-                if (s == null) {
-                    showToast("请求错误");
-                    return;
-                }
-                Observable.just(s)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribeOn(Schedulers.io())
-                        .subscribe(new Consumer<String>() {
-                                       @Override
-                                       public void accept(String s) throws Exception {
-                                           ResultMessage msg = new Gson().fromJson(s, ResultMessage.class);
-                                           if (msg.getError_code() == 0) {
-                                               showToast("古树信息上传成功.");
-                                               Activity_add_tree.this.finish();
-                                           } else {
-                                               showToast(msg.getMessage());
-                                           }
-                                       }
-                                   },
-                                new Consumer<Throwable>() {
-                                    @Override
-                                    public void accept(Throwable throwable) throws Exception {
-                                        showToast("解析失败");
-                                    }
-                                });
-            }
-        }.execute();
     }
 
 

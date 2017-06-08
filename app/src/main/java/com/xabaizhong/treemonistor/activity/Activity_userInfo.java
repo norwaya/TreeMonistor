@@ -20,6 +20,7 @@ import com.xabaizhong.treemonistor.myview.C_info_gather_item1;
 import com.xabaizhong.treemonistor.service.WebserviceHelper;
 import com.xabaizhong.treemonistor.service.model.User;
 import com.xabaizhong.treemonistor.service.response.LoginResultMessage;
+import com.xabaizhong.treemonistor.utils.FileUtil;
 
 import java.io.Serializable;
 import java.net.ConnectException;
@@ -29,6 +30,13 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Administrator on 2017/4/6 0006.
@@ -49,36 +57,65 @@ public class Activity_userInfo extends Activity_base {
     private void initView() {
         getUserInfo();
     }
-
-    AsyncTask asyncTask;
+    Disposable mDisposable;
+    @Override
+    public void onBackPressed() {
+        if (mDisposable != null) {
+            mDisposable.dispose();
+            mDisposable = null;
+        }else{
+            super.onBackPressed();
+        }
+    }
 
     private void getUserInfo() {
-        asyncTask = new AsyncTask<Void, Void, String>() {
+        Observable.create(new ObservableOnSubscribe<String>() {
             @Override
-            protected String doInBackground(Void... params) {
+            public void subscribe(ObservableEmitter<String> e) throws Exception {
+                String result = null;
                 try {
-                    return WebserviceHelper.GetWebService(
+                    result =  WebserviceHelper.GetWebService(
                             "Login", "UserDetInfo", requestMap());
-                } catch (ConnectException e) {
-                    e.printStackTrace();
-                    return null;
+                } catch (Exception ex) {
+                    e.onError(ex);
                 }
-            }
-
-            @Override
-            protected void onPostExecute(String s) {
-                if (s == null)
-                    return;
-                Log.i(TAG, "onPostExecute: " + s);
-                LoginResultMessage loginResultMessage = new Gson().fromJson(s, LoginResultMessage.class);
-                if (loginResultMessage.getError_code() == 0) {
-                    User result = loginResultMessage.getResult();
-                    initInfo(result);
+                if (result == null) {
+                    e.onError(new RuntimeException("返回为空"));
                 } else {
-                    addView("错误信息", "获取用户信息失败");
+                    e.onNext(result);
                 }
+                e.onComplete();
             }
-        }.execute();
+        }).observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Observer<String>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        mDisposable = d;
+                    }
+
+                    @Override
+                    public void onNext(String value) {
+                        LoginResultMessage loginResultMessage = new Gson().fromJson(value, LoginResultMessage.class);
+                        if (loginResultMessage.getError_code() == 0) {
+                            User result = loginResultMessage.getResult();
+                            initInfo(result);
+                        } else {
+                            addView("错误信息", "获取用户信息失败");
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        mDisposable = null;
+                    }
+                });
+
     }
 
     private String getAreaName(String areaId) {

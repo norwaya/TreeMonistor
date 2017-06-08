@@ -56,11 +56,11 @@ public class Activity_query_tree_info_list extends Activity_base implements Comm
 
     }
 
-    int mType;
+    String mType;
     int type;
 
     private void initialRequest() {
-        mType = getIntent.getIntExtra("index", -1);
+        mType = getIntent.getStringExtra("index");
         type = getIntent.getIntExtra("type", 0);
         mPage = 0;
         mCol = 0;
@@ -119,13 +119,13 @@ public class Activity_query_tree_info_list extends Activity_base implements Comm
     /* <index>int</index>
       <AreaID>string</AreaID>
       <page>int</page>*/
-    public void request(int type, int page, int col) {
+    public void request(String item, int page, int col) {
 
         int index =   col;
         Log.i(TAG, "request: index -> " + index);
 
         final Map<String, Object> map = new HashMap<>();
-        map.put("index", type);
+        map.put("index", item);
         map.put("AreaID", sharedPreferences.getString(UserSharedField.AREAID, ""));
         map.put("page", index);
 
@@ -204,7 +204,7 @@ public class Activity_query_tree_info_list extends Activity_base implements Comm
     @Override
     public void onItemClickListener(View view, int position) {
         Intent i = null;
-        if (type == 1) {
+        if (mType.equals("72")) {
             i = new Intent(this, Activity_tree_group_detailInfo.class);
         } else {
             i = new Intent(this, Activity_tree_detailInfo.class);

@@ -45,13 +45,6 @@
                 app:left_text="季节"
                 app:mid_text_hint="季节"/>
 
-            <com.xabaizhong.treemonistor.myview.C_info_gather_item1
-                android:id="@+id/bug_species"
-                style="@style/custom_edit_text_style"
-                app:mid_font_color="@color/wx_green"
-                app:mid_type="read"
-                app:left_text="树种"
-                app:mid_text_hint="树种"/>
 
             <com.xabaizhong.treemonistor.myview.C_info_gather_item1
                 android:id="@+id/bug_part"
@@ -68,6 +61,13 @@
                 app:mid_type="read"
                 app:left_text="害虫分类"
                 app:mid_text_hint="害虫分类"/>
+            <com.xabaizhong.treemonistor.myview.C_info_gather_item1
+                android:id="@+id/pics"
+                style="@style/custom_edit_text_style"
+                app:mid_font_color="@color/wx_green"
+                app:mid_type="read"
+                app:left_text="选择照片"
+                app:mid_text_hint="选择照片"/>
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>

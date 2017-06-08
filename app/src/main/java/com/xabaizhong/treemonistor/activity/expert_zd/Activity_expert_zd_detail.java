@@ -3,15 +3,18 @@ package com.xabaizhong.treemonistor.activity.expert_zd;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 import com.xabaizhong.treemonistor.R;
+import com.xabaizhong.treemonistor.activity.expert_zd.fragment.Fragment_Expert_Bug;
 import com.xabaizhong.treemonistor.activity.expert_zd.fragment.Fragment_Expert_Ill;
 import com.xabaizhong.treemonistor.activity.expert_zd.fragment.Fragment_Expert_Species;
 import com.xabaizhong.treemonistor.base.Activity_base;
+import com.xabaizhong.treemonistor.myview.C_info_gather_item1;
 import com.xabaizhong.treemonistor.service.AsyncTaskRequest;
 
 import java.util.HashMap;
@@ -69,13 +72,16 @@ public class Activity_expert_zd_detail extends Activity_base {
                                         public void accept(String s) throws Exception {
                                             ResultMsg bean = new Gson().fromJson(s, ResultMsg.class);
                                             if (bean.getErrorCode() == 0) {
-                                                if (bean.getType() == 0){
+                                                if (bean.getType() == 0) {
                                                     Fragment_Expert_Species.Bean instance = new Gson().fromJson(s, Fragment_Expert_Species.Bean.class);
                                                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_replace, Fragment_Expert_Species.instance(instance)).commit();
-                                                }
-                                                else if (bean.getType() == 3){
+                                                } else if (bean.getType() == 3) {
                                                     Fragment_Expert_Ill.Bean instance = new Gson().fromJson(s, Fragment_Expert_Ill.Bean.class);
                                                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_replace, Fragment_Expert_Ill.instance(instance)).commit();
+                                                } else if (bean.getType() == 4) {
+                                                    Fragment_Expert_Bug.Bean instance = new Gson().fromJson(s, Fragment_Expert_Bug.Bean.class);
+                                                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_replace, Fragment_Expert_Bug.instance(instance)).commit();
+
                                                 }
                                             }
                                         }
@@ -90,6 +96,8 @@ public class Activity_expert_zd_detail extends Activity_base {
                 }).setParams(map)
                 .create();
     }
+
+
 
     static class ResultMsg {
         @SerializedName("message")

@@ -83,6 +83,10 @@ public class C_info_gather_item1 extends LinearLayout {
         addView(view);
     }
 
+    public EditText getMid() {
+        return mid;
+    }
+
     /*right*/
     final static int TYPE_FLAG = 0x001001;
     final static int TYPT_CLEAR = 0x001002;

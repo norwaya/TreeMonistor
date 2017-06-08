@@ -7,10 +7,15 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-    <com.jcodecraeer.xrecyclerview.XRecyclerView
-        android:id="@+id/xRecyclerView"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent">
+        <ListView
+            android:id="@+id/lv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 
     <terranovaproductions.newcomicreader.FloatingActionMenu
@@ -29,7 +34,6 @@
             android:src="@drawable/close"
             fab:backgroundTint="@color/wx_green"
             fab:fabSize="normal"/>
-
         <!-- Other button as menu items-->
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_tree_weakness"
@@ -39,14 +43,14 @@
             android:src="@drawable/ic_edit"
             fab:backgroundTint="@color/wx_green"
             fab:fabSize="mini"/>
-       <!-- <android.support.design.widget.FloatingActionButton
+        <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_tree_bug"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/tree_bug"
             android:src="@drawable/ic_edit"
             fab:backgroundTint="@color/wx_green"
-            fab:fabSize="mini"/>-->
+            fab:fabSize="mini"/>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_tree_unknow"

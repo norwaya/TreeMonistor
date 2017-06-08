@@ -46,12 +46,12 @@
                 app:mid_font_color="@color/wx_green"
                 app:mid_type="read"/>
 
-            <com.xabaizhong.treemonistor.myview.C_info_gather_item1
-                android:id="@+id/step"
-                style="@style/custom_edit_text_style"
-                app:left_text="虫害防治"
-                app:mid_font_color="@color/wx_green"
-                app:mid_type="read"/>
+            <!--<com.xabaizhong.treemonistor.myview.C_info_gather_item1-->
+                <!--android:id="@+id/step"-->
+                <!--style="@style/custom_edit_text_style"-->
+                <!--app:left_text="虫害防治"-->
+                <!--app:mid_font_color="@color/wx_green"-->
+                <!--app:mid_type="read"/>-->
             <com.xabaizhong.treemonistor.myview.C_info_gather_item1
                 android:id="@+id/pic"
                 style="@style/custom_edit_text_style"

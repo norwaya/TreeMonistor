@@ -26,6 +26,13 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by admin on 2017/3/17.
@@ -85,34 +92,78 @@ public class Activity_tree_base_detail extends Activity_base {
 
     }
 
-    AsyncTask asyncTask;
+    Disposable mDisposable;
 
     private void showPic() {
-        asyncTask = new AsyncTask<Void, Void, String>() {
+        Observable.create(new ObservableOnSubscribe<String>() {
             @Override
-            protected String doInBackground(Void... params) {
+            public void subscribe(ObservableEmitter<String> e) throws Exception {
+                String result = null;
                 try {
-                    return WebserviceHelper.GetWebService(
+                    result = WebserviceHelper.GetWebService(
                             "Pic", "GetTreeSpeInfoPic", getParms());
-                } catch (ConnectException e) {
-                    e.printStackTrace();
-                    return null;
+                } catch (Exception ex) {
+                    e.onError(ex);
                 }
+                if (result == null) {
+                    e.onError(new RuntimeException("返回为空"));
+                } else {
+                    e.onNext(result);
+                }
+                e.onComplete();
             }
+        }).observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Observer<String>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        mDisposable = d;
+                    }
 
-            @Override
-            protected void onPostExecute(String s) {
-                Log.i(TAG, "onPostExecute: " + s);
-                if (s == null) {
-                    return;
-                }
-                PicPath picPath = new Gson().fromJson(s, PicPath.class);
-                if (picPath.getResult() != null && picPath.getResult().size() > 0) {
-                    picList.addAll(picPath.getResult());
-                    pic.setText(picList.size() + "");
-                }
-            }
-        }.execute();
+                    @Override
+                    public void onNext(String value) {
+                        PicPath picPath = new Gson().fromJson(value, PicPath.class);
+                        if (picPath.getResult() != null && picPath.getResult().size() > 0) {
+                            picList.addAll(picPath.getResult());
+                            pic.setText(picList.size() + "");
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        mDisposable = null;
+                    }
+                });
+//        asyncTask = new AsyncTask<Void, Void, String>() {
+//            @Override
+//            protected String doInBackground(Void... params) {
+//                try {
+//                    return WebserviceHelper.GetWebService(
+//                            "Pic", "GetTreeSpeInfoPic", getParms());
+//                } catch (ConnectException e) {
+//                    e.printStackTrace();
+//                    return null;
+//                }
+//            }
+//
+//            @Override
+//            protected void onPostExecute(String s) {
+//                Log.i(TAG, "onPostExecute: " + s);
+//                if (s == null) {
+//                    return;
+//                }
+//                PicPath picPath = new Gson().fromJson(s, PicPath.class);
+//                if (picPath.getResult() != null && picPath.getResult().size() > 0) {
+//                    picList.addAll(picPath.getResult());
+//                    pic.setText(picList.size() + "");
+//                }
+//            }
+//        }.execute();
     }
 
     private Map<String, Object> getParms() {

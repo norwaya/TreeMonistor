@@ -73,11 +73,11 @@ dependencies {
     compile 'com.squareup.retrofit2:converter-gson:2.2.0'
     compile 'com.squareup.retrofit2:adapter-rxjava2:2.2.0'
     /* compile ("com.squareup.retrofit2:converter-simplexml:2.2.0")
-                    {
-                                exclude module: 'stax'
-                                exclude module: 'stax-api'
-                                exclude module: 'xpp3'
-                            }*/
+                        {
+                                    exclude module: 'stax'
+                                    exclude module: 'stax-api'
+                                    exclude module: 'xpp3'
+                                }*/
     //rxjava rxandroid
     compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
     compile 'io.reactivex.rxjava2:rxjava:2.0.1'
@@ -96,6 +96,7 @@ dependencies {
     //compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
     //FloatingActionMenu
     compile 'com.novaapps:FloatingActionMenu:1.0'
-    compile files('libs/ksoap2-android-assembly-2.5.2-jar-with-dependencies.jar')
+//    compile files('libs/ksoap2-android-assembly-2.5.2-jar-with-dependencies.jar')
     compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha2'
+    compile files('libs/ksoap.jar')
 }

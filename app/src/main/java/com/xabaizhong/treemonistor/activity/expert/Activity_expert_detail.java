@@ -3,6 +3,9 @@ package com.xabaizhong.treemonistor.activity.expert;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -10,9 +13,12 @@ import com.google.gson.annotations.SerializedName;
 import com.xabaizhong.treemonistor.R;
 import com.xabaizhong.treemonistor.base.Activity_base;
 import com.xabaizhong.treemonistor.contant.UserSharedField;
+import com.xabaizhong.treemonistor.myview.C_info_gather_item1;
 import com.xabaizhong.treemonistor.service.WebserviceHelper;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -39,6 +45,8 @@ public class Activity_expert_detail extends Activity_base {
     TextView text2;
     @BindView(R.id.text3)
     TextView text3;
+    @BindView(R.id.layout)
+    LinearLayout layout;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -80,13 +88,15 @@ public class Activity_expert_detail extends Activity_base {
                     @Override
                     public void onSubscribe(Disposable d) {
 
-
                     }
 
                     @Override
                     public void onNext(String value) {
                         Log.i(TAG, "onNext: " + value);
-                        fillData(value);
+                        ResultMessage rm = new Gson().fromJson(value, ResultMessage.class);
+                        if (rm.getErrorCode() == 0) {
+                            fillData(value);
+                        }
                     }
 
                     @Override
@@ -103,6 +113,7 @@ public class Activity_expert_detail extends Activity_base {
     }
 
     private void fillData(String value) {
+
         switch (type) {
             case 0:
                 treeSpecies(value);
@@ -110,10 +121,61 @@ public class Activity_expert_detail extends Activity_base {
             case 3:
                 treeIll(value);
                 break;
+            case 4:
+                treeBug(value);
+                break;
             default:
                 break;
         }
     }
+
+    private void treeBug(String value) {
+        Bug bug = new Gson().fromJson(value, Bug.class);
+        List<String> season = new ArrayList<>();
+        List<String> part = new ArrayList<>();
+        List<String> classic = new ArrayList<>();
+        season.add(0, "其他");
+        season.add(1, "春季");
+        season.add(2, "夏季");
+        season.add(3, "秋季");
+        season.add(4, "冬季");
+        part.add(0, "其他");
+        part.add(1, "叶子");
+        part.add(2, "树干");
+        part.add(3, "根");
+        part.add(4, "果实");
+        classic.add(0, "咀嚼式");
+        classic.add(1, "刺吸式");
+        classic.add(2, "其他");
+        layout.addView(getView("鉴定编号", tid));
+        layout.addView(getView("季节", season.get(bug.getBean().getDiscoverySeason())));
+        layout.addView(getView("虫害部位", part.get(bug.getBean().getPart())));
+        layout.addView(getView("虫害类型", classic.get(bug.getBean().getTreeType())));
+        //专家信息 +鉴定信息
+        if (bug.isChecked()) {
+            layout.addView(getView("鉴定结果", bug.getExpert().getResult()));
+            layout.addView(getView("鉴定时间", bug.getExpert().getDate()));
+            layout.addView(getView("专家", bug.getExpert().getRealName()));
+            layout.addView(getView("手机", bug.getExpert().getUserTel()));
+        } else {
+            layout.addView(getView("是否鉴定", "未鉴定"));
+        }
+    }
+
+    LayoutInflater inflater;
+
+    private View getView(String left, String mid) {
+        if (inflater == null) {
+            inflater = LayoutInflater.from(this);
+        }
+
+        View view = inflater.inflate(R.layout.c_view, null);
+        C_info_gather_item1 cv = (C_info_gather_item1) view.findViewById(R.id.cv);
+        cv.setLeftText(left);
+        cv.setText(mid);
+        return view;
+    }
+
 
     private void treeIll(String value) {
         TreeIll treeIll = new Gson().fromJson(value, TreeIll.class);
@@ -122,16 +184,24 @@ public class Activity_expert_detail extends Activity_base {
         text1.setText("鉴定编号\t" + tid + "\n" +
                 "叶：" + part[treeIll.getBean().getPart()]
         );
+        layout.addView(getView("鉴定编号", tid));
+        layout.addView(getView("叶", part[treeIll.getBean().getPart()]));
         if (treeIll.isChecked()) {
-            text2.setText("鉴定时间：" + expert.getDate() + "\n" +
-                    "专家：" + expert.getRealName() + "\n" +
-                    "手机：" + expert.getUserTel()
-
-            );
-            text3.setText("鉴定结果：" + expert.getResult());
+//            text2.setText("鉴定时间：" + expert.getDate() + "\n" +
+//                    "专家：" + expert.getRealName() + "\n" +
+//                    "手机：" + expert.getUserTel()
+//
+//            );
+//            text3.setText("鉴定结果：" + expert.getResult());
+            layout.addView(getView("鉴定结果", expert.getResult()));
+            layout.addView(getView("鉴定时间", expert.getDate()));
+            layout.addView(getView("专家", expert.getRealName()));
+            layout.addView(getView("手机", expert.getUserTel()));
         } else {
-            text2.setText("未鉴定");
+//            text2.setText("未鉴定");
+            layout.addView(getView("是否鉴定", "未鉴定"));
         }
+
     }
 
     private void treeSpecies(String value) {
@@ -144,23 +214,36 @@ public class Activity_expert_detail extends Activity_base {
         TreeSpeciesRm treeSpeciesRm = new Gson().fromJson(value, TreeSpeciesRm.class);
         TreeSpecialDetail bean = treeSpeciesRm.getBean();
         text1.setText("鉴定编号\t" + tid + "\n" +
-                getString(R.string.two_item_t, "叶：", leafArray[bean.getLeafShape()]) + "\n" +
-                getString(R.string.two_item_t, "叶颜色：", leafColorArray[bean.getLeafColor()]) + "\n" +
+                getString(R.string.two_item_t,
+                        "叶：", leafArray[bean.getLeafShape()]) + "\n" +
+                getString(R.string.two_item_t,
+                        "叶颜色：", leafColorArray[bean.getLeafColor()]) + "\n" +
                 "花：" + flowerArray[bean.getFlowerType()] + "\n" +
                 "花颜色：" + flowerColorArray[bean.getFlowerColor()] + "\n" +
                 "果实：" + fruitArray[bean.getFruitType()] + "\n" +
                 "果实颜色：" + fruitColorArray[bean.getFruitColor()] + "\n"
         );
+        layout.addView(getView("鉴定编号", tid));
+        layout.addView(getView("叶", leafArray[bean.getLeafShape()]));
+        layout.addView(getView("叶颜色", leafColorArray[bean.getLeafColor()]));
+        layout.addView(getView("花", flowerArray[bean.getFlowerType()]));
+        layout.addView(getView("花颜色", flowerColorArray[bean.getFlowerColor()]));
+        layout.addView(getView("果实", fruitArray[bean.getFruitType()]));
+        layout.addView(getView("果实颜色", fruitColorArray[bean.getFruitColor()]));
         ResultMessage<TreeSpecialDetail>.ExpertBean expert = treeSpeciesRm.getExpert();
         if (treeSpeciesRm.isChecked()) {
-            text2.setText("鉴定时间：" + expert.getDate() + "\n" +
-                    "专家：" + expert.getRealName() + "\n" +
-                    "手机：" + expert.getUserTel()
-
-            );
-            text3.setText("鉴定结果：" + expert.getResult());
+//            text2.setText("鉴定时间：" + expert.getDate() + "\n" +
+//                    "专家：" + expert.getRealName() + "\n" +
+//                    "手机：" + expert.getUserTel()
+//
+//            );
+            layout.addView(getView("鉴定结果", expert.getResult()));
+            layout.addView(getView("鉴定时间", expert.getDate()));
+            layout.addView(getView("专家", expert.getRealName()));
+            layout.addView(getView("手机", expert.getUserTel()));
         } else {
-            text2.setText("未鉴定");
+//            text2.setText("未鉴定");
+            layout.addView(getView("是否鉴定", "未鉴定"));
         }
     }
 
@@ -168,7 +251,7 @@ public class Activity_expert_detail extends Activity_base {
 
     }
 
-    class ResultMessage<T> {
+    static class ResultMessage<T> {
 
         /**
          * message : suc
@@ -303,7 +386,7 @@ public class Activity_expert_detail extends Activity_base {
         }
     }
 
-    class TreeSpecialDetail {
+    static class TreeSpecialDetail {
         /**
          * LeafShape : 6
          * LeafColor : 4
@@ -375,7 +458,7 @@ public class Activity_expert_detail extends Activity_base {
         }
     }
 
-    class TreeIllDetail {
+    static class TreeIllDetail {
 
         /**
          * Part : 5
@@ -415,9 +498,183 @@ public class Activity_expert_detail extends Activity_base {
         }
     }
 
-    class TreeSpeciesRm extends ResultMessage<TreeSpecialDetail> {
+    static class TreeSpeciesRm extends ResultMessage<TreeSpecialDetail> {
     }
 
-    class TreeIll extends ResultMessage<TreeIllDetail> {
+    static class TreeIll extends ResultMessage<TreeIllDetail> {
+    }
+
+    static class Bug {
+
+
+        /**
+         * message : suc
+         * error_code : 0
+         * beanType : 4
+         * bean : {"Part":0,"TreeType":0,"DiscoverySeason":1}
+         * expert : {"UserID":"610102001","RealName":"张三","UserTel":"12345678910","date":"2017-06-08 09:35:09","result":"215145"}
+         * checked : true
+         */
+
+        @SerializedName("message")
+        private String message;
+        @SerializedName("error_code")
+        private int errorCode;
+        @SerializedName("beanType")
+        private int beanType;
+        @SerializedName("bean")
+        private BeanBean bean;
+        @SerializedName("expert")
+        private ExpertBean expert;
+        @SerializedName("checked")
+        private boolean checked;
+
+        public String getMessage() {
+            return message;
+        }
+
+        public void setMessage(String message) {
+            this.message = message;
+        }
+
+        public int getErrorCode() {
+            return errorCode;
+        }
+
+        public void setErrorCode(int errorCode) {
+            this.errorCode = errorCode;
+        }
+
+        public int getBeanType() {
+            return beanType;
+        }
+
+        public void setBeanType(int beanType) {
+            this.beanType = beanType;
+        }
+
+        public BeanBean getBean() {
+            return bean;
+        }
+
+        public void setBean(BeanBean bean) {
+            this.bean = bean;
+        }
+
+        public ExpertBean getExpert() {
+            return expert;
+        }
+
+        public void setExpert(ExpertBean expert) {
+            this.expert = expert;
+        }
+
+        public boolean isChecked() {
+            return checked;
+        }
+
+        public void setChecked(boolean checked) {
+            this.checked = checked;
+        }
+
+        public static class BeanBean {
+            /**
+             * Part : 0
+             * TreeType : 0
+             * DiscoverySeason : 1
+             */
+
+            @SerializedName("Part")
+            private int Part;
+            @SerializedName("TreeType")
+            private int TreeType;
+            @SerializedName("DiscoverySeason")
+            private int DiscoverySeason;
+
+            public int getPart() {
+                return Part;
+            }
+
+            public void setPart(int Part) {
+                this.Part = Part;
+            }
+
+            public int getTreeType() {
+                return TreeType;
+            }
+
+            public void setTreeType(int TreeType) {
+                this.TreeType = TreeType;
+            }
+
+            public int getDiscoverySeason() {
+                return DiscoverySeason;
+            }
+
+            public void setDiscoverySeason(int DiscoverySeason) {
+                this.DiscoverySeason = DiscoverySeason;
+            }
+        }
+
+        public static class ExpertBean {
+            /**
+             * UserID : 610102001
+             * RealName : 张三
+             * UserTel : 12345678910
+             * date : 2017-06-08 09:35:09
+             * result : 215145
+             */
+
+            @SerializedName("UserID")
+            private String UserID;
+            @SerializedName("RealName")
+            private String RealName;
+            @SerializedName("UserTel")
+            private String UserTel;
+            @SerializedName("date")
+            private String date;
+            @SerializedName("result")
+            private String result;
+
+            public String getUserID() {
+                return UserID;
+            }
+
+            public void setUserID(String UserID) {
+                this.UserID = UserID;
+            }
+
+            public String getRealName() {
+                return RealName;
+            }
+
+            public void setRealName(String RealName) {
+                this.RealName = RealName;
+            }
+
+            public String getUserTel() {
+                return UserTel;
+            }
+
+            public void setUserTel(String UserTel) {
+                this.UserTel = UserTel;
+            }
+
+            public String getDate() {
+                return date;
+            }
+
+            public void setDate(String date) {
+                this.date = date;
+            }
+
+            public String getResult() {
+                return result;
+            }
+
+            public void setResult(String result) {
+                this.result = result;
+            }
+        }
     }
 }

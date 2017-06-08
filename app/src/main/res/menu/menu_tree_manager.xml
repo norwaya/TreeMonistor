@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <group android:id="@+id/choose_and_upload">
+        <item
+            android:id="@+id/select"
+            android:title="选择"
+            app:showAsAction="always"/>
+        <item
+            android:id="@+id/all"
+            android:title="全选"
+            app:showAsAction="always"/>
+        <item
+            android:id="@+id/upload"
+            android:title="上传"
+            app:showAsAction="always"/>
+    </group>
+</menu>

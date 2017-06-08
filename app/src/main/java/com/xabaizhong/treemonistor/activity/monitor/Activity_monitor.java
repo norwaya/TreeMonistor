@@ -1,5 +1,6 @@
 package com.xabaizhong.treemonistor.activity.monitor;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import com.google.gson.annotations.SerializedName;
 import com.xabaizhong.treemonistor.R;
 import com.xabaizhong.treemonistor.base.Activity_base;
 import com.xabaizhong.treemonistor.contant.UserSharedField;
+import com.xabaizhong.treemonistor.myview.ProgressDialogUtil;
 import com.xabaizhong.treemonistor.service.AsyncTaskRequest;
 import com.xabaizhong.treemonistor.service.WebserviceHelper;
 import com.xabaizhong.treemonistor.service.model.MonitorTree;
@@ -158,6 +160,8 @@ public class Activity_monitor extends Activity_base {
                 .start(this, code);
     }
 
+    DialogInterface mDialog;
+
     @OnClick({R.id.rb1, R.id.rb2, R.id.btn})
     public void onViewClicked(View view) {
         Log.i(TAG, "onViewClicked: ");
@@ -177,7 +181,16 @@ public class Activity_monitor extends Activity_base {
             case R.id.btn:
                 if (check()) {
                     fillMonitor();
-                    pbLayout.setVisibility(View.VISIBLE);
+                    mDialog = ProgressDialogUtil.getInstance(this).initial("UPLOADING...",
+                            new ProgressDialogUtil.CallBackListener() {
+                                @Override
+                                public void callBack(DialogInterface dialog) {
+                                    if (disposable != null) {
+                                        disposable.dispose();
+                                    }
+                                    Activity_monitor.this.finish();
+                                }
+                            });
                     upload();
                 }
 
@@ -212,45 +225,77 @@ public class Activity_monitor extends Activity_base {
         monitorTree.setUserID(sharedPreferences.getString(UserSharedField.USERID, ""));
     }
 
+    Disposable disposable;
+
     private void upload() {
 
-        Observer<Object> observer = new Observer<Object>() {
+
+        Observable<String> observable = Observable.create(new ObservableOnSubscribe<String>() {
+            @Override
+            public void subscribe(ObservableEmitter<String> e) throws Exception {
+
+                String result = null;
+                try {
+                    FileUtil.clearFileDir();
+                    scaleImages();
+                    fillImages();
+                    result = WebserviceHelper.GetWebService(
+                            "UploadTreeInfo", "UploadTreeInfoMethod", getParams());
+                    Log.i(TAG, "subscribe: end up;oad+++++++++++++++++++++++");
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                if (result == null) {
+                    e.onError(new RuntimeException("返回为空"));
+                } else {
+                    e.onNext(result);
+                }
+                e.onComplete();
+            }
+        }).observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io());
+
+        observable.subscribe(new Observer<String>() {
             @Override
             public void onSubscribe(Disposable d) {
-
+                disposable = d;
             }
 
             @Override
-            public void onNext(Object value) {
-
+            public void onNext(String value) {
+                ResultMessage resultMessage = new Gson().fromJson(value, ResultMessage.class);
+                if (resultMessage.getError_code() == 0) {
+                    showToast(resultMessage.getMessage());
+                    if (mDialog != null) {
+                        mDialog.dismiss();
+                    }
+                } else {
+                    showToast(resultMessage.getMessage());
+                    mDialog.cancel();
+                }
             }
 
             @Override
             public void onError(Throwable e) {
-
+                e.printStackTrace();
+//                        pbLayout.setVisibility(View.GONE);
             }
 
             @Override
             public void onComplete() {
 
-
-                uploadInfo();
             }
-        };
+        });
+    }
 
-        Observable.create(new ObservableOnSubscribe<Object>() {
-            @Override
-            public void subscribe(ObservableEmitter<Object> e) throws Exception {
-                FileUtil.clearFileDir();
-                scaleImages();
-                fillImages();
+    @Override
+    public void onBackPressed() {
+        if (disposable != null) {
+            disposable.dispose();
+        }
+        super.onBackPressed();
 
-                e.onComplete();
-                Log.i(TAG, "subscribe: over");
-            }
-        }).observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(observer);
+
     }
 
     private void fillImages() {
@@ -261,25 +306,21 @@ public class Activity_monitor extends Activity_base {
             ArrayList<String> eastPicList = new ArrayList<>();
             ArrayList<String> westPicList = new ArrayList<>();
             ArrayList<String> southPicList = new ArrayList<>();
-            ArrayList<String> northtPicList = new ArrayList<>();
+            ArrayList<String> northPicList = new ArrayList<>();
 
             List<File> files = FileUtil.getFiles();
             for (File f : files) {
                 if (f.getName().matches("east[\\d].[\\w]+")) {
                     Log.i(TAG, "east: " + f.getName());
-//                    eastPicList.add("images");
                     eastPicList.add(FileUtil.bitmapToBase64Str(f));
                 } else if (f.getName().matches("west[\\d].[\\w]+")) {
-//                    westPicList.add("images");
                     westPicList.add(FileUtil.bitmapToBase64Str(f));
                     Log.i(TAG, "west: " + f.getName());
                 } else if (f.getName().matches("south[\\d].[\\w]+")) {
-//                    southPicList.add("images");
                     southPicList.add(FileUtil.bitmapToBase64Str(f));
                     Log.i(TAG, "south: " + f.getName());
                 } else if (f.getName().matches("north[\\d].[\\w]+")) {
-//                    northtPicList.add("images");
-                    northtPicList.add(FileUtil.bitmapToBase64Str(f));
+                    northPicList.add(FileUtil.bitmapToBase64Str(f));
                     Log.i(TAG, "north: " + f.getName());
                 }
             }
@@ -306,7 +347,7 @@ public class Activity_monitor extends Activity_base {
             picInfoBean = new MonitorTree.PicinfoBean();
             picInfoBean.setPicPlace(4);
             picInfoBean.setExplain("dong");
-            picInfoBean.setPiclist(northtPicList);
+            picInfoBean.setPiclist(northPicList);
             list.add(picInfoBean);
         } else {
             ArrayList<String> allPicList = new ArrayList<>();
@@ -332,6 +373,7 @@ public class Activity_monitor extends Activity_base {
     }
 
     private void scaleImages() {
+        Log.i(TAG, "scaleImages: start scale images");
         if (flag) {
             if (picList.EastList != null) {
                 for (int i = 0; i < picList.EastList.size(); i++) {
@@ -363,42 +405,7 @@ public class Activity_monitor extends Activity_base {
     }
 
 
-    AsyncTask asyncTask;
-
-    private void uploadInfo() {
-        asyncTask = new AsyncTask<Void, Void, String>() {
-            @Override
-            protected String doInBackground(Void... params) {
-                try {
-                    return WebserviceHelper.GetWebService(
-                            "UploadTreeInfo", "UploadTreeInfoMethod", getParms());
-                } catch (ConnectException e) {
-                    e.printStackTrace();
-                    return null;
-                }
-            }
-
-            @Override
-            protected void onPostExecute(String s) {
-                if (s == null) {
-                    showToast("请求错误,请检查网络是否正常");
-                    return;
-                }
-                Log.i(TAG, "onPostExecute: " + s);
-                pbLayout.setVisibility(View.GONE);
-                ResultMessage resultMessage = new Gson().fromJson(s, ResultMessage.class);
-                if (resultMessage.getError_code() == 0) {
-                    showToast(resultMessage.getMessage());
-                    finish();
-                } else {
-                    showToast(resultMessage.getMessage());
-                }
-            }
-        }.execute();
-    }
-
-
-    private Map<String, Object> getParms() {
+    private Map<String, Object> getParams() {
         Map<String, Object> map = new HashMap<>();
         String user_id = sharedPreferences.getString(UserSharedField.USERID, "");
         String area_id = sharedPreferences.getString(UserSharedField.AREAID, "");
@@ -406,7 +413,7 @@ public class Activity_monitor extends Activity_base {
         map.put("UserID ", user_id);
         map.put("TreeType", 1);
         map.put("JsonStr", json);
-        map.put("AreaID",area_id);
+        map.put("AreaID", area_id);
         return map;
     }
 
@@ -443,8 +450,6 @@ public class Activity_monitor extends Activity_base {
                 break;
         }
     }
-
-
 
 
     @Override
