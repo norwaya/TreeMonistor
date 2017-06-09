@@ -18,7 +18,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="古树编号"
-            android:textAlignment="center"/>
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"/>
 
         <TextView
             android:id="@+id/tree_name"
@@ -26,7 +27,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="数种类"
-            android:textAlignment="center"/>
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"/>
 
         <TextView
             android:id="@+id/tree_area"
@@ -34,7 +36,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="记录时间"
-            android:textAlignment="center"/>
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"/>
     </LinearLayout>
 
     <com.jcodecraeer.xrecyclerview.XRecyclerView

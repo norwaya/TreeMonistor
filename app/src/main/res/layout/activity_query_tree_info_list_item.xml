@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@android:color/white"
-    android:gravity="center_vertical"
-    android:orientation="horizontal"
-    android:padding="@dimen/activity_horizontal_margin">
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@drawable/selector_item_selected"
+              android:gravity="center_vertical"
+              android:orientation="horizontal"
+              android:clickable="true"
+              android:padding="@dimen/activity_horizontal_margin">
 
     <TextView
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        android:text="dsfsaf"
         android:id="@+id/tree_id"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:textAlignment="textStart" />
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="16sp"/>
 
     <TextView
-        android:textColor="@color/black"
         android:id="@+id/tree_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:textAlignment="textStart" />
+        android:textAlignment="center"
+        android:textColor="@color/black"/>
 
     <TextView
-        android:textColor="@color/black"
         android:id="@+id/tree_area"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:textAlignment="textStart" />
+        android:textAlignment="center"
+        android:textColor="@color/black"/>
 </LinearLayout>

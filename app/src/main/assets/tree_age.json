@@ -2,86 +2,170 @@
   "RECORDS": [
     {
       "TreeSpeID": "T00222",
-      "TreeBJ": 20,
+      "TreeBJ": 10,
       "TreeAge": 2,
       "TreeAgeNum": 0,
       "CHName": "槐树"
     },
     {
-      "TreeSpeID": "T00087",
+      "TreeSpeID": "T00222",
       "TreeBJ": 20,
+      "TreeAge": 2,
+      "TreeAgeNum": 20,
+      "CHName": "槐树"
+    },
+    {
+      "TreeSpeID": "T00087",
+      "TreeBJ": 10,
       "TreeAge": 4,
       "TreeAgeNum": 0,
       "CHName": "侧柏"
     },
     {
-      "TreeSpeID": "T00654",
+      "TreeSpeID": "T00087",
       "TreeBJ": 20,
+      "TreeAge": 4,
+      "TreeAgeNum": 40,
+      "CHName": "侧柏"
+    },
+    {
+      "TreeSpeID": "T00654",
+      "TreeBJ": 10,
       "TreeAge": 3,
       "TreeAgeNum": 0,
       "CHName": "榔榆"
     },
     {
-      "TreeSpeID": "T00584",
+      "TreeSpeID": "T00654",
       "TreeBJ": 20,
+      "TreeAge": 3,
+      "TreeAgeNum": 30,
+      "CHName": "榔榆"
+    },
+    {
+      "TreeSpeID": "T00584",
+      "TreeBJ": 10,
       "TreeAge": 3,
       "TreeAgeNum": 0,
       "CHName": "柿树"
     },
     {
-      "TreeSpeID": "T00071",
+      "TreeSpeID": "T00584",
       "TreeBJ": 20,
+      "TreeAge": 3,
+      "TreeAgeNum": 30,
+      "CHName": "柿树"
+    },
+    {
+      "TreeSpeID": "T00071",
+      "TreeBJ": 10,
       "TreeAge": 3,
       "TreeAgeNum": 0,
       "CHName": "油松"
     },
     {
-      "TreeSpeID": "T00379",
+      "TreeSpeID": "T00071",
       "TreeBJ": 20,
+      "TreeAge": 3,
+      "TreeAgeNum": 30,
+      "CHName": "油松"
+    },
+    {
+      "TreeSpeID": "T00379",
+      "TreeBJ": 10,
       "TreeAge": 3,
       "TreeAgeNum": 0,
       "CHName": "楸树"
     },
     {
-      "TreeSpeID": "T00101",
+      "TreeSpeID": "T00379",
       "TreeBJ": 20,
+      "TreeAge": 3,
+      "TreeAgeNum": 30,
+      "CHName": "楸树"
+    },
+    {
+      "TreeSpeID": "T00101",
+      "TreeBJ": 10,
       "TreeAge": 3,
       "TreeAgeNum": 0,
       "CHName": "红豆杉"
     },
     {
-      "TreeSpeID": "T00640",
+      "TreeSpeID": "T00101",
       "TreeBJ": 20,
+      "TreeAge": 3,
+      "TreeAgeNum": 30,
+      "CHName": "红豆杉"
+    },
+    {
+      "TreeSpeID": "T00640",
+      "TreeBJ": 10,
       "TreeAge": 2,
       "TreeAgeNum": 0,
       "CHName": "皂荚"
     },
     {
-      "TreeSpeID": "T00912",
+      "TreeSpeID": "T00640",
       "TreeBJ": 20,
+      "TreeAge": 2,
+      "TreeAgeNum": 20,
+      "CHName": "皂荚"
+    },
+    {
+      "TreeSpeID": "T00912",
+      "TreeBJ": 10,
       "TreeAge": 3,
       "TreeAgeNum": 0,
       "CHName": "腊梅"
     },
     {
-      "TreeSpeID": "T00660",
+      "TreeSpeID": "T00912",
       "TreeBJ": 20,
+      "TreeAge": 3,
+      "TreeAgeNum": 30,
+      "CHName": "腊梅"
+    },
+    {
+      "TreeSpeID": "T00660",
+      "TreeBJ": 10,
       "TreeAge": 4,
       "TreeAgeNum": 0,
       "CHName": "龙爪槐"
     },
     {
-      "TreeSpeID": "T00066",
+      "TreeSpeID": "T00660",
       "TreeBJ": 20,
+      "TreeAge": 4,
+      "TreeAgeNum": 40,
+      "CHName": "龙爪槐"
+    },
+    {
+      "TreeSpeID": "T00066",
+      "TreeBJ": 10,
       "TreeAge": 3,
       "TreeAgeNum": 0,
       "CHName": "白皮松"
     },
     {
+      "TreeSpeID": "T00066",
+      "TreeBJ": 20,
+      "TreeAge": 3,
+      "TreeAgeNum": 30,
+      "CHName": "白皮松"
+    },
+    {
+      "TreeSpeID": "T00028",
+      "TreeBJ": 10,
+      "TreeAge": 3,
+      "TreeAgeNum": 0,
+      "CHName": "云杉"
+    },
+    {
       "TreeSpeID": "T00028",
       "TreeBJ": 20,
       "TreeAge": 3,
-      "TreeAgeNum": 0,
+      "TreeAgeNum": 30,
       "CHName": "云杉"
     },
     {

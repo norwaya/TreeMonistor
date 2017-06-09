@@ -2,11 +2,15 @@ package com.xabaizhong.treemonistor.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -52,6 +56,8 @@ public class Fragment_news extends Fragment_base {
 
     @BindView(R.id.fragment_news_rv)
     XRecyclerView xRecyclerView;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
     private Context context;
 
     public Fragment_news() {
@@ -66,14 +72,22 @@ public class Fragment_news extends Fragment_base {
         ButterKnife.bind(this, view);
         Log.d(TAG, "onCreateView: ");
         Log.d(TAG, "onCreateView: +++++++++" + (savedInstanceState == null));
+        initToolbar();
         initView();
 
         return view;
     }
 
+    private void initToolbar() {
+        toolbar.setTitle("资讯");
+        toolbar.setTitleTextColor(Color.WHITE);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+    }
+
     Fragment_news_adapter adapter;
 
     private void initView() {
+
         dao = ((App) context.getApplicationContext()).getDaoSession().getData_newsDao();
 
         xRecyclerView.setPullRefreshEnabled(true);
@@ -94,11 +108,12 @@ public class Fragment_news extends Fragment_base {
         adapter = new Fragment_news_adapter(context, R.layout.fragment_news_newsitem);
         adapter.setCallBack(new CommonRecyclerViewAdapter.CallBack<Fragment_news_adapter_viewHold, Data_news>() {
             private List<Data_news> list;
+
             @Override
             public void bindView(Fragment_news_adapter_viewHold holder, int position, List<Data_news> list) {
                 this.list = list;
                 Data_news data = list.get(position);
-                holder.tv_content.setText( data.getTitle());
+                holder.tv_content.setText(data.getTitle());
                 String url = data.getThumbnail_pic_s();
                 if (!TextUtils.isEmpty(url))
                     Picasso.with(context).load(Uri.parse(url)).into(holder.image);
@@ -108,8 +123,8 @@ public class Fragment_news extends Fragment_base {
             @Override
             public void onItemClickListener(View view, int position) {
                 Intent i = new Intent(context, Activity_news_show.class);
-                i.putExtra("url",list.get(position).getUrl());
-                i.putExtra("title",list.get(position).getTitle());
+                i.putExtra("url", list.get(position).getUrl());
+                i.putExtra("title", list.get(position).getTitle());
                 startActivity(i);
             }
         });
@@ -223,6 +238,11 @@ public class Fragment_news extends Fragment_base {
     }*/
 
     List<Data_news> list;
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+    }
 
 
     /**

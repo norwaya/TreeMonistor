@@ -6,7 +6,7 @@
     android:paddingRight="@dimen/activity_vertical_margin"
     android:paddingBottom="8dp"
     android:paddingTop="8dp"
-    android:background="@drawable/text_view_with_bottom_line"
+    android:background="@drawable/selector_item_selected"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"

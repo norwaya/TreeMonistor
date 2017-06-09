@@ -47,7 +47,6 @@ public class Activity_monitor_query_dateList extends Activity_base implements Co
         ButterKnife.bind(this);
         treeId = getIntent().getStringExtra("tree-id");
         setTitle(treeId);
-        Log.i(TAG, "onCreate: " + treeId);
         initialView();
     }
 
@@ -98,22 +97,27 @@ public class Activity_monitor_query_dateList extends Activity_base implements Co
 
     @Override
     public void onItemClickListener(View view, int position) {
-        Log.i(TAG, "onItemClickListener: ");
-
         String date = list.get(position);
-        Intent i = new Intent(this, Activity_monitor_query_date_pics.class);
-        i.putExtra("treeId", treeId);
-        i.putExtra("date", date);
-        startActivity(i);
+        if (treeId.matches("\\d{11}")) {
+            Intent i = new Intent(this, Activity_tree_detailInfo.class);
+            i.putExtra("treeId", treeId);
+            i.putExtra("date", date);
+            startActivity(i);
+        }
+
+//        Intent i = new Intent(this, Activity_monitor_query_date_pics.class);
+//        i.putExtra("treeId", treeId);
+//        i.putExtra("date", date);
+//        startActivity(i);
     }
 
 
-    @OnClick(R.id.button)
-    public void onViewClicked() {
-        Intent i = new Intent(this, Activity_tree_detailInfo.class);
-        i.putExtra("treeId", treeId);
-        startActivity(i);
-    }
+//    @OnClick(R.id.button)
+//    public void onViewClicked() {
+//        Intent i = new Intent(this, Activity_tree_detailInfo.class);
+//        i.putExtra("treeId", treeId);
+//        startActivity(i);
+//    }
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

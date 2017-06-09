@@ -49,6 +49,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class Activity_tree_detailInfo extends Activity_base {
     String treeId;
+    String date;
     //    @BindView(R.id.text1)
 //    TextView text1;
     @BindView(R.id.layout)
@@ -60,6 +61,7 @@ public class Activity_tree_detailInfo extends Activity_base {
         setContentView(R.layout.activity_tree_detail_info);
         ButterKnife.bind(this);
         treeId = getIntent().getStringExtra("treeId");
+        date = getIntent().getStringExtra("date");
         query();
 
     }
@@ -83,7 +85,7 @@ public class Activity_tree_detailInfo extends Activity_base {
                 String result = null;
                 try {
                     result = WebserviceHelper.GetWebService(
-                            "DataQuerySys", "TreeDelInfo", getParms());
+                            "DataQuerySys", "TreeDelInfo1", getParms());
                 } catch (Exception ex) {
                     e.onError(ex);
                 }
@@ -104,6 +106,7 @@ public class Activity_tree_detailInfo extends Activity_base {
 
                     @Override
                     public void onNext(String value) {
+                        Log.i(TAG, "onNext: "+value);
                         ResultMessage rm = new Gson().fromJson(value, ResultMessage.class);
                         if (rm.getErrorCode() == 0) {
                             getTreeInfo(rm);
@@ -123,51 +126,6 @@ public class Activity_tree_detailInfo extends Activity_base {
                         disposable = null;
                     }
                 });
-//        asyncTask = new AsyncTask<Void, Void, String>() {
-//            @Override
-//            protected String doInBackground(Void... params) {
-//                try {
-//                    return WebserviceHelper.GetWebService(
-//                            "DataQuerySys", "TreeDelInfo", getParms());
-//                } catch (ConnectException e) {
-//                    e.printStackTrace();
-//                    return null;
-//                }
-//            }
-//
-//            @Override
-//            protected void onPostExecute(String s) {
-//                Log.i(TAG, "onPostExecute: " + s);
-//                if (s == null) {
-//                    showToast("获取古树信息失败");
-//                    return;
-//                }
-//
-//                Observable.just(s)
-//                        .observeOn(AndroidSchedulers.mainThread())
-//                        .subscribeOn(Schedulers.io())
-//                        .subscribe(
-//                                new Consumer<String>() {
-//                                    @Override
-//                                    public void accept(String s) throws Exception {
-//                                        ResultMessage rm = new Gson().fromJson(s, ResultMessage.class);
-//                                        if (rm.getErrorCode() == 0) {
-//                                            getTreeInfo(rm);
-////                                            text1.setText(getTreeInfo(rm));
-//                                        } else {
-//                                            showToast(rm.getMessage());
-//                                        }
-//                                    }
-//                                },
-//                                new Consumer<Throwable>() {
-//                                    @Override
-//                                    public void accept(Throwable throwable) throws Exception {
-//                                        throwable.printStackTrace();
-//                                        showToast("解析信息失败");
-//                                    }
-//                                });
-//            }
-//        }.execute();
     }
 
     /* <UserID>string</UserID>
@@ -179,6 +137,7 @@ public class Activity_tree_detailInfo extends Activity_base {
         map.put("UserID", sharedPreferences.getString(UserSharedField.USERID, ""));
         map.put("TreeType", 0);
         map.put("TreeID", treeId);
+        map.put("Date", date);
         map.put("AreaID", sharedPreferences.getString(UserSharedField.AREAID, ""));
         return map;
     }
@@ -276,31 +235,6 @@ public class Activity_tree_detailInfo extends Activity_base {
         addView("管护人/单位：", rm.result.getManagementunit() + tree.getManagementpersion());
         addView("记录人：", rm.result.getUserID());
         addPicView(rm.result);
-       /* String result =  "古树编号：" + rm.treeid + "\n" +
-                "位置：" + Activity_tree_detailInfo.this.getAreaName(rm.areaid) + "\n" +
-                "地址：" + rm.result.town + rm.result.village + rm.result.smallname + "\n" +
-                "树高(m)：" + rm.result.getTreeheight() + "\n" +
-                "树高(m)：" + rm.result.getTreeheight() + "\n" +
-                "胸径(cm)：" + rm.result.getTreeDBH() + "\n" +
-                "经度：" + rm.result.getOrdinate() + "\n" +
-                "纬度：" + rm.result.getAbscissa() + "\n" +
-                "树龄：" + rm.result.getRealage() + "(估测树龄:" + rm.result.getGuessage() + ")" + "\n" +
-                "生长势：" + grownth + "\n" +
-                "生长环境：" + environment + "\n" +
-                "状况：" + status + "\n" +
-                "散生群状：" + special + "\n" +
-                "古树标识：" + gsbz + "\n" +
-                "权属：" + owner + "\n" +
-                "生长场所：" + growSpace + "\n" +
-                "生长地：" + treeArea + "\n" +
-                "坡向：" + aspect + "\n" +
-                "坡位：" + slopePos + "\n" +
-                "坡度：" + slope + "\n" +
-                "土壤：" + soil + "\n" +
-                "保护现状：" + protect + "\n" +
-                "养护现状：" + recovery + "\n" +
-                "管护人/单位：" + rm.result.getManagementunit() + tree.getManagementpersion() + "\n" +
-                "记录人：" + rm.result.getUserID();*/
     }
 
     private void addPicView(final ResultMessage.ResultBean bean) {

@@ -29,8 +29,10 @@ import com.xabaizhong.treemonistor.myview.DateDialog;
 import com.xabaizhong.treemonistor.myview.DynamicView;
 import com.xabaizhong.treemonistor.myview.ProgressDialogUtil;
 import com.xabaizhong.treemonistor.service.WebserviceHelper;
+import com.xabaizhong.treemonistor.utils.FileUtil;
 import com.xabaizhong.treemonistor.utils.MessageEvent;
 import com.xabaizhong.treemonistor.utils.RxBus;
+import com.xabaizhong.treemonistor.utils.ScaleBitmap;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -88,6 +90,7 @@ public class Fragment_group extends Fragment_base implements Imonitor {
     private void initObject() {
         treeTypeInfo = new TreeTypeInfo();
         group = new TreeGroup();
+        group.setUserID(sharedPreferences.getString(UserSharedField.USERID,""));
         treeTypeInfo.setTreeId(mTreeId);
         group.setTreeId(mTreeId);
         treeTypeInfo.setTreeGroup(group);
@@ -214,7 +217,6 @@ public class Fragment_group extends Fragment_base implements Imonitor {
 
     private void fillData() {
         Result.ResultBean bean = resultMessage.getResult();
-        mViewHolder.researchDate.setText(bean.RecordTime.substring(0, 10));
         mViewHolder.region.setText(getAreaName(resultMessage.areaid));
         mViewHolder.placeName.setText(bean.PlaceName);
         mViewHolder.evevation.setText(bean.Evevation);
@@ -405,7 +407,7 @@ public class Fragment_group extends Fragment_base implements Imonitor {
         treeTypeInfo.setDate(date);
         group.setDate(date);
         treeTypeInfo.setAreaId(resultMessage.areaid);
-
+        group.setRegion(getAreaName(resultMessage.areaid));
         String slope = bean.Slope;
         if (slope.matches("\\d+.\\d+")) {
             group.setSlope(Integer.parseInt(slope));
@@ -503,6 +505,7 @@ public class Fragment_group extends Fragment_base implements Imonitor {
     private void fzBean() {
         initialElvation();
         group.setMainTreeName(mViewHolder.mainTreeName.getText());
+        group.setAimsTree(mViewHolder.mainTreeName.getText());
         group.setSZJX(mViewHolder.szjx.getText());
         group.setXiaMuType(mViewHolder.xiaMuType.getText());
         group.setDBWType(mViewHolder.dBWType.getText());
@@ -525,7 +528,11 @@ public class Fragment_group extends Fragment_base implements Imonitor {
     }
 
     private void picToString() {
-
+        for (int i = 0; i < mList.size(); i++) {
+            ScaleBitmap.getBitmap(mList.get(i), "image" + i + ".png");
+        }
+//        group.setPicList(FileUtil.getPngFiles());
+        group.setPicList(new ArrayList<String>());
     }
 
     interface Result_Code {

@@ -244,36 +244,6 @@ public class Activity_query_tree_info extends Activity_base implements C_info_ga
     
 
 
-
-  /*  @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (position == 0)
-            return;
-        Bean.ListBean bean = list.get(position - 1);
-        int index = bean.getIndex();
-        Intent i = new Intent(this, Activity_query_tree_info_list.class);
-        i.putExtra("index", index);
-        if (index == -1) {
-            i.putExtra("type", 1);
-        } else {
-            i.putExtra("type", 0);
-        }
-        startActivity(i);
-    }*/
-
-/*
-    class ViewHolder {
-        TextView title;
-        TextView mid;
-        TextView content;
-
-        public ViewHolder(View view) {
-            title = ((TextView) view.findViewById(R.id.title));
-            mid = ((TextView) view.findViewById(R.id.mid));
-            content = ((TextView) view.findViewById(R.id.content));
-        }
-    }*/
-
     static class Bean {
 
         /**

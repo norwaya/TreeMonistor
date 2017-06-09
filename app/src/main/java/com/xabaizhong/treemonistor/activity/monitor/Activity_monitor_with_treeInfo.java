@@ -179,7 +179,9 @@ public class Activity_monitor_with_treeInfo extends Activity_base {
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment, fragment).commit();
 
     }
+
     Fragment f;
+
     private void initImportTreeGroupFragment(String treeId) {
         Fragment_group fragment = Fragment_group.instance(treeId);
         imonitor = fragment;
@@ -200,29 +202,36 @@ public class Activity_monitor_with_treeInfo extends Activity_base {
         }
         String checkResult = imonitor.check();
         if (checkResult == null) {
-//            request(imonitor.getJsonStr());
+            request();
+//            Log.i(TAG, "onViewClicked: " + imonitor.getJsonStr());
         } else {
             showToast(checkResult);
         }
-        Log.i(TAG, "onViewClicked: " + imonitor.getJsonStr());
     }
 
 
     Disposable upLoadDisposable;
 
-    private void request(String jsonStr) {
+    private void request() {
+        /*<tem:UserID>?</tem:UserID>
+         <tem:TreeType>?</tem:TreeType>
+         <!--Optional:-->
+         <tem:JsonStr>?</tem:JsonStr>
+         <!--Optional:-->
+         <tem:AreaID>?</tem:AreaID>*/
 
-
-        final Map<String, Object> map = new HashMap<>();
-        map.put("", "");
-        map.put("jsonStr", jsonStr);
-        Observable.create(new ObservableOnSubscribe<String>() {
+                Observable.create(new ObservableOnSubscribe<String>() {
             @Override
             public void subscribe(ObservableEmitter<String> e) throws Exception {
                 String result = null;
                 try {
-//                    result = WebserviceHelper.GetWebService(
-//                            "Login", "UserDetInfo", map);
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("UserID", sharedPreferences.getString(UserSharedField.USERID,""));
+                    map.put("AreaID", sharedPreferences.getString(UserSharedField.AREAID,""));
+                    map.put("TreeType", 1);
+                    map.put("JsonStr", imonitor.getJsonStr());
+                    result = WebserviceHelper.GetWebService(
+                            "UploadTreeInfo", "UploadTreeInfoMethod", map);
                 } catch (Exception ex) {
                     e.onError(ex);
                 }
@@ -243,7 +252,7 @@ public class Activity_monitor_with_treeInfo extends Activity_base {
 
                     @Override
                     public void onNext(String value) {
-
+                        Log.i(TAG, "onNext: "+value);
                     }
 
                     @Override

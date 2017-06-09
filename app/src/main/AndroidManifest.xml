@@ -49,7 +49,7 @@
             android:label="@string/app_title"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
             android:name=".activity.add_tree.Activity_add_manage"

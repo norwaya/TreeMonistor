@@ -3,19 +3,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-    <me.nereo.multi_image_selector.view.SquaredImageView
+    <com.xabaizhong.treemonistor.myview.pinchimageview
         android:id="@+id/image_item1"
-        android:src="@drawable/tree_header"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerInParent="true"
-        android:scaleType="fitCenter"/>
+        android:layout_height="match_parent"/>
 
     <TextView
-        android:background="@color/white"
         android:id="@+id/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"/>
+        android:layout_alignParentEnd="true"
+        android:background="@color/white"/>
 </RelativeLayout>

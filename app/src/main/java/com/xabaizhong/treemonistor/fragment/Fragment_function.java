@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ListView;
 
 import com.xabaizhong.treemonistor.R;
 import com.xabaizhong.treemonistor.activity.expert_zd.Activity_expert_zd;
@@ -45,8 +46,8 @@ import static android.widget.LinearLayout.VERTICAL;
 
 public class Fragment_function extends Fragment_base implements Fragment_function_adapter.OnItemClickListener {
     String TAG = "fragment-function";
-    @BindView(R.id.function_rv)
-    RecyclerView functionRv;
+    @BindView(R.id.lv)
+    ListView lv;
     private Context mContext;
    /* @BindView(R.id.lv)
     ListView lv;*/
@@ -56,8 +57,23 @@ public class Fragment_function extends Fragment_base implements Fragment_functio
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_function, container, false);
         ButterKnife.bind(this, view);
+        initToolbar();
         initView();
         return view;
+    }
+    private void initToolbar() {
+        if(Build.VERSION.SDK_INT >=Build.VERSION_CODES.LOLLIPOP){
+            getActivity().getWindow().setStatusBarColor(getResources().getColor(android.R.color.transparent));
+        }
+        getActivity().getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        initToolbar();
     }
 
     private void initView() {
@@ -70,13 +86,13 @@ public class Fragment_function extends Fragment_base implements Fragment_functio
         }
         //init RecyclerView
         Fragment_function_adapter function_adapter = new Fragment_function_adapter(context);
-        HeaderAndFooterWrapper adapter = new HeaderAndFooterWrapper(function_adapter);
+//        HeaderAndFooterWrapper adapter = new HeaderAndFooterWrapper(function_adapter);
 
-        adapter.addHeaderView(view);
-
-        functionRv.addItemDecoration(new RecycleViewDivider(context, VERTICAL, R.drawable.divider));
-        functionRv.setLayoutManager(new LinearLayoutManager(context));
-        functionRv.setAdapter(adapter);
+        lv.addHeaderView(view);
+        lv.setAdapter(function_adapter);
+//        functionRv.addItemDecoration(new RecycleViewDivider(context, VERTICAL, R.drawable.divider));
+//        functionRv.setLayoutManager(new LinearLayoutManager(context));
+//        functionRv.setAdapter(adapter);
 
         function_adapter.setOnItemClickListener(this);
 

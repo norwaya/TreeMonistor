@@ -107,24 +107,28 @@ public class Activity_expert_age extends Activity_base {
         float a = Float.parseFloat(s);
         int tree_bj = (int) (a *1.0f/ 2);
         String cname = mList.get(mPosition);
-        int bj = (tree_bj / 10 + 1) * 10;
-        Log.i(TAG, "compute: " + s + "\t" + tree_bj + "\t" + bj);
-        Tree_age treeAge = query(cname, bj);
+        //找到大于半径a 的最小的那个
+        Tree_age treeAge = query(cname, tree_bj);
         if (treeAge == null) {
             showToast("输入的胸径超出此工具能估测的范围。");
             age.setText("");
         } else {
-            int endAge = treeAge.getTreeAgeNum() + (tree_bj > 20 ? tree_bj % 10 : tree_bj) * treeAge.getTreeAge();
-            age.setText(endAge + "");
+            Log.i(TAG, "compute: "+ treeAge.getCname() +"\t"+treeAge.getTreeBj()+"\t"+treeAge.getTreeAge()+"\t"+treeAge.getTreeAgeNum());
+            int endAge = treeAge.getTreeAgeNum() + (tree_bj%10) * treeAge.getTreeAge() ;
+            age.setText(String.valueOf(endAge));
         }
     }
 
     private Tree_age query(String name, int bj) {
         Log.i(TAG, "query: " + name + "\t" + bj);
-        if (bj == 10)
-            bj = 20;
         Tree_ageDao tree_ageDao = ((App) getApplication()).getDaoSession().getTree_ageDao();
-        List<Tree_age> treeList = tree_ageDao.queryBuilder().where(Tree_ageDao.Properties.Cname.eq(mList.get(mPosition)), Tree_ageDao.Properties.TreeBj.eq(bj)).build().list();
+        List<Tree_age> treeList = tree_ageDao
+                .queryBuilder()
+                .where(Tree_ageDao.Properties.Cname.eq(mList.get(mPosition)), Tree_ageDao.Properties.TreeBj.gt(bj))
+                .orderAsc(Tree_ageDao.Properties.TreeBj)
+                .build()
+                .list();
+
         if (treeList.size() > 0) {
             return treeList.get(0);
         } else {

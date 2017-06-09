@@ -36,8 +36,10 @@ import com.xabaizhong.treemonistor.myview.C_info_gather_item1;
 import com.xabaizhong.treemonistor.myview.DateDialog;
 import com.xabaizhong.treemonistor.myview.ProgressDialogUtil;
 import com.xabaizhong.treemonistor.service.WebserviceHelper;
+import com.xabaizhong.treemonistor.utils.FileUtil;
 import com.xabaizhong.treemonistor.utils.MessageEvent;
 import com.xabaizhong.treemonistor.utils.RxBus;
+import com.xabaizhong.treemonistor.utils.ScaleBitmap;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -63,6 +65,7 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import me.nereo.multi_image_selector.MultiImageSelector;
 import me.nereo.multi_image_selector.MultiImageSelectorActivity;
+import me.nereo.multi_image_selector.utils.FileUtils;
 
 import static android.app.Activity.RESULT_OK;
 import static com.xabaizhong.treemonistor.activity.monitor.fragment.Fragment_tree.ResultCode;
@@ -115,6 +118,7 @@ public class Fragment_tree extends Fragment_base implements Imonitor, C_info_gat
         treeTypeInfo.setTypeId(0);
         treeTypeInfo.setTreeId(mTreeId);
         tree.setTreeId(mTreeId);
+        tree.setUserID(sharedPreferences.getString(UserSharedField.USERID, ""));
     }
 
     Disposable disposable;
@@ -199,6 +203,8 @@ public class Fragment_tree extends Fragment_base implements Imonitor, C_info_gat
             tree.setDate(date);
         }
         treeTypeInfo.setAreaId(resultMessage.areaid);
+
+        tree.setRegion(getAreaName(resultMessage.areaid));
         tree.setSmallName(bean.smallname);
         tree.setEvevation(bean.evevation);
         tree.setTown(bean.town);
@@ -233,7 +239,6 @@ public class Fragment_tree extends Fragment_base implements Imonitor, C_info_gat
         tree.setSpecDesc(bean.specdesc);
         Log.e(TAG, "initBean: " + new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create().toJson(treeTypeInfo));
     }
-
 
 
     private void fillData() {
@@ -300,7 +305,6 @@ public class Fragment_tree extends Fragment_base implements Imonitor, C_info_gat
         }
         String recovery = recoverySbu.toString();
         mViewHolder.tch.setText(tree.IVST);
-        mViewHolder.researchDate.setText(tree.RecordTime);
         mViewHolder.region.setText(getAreaName(resultMessage.areaid));
         mViewHolder.detailAddress.setText(tree.smallname);
         mViewHolder.elevation.setText(tree.evevation + "");
@@ -701,7 +705,6 @@ public class Fragment_tree extends Fragment_base implements Imonitor, C_info_gat
     }
 
 
-
     private TreeSpecial getTreeSpecies(String treeSpeciesId) {
         TreeSpecialDao areaCodeDao = ((App) getActivity().getApplication()).getDaoSession().getTreeSpecialDao();
         List<TreeSpecial> list = areaCodeDao.queryBuilder().where(TreeSpecialDao.Properties.TreeSpeId.eq(treeSpeciesId)).build().list();
@@ -794,18 +797,52 @@ public class Fragment_tree extends Fragment_base implements Imonitor, C_info_gat
         if (mViewHolder.history.getText().equals("")) {
             return "请填写历史因素";
         }
+        if (mList == null || mList.size() == 0) {
+            return "请选择图片";
+        }
         return null;
 
     }
 
     @Override
     public String getJsonStr() {
+        viewToBean();
         picToString();
         return new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setDateFormat("yyyy-MM-dd").create().toJson(treeTypeInfo);
     }
 
-    private void picToString() {
+    private void viewToBean() {
+        treeTypeInfo.setIvst(mViewHolder.tch.getText());
+        tree.setTown(mViewHolder.town.getText());
+        tree.setVillage(mViewHolder.village.getText());
+        tree.setAbscissa(mViewHolder.latitude.getText());
+        tree.setOrdinate(mViewHolder.longitude.getText());
+        tree.setEvevation(Double.parseDouble(mViewHolder.elevation.getText()));
+        tree.setTreeHeight(Double.parseDouble(mViewHolder.height.getText()));
+        tree.setTreeDBH(Double.parseDouble(mViewHolder.dbh.getText()));
+        String strCrownEW = mViewHolder.crownEW.getText();
+        String strCrownNS = mViewHolder.crownNS.getText();
+        tree.setCrownEW(Double.parseDouble(strCrownEW));
+        tree.setCrownNS(Double.parseDouble(strCrownNS));
+        tree.setCrownAvg((tree.getCrownEW() + tree.getCrownEW()) / 2);
+        tree.setManagementPersion(mViewHolder.managerPerson.getText());
+        tree.setManagementUnit(mViewHolder.mangerUnit.getText());
+        tree.setTreeHistory(mViewHolder.history.getText());
+        tree.setRealAge(Double.parseDouble(mViewHolder.age.getText()));
+        tree.setGuessAge(Double.parseDouble(mViewHolder.age.getText()));
 
+        tree.setEnviorFactor(mViewHolder.environmentFactor.getText());
+        tree.setSpecStatDesc(mViewHolder.specStatDesc.getText());
+        tree.setSpecDesc(mViewHolder.specDesc.getText());
+    }
+
+    private void picToString() {
+        FileUtil.clearFileDir();
+        for (int i = 0; i < mList.size(); i++) {
+            ScaleBitmap.getBitmap(mList.get(i), "image" + i + ".png");
+        }
+        tree.setPiclist(FileUtil.getPngFiles());
+//        tree.setPiclist(new ArrayList<String>());
     }
 
     @Override

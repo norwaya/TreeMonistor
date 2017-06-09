@@ -1,21 +1,32 @@
 package com.xabaizhong.treemonistor.activity.query_treeOrGroup;
 
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.xabaizhong.treemonistor.R;
 import com.xabaizhong.treemonistor.adapter.CommonRecyclerViewAdapter;
 import com.xabaizhong.treemonistor.adapter.QueryTreeInfoListAdapter;
 import com.xabaizhong.treemonistor.base.Activity_base;
 import com.xabaizhong.treemonistor.contant.UserSharedField;
+import com.xabaizhong.treemonistor.myview.ProgressDialogUtil;
 import com.xabaizhong.treemonistor.service.WebserviceHelper;
 import com.xabaizhong.treemonistor.service.model.QueryTreeInfoList;
 import com.xabaizhong.treemonistor.utils.RecycleViewDivider;
@@ -33,13 +44,12 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 import static android.widget.LinearLayout.VERTICAL;
 
 
-public class Activity_query_tree_info_list extends Activity_base implements CommonRecyclerViewAdapter.CallBack<Activity_query_tree_info_list.ViewHolder, QueryTreeInfoList.ListBean>, XRecyclerView.LoadingListener {
+public class Activity_query_tree_info_list extends Activity_base implements CommonRecyclerViewAdapter.CallBack<Activity_query_tree_info_list.ViewHolder, QueryTreeInfoList.ListBean>, XRecyclerView.LoadingListener, AdapterView.OnItemClickListener {
 
     Intent getIntent;
     @BindView(R.id.xRecyclerView)
@@ -57,11 +67,11 @@ public class Activity_query_tree_info_list extends Activity_base implements Comm
     }
 
     String mType;
-    int type;
+//    int type;
 
     private void initialRequest() {
         mType = getIntent.getStringExtra("index");
-        type = getIntent.getIntExtra("type", 0);
+//        type = getIntent.getIntExtra("type", 0);
         mPage = 0;
         mCol = 0;
         request(mType, mPage, mCol);
@@ -121,7 +131,7 @@ public class Activity_query_tree_info_list extends Activity_base implements Comm
       <page>int</page>*/
     public void request(String item, int page, int col) {
 
-        int index =   col;
+        int index = col;
         Log.i(TAG, "request: index -> " + index);
 
         final Map<String, Object> map = new HashMap<>();
@@ -203,16 +213,259 @@ public class Activity_query_tree_info_list extends Activity_base implements Comm
 
     @Override
     public void onItemClickListener(View view, int position) {
-        Intent i = null;
-        if (mType.equals("72")) {
-            i = new Intent(this, Activity_tree_group_detailInfo.class);
-        } else {
-            i = new Intent(this, Activity_tree_detailInfo.class);
-        }
-        i.putExtra("treeId", mList.get(position).getTreeID());
-        startActivity(i);
+        judgeToGo(mList.get(position).getTreeID());
+//        Intent i = null;
+//        if (mType.equals("72")) {
+//            i = new Intent(this, Activity_tree_group_detailInfo.class);
+//        } else {
+//            i = new Intent(this, Activity_tree_detailInfo.class);
+//        }
+//        i.putExtra("treeId", mList.get(position).getTreeID());
+//        startActivity(i);
     }
 
+    private void judgeToGo(final String treeId) {
+
+        /* <tem:UserID>610102001</tem:UserID>
+         <tem:TreeType>0</tem:TreeType>
+         <!--Optional:-->
+         <tem:TreeID>61010200001</tem:TreeID>
+         <!--Optional:-->
+         <tem:AreaID>610102</tem:AreaID>
+         <!--Optional:-->
+         <tem:Date></tem:Date>*/
+        final ProgressDialog dialog = ProgressDialogUtil.getInstance(this).initial("请求数据中...", null);
+        final Map<String, Object> map = new HashMap<>();
+        map.put("UserID ", sharedPreferences.getString(UserSharedField.USERID, ""));
+        map.put("AreaID", sharedPreferences.getString(UserSharedField.AREAID, ""));
+        map.put("TreeType", mType.equals("72") ? 1 : 0);
+        map.put("TreeID", treeId);
+        map.put("Date", null);
+
+        Observable
+                .create(new ObservableOnSubscribe<String>() {
+                    @Override
+                    public void subscribe(ObservableEmitter<String> e) throws Exception {
+                        String result = null;
+                        try {
+                            result = WebserviceHelper.GetWebService(
+                                    "DataQuerySys", "TreeDelInfo1", map);
+                        } catch (Exception ex) {
+                            e.onError(ex);
+                        }
+                        if (result == null) {
+                            e.onError(new RuntimeException("error"));
+                        } else {
+                            e.onNext(result);
+                        }
+                        e.onComplete();
+
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Observer<String>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(String value) {
+                        Log.i(TAG, "onNext: " + value);
+                        Result bean = new Gson().fromJson(value, Result.class);
+                        if (bean.errorCode == 0) {
+                            Intent intent = null;
+                            if (bean.getIsList() == 1) {
+                                showListDialogFromBottom(new Gson().fromJson(value, ResultBean.class));
+                            } else if (bean.getTreetype() == 0) {
+                                intent = new Intent(Activity_query_tree_info_list.this, Activity_tree_detailInfo.class);
+                                intent.putExtra("treeId", treeId);
+//                                intent.putExtra("date", "");
+                            } else if (bean.getTreetype() == 1) {
+                                intent = new Intent(Activity_query_tree_info_list.this, Activity_tree_group_detailInfo.class);
+                                intent.putExtra("treeId", treeId);
+                            }
+                            if (intent != null)
+                                startActivity(intent);
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.i(TAG, "accept: " + e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        dialog.dismiss();
+                    }
+                });
+
+    }
+
+    ResultBean currentBean;
+
+    private void showListDialogFromBottom(ResultBean bean) {
+        currentBean = bean;
+        Dialog dialog = new Dialog(this,R.style.testDialog);
+        View view = getLayoutInflater().inflate(R.layout.bottom_list_view, null);
+        ListView lv = (ListView) view.findViewById(R.id.lv);
+        ListAdapter adapter = getAdapter(bean.getResult());
+        dialog.setContentView(view);
+        lv.setAdapter(adapter);
+        lv.setOnItemClickListener(this);
+
+        Window dialogWindow = dialog.getWindow();
+        if (dialogWindow != null) {
+            dialogWindow.setGravity(Gravity.BOTTOM);
+            WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+            dialogWindow.setAttributes(lp);
+        }
+        dialog.show();
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Intent intent = null;
+        if (currentBean.getTreetype() == 0) {
+            intent = new Intent(Activity_query_tree_info_list.this, Activity_tree_detailInfo.class);
+            intent.putExtra("treeId", currentBean.getTreeId());
+            intent.putExtra("date", currentBean.getResult().get(position));
+        } else if (currentBean.getTreetype() == 1) {
+            intent = new Intent(Activity_query_tree_info_list.this, Activity_tree_group_detailInfo.class);
+            intent.putExtra("treeId", currentBean.getTreeId());
+            intent.putExtra("date", currentBean.getResult().get(position));
+        }
+        if (intent != null)
+            startActivity(intent);
+
+    }
+
+    ListAdapter getAdapter(List<String> list) {
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                R.layout.simple_text_center, R.id.text1, list);
+
+        return adapter;
+
+    }
+
+
+    static class Result {
+        @SerializedName("message")
+        private String message;
+        @SerializedName("error_code")
+        private int errorCode;
+        @SerializedName("treetype")
+        private int treetype;
+        @SerializedName("isList")
+        private int isList;
+
+        public String getMessage() {
+            return message;
+        }
+
+        public void setMessage(String message) {
+            this.message = message;
+        }
+
+        public int getErrorCode() {
+            return errorCode;
+        }
+
+        public void setErrorCode(int errorCode) {
+            this.errorCode = errorCode;
+        }
+
+        public int getTreetype() {
+            return treetype;
+        }
+
+        public void setTreetype(int treetype) {
+            this.treetype = treetype;
+        }
+
+        public int getIsList() {
+            return isList;
+        }
+
+        public void setIsList(int isList) {
+            this.isList = isList;
+        }
+    }
+
+
+    static class ResultBean {
+
+        /**
+         * message : sus
+         * error_code : 0
+         * treetype : 0
+         * isList : 1
+         * result : ["2017-06-09","2017-06-08","2016-06-29","2016-06-27","2016-06-16"]
+         */
+
+        @SerializedName("treeid")
+        private String treeId;
+        @SerializedName("message")
+        private String message;
+        @SerializedName("error_code")
+        private int errorCode;
+        @SerializedName("treetype")
+        private int treetype;
+        @SerializedName("isList")
+        private int isList;
+        @SerializedName("result")
+        private List<String> result;
+
+        public String getTreeId() {
+            return treeId;
+        }
+
+        public void setTreeId(String treeId) {
+            this.treeId = treeId;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+
+        public void setMessage(String message) {
+            this.message = message;
+        }
+
+        public int getErrorCode() {
+            return errorCode;
+        }
+
+        public void setErrorCode(int errorCode) {
+            this.errorCode = errorCode;
+        }
+
+        public int getTreetype() {
+            return treetype;
+        }
+
+        public void setTreetype(int treetype) {
+            this.treetype = treetype;
+        }
+
+        public int getIsList() {
+            return isList;
+        }
+
+        public void setIsList(int isList) {
+            this.isList = isList;
+        }
+
+        public List<String> getResult() {
+            return result;
+        }
+
+        public void setResult(List<String> result) {
+            this.result = result;
+        }
+    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView id;

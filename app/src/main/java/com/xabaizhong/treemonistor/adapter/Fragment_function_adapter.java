@@ -21,7 +21,7 @@ import java.util.List;
  * Created by admin on 2017/2/24.
  */
 
-public class Fragment_function_adapter extends RecyclerView.Adapter<Fragment_function_adapter.FunctionViewHoler> {
+public class Fragment_function_adapter extends BaseAdapter {
     private List<String> itemList = new ArrayList<>();
     private List<Integer> imageIdList = new ArrayList<>();
     private LayoutInflater inflater;
@@ -42,22 +42,53 @@ public class Fragment_function_adapter extends RecyclerView.Adapter<Fragment_fun
     }
 
 
+//    @Override
+//    public FunctionViewHoler onCreateViewHolder(ViewGroup parent, int viewType) {
+//        View view = inflater.inflate(R.layout.fragment_function_list_item, parent, false);
+//        return new FunctionViewHoler(view);
+//    }
+
+//    @Override
+//    public void onBindViewHolder(FunctionViewHoler holder, final int position) {
+//        //权限控制 ，根据权限 控制显示的功能选项
+////        boolean flag = position != 2;
+////        if (flag) {
+//
+//
+//    }
+
+
+
     @Override
-    public FunctionViewHoler onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.fragment_function_list_item, parent, false);
-        return new FunctionViewHoler(view);
+    public int getCount() {
+        return itemList.size();
     }
 
     @Override
-    public void onBindViewHolder(FunctionViewHoler holder, final int position) {
-        //权限控制 ，根据权限 控制显示的功能选项
-//        boolean flag = position != 2;
-//        if (flag) {
+    public Object getItem(int position) {
+        return itemList.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return itemList.get(position).hashCode();
+    }
+
+    @Override
+    public View getView(final int position, View convertView, ViewGroup parent) {
+        FunctionViewHoler holder;
+        if (convertView == null) {
+            convertView = inflater.inflate(R.layout.fragment_function_list_item, parent, false);
+            holder = new FunctionViewHoler(convertView);
+            convertView.setTag(holder);
+        }else{
+            holder = ((FunctionViewHoler) convertView.getTag());
+        }
         Picasso.with(context)
                 .load(imageIdList.get(position))
                 .into(holder.iv);
         holder.tv.setText(itemList.get(position));
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
+        holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (onItemClickListener != null)
@@ -101,37 +132,31 @@ public class Fragment_function_adapter extends RecyclerView.Adapter<Fragment_fun
                 holder.setVisibility(true);
                 break;
         }
-
+        return convertView;
     }
 
-
-    @Override
-    public int getItemCount() {
-        return itemList.size();
-    }
-
-    class FunctionViewHoler extends RecyclerView.ViewHolder {
+   private class FunctionViewHoler {
         ImageView iv;
         TextView tv;
-
+        View view;
         public FunctionViewHoler(View itemView) {
-            super(itemView);
+            view = itemView;
             iv = (ImageView) itemView.findViewById(R.id.iv);
             tv = (TextView) itemView.findViewById(R.id.text);
         }
 
         public void setVisibility(boolean isVisible) {
-            RecyclerView.LayoutParams param = (RecyclerView.LayoutParams) itemView.getLayoutParams();
+            ViewGroup.LayoutParams param =  view.getLayoutParams();
             if (isVisible) {
                 param.height = LinearLayout.LayoutParams.WRAP_CONTENT;
                 param.width = LinearLayout.LayoutParams.MATCH_PARENT;
-                itemView.setVisibility(View.VISIBLE);
+                view.setVisibility(View.VISIBLE);
             } else {
-                itemView.setVisibility(View.GONE);
+                view.setVisibility(View.GONE);
                 param.height = 0;
                 param.width = 0;
             }
-            itemView.setLayoutParams(param);
+            view.setLayoutParams(param);
         }
     }
 

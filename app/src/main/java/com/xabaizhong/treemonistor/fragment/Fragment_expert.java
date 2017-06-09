@@ -2,6 +2,7 @@ package com.xabaizhong.treemonistor.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -100,6 +101,7 @@ public class Fragment_expert extends Fragment_base implements Fragment_expert_ad
         if (roles.contains("3")) {
             view = inflater.inflate(R.layout.fragment_expert, container, false);
             ButterKnife.bind(this, view);
+            initToolbar();
             initView();
             isShow = true;
         } else {
@@ -112,9 +114,19 @@ public class Fragment_expert extends Fragment_base implements Fragment_expert_ad
         return view;
     }
 
+    private void initToolbar() {
+        if(Build.VERSION.SDK_INT >=Build.VERSION_CODES.LOLLIPOP){
+            getActivity().getWindow().setStatusBarColor(getResources().getColor(android.R.color.transparent));
+        }
+        getActivity().getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+    }
+
     @Override
     public void onStart() {
         super.onStart();
+        initToolbar();
         if (isShow)
             request();
     }
