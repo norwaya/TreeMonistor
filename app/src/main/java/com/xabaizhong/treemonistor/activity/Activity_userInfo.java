@@ -57,13 +57,15 @@ public class Activity_userInfo extends Activity_base {
     private void initView() {
         getUserInfo();
     }
+
     Disposable mDisposable;
+
     @Override
     public void onBackPressed() {
         if (mDisposable != null) {
             mDisposable.dispose();
             mDisposable = null;
-        }else{
+        } else {
             super.onBackPressed();
         }
     }
@@ -74,17 +76,17 @@ public class Activity_userInfo extends Activity_base {
             public void subscribe(ObservableEmitter<String> e) throws Exception {
                 String result = null;
                 try {
-                    result =  WebserviceHelper.GetWebService(
+                    result = WebserviceHelper.GetWebService(
                             "Login", "UserDetInfo", requestMap());
                 } catch (Exception ex) {
-                    e.onError(ex);
+                    ex.printStackTrace();
                 }
                 if (result == null) {
                     e.onError(new RuntimeException("返回为空"));
                 } else {
                     e.onNext(result);
+                    e.onComplete();
                 }
-                e.onComplete();
             }
         }).observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -97,6 +99,7 @@ public class Activity_userInfo extends Activity_base {
                     @Override
                     public void onNext(String value) {
                         LoginResultMessage loginResultMessage = new Gson().fromJson(value, LoginResultMessage.class);
+                        Log.i(TAG, "onNext: " + value);
                         if (loginResultMessage.getError_code() == 0) {
                             User result = loginResultMessage.getResult();
                             initInfo(result);
@@ -107,9 +110,9 @@ public class Activity_userInfo extends Activity_base {
 
                     @Override
                     public void onError(Throwable e) {
+                        mDisposable = null;
                         e.printStackTrace();
                     }
-
                     @Override
                     public void onComplete() {
                         mDisposable = null;
@@ -149,7 +152,6 @@ public class Activity_userInfo extends Activity_base {
         C_info_gather_item1 cv = (C_info_gather_item1) view.findViewById(R.id.cv);
         cv.setLeftText(left);
         cv.setText(mid);
-        Log.i(TAG, "getView: " + view);
         return view;
     }
 

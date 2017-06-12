@@ -42,20 +42,6 @@ public class Fragment_function_adapter extends BaseAdapter {
     }
 
 
-//    @Override
-//    public FunctionViewHoler onCreateViewHolder(ViewGroup parent, int viewType) {
-//        View view = inflater.inflate(R.layout.fragment_function_list_item, parent, false);
-//        return new FunctionViewHoler(view);
-//    }
-
-//    @Override
-//    public void onBindViewHolder(FunctionViewHoler holder, final int position) {
-//        //权限控制 ，根据权限 控制显示的功能选项
-////        boolean flag = position != 2;
-////        if (flag) {
-//
-//
-//    }
 
 
 
@@ -153,7 +139,7 @@ public class Fragment_function_adapter extends BaseAdapter {
                 view.setVisibility(View.VISIBLE);
             } else {
                 view.setVisibility(View.GONE);
-                param.height = 0;
+                param.height = 1;
                 param.width = 0;
             }
             view.setLayoutParams(param);

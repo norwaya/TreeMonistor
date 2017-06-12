@@ -5,8 +5,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,20 +14,16 @@ import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.xabaizhong.treemonistor.R;
-import com.xabaizhong.treemonistor.activity.expert_zd.Activity_expert_zd;
-import com.xabaizhong.treemonistor.activity.monitor.Activity_monitor;
 import com.xabaizhong.treemonistor.activity.add_tree.Activity_add_manage;
 import com.xabaizhong.treemonistor.activity.base_data.Activity_base_data;
+import com.xabaizhong.treemonistor.activity.expert_zd.Activity_expert_zd;
 import com.xabaizhong.treemonistor.activity.monitor.Activity_monitor_with_treeInfo;
 import com.xabaizhong.treemonistor.activity.monitor_query.Activity_monitor_query;
 import com.xabaizhong.treemonistor.activity.query_treeOrGroup.Activity_query_tree_info;
 import com.xabaizhong.treemonistor.adapter.Fragment_function_adapter;
-import com.xabaizhong.treemonistor.adapter.HeaderAndFooterWrapper;
 import com.xabaizhong.treemonistor.base.Fragment_base;
 import com.xabaizhong.treemonistor.contant.UserSharedField;
-import com.xabaizhong.treemonistor.utils.RecycleViewDivider;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -37,8 +32,6 @@ import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import static android.widget.LinearLayout.VERTICAL;
 
 /**
  * Created by admin on 2017/2/24.
@@ -57,28 +50,21 @@ public class Fragment_function extends Fragment_base implements Fragment_functio
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_function, container, false);
         ButterKnife.bind(this, view);
-        initToolbar();
         initView();
         return view;
     }
-    private void initToolbar() {
-        if(Build.VERSION.SDK_INT >=Build.VERSION_CODES.LOLLIPOP){
-            getActivity().getWindow().setStatusBarColor(getResources().getColor(android.R.color.transparent));
-        }
-        getActivity().getWindow().getDecorView().setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-    }
+
+
 
     @Override
     public void onStart() {
         super.onStart();
-        initToolbar();
     }
 
     private void initView() {
         View view = LayoutInflater.from(mContext).inflate(R.layout.fragment_function_header, null);
         ImageView iv = (ImageView) view.findViewById(R.id.iv);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             iv.setImageDrawable(mContext.getDrawable(R.drawable.tree_header));
         } else {
@@ -101,14 +87,14 @@ public class Fragment_function extends Fragment_base implements Fragment_functio
         Set<String> set = sharedPreferences.getStringSet(UserSharedField.ROLEID, new HashSet<String>());
         List<String> roles = new ArrayList<>();
         roles.addAll(set);
-        for (String str:roles
-             ) {
-            Log.i(TAG, "initView: "+str);
+        for (String str : roles
+                ) {
+            Log.i(TAG, "initView: " + str);
         }
-        Log.i(TAG, "initView: "+roles.contains("50"));
-        Log.i(TAG, "initView: "+roles.contains("40"));
-        Log.i(TAG, "initView: "+roles.contains("3"));
-        function_adapter.setResource(roles,Arrays.asList(
+        Log.i(TAG, "initView: " + roles.contains("50"));
+        Log.i(TAG, "initView: " + roles.contains("40"));
+        Log.i(TAG, "initView: " + roles.contains("3"));
+        function_adapter.setResource(roles, Arrays.asList(
                 R.drawable.ic_fragment_functin_tree,
                 R.drawable.ic_fragment_function_query,
                 R.drawable.import_tree,

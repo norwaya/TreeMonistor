@@ -143,50 +143,6 @@ public class Activity_query_tree_info extends Activity_base implements C_info_ga
                 });
 
 
-//      new AsyncTask<Void, Void, String>() {
-//            @Override
-//            protected String doInBackground(Void... params) {
-//                try {
-//                    return WebserviceHelper.GetWebService(
-//                            "DataQuerySys", "QueryTreeInfoMethod1", getParams());
-//                } catch (ConnectException e) {
-//                    e.printStackTrace();
-//                    return null;
-//                }
-//            }
-//
-//            @Override
-//            protected void onPostExecute(String s) {
-//                Log.i(TAG, "accept: " + s);
-//                if (s == null) {
-//                    showToast("请求错误");
-//                    return;
-//                }
-//                Observable.just(s)
-//                        .observeOn(AndroidSchedulers.mainThread())
-//                        .subscribe(new Consumer<String>() {
-//                            @Override
-//                            public void accept(String s) throws Exception {
-//                                Bean bean = new Gson().fromJson(s, Bean.class);
-//                                for (Bean.ListBean listBean:bean.getList()
-//                                     ) {
-//                                    layout.addView(getTitle(titleArray[listBean.getGroupIndex()]));
-//                                    for (Bean.ListBean.ItemsBean item:listBean.getItems()
-//                                         ) {
-//                                        layout.addView(getView(item.getClassical(),item.getNum()+"",listBean.getGroupIndex()+""+item.getIndex()));
-//
-//                                    }
-//                                }
-//
-//                            }
-//                        }, new Consumer<Throwable>() {
-//                            @Override
-//                            public void accept(Throwable throwable) throws Exception {
-//                                Log.i(TAG, "accept: " + throwable.getMessage());
-//                            }
-//                        });
-//            }
-//        }.execute();
     }
 
     String[] titleArray;
@@ -215,8 +171,6 @@ public class Activity_query_tree_info extends Activity_base implements C_info_ga
         cv.getMid().setTag(tag);
         cv.setLeftText(left);
         cv.setText(mid);
-//        view.setOnClickListener(this);
-//        view.setTag(tag);
         return view;
     }
 
@@ -227,6 +181,12 @@ public class Activity_query_tree_info extends Activity_base implements C_info_ga
             showToast("古树总量只有统计总数");
             return;
         }
+        if(et instanceof C_info_gather_item1){
+            if (((C_info_gather_item1) et).getText().equals("0")) {
+                return;
+            }
+        }
+
         Intent i = new Intent(this, Activity_query_tree_info_list.class);
         i.putExtra("index", ((String) tag));
         startActivity(i);

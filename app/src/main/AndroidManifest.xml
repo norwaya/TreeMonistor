@@ -178,6 +178,7 @@
         <activity
             android:name=".activity.base_data.Activity_pic_vp"
             android:label="图片"
+            android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.expert_zd.Activity_expert_zd"

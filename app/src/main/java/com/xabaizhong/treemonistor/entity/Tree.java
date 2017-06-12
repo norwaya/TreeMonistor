@@ -181,7 +181,7 @@ public class Tree {
     @Expose
     private double specialCode = 0;
     @Expose
-    private String region;
+    private String region="";
 
     @Expose
     @ToMany(referencedJoinProperty = "tree_id")

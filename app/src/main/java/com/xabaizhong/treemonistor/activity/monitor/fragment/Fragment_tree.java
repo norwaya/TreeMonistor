@@ -166,6 +166,7 @@ public class Fragment_tree extends Fragment_base implements Imonitor, C_info_gat
 
                     @Override
                     public void onNext(String value) {
+                        Log.i(TAG, "onNext: "+value);
                         resultMessage = new Gson().fromJson(value, ResultMessage.class);
                         if (resultMessage.getErrorCode() == 0) {
                             initBean();

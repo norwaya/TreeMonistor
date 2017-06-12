@@ -1,5 +1,6 @@
 package com.xabaizhong.treemonistor.activity.expert;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -29,6 +30,7 @@ import com.xabaizhong.treemonistor.entity.TreeSpecial;
 import com.xabaizhong.treemonistor.entity.TreeSpecialDao;
 import com.xabaizhong.treemonistor.myview.C_dialog_radio;
 import com.xabaizhong.treemonistor.myview.C_info_gather_item1;
+import com.xabaizhong.treemonistor.myview.ProgressDialogUtil;
 import com.xabaizhong.treemonistor.service.AsyncTaskRequest;
 import com.xabaizhong.treemonistor.service.model.ResultMessage;
 import com.xabaizhong.treemonistor.service.model.SpeciesResult;
@@ -142,18 +144,22 @@ public class Activity_species extends Activity_base implements C_info_gather_ite
 
     @OnClick(R.id.submit)
     public void onViewClicked() {
+        final DialogInterface dialog = ProgressDialogUtil.getInstance(this).initial(null, new ProgressDialogUtil.CallBackListener() {
+            @Override
+            public void callBack(DialogInterface dialog) {
 
+            }
+        });
         if (flag) {
             if (params.check()) {
-                pb.setVisibility(View.VISIBLE);
                 AsyncTaskRequest
                         .instance("CheckUp", "SpeciesIden")
                         .setParams(getParms())
                         .setCallBack(new AsyncTaskRequest.CallBack() {
                             @Override
                             public void execute(String s) {
+                                cancelDialog(dialog);
                                 Log.i(TAG, "execute: " + s);
-                                pb.setVisibility(View.INVISIBLE);
                                 if (s == null) {
                                     showToast("请求错误");
                                     return;
@@ -176,7 +182,6 @@ public class Activity_species extends Activity_base implements C_info_gather_ite
             if (list.size() < 1) {
                 showToast("添加图片");
             } else {
-                pb.setVisibility(View.VISIBLE);
                 new AsyncTask<Void, Void, String>() {
                     @Override
                     protected String doInBackground(Void... params) {
@@ -198,7 +203,7 @@ public class Activity_species extends Activity_base implements C_info_gather_ite
                                 .setCallBack(new AsyncTaskRequest.CallBack() {
                                     @Override
                                     public void execute(String s) {
-                                        pb.setVisibility(View.INVISIBLE);
+                                        cancelDialog(dialog);
                                         if (s == null) {
                                             showToast("请检查网络连接是否异常");
                                             return;
@@ -232,6 +237,12 @@ public class Activity_species extends Activity_base implements C_info_gather_ite
                     }
                 }.execute();
             }
+        }
+    }
+
+    private void cancelDialog(DialogInterface dialog) {
+        if (dialog != null) {
+            dialog.dismiss();
         }
     }
 

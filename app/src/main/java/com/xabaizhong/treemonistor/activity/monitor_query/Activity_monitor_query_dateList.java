@@ -13,6 +13,7 @@ import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 import com.xabaizhong.treemonistor.R;
 import com.xabaizhong.treemonistor.activity.query_treeOrGroup.Activity_tree_detailInfo;
+import com.xabaizhong.treemonistor.activity.query_treeOrGroup.Activity_tree_group_detailInfo;
 import com.xabaizhong.treemonistor.adapter.Activity_monitor_query_dateList_adapter;
 import com.xabaizhong.treemonistor.adapter.CommonRecyclerViewAdapter;
 import com.xabaizhong.treemonistor.base.Activity_base;
@@ -100,6 +101,11 @@ public class Activity_monitor_query_dateList extends Activity_base implements Co
         String date = list.get(position);
         if (treeId.matches("\\d{11}")) {
             Intent i = new Intent(this, Activity_tree_detailInfo.class);
+            i.putExtra("treeId", treeId);
+            i.putExtra("date", date);
+            startActivity(i);
+        }else if(treeId.matches("\\d{8}")){
+            Intent i = new Intent(this, Activity_tree_group_detailInfo.class);
             i.putExtra("treeId", treeId);
             i.putExtra("date", date);
             startActivity(i);

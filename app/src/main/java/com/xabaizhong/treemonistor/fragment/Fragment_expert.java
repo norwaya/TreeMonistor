@@ -101,7 +101,6 @@ public class Fragment_expert extends Fragment_base implements Fragment_expert_ad
         if (roles.contains("3")) {
             view = inflater.inflate(R.layout.fragment_expert, container, false);
             ButterKnife.bind(this, view);
-            initToolbar();
             initView();
             isShow = true;
         } else {
@@ -114,19 +113,10 @@ public class Fragment_expert extends Fragment_base implements Fragment_expert_ad
         return view;
     }
 
-    private void initToolbar() {
-        if(Build.VERSION.SDK_INT >=Build.VERSION_CODES.LOLLIPOP){
-            getActivity().getWindow().setStatusBarColor(getResources().getColor(android.R.color.transparent));
-        }
-        getActivity().getWindow().getDecorView().setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-    }
 
     @Override
     public void onStart() {
         super.onStart();
-        initToolbar();
         if (isShow)
             request();
     }
@@ -210,7 +200,12 @@ public class Fragment_expert extends Fragment_base implements Fragment_expert_ad
                 .create(new ObservableOnSubscribe<String>() {
                     @Override
                     public void subscribe(ObservableEmitter<String> e) throws Exception {
-                        String result = WebserviceHelper.GetWebService("CheckUp", "Query_CheckResult1", map);
+                        String result = null;
+                        try{
+                           result =  WebserviceHelper.GetWebService("CheckUp", "Query_CheckResult1", map);
+                        }catch (Exception ex){
+                            ex.printStackTrace();
+                        }
                         if (result == null) {
                             e.onError(new RuntimeException("error"));
                         } else {
@@ -239,11 +234,14 @@ public class Fragment_expert extends Fragment_base implements Fragment_expert_ad
 
                     @Override
                     public void onError(Throwable e) {
+                        refreshLayout.setRefreshing(false);
                         showToast("解析数据失败");
+                        Log.i(TAG, "onError: ");
                     }
 
                     @Override
                     public void onComplete() {
+                        Log.i(TAG, "onComplete: ");
                         refreshLayout.setRefreshing(false);
                     }
                 });

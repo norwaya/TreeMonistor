@@ -1,6 +1,8 @@
 package com.xabaizhong.treemonistor.activity;
 
+import android.app.Dialog;
 import android.content.ComponentName;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -23,6 +25,7 @@ import com.google.gson.Gson;
 import com.xabaizhong.treemonistor.R;
 import com.xabaizhong.treemonistor.base.Activity_base;
 import com.xabaizhong.treemonistor.contant.UserSharedField;
+import com.xabaizhong.treemonistor.myview.ProgressDialogUtil;
 import com.xabaizhong.treemonistor.service.AsyncTaskRequest;
 import com.xabaizhong.treemonistor.service.WebserviceHelper;
 import com.xabaizhong.treemonistor.service.model.User;
@@ -196,7 +199,6 @@ public class Activity_login extends Activity_base implements View.OnFocusChangeL
                 }
                 break;
             case R.id.btn_login:
-                pb.setVisibility(View.VISIBLE);
                 attemptLogin();
                 break;
         }
@@ -219,18 +221,25 @@ public class Activity_login extends Activity_base implements View.OnFocusChangeL
     }
 
     AsyncTaskRequest asyncTaskRequest = null;
+    Dialog dialog;
 
     private void attemptLogin() {
-        if (!verification()) {
-            pb.setVisibility(View.INVISIBLE);
-            showToast("error");
-        }
+        dialog = ProgressDialogUtil.getInstance(this).initial("login...", new ProgressDialogUtil.CallBackListener() {
+            @Override
+            public void callBack(DialogInterface dialog) {
+                if (asyncTaskRequest != null) {
+                    asyncTaskRequest.cancel();
+                    asyncTaskRequest = null;
+                }
+            }
+        });
         asyncTaskRequest = AsyncTaskRequest.instance("Login", "login").setParams(getLoginInfo())
                 .setCallBack(new AsyncTaskRequest.CallBack() {
                     @Override
                     public void execute(String s) {
                         Log.i(TAG, "execute: " + s);
-                        pb.setVisibility(View.INVISIBLE);
+                        asyncTaskRequest = null;
+                        cancelDialog(dialog);
                         if (s == null) {
                             showToast("请检查您的网络");
                             return;
@@ -262,6 +271,27 @@ public class Activity_login extends Activity_base implements View.OnFocusChangeL
 
     }
 
+    @Override
+    public void onBackPressed() {
+        Log.i(TAG, "onBackPressed: pressed");
+        if (dialog != null) {
+            dialog.dismiss();
+            Log.i(TAG, "onBackPressed: cancel dialog");
+            dialog = null;
+        } else {
+
+            super.onBackPressed();
+        }
+
+
+    }
+    private void cancelDialog(Dialog dialog){
+        if (dialog != null) {
+            dialog.dismiss();
+            Log.i(TAG, "onBackPressed: cancel dialog");
+            dialog = null;
+        }
+    }
     /**
      * @return true if username and pwd is ok
      */

@@ -57,6 +57,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
+import io.reactivex.internal.util.ExceptionHelper;
 import io.reactivex.schedulers.Schedulers;
 import terranovaproductions.newcomicreader.FloatingActionMenu;
 
@@ -354,8 +355,17 @@ public class Activity_add_manage extends Activity_base {
                         Map<String, Object> params = pkg(treeTypeInfo);
                         current = treeTypeInfo;
                         Log.i(TAG, "apply: " + Thread.currentThread().getName());
-                        String result = WebserviceHelper.GetWebService("UploadTreeInfo", "UploadTreeInfoMethod", params);
-                        return result;
+                        String result = null;
+                        try {
+                            result = WebserviceHelper.GetWebService("UploadTreeInfo", "UploadTreeInfoMethod", params);
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+                        if (result == null) {
+                            return "-1";
+                        }else{
+                            return result;
+                        }
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())
@@ -364,14 +374,14 @@ public class Activity_add_manage extends Activity_base {
                     @Override
                     public void onSubscribe(Disposable d) {
                         mDisposable = d;
-
                     }
 
                     @Override
                     public void onNext(String msg) {
                         Log.i(TAG, "onNext: " + msg);
-                        if (msg == null) {
+                        if ("-1".equals(msg)) {
                             showToast(current.getTreeId() + "error");
+                            return;
                         }
                         ResultMessage rm = new Gson().fromJson(msg, ResultMessage.class);
                         if (rm.getError_code() == 0) {
@@ -432,7 +442,7 @@ public class Activity_add_manage extends Activity_base {
 
     @Override
     public void onBackPressed() {
-        
+
 //        if (mDisposable != null && !mDisposable.isDisposed()) {
 //            mDisposable.dispose();
 //            mDisposable = null;

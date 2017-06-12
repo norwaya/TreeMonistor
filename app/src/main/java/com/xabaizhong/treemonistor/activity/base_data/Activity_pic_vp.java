@@ -1,6 +1,7 @@
 package com.xabaizhong.treemonistor.activity.base_data;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
@@ -37,11 +39,26 @@ public class Activity_pic_vp extends Activity_base {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pic_vp);
         ButterKnife.bind(this);
+        setScreen();
         initialView();
     }
 
+    private void setScreen() {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
+                        View.SYSTEM_UI_FLAG_FULLSCREEN|
+                        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
+                        View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
+                        View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+        );
+
+
+    }
+
     ViewPagerAdapter adapter;
-    int currentItem ;
+    int currentItem;
+
     private void initialView() {
         picList = getIntent().getStringArrayListExtra("picList");
         currentItem = getIntent().getIntExtra("current", 0);

@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -129,14 +130,13 @@ public class Fragment_setting extends Fragment_base {
         toolbar.setTitle("设置");
         toolbar.setTitleTextColor(Color.WHITE);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-
     }
 
     private void initNotice() {
 
         boolean noticeS = sharedPreferences.getBoolean(NOTICE_PUSH, true);
         informationS.setChecked(noticeS);
-        WebserviceHelper.switch_ip = noticeS;
+//        WebserviceHelper.switch_ip = noticeS;
     }
 
     private void initView() {
@@ -152,7 +152,7 @@ public class Fragment_setting extends Fragment_base {
                 }
                 getContext().sendBroadcast(i);
                 changeNoticeSwitch(isChecked);
-                WebserviceHelper.switch_ip = isChecked;
+//                WebserviceHelper.switch_ip = isChecked;
             }
         });
     }

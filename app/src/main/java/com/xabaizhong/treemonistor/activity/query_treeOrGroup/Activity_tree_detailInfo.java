@@ -106,7 +106,7 @@ public class Activity_tree_detailInfo extends Activity_base {
 
                     @Override
                     public void onNext(String value) {
-                        Log.i(TAG, "onNext: "+value);
+                        Log.i(TAG, "onNext: " + value);
                         ResultMessage rm = new Gson().fromJson(value, ResultMessage.class);
                         if (rm.getErrorCode() == 0) {
                             getTreeInfo(rm);
@@ -209,10 +209,12 @@ public class Activity_tree_detailInfo extends Activity_base {
             final int i = Integer.parseInt(recM.group());
             recoverySbu.append(recoveryArray[i - 1]).append(",");
         }
+
         String recovery = recoverySbu.toString();
         addView("古树编号：", rm.treeid);
         addView("位置：", Activity_tree_detailInfo.this.getAreaName(rm.areaid));
         addView("地址：", rm.result.town + rm.result.village + rm.result.smallname);
+        addView("日期", rm.result.RecordTime);
         addView("树高(m)：", rm.result.getTreeheight() + "");
         addView("胸径(cm)：", rm.result.getTreeDBH() + "");
         addView("经度：", rm.result.getOrdinate());
@@ -277,7 +279,6 @@ public class Activity_tree_detailInfo extends Activity_base {
         C_info_gather_item1 cv = (C_info_gather_item1) view.findViewById(R.id.cv);
         cv.setLeftText(left);
         cv.setText(mid);
-        Log.i(TAG, "getView: " + view);
         return view;
     }
 

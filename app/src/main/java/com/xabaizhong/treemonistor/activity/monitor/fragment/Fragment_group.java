@@ -90,7 +90,7 @@ public class Fragment_group extends Fragment_base implements Imonitor {
     private void initObject() {
         treeTypeInfo = new TreeTypeInfo();
         group = new TreeGroup();
-        group.setUserID(sharedPreferences.getString(UserSharedField.USERID,""));
+        group.setUserID(sharedPreferences.getString(UserSharedField.USERID, ""));
         treeTypeInfo.setTreeId(mTreeId);
         group.setTreeId(mTreeId);
         treeTypeInfo.setTreeGroup(group);
@@ -115,25 +115,27 @@ public class Fragment_group extends Fragment_base implements Imonitor {
         map.put("TreeID", mTreeId);
         map.put("AreaID", sharedPreferences.getString(UserSharedField.AREAID, ""));
 
-        Observable.create(new ObservableOnSubscribe<String>() {
+        Observable
+                .create(new ObservableOnSubscribe<String>() {
 
-            @Override
-            public void subscribe(ObservableEmitter<String> e) throws Exception {
-                String result = null;
-                try {
-                    result = WebserviceHelper.GetWebService(
-                            "DataQuerySys", "TreeDelInfo", map);
-                } catch (Exception ex) {
-                    e.onError(ex);
-                }
-                if (result == null) {
-                    e.onError(new RuntimeException("返回为空"));
-                } else {
-                    e.onNext(result);
-                }
-                e.onComplete();
-            }
-        }).observeOn(AndroidSchedulers.mainThread())
+                    @Override
+                    public void subscribe(ObservableEmitter<String> e) throws Exception {
+                        String result = null;
+                        try {
+                            result = WebserviceHelper.GetWebService(
+                                    "DataQuerySys", "TreeDelInfo", map);
+                        } catch (Exception ex) {
+                            e.onError(ex);
+                        }
+                        if (result == null) {
+                            e.onError(new RuntimeException("返回为空"));
+                        } else {
+                            e.onNext(result);
+                        }
+                        e.onComplete();
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Observer<String>() {
                     @Override
@@ -243,6 +245,7 @@ public class Fragment_group extends Fragment_base implements Imonitor {
         mViewHolder.averageDiameter.setText(bean.AverageDiameter + "");
         mViewHolder.averageHeight.setText(bean.AverageHeight + "");
         String soil = bean.SoilName;
+        Log.i(TAG, "fillData: soil-> " + soil);
         if (soil.matches("\\d+")) {
             soil = getActivity().getResources().getStringArray(R.array.soil)[Integer.parseInt(soil)];
         }
@@ -397,7 +400,7 @@ public class Fragment_group extends Fragment_base implements Imonitor {
         intent.putExtra(MultiImageSelectorActivity.EXTRA_SELECT_COUNT, 5);
         intent.putExtra(MultiImageSelectorActivity.EXTRA_SELECT_MODE, MultiImageSelectorActivity.MODE_MULTI);
         intent.putStringArrayListExtra(MultiImageSelectorActivity.EXTRA_DEFAULT_SELECTED_LIST, mList);
-        startActivityForResult(intent,Result_Code.REQUEST_IMAGE );
+        startActivityForResult(intent, Result_Code.REQUEST_IMAGE);
     }
 
 
@@ -415,9 +418,8 @@ public class Fragment_group extends Fragment_base implements Imonitor {
         group.setAspect(bean.Aspect);
         String soil = bean.SoilName;
         if (soil.matches("\\d+.\\d+")) {
-            group.setSlope(Double.parseDouble(soil));
+            group.setSoilName(soil);
         }
-
     }
 
     @Override
@@ -503,7 +505,7 @@ public class Fragment_group extends Fragment_base implements Imonitor {
     }
 
     private void fzBean() {
-        initialElvation();
+        group.setPlaceName(mViewHolder.placeName.getText());
         group.setMainTreeName(mViewHolder.mainTreeName.getText());
         group.setAimsTree(mViewHolder.mainTreeName.getText());
         group.setSZJX(mViewHolder.szjx.getText());
@@ -522,17 +524,21 @@ public class Fragment_group extends Fragment_base implements Imonitor {
         group.setAverageHeight(Double.parseDouble(mViewHolder.averageHeight.getText()));
         group.setArea(Double.parseDouble(mViewHolder.area.getText()));
         group.setTreeMap(mViewHolder.treeMap.getTreeMap());
+        group.setSoilHeight(Double.parseDouble(mViewHolder.soilHeight.getText()));
+        initialElevation();
     }
 
-    private void initialElvation() {
+    private void initialElevation() {
+        Log.i(TAG, "initialElevation: " + mViewHolder.evevation.getText());
+        group.setEvevation(mViewHolder.evevation.getText().replaceFirst("[^\\d]+", ":"));
     }
 
     private void picToString() {
         for (int i = 0; i < mList.size(); i++) {
             ScaleBitmap.getBitmap(mList.get(i), "image" + i + ".png");
         }
-//        group.setPicList(FileUtil.getPngFiles());
-        group.setPicList(new ArrayList<String>());
+        group.setPicList(FileUtil.getPngFiles());
+//        group.setPicList(new ArrayList<String>());
     }
 
     interface Result_Code {
@@ -739,17 +745,17 @@ public class Fragment_group extends Fragment_base implements Imonitor {
             @SerializedName("SZJX")
             private String SZJX;
             @SerializedName("Area")
-            private int Area;
+            private double Area;
             @SerializedName("GSTreeNum")
-            private int GSTreeNum;
+            private double GSTreeNum;
             @SerializedName("AverageHeight")
             private double AverageHeight;
             @SerializedName("AverageDiameter")
-            private int AverageDiameter;
+            private double AverageDiameter;
             @SerializedName("AverageAge")
-            private int AverageAge;
+            private double AverageAge;
             @SerializedName("YBDInfo")
-            private int YBDInfo;
+            private double YBDInfo;
             @SerializedName("Evevation")
             private String Evevation;
             @SerializedName("Aspect")
@@ -759,7 +765,7 @@ public class Fragment_group extends Fragment_base implements Imonitor {
             @SerializedName("SoilName")
             private String SoilName;
             @SerializedName("SoilHeight")
-            private int SoilHeight;
+            private double SoilHeight;
             @SerializedName("XiaMuType")
             private String XiaMuType;
             @SerializedName("XiaMuDensity")
@@ -835,7 +841,7 @@ public class Fragment_group extends Fragment_base implements Imonitor {
                 this.SZJX = SZJX;
             }
 
-            public int getArea() {
+            public double getArea() {
                 return Area;
             }
 
@@ -843,7 +849,7 @@ public class Fragment_group extends Fragment_base implements Imonitor {
                 this.Area = Area;
             }
 
-            public int getGSTreeNum() {
+            public double getGSTreeNum() {
                 return GSTreeNum;
             }
 
@@ -859,7 +865,7 @@ public class Fragment_group extends Fragment_base implements Imonitor {
                 this.AverageHeight = AverageHeight;
             }
 
-            public int getAverageDiameter() {
+            public double getAverageDiameter() {
                 return AverageDiameter;
             }
 
@@ -867,7 +873,7 @@ public class Fragment_group extends Fragment_base implements Imonitor {
                 this.AverageDiameter = AverageDiameter;
             }
 
-            public int getAverageAge() {
+            public double getAverageAge() {
                 return AverageAge;
             }
 
@@ -875,7 +881,7 @@ public class Fragment_group extends Fragment_base implements Imonitor {
                 this.AverageAge = AverageAge;
             }
 
-            public int getYBDInfo() {
+            public double getYBDInfo() {
                 return YBDInfo;
             }
 
@@ -915,7 +921,7 @@ public class Fragment_group extends Fragment_base implements Imonitor {
                 this.SoilName = SoilName;
             }
 
-            public int getSoilHeight() {
+            public double getSoilHeight() {
                 return SoilHeight;
             }
 

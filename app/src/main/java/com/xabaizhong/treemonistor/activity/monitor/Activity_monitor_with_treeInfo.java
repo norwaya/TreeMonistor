@@ -23,6 +23,7 @@ import com.xabaizhong.treemonistor.base.Activity_base;
 import com.xabaizhong.treemonistor.contant.UserSharedField;
 import com.xabaizhong.treemonistor.myview.ProgressDialogUtil;
 import com.xabaizhong.treemonistor.service.WebserviceHelper;
+import com.xabaizhong.treemonistor.service.model.ResultMessage;
 
 import java.util.HashMap;
 import java.util.List;
@@ -219,21 +220,27 @@ public class Activity_monitor_with_treeInfo extends Activity_base {
          <tem:JsonStr>?</tem:JsonStr>
          <!--Optional:-->
          <tem:AreaID>?</tem:AreaID>*/
-
-                Observable.create(new ObservableOnSubscribe<String>() {
+        final DialogInterface dialog = ProgressDialogUtil.getInstance(this).initial("loading...", new ProgressDialogUtil.CallBackListener() {
+            @Override
+            public void callBack(DialogInterface dialog) {
+                upLoadDisposable = null;
+            }
+        });
+        Observable.create(new ObservableOnSubscribe<String>() {
             @Override
             public void subscribe(ObservableEmitter<String> e) throws Exception {
                 String result = null;
                 try {
                     Map<String, Object> map = new HashMap<>();
-                    map.put("UserID", sharedPreferences.getString(UserSharedField.USERID,""));
-                    map.put("AreaID", sharedPreferences.getString(UserSharedField.AREAID,""));
+                    map.put("UserID", sharedPreferences.getString(UserSharedField.USERID, ""));
+                    map.put("AreaID", sharedPreferences.getString(UserSharedField.AREAID, ""));
                     map.put("TreeType", 1);
                     map.put("JsonStr", imonitor.getJsonStr());
+
                     result = WebserviceHelper.GetWebService(
                             "UploadTreeInfo", "UploadTreeInfoMethod", map);
                 } catch (Exception ex) {
-                    e.onError(ex);
+                   ex.printStackTrace();
                 }
                 if (result == null) {
                     e.onError(new RuntimeException("返回为空"));
@@ -252,17 +259,25 @@ public class Activity_monitor_with_treeInfo extends Activity_base {
 
                     @Override
                     public void onNext(String value) {
-                        Log.i(TAG, "onNext: "+value);
+                        ResultMessage resultMessage = new Gson().fromJson(value, ResultMessage.class);
+                        if (resultMessage.getError_code() == 0) {
+                            dialog.dismiss();
+                            showToast("上传成功");
+                            finish();
+                        }
                     }
 
                     @Override
                     public void onError(Throwable e) {
+                        showToast("上传失败");
                         e.printStackTrace();
+                        dialog.dismiss();
                     }
 
                     @Override
                     public void onComplete() {
-                        disposable = null;
+
+
                     }
                 });
 

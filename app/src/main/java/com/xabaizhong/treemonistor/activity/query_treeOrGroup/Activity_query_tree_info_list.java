@@ -1,7 +1,9 @@
 package com.xabaizhong.treemonistor.activity.query_treeOrGroup;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -308,37 +310,46 @@ public class Activity_query_tree_info_list extends Activity_base implements Comm
 
     private void showListDialogFromBottom(ResultBean bean) {
         currentBean = bean;
-        Dialog dialog = new Dialog(this,R.style.testDialog);
+
+        AlertDialog.Builder builder = new  AlertDialog.Builder(this);
+        builder.setTitle("日期列表");
         View view = getLayoutInflater().inflate(R.layout.bottom_list_view, null);
         ListView lv = (ListView) view.findViewById(R.id.lv);
         ListAdapter adapter = getAdapter(bean.getResult());
-        dialog.setContentView(view);
+        AlertDialog dialog = builder.create();
+        builder.setSingleChoiceItems(adapter, 0, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = null;
+                if (currentBean.getTreetype() == 0) {
+                    intent = new Intent(Activity_query_tree_info_list.this, Activity_tree_detailInfo.class);
+                    intent.putExtra("treeId", currentBean.getTreeId());
+                    intent.putExtra("date", currentBean.getResult().get(which));
+                } else if (currentBean.getTreetype() == 1) {
+                    intent = new Intent(Activity_query_tree_info_list.this, Activity_tree_group_detailInfo.class);
+                    intent.putExtra("treeId", currentBean.getTreeId());
+                    intent.putExtra("date", currentBean.getResult().get(which));
+                }
+                if (intent != null)
+                    startActivity(intent);
+            }
+        });
+//        dialog.setContentView(view);
         lv.setAdapter(adapter);
         lv.setOnItemClickListener(this);
 
-        Window dialogWindow = dialog.getWindow();
-        if (dialogWindow != null) {
-            dialogWindow.setGravity(Gravity.BOTTOM);
-            WindowManager.LayoutParams lp = dialogWindow.getAttributes();
-            dialogWindow.setAttributes(lp);
-        }
-        dialog.show();
+//        Window dialogWindow = dialog.getWindow();
+//        if (dialogWindow != null) {
+//            dialogWindow.setGravity(Gravity.BOTTOM);
+//            WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+//            dialogWindow.setAttributes(lp);
+//        }
+        builder.show();
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent intent = null;
-        if (currentBean.getTreetype() == 0) {
-            intent = new Intent(Activity_query_tree_info_list.this, Activity_tree_detailInfo.class);
-            intent.putExtra("treeId", currentBean.getTreeId());
-            intent.putExtra("date", currentBean.getResult().get(position));
-        } else if (currentBean.getTreetype() == 1) {
-            intent = new Intent(Activity_query_tree_info_list.this, Activity_tree_group_detailInfo.class);
-            intent.putExtra("treeId", currentBean.getTreeId());
-            intent.putExtra("date", currentBean.getResult().get(position));
-        }
-        if (intent != null)
-            startActivity(intent);
+
 
     }
 

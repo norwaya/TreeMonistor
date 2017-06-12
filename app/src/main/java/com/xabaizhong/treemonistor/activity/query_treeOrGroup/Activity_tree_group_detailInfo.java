@@ -153,6 +153,7 @@ public class Activity_tree_group_detailInfo extends Activity_base {
         addView("古树群编号", tree.getTreeListID());
         addView("位置", Activity_tree_group_detailInfo.this.getAreaName(rm.areaid));
         addView("详细信息", tree.getPlaceName());
+        addView("日期", tree.RecordTime);
         addView("主要树种", tree.getMainTreeName());
         addView("树种类", tree.getTreeSpelNum());
         addView("四至界限", tree.getSZJX());

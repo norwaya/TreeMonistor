@@ -41,10 +41,11 @@ public class WebserviceHelper {
 */
     public static String GetWebService(String url_d, String methodName, Map<String, Object> map)
             throws IOException, XmlPullParserException {
+        long startTime = System.nanoTime();
+
         String WSDL_URI = switch_ip ? "http://117.34.105.28:8055/" + url_d + ".asmx?WSDL" :
                 "http://192.168.0.118:8055/" + url_d + ".asmx?WSDL";//wsdl 的uri
         String namespace = "http://tempuri.org/";//namespace
-        Log.i(TAG, "GetWebService: " + WSDL_URI + "\t" + methodName);
         SoapObject request = new SoapObject(namespace, methodName);
         // 设置需调用WebService接口需要传入的两个参数mobileCode、userId
         if (map != null)
@@ -64,6 +65,7 @@ public class WebserviceHelper {
         // 获取返回的数据
         SoapObject object = (SoapObject) envelope.bodyIn;
         // 获取返回的结果
+        Log.i(TAG, "GetWebService: using time : " + WSDL_URI + "\t" + methodName +((System.nanoTime() - startTime) / 1e9d));
         return object.getProperty(0).toString();
 //        String nameSpace = "http://tempuri.org/";
 //        String url = switch_ip ? remote : local + url_d + ".asmx?WSDL";
