@@ -2,7 +2,7 @@
 <resources>
     <string-array name="function_array">
         <item>古树信息上传</item>
-        <item>古树信息查询</item>
+        <item>古树信息统计</item>
         <item>重点古树监管</item>
         <item>重点古树查询</item>
         <item>专家诊断</item>

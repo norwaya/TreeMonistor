@@ -95,8 +95,12 @@ public class Activity_login extends Activity_base implements View.OnFocusChangeL
     }
 
     private void initView() {
-        name.setText("610102001");
-        pwd.setText("admin");
+        String areaId = sharedPreferences.getString(UserSharedField.USERID, "-1");
+        if (!"-1".equals(areaId)) {
+            name.setText(areaId);
+        }
+//        name.setText("610102001");
+//        pwd.setText("admin");
         pb.setVisibility(View.INVISIBLE);
 
         /*ivAreaClose.setVisibility(View.INVISIBLE);*/
@@ -254,7 +258,7 @@ public class Activity_login extends Activity_base implements View.OnFocusChangeL
                                         if (loginResult.getError_code() == 0) {
                                             writerUserToFile(loginResult.getResult());
                                             startActivity(new Intent(Activity_login.this, Activity_main.class));
-
+                                            Activity_login.this.finish();
                                         }
                                         showToast(loginResult.getMessage());
                                     }

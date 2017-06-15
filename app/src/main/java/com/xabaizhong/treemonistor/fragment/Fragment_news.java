@@ -87,7 +87,7 @@ public class Fragment_news extends Fragment_base {
     private void initToolbar() {
         toolbar.setTitle("资讯");
         toolbar.setTitleTextColor(Color.WHITE);
-        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+//        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
 
     }
 

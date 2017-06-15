@@ -293,11 +293,14 @@ public class Activity_tree_group_detailInfo extends Activity_base {
 
     private void addPicView(final Activity_tree_group_detailInfo.ResultMessage.ResultBean bean) {
         View view = getView("图片", bean.getPicInfo() != null ? bean.getPicInfo().size() + "" : "0");
-        C_info_gather_item1 cv = (C_info_gather_item1) view.findViewById(R.id.cv);
+        final C_info_gather_item1 cv = (C_info_gather_item1) view.findViewById(R.id.cv);
         cv.setCallback_mid(new C_info_gather_item1.Mid_CallBack() {
             @Override
             public void onClickListener(View et) {
                 Log.i(TAG, "onClickListener: pic");
+                if ("0".equals(cv.getText())) {
+                    return;
+                }
                 Intent i = new Intent(Activity_tree_group_detailInfo.this, Activity_pic_vp.class);
                 i.putStringArrayListExtra("picList", bean.getPicInfo());
                 startActivity(i);

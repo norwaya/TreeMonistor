@@ -38,60 +38,6 @@ public class Fragment_expert_adapter extends BaseAdapter {
     }
 
 
-//    @Override
-//    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-//        return new Fragment_expert_adapter_viewHold(
-//                inflate.inflate(R.layout.fragment_expert_item2, parent, false));
-//    }
-
-
-//    @Override
-//    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-//        holder.setIsRecyclable(false);
-//        ResultOfExpert roe = list.get(position);
-//        Fragment_expert_adapter_viewHold viewHolder = (Fragment_expert_adapter_viewHold) holder;
-//        Log.i("check same", "onBindViewHolder: " + roe.getTID() + "\t" + roe.isChecked());
-//        viewHolder.tid.setText(roe.getTID());
-//        if (roe.isChecked()) {
-//            viewHolder.checked.setText("是");
-//        } else {
-//            viewHolder.checked.setText("否");
-//        }
-//        viewHolder.date.setText(roe.getDateTime().substring(0, 10));
-//        String type = "";
-//        switch (roe.getAuthType()) {
-//            case 0:
-//                type = "树种鉴定";
-//                break;
-//            case 1:
-//                type = "";
-//                break;
-//            case 2:
-//                type = "";
-//                break;
-//            case 3:
-//                type = "树病鉴定";
-//                break;
-//            case 4:
-//                type = "虫害鉴定";
-//                break;
-//            default:
-//                break;
-//
-//        }
-//        viewHolder.type.setText(type);
-//        Log.i("isChecked", "onBindViewHolder: " + roe.isChecked());
-//
-//        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (onClickListener != null) {
-//                    onClickListener.onClick(v, position, list.get(position));
-//                }
-//            }
-//        });
-//    }
-
 
     public void setOnClickListener(OnClickListener onClickListener) {
         this.onClickListener = onClickListener;
@@ -123,7 +69,7 @@ public class Fragment_expert_adapter extends BaseAdapter {
             viewHolder = (Fragment_expert_adapter_viewHold) convertView.getTag();
         }
         ResultOfExpert roe = list.get(position);
-        Log.i("check same", "onBindViewHolder: " + roe.getTID() + "\t" + roe.isChecked());
+//        Log.i("check same", "onBindViewHolder: " + roe.getTID() + "\t" + roe.isChecked());
         viewHolder.tid.setText(roe.getTID());
         if (roe.isChecked()) {
             viewHolder.checked.setText("是");
@@ -153,7 +99,6 @@ public class Fragment_expert_adapter extends BaseAdapter {
 
         }
         viewHolder.type.setText(type);
-        Log.i("isChecked", "onBindViewHolder: " + roe.isChecked());
 
         viewHolder.view.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -166,8 +111,6 @@ public class Fragment_expert_adapter extends BaseAdapter {
 
         return convertView;
     }
-
-
     public class Fragment_expert_adapter_viewHold {
 
         TextView tid;

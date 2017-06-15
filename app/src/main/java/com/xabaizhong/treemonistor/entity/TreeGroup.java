@@ -102,7 +102,7 @@ public class TreeGroup {
     @ToMany(referencedJoinProperty = "tree_id")
     private List<TreeGroupPic> Pics;
     @Expose
-    private String region;
+    private String region="";
     /**
      * Used to resolve relations
      */

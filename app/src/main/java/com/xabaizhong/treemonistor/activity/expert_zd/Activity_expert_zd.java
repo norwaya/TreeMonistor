@@ -47,6 +47,12 @@ public class Activity_expert_zd extends Activity_base implements XRecyclerView.L
         initialView();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refreshView();
+    }
+
     private void initialView() {
         initialAdapter();
         xRecyclerView.setLayoutManager(new LinearLayoutManager(this));

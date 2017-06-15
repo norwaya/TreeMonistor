@@ -1,7 +1,14 @@
 package com.xabaizhong.treemonistor.activity.expert;
 
+import android.Manifest;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +22,8 @@ import com.xabaizhong.treemonistor.base.Activity_base;
 import com.xabaizhong.treemonistor.contant.UserSharedField;
 import com.xabaizhong.treemonistor.myview.C_info_gather_item1;
 import com.xabaizhong.treemonistor.service.WebserviceHelper;
+
+import junit.runner.Version;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,11 +40,13 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+
 /**
  * Created by Administrator on 2017/5/18 0018.
  */
 
-public class Activity_expert_detail extends Activity_base {
+public class Activity_expert_detail extends Activity_base implements C_info_gather_item1.Mid_CallBack {
 
     String tid;
     int type;
@@ -156,7 +167,8 @@ public class Activity_expert_detail extends Activity_base {
             layout.addView(getView("鉴定结果", bug.getExpert().getResult()));
             layout.addView(getView("鉴定时间", bug.getExpert().getDate()));
             layout.addView(getView("专家", bug.getExpert().getRealName()));
-            layout.addView(getView("手机", bug.getExpert().getUserTel()));
+            telNum = bug.getExpert().getUserTel();
+            layout.addView(getListenerView("手机", bug.getExpert().getUserTel()));
         } else {
             layout.addView(getView("是否鉴定", "未鉴定"));
         }
@@ -175,7 +187,19 @@ public class Activity_expert_detail extends Activity_base {
         cv.setText(mid);
         return view;
     }
+    private View getListenerView(String left, String mid) {
+        if (inflater == null) {
+            inflater = LayoutInflater.from(this);
+        }
 
+        View view = inflater.inflate(R.layout.c_view, null);
+        C_info_gather_item1 cv = (C_info_gather_item1) view.findViewById(R.id.cv);
+
+        cv.setCallback_mid(this);
+        cv.setLeftText(left);
+        cv.setText(mid);
+        return view;
+    }
 
     private void treeIll(String value) {
         TreeIll treeIll = new Gson().fromJson(value, TreeIll.class);
@@ -196,13 +220,43 @@ public class Activity_expert_detail extends Activity_base {
             layout.addView(getView("鉴定结果", expert.getResult()));
             layout.addView(getView("鉴定时间", expert.getDate()));
             layout.addView(getView("专家", expert.getRealName()));
-            layout.addView(getView("手机", expert.getUserTel()));
+            telNum = expert.getUserTel();
+            layout.addView(getListenerView("手机", expert.getUserTel()));
         } else {
 //            text2.setText("未鉴定");
             layout.addView(getView("是否鉴定", "未鉴定"));
         }
 
     }
+
+    private static final int REQUEST_CODE_CALL = 818;
+    private void checkCallPermissionAndDial(){
+        if(Build.VERSION.SDK_INT> Build.VERSION_CODES.M){
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.CALL_PHONE},REQUEST_CODE_CALL);
+            }else{
+                makeDial();
+            }
+        }else{
+            makeDial();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == REQUEST_CODE_CALL && grantResults[0] == PERMISSION_GRANTED) {
+            makeDial();
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+    String telNum ="";
+    private void makeDial(){
+        if("".equals(telNum.trim()))
+            return;
+        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:"+telNum));
+        startActivity(intent);
+    }
+
 
     private void treeSpecies(String value) {
         String[] leafArray = new String[]{"其他", "椭圆状", "心形", "掌形", "扇形", "菱形", "披针形", "卵形", "圆形", "针形", "鳞形", "匙形", "三角形"};
@@ -213,16 +267,16 @@ public class Activity_expert_detail extends Activity_base {
         String[] fruitColorArray = new String[]{"其他", "白色", "红色", "绿色", "紫色", "黄色", "粉色", "褐色", "黑色"};
         TreeSpeciesRm treeSpeciesRm = new Gson().fromJson(value, TreeSpeciesRm.class);
         TreeSpecialDetail bean = treeSpeciesRm.getBean();
-        text1.setText("鉴定编号\t" + tid + "\n" +
-                getString(R.string.two_item_t,
-                        "叶：", leafArray[bean.getLeafShape()]) + "\n" +
-                getString(R.string.two_item_t,
-                        "叶颜色：", leafColorArray[bean.getLeafColor()]) + "\n" +
-                "花：" + flowerArray[bean.getFlowerType()] + "\n" +
-                "花颜色：" + flowerColorArray[bean.getFlowerColor()] + "\n" +
-                "果实：" + fruitArray[bean.getFruitType()] + "\n" +
-                "果实颜色：" + fruitColorArray[bean.getFruitColor()] + "\n"
-        );
+//        text1.setText("鉴定编号\t" + tid + "\n" +
+//                getString(R.string.two_item_t,
+//                        "叶：", leafArray[bean.getLeafShape()]) + "\n" +
+//                getString(R.string.two_item_t,
+//                        "叶颜色：", leafColorArray[bean.getLeafColor()]) + "\n" +
+//                "花：" + flowerArray[bean.getFlowerType()] + "\n" +
+//                "花颜色：" + flowerColorArray[bean.getFlowerColor()] + "\n" +
+//                "果实：" + fruitArray[bean.getFruitType()] + "\n" +
+//                "果实颜色：" + fruitColorArray[bean.getFruitColor()] + "\n"
+//        );
         layout.addView(getView("鉴定编号", tid));
         layout.addView(getView("叶", leafArray[bean.getLeafShape()]));
         layout.addView(getView("叶颜色", leafColorArray[bean.getLeafColor()]));
@@ -232,23 +286,23 @@ public class Activity_expert_detail extends Activity_base {
         layout.addView(getView("果实颜色", fruitColorArray[bean.getFruitColor()]));
         ResultMessage<TreeSpecialDetail>.ExpertBean expert = treeSpeciesRm.getExpert();
         if (treeSpeciesRm.isChecked()) {
-//            text2.setText("鉴定时间：" + expert.getDate() + "\n" +
-//                    "专家：" + expert.getRealName() + "\n" +
-//                    "手机：" + expert.getUserTel()
-//
-//            );
             layout.addView(getView("鉴定结果", expert.getResult()));
             layout.addView(getView("鉴定时间", expert.getDate()));
             layout.addView(getView("专家", expert.getRealName()));
-            layout.addView(getView("手机", expert.getUserTel()));
+            telNum = expert.getUserTel();
+            layout.addView(getListenerView("手机", expert.getUserTel()));
         } else {
-//            text2.setText("未鉴定");
             layout.addView(getView("是否鉴定", "未鉴定"));
         }
     }
 
     private void initialView() {
 
+    }
+
+    @Override
+    public void onClickListener(View et) {
+        checkCallPermissionAndDial();
     }
 
     static class ResultMessage<T> {

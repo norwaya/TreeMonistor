@@ -43,7 +43,7 @@
     <!-- activity_title -->
     <string name="tree_info_detail">古树详细信息</string>
     <string name="app_title">古树名木信息系统</string>
-    <string name="activity_tree_query">古树信息查询</string>
+    <string name="activity_tree_query">古树信息统计</string>
     <string name="acitivty_important_query">重点古树查询</string>
     <string name="activity_import_monitor">重点古树监管</string>
     <string name="activity_expert_base_info">专家诊断信息库</string>
@@ -55,5 +55,5 @@
     <string name="tree_monitor">重点古树监管</string>
 
     <!-- Strings related to Settings -->
-
+    <string name="fragment_title_jd">鉴定</string>
 </resources>

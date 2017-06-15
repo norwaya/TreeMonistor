@@ -29,6 +29,7 @@ import com.xabaizhong.treemonistor.contant.UserSharedField;
 import com.xabaizhong.treemonistor.entity.DaoSession;
 import com.xabaizhong.treemonistor.entity.Weakness;
 import com.xabaizhong.treemonistor.entity.WeaknessDao;
+import com.xabaizhong.treemonistor.myview.ProgressDialogUtil;
 import com.xabaizhong.treemonistor.service.WebserviceHelper;
 import com.xabaizhong.treemonistor.service.model.ResultMessage;
 import com.xabaizhong.treemonistor.utils.FileUtil;
@@ -170,10 +171,7 @@ public class Activity_expert_weak2 extends Activity_base implements CommonRecycl
                     showToast("请先选择图片");
                     return;
                 }
-                if (mDisposable == null || mDisposable.isDisposed()) {
-                    pb.setVisibility(View.VISIBLE);
-                    upload();
-                }
+                upload();
 
                 break;
         }
@@ -182,7 +180,12 @@ public class Activity_expert_weak2 extends Activity_base implements CommonRecycl
     Disposable mDisposable;
 
     private void upload() {
+        final DialogInterface dialog = ProgressDialogUtil.getInstance(this).initial(null, new ProgressDialogUtil.CallBackListener() {
+            @Override
+            public void callBack(DialogInterface dialog) {
 
+            }
+        });
         Observable
                 .create(new ObservableOnSubscribe<String>() {
                     @Override
@@ -196,10 +199,10 @@ public class Activity_expert_weak2 extends Activity_base implements CommonRecycl
                         String result = WebserviceHelper.GetWebService("UploadTreeInfo", "AuthenticateInfoMethod", getUploadParas());
                         if (result != null) {
                             e.onNext(result);
+                            e.onComplete();
                         } else {
                             e.onError(new RuntimeException("error"));
                         }
-                        e.onComplete();
                     }
                 })
                 .subscribeOn(Schedulers.io())
@@ -223,11 +226,16 @@ public class Activity_expert_weak2 extends Activity_base implements CommonRecycl
 
                     @Override
                     public void onError(Throwable e) {
-
+                        if (dialog != null) {
+                            dialog.dismiss();
+                        }
                     }
 
                     @Override
                     public void onComplete() {
+                        if (dialog != null) {
+                            dialog.dismiss();
+                        }
                         startActivity(new Intent(Activity_expert_weak2.this, Activity_main.class));
                     }
                 });

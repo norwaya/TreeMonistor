@@ -3,11 +3,6 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
-    <TextView
-        android:text="病虫列表"
-        android:textAlignment="center"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
     <ListView
         android:divider="@null"
         android:id="@+id/lv"

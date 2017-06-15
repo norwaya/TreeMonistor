@@ -2,27 +2,22 @@ package com.xabaizhong.treemonistor.fragment;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
-import com.jcodecraeer.xrecyclerview.XRecyclerView;
-import com.squareup.picasso.Picasso;
 import com.xabaizhong.treemonistor.R;
 import com.xabaizhong.treemonistor.activity.Activity_main;
 import com.xabaizhong.treemonistor.activity.expert.Activity_expert_age;
@@ -32,13 +27,10 @@ import com.xabaizhong.treemonistor.activity.expert.Activity_expert_weak;
 import com.xabaizhong.treemonistor.activity.expert.Activity_monitor_growth;
 import com.xabaizhong.treemonistor.activity.expert.Activity_species;
 import com.xabaizhong.treemonistor.adapter.Fragment_expert_adapter;
-import com.xabaizhong.treemonistor.adapter.HeaderAndFooterWrapper;
 import com.xabaizhong.treemonistor.base.Fragment_base;
 import com.xabaizhong.treemonistor.contant.UserSharedField;
 import com.xabaizhong.treemonistor.entity.ResultOfExpert;
-import com.xabaizhong.treemonistor.service.AsyncTaskRequest;
 import com.xabaizhong.treemonistor.service.WebserviceHelper;
-import com.xabaizhong.treemonistor.utils.RecycleViewDivider;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,17 +42,15 @@ import java.util.Set;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Unbinder;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import terranovaproductions.newcomicreader.FloatingActionMenu;
-
-import static android.support.v7.widget.RecyclerView.VERTICAL;
 
 /**
  * Created by admin on 2017/2/24.
@@ -68,20 +58,19 @@ import static android.support.v7.widget.RecyclerView.VERTICAL;
 
 public class Fragment_expert extends Fragment_base implements Fragment_expert_adapter.OnClickListener {
     String TAG = "fragment-expert";
-    /* @BindView(R.id.menu_yellow)
-     FloatingActionMenu menuYellow;
-     @BindView(R.id.fab_tree_unknow)
-     FloatingActionButton fabTreeUnknow;
-     @BindView(R.id.fab_tree_weakness)
-     FloatingActionButton fabTreeWeakness;
-     private Context context;*/
-    @BindView(R.id.swipe_layout)
-    SwipeRefreshLayout refreshLayout;
     @BindView(R.id.lv)
     ListView lv;
     @BindView(R.id.fab_father)
     FloatingActionMenu fabFather;
-
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.float_btn)
+    FloatingActionButton floatBtn;
+    @BindView(R.id.collapsing_toolbar)
+    CollapsingToolbarLayout collapsingToolbar;
+    @BindView(R.id.appbar)
+    AppBarLayout appbar;
+    Unbinder unbinder;
 
 
     @Override
@@ -90,6 +79,7 @@ public class Fragment_expert extends Fragment_base implements Fragment_expert_ad
     }
 
     boolean isShow;
+
 
     @Nullable
     @Override
@@ -100,7 +90,7 @@ public class Fragment_expert extends Fragment_base implements Fragment_expert_ad
         View view = null;
         if (roles.contains("3")) {
             view = inflater.inflate(R.layout.fragment_expert, container, false);
-            ButterKnife.bind(this, view);
+            unbinder = ButterKnife.bind(this, view);
             initView();
             isShow = true;
         } else {
@@ -110,6 +100,7 @@ public class Fragment_expert extends Fragment_base implements Fragment_expert_ad
             showToast("此用户不具备该权限，无法使用此功能");
             isShow = false;
         }
+
         return view;
     }
 
@@ -117,50 +108,30 @@ public class Fragment_expert extends Fragment_base implements Fragment_expert_ad
     @Override
     public void onStart() {
         super.onStart();
-        if (isShow)
-            request();
+        if (isShow) {
+            if (!fabFather.isOpened()) {
+                floatBtn.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     Fragment_expert_adapter adapter;
 
     private void initView() {
         initialFloatView();
-       /* menuYellow.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
-            @Override
-            public void onMenuToggle(boolean opened) {
-                Log.d(TAG, "onMenuToggle: " + opened);
-            }
-        });*/
-
-        View view = LayoutInflater.from(context).inflate(R.layout.fragment_expert_header, null);
-        /*view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 200));*/
-        ImageView iv = (ImageView) view.findViewById(R.id.iv);
-        Picasso.with(context)
-                .load(R.drawable.tree_header)
-                .into(iv);
-
-       /* LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);*/
-      /*  xRecyclerView.addHeaderView(view);*/
+        collapsingToolbar.setExpandedTitleColor(Color.WHITE);
+        collapsingToolbar.setCollapsedTitleTextColor(Color.WHITE);
+        toolbar.setTitleTextColor(Color.WHITE);
+        toolbar.setTitle("鉴定");
         adapter = new Fragment_expert_adapter(context);
         adapter.setOnClickListener(this);
         lv.setAdapter(adapter);
-//        recyclerView.setPullRefreshEnabled(true);
-//        recyclerView.setLoadingMoreEnabled(true);
-        lv.addHeaderView(view);
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                request();
-            }
-        });
-
+        request();
     }
 
     private void initialFloatView() {
         fabFather.setIsCircle(false);
         fabFather.setmItemGap(20);
-
         fabFather.setOnMenuItemClickListener(new FloatingActionMenu.OnMenuItemClickListener() {
             @Override
             public void onMenuItemClick(FloatingActionMenu floatingActionMenu, int i, FloatingActionButton floatingActionButton) {
@@ -201,9 +172,9 @@ public class Fragment_expert extends Fragment_base implements Fragment_expert_ad
                     @Override
                     public void subscribe(ObservableEmitter<String> e) throws Exception {
                         String result = null;
-                        try{
-                           result =  WebserviceHelper.GetWebService("CheckUp", "Query_CheckResult1", map);
-                        }catch (Exception ex){
+                        try {
+                            result = WebserviceHelper.GetWebService("CheckUp", "Query_CheckResult1", map);
+                        } catch (Exception ex) {
                             ex.printStackTrace();
                         }
                         if (result == null) {
@@ -228,25 +199,23 @@ public class Fragment_expert extends Fragment_base implements Fragment_expert_ad
                         ResultMessage rm = new Gson().fromJson(value, ResultMessage.class);
                         if (rm.getErrorCode() == 0) {
                             adapter.setResource(rm.getList());
-                            Log.i(TAG, "onNext: "+Thread.currentThread().getName());
+//                            Log.i(TAG, "onNext: " + Thread.currentThread().getName());
                         }
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        refreshLayout.setRefreshing(false);
+//                        refreshLayout.setRefreshing(false);
                         showToast("解析数据失败");
-                        Log.i(TAG, "onError: ");
+//                        Log.i(TAG, "onError: ");
                     }
 
                     @Override
                     public void onComplete() {
-                        Log.i(TAG, "onComplete: ");
-                        refreshLayout.setRefreshing(false);
+                        showToast("刷新完成");
                     }
                 });
     }
-
 
 
     @Override
@@ -258,15 +227,9 @@ public class Fragment_expert extends Fragment_base implements Fragment_expert_ad
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-    }
-
-    @OnClick(R.id.fab_main)
-    public void onViewClicked() {
-        if (fabFather.isOpened()) {
-            fabFather.close();
-        } else {
-            fabFather.open();
-        }
+       if(unbinder!=null){
+           unbinder.unbind();
+       }
 
     }
 
@@ -278,6 +241,24 @@ public class Fragment_expert extends Fragment_base implements Fragment_expert_ad
         i.putExtra("tid", resultOfExpert.getTID());
         i.putExtra("type", resultOfExpert.getAuthType());
         startActivity(i);
+    }
+
+    @OnClick({R.id.float_btn, R.id.fab_main})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.float_btn:
+                request();
+                break;
+            case R.id.fab_main:
+                if (fabFather.isOpened()) {
+                    fabFather.close();
+                    floatBtn.setVisibility(View.VISIBLE);
+                } else {
+                    fabFather.open();
+                    floatBtn.setVisibility(View.INVISIBLE);
+                }
+                break;
+        }
     }
 
 

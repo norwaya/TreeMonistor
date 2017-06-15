@@ -30,6 +30,7 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
     <uses-permission android:name="android.permission.READ_PROFILE"/>
     <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
 
     <application
         android:name=".base.App"
@@ -178,8 +179,8 @@
         <activity
             android:name=".activity.base_data.Activity_pic_vp"
             android:label="图片"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme_transparent"/>
         <activity
             android:name=".activity.expert_zd.Activity_expert_zd"
             android:label="专家诊断"
@@ -238,8 +239,7 @@
                 </action>
             </intent-filter>
         </service>
-        <service android:name=".service.service_notice.NoticeService"
-            >
+        <service android:name=".service.service_notice.NoticeService">
             <intent-filter>
                 <action android:name="com.action.monitor_notice_service"/>
                 <category android:name="android.intent.category.DEFAULT"/>

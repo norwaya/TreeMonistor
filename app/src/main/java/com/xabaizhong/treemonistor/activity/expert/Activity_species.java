@@ -181,6 +181,7 @@ public class Activity_species extends Activity_base implements C_info_gather_ite
         } else {
             if (list.size() < 1) {
                 showToast("添加图片");
+                cancelDialog(dialog);
             } else {
                 new AsyncTask<Void, Void, String>() {
                     @Override

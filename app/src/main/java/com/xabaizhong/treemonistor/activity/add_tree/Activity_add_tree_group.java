@@ -71,7 +71,6 @@ public class Activity_add_tree_group extends Activity_base {
     private static final int REQUEST_IMAGE = 0x100;
     ArrayList<String> list;
     Disposable disposable;
-
     @BindView(R.id.tree_id)
     C_info_gather_item1 treeId;
     @BindView(R.id.research_date)
@@ -150,6 +149,7 @@ public class Activity_add_tree_group extends Activity_base {
     }
 
     private static final int CNAME_CODE = 831;
+
     private void initClickListener() {
         researchDate.setCallback_mid(new C_info_gather_item1.Mid_CallBack() {
             @Override
@@ -166,7 +166,7 @@ public class Activity_add_tree_group extends Activity_base {
         mainTreeName.setCallback_mid(new C_info_gather_item1.Mid_CallBack() {
             @Override
             public void onClickListener(View et) {
-                startActivityForResult(new Intent(Activity_add_tree_group.this,Activity_tree_cname.class),CNAME_CODE);
+                startActivityForResult(new Intent(Activity_add_tree_group.this, Activity_tree_cname.class), CNAME_CODE);
             }
         });
         aspect.setCallback_mid(new C_info_gather_item1.Mid_CallBack() {
@@ -246,7 +246,7 @@ public class Activity_add_tree_group extends Activity_base {
                 if (resultCode == 100) {
                     Activity_map.LocationBox box = data.getParcelableExtra("location");
                     if (box != null) {
-                        
+
                         treeGroup.setPlaceName(box.getStreet() + box.getSematicDescription());
                         treeGroup.setRegion(box.getProvince() + box.getCity() + box.getDistrict());
 
@@ -257,20 +257,23 @@ public class Activity_add_tree_group extends Activity_base {
 
                 break;
             case CNAME_CODE:
-                TreeSpecial tree = data.getParcelableExtra("special");
-                if (tree != null) {
-                    mainTreeName.setText(tree.getCname());
-                    treeGroup.setMainTreeName(tree.getCname());
-                    treeGroup.setAimsBelong(tree.getBelong());
-                    treeGroup.setAimsTree(tree.getCname());
-                    treeGroup.setAimsFamily(tree.getFamily());
+                if (resultCode == Activity_tree_cname.REQUEST_CODE_CNAME_RESULT) {
+                    TreeSpecial tree = data.getParcelableExtra("special");
+                    if (tree != null) {
+                        mainTreeName.setText(tree.getCname());
+                        treeGroup.setMainTreeName(tree.getCname());
+                        treeGroup.setAimsBelong(tree.getBelong());
+                        treeGroup.setAimsTree(tree.getCname());
+                        treeGroup.setAimsFamily(tree.getFamily());
+                    }
                 }
                 break;
-
             case REQUEST_CODE_TREESPECIES:
-                TreeSpecial treeSpecial = data.getParcelableExtra("special");
-                if (treeSpecial != null) {
-                    treeMap.setMapViewValue(treeSpecial);
+                if (resultCode == Activity_tree_cname.REQUEST_CODE_CNAME_RESULT) {
+                    TreeSpecial treeSpecial = data.getParcelableExtra("special");
+                    if (treeSpecial != null) {
+                        treeMap.setMapViewValue(treeSpecial);
+                    }
                 }
                 break;
             default:
@@ -286,7 +289,7 @@ public class Activity_add_tree_group extends Activity_base {
             fillData();
             saveDao();
             showToast("保存成功");
-            startActivity(new Intent(this,Activity_add_tree_group.class));
+            startActivity(new Intent(this, Activity_add_tree_group.class));
             finish();
         } else {
             showToast(checkStr);
@@ -311,6 +314,7 @@ public class Activity_add_tree_group extends Activity_base {
 
         List<Map<String, Object>> maps = treeMap.getTreeMap();
         TreeMap treeMap;
+
         for (Map<String, Object> map : maps) {
             treeMap = new TreeMap(null, id, map.get("name").toString(), Integer.parseInt(map.get("num").toString()));
             treeMapDao.save(treeMap);
@@ -321,6 +325,7 @@ public class Activity_add_tree_group extends Activity_base {
     TreeGroupDao treeGroupDao;
     TreeGroupPicDao picDao;
     TreeMapDao treeMapDao;
+
     private void initialDao() {
         DaoSession daoSession = ((App) getApplication()).getDaoSession();
         treeTypeInfoDao = daoSession.getTreeTypeInfoDao();
@@ -357,9 +362,9 @@ public class Activity_add_tree_group extends Activity_base {
         if (researchDate.getText().equals("")) {
             return "选择调查日期";
         }
-        if (region.getText().equals("")) {
-            return "请选择地理信息";
-        }
+//        if (region.getText().equals("")) {
+//            return "请选择地理信息";
+//        }
         if (!evevation.getText().matches("^\\d+[^\\d]+\\d+$")) {
             return "海拔格式错误";
         }
@@ -368,6 +373,9 @@ public class Activity_add_tree_group extends Activity_base {
         }
         if (mainTreeName.getText().equals("")) {
             return "请填写主要树种";
+        }
+        if(!checkTreeMap()){
+            return "树种-数量 至少填一项";
         }
         if (szjx.getText().equals("")) {
             return "请填写四至界限";
@@ -417,6 +425,10 @@ public class Activity_add_tree_group extends Activity_base {
         return null;
     }
 
+    private boolean checkTreeMap() {
+        return treeMap.getTreeMap().size() > 0;
+    }
+
     String json;
 
     private void fillData() {
@@ -424,6 +436,7 @@ public class Activity_add_tree_group extends Activity_base {
 //        treeTypeInfo.setRecoredPerson(researchPersion.getText());
         treeTypeInfo.setTreeId(treeId.getText());
         initialElvation();
+        treeGroup.setPlaceName(placeName.getText());
         treeGroup.setMainTreeName(mainTreeName.getText());
         treeGroup.setSZJX(szjx.getText());
         treeGroup.setXiaMuType(xiaMuType.getText());
@@ -447,7 +460,7 @@ public class Activity_add_tree_group extends Activity_base {
     }
 
     private void initialElvation() {
-        treeGroup.setEvevation(evevation.getText().replaceFirst("[^\\d]+",":"));
+        treeGroup.setEvevation(evevation.getText().replaceFirst("[^\\d]+", ":"));
     }
 
     private String userId() {

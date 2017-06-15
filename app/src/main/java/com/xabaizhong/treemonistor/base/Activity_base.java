@@ -5,8 +5,10 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.xabaizhong.treemonistor.activity.add_tree.Activity_tree_cname;
 import com.xabaizhong.treemonistor.contant.Contant;
 
 import java.text.SimpleDateFormat;
@@ -26,6 +28,10 @@ public class Activity_base extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         this.TAG = getClass().getSimpleName();
         initSharedPreferences();
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     private void initSharedPreferences() {
@@ -61,5 +67,15 @@ public class Activity_base extends AppCompatActivity {
             date = new Date();
         return sdf.format(date);
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

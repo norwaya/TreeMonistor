@@ -166,7 +166,7 @@ public class Activity_tree_detailInfo extends Activity_base {
         String special = getResources().getStringArray(R.array.special)[specialIndex];
 
         int gsbzIndex = tree.getTreetype();
-        String gsbz = getResources().getStringArray(R.array.gsbz)[gsbzIndex];
+        String gsbz = getResources().getStringArray(R.array.gsbz)[gsbzIndex - 1];
 
         int ownIndex = Integer.parseInt(tree.getOwner()) - 1;
         String owner = getResources().getStringArray(R.array.owner)[ownIndex];
@@ -241,11 +241,14 @@ public class Activity_tree_detailInfo extends Activity_base {
 
     private void addPicView(final ResultMessage.ResultBean bean) {
         View view = getView("图片", bean.getPicInfo() != null ? bean.getPicInfo().size() + "" : "0");
-        C_info_gather_item1 cv = (C_info_gather_item1) view.findViewById(R.id.cv);
+        final C_info_gather_item1 cv = (C_info_gather_item1) view.findViewById(R.id.cv);
         cv.setCallback_mid(new C_info_gather_item1.Mid_CallBack() {
             @Override
             public void onClickListener(View et) {
                 Log.i(TAG, "onClickListener: pic");
+                if ("0".equals(cv.getText())) {
+                    return;
+                }
                 Intent i = new Intent(Activity_tree_detailInfo.this, Activity_pic_vp.class);
                 i.putStringArrayListExtra("picList", bean.getPicInfo());
                 startActivity(i);

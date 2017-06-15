@@ -3,7 +3,7 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimary">@color/wx_green</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/wx_green</item>
     </style>
@@ -12,6 +12,12 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+
+    <style name="AppTheme_transparent" parent="AppTheme.NoActionBar">
+        <item name="android:windowBackground">@color/translateColor</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+
     <style name="testDialog" parent="@android:style/Theme.Translucent">
         <item name="android:windowFrame">@null</item>
         <item name="android:windowNoTitle">true</item>//无标题

@@ -129,7 +129,7 @@ public class Fragment_setting extends Fragment_base {
     private void initialToolbar() {
         toolbar.setTitle("设置");
         toolbar.setTitleTextColor(Color.WHITE);
-        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+//        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
     }
 
     private void initNotice() {

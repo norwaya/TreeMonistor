@@ -142,7 +142,7 @@ public class Activity_expert_bug extends Activity_base implements C_info_gather_
             } else {
                 request();
             }
-        }else{
+        } else {
             showToast("填写完整信息");
         }
     }
@@ -156,7 +156,6 @@ public class Activity_expert_bug extends Activity_base implements C_info_gather_
         });
 
 
-
         Observable
                 .create(new ObservableOnSubscribe<String>() {
                     @Override
@@ -164,8 +163,13 @@ public class Activity_expert_bug extends Activity_base implements C_info_gather_
                         FileUtil.clearFileDir();
                         scaleImages();
                         fillStrImages();
-                        String result = WebserviceHelper.GetWebService(
-                                "UploadTreeInfo", "AuthenticateInfoMethod", getUploadParams());
+                        String result = null;
+                        try {
+                           result =  WebserviceHelper.GetWebService(
+                                    "UploadTreeInfo", "AuthenticateInfoMethod", getUploadParams());
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
                         if (result == null) {
                             e.onError(new RuntimeException("服务器无返回值"));
                         } else {
@@ -185,7 +189,11 @@ public class Activity_expert_bug extends Activity_base implements C_info_gather_
                     public void onNext(String value) {
                         Log.i(TAG, "onNext: " + value);
                         ResultMessage rm = new Gson().fromJson(value, ResultMessage.class);
-                        showToast(rm.getMessage());
+                        if (rm.getError_code() == 0) {
+                            showToast("上传成功");
+                        }else{
+                            showToast(rm.getMessage());
+                        }
                         mDisposable = null;
                     }
 
@@ -209,7 +217,8 @@ public class Activity_expert_bug extends Activity_base implements C_info_gather_
                     }
                 });
     }
-//    <UserID>string</UserID>
+
+    //    <UserID>string</UserID>
 //      <date>string</date>
 //      <Type>int</Type>
 //      <areaId>string</areaId>
@@ -380,7 +389,6 @@ public class Activity_expert_bug extends Activity_base implements C_info_gather_
                         if (jdResult.getErrorCode() == 0) {
                             initialDialog(value, jdResult.getResult());
                         } else {
-
                             initialDialog(value, null);
                         }
                     }

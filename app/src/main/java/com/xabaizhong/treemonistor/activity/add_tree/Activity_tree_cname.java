@@ -86,7 +86,7 @@ public class Activity_tree_cname extends Activity_base implements View.OnClickLi
         switch (item.getItemId()) {
             case android.R.id.home:
                 Activity_tree_cname.this.finish();
-                break;
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }

@@ -166,7 +166,7 @@ public class Fragment_tree extends Fragment_base implements Imonitor, C_info_gat
 
                     @Override
                     public void onNext(String value) {
-                        Log.i(TAG, "onNext: "+value);
+                        Log.i(TAG, "onNext: " + value);
                         resultMessage = new Gson().fromJson(value, ResultMessage.class);
                         if (resultMessage.getErrorCode() == 0) {
                             initBean();
@@ -261,7 +261,7 @@ public class Fragment_tree extends Fragment_base implements Imonitor, C_info_gat
         String special = getResources().getStringArray(R.array.special)[specialIndex];
 
         int gsbzIndex = tree.getTreetype();
-        String gsbz = getResources().getStringArray(R.array.gsbz)[gsbzIndex];
+        String gsbz = getResources().getStringArray(R.array.gsbz)[gsbzIndex - 1];
 
         int ownIndex = Integer.parseInt(tree.getOwner()) - 1;
         String owner = getResources().getStringArray(R.array.owner)[ownIndex];
@@ -603,7 +603,7 @@ public class Fragment_tree extends Fragment_base implements Imonitor, C_info_gat
                         break;
                     case Activity_add_tree.ResultCode.REQUEST_CODE_GSBZ:
                         mViewHolder.gsbz.setText(array[messageEvent.getId()]);
-                        tree.setTreetype((messageEvent.getId()));
+                        tree.setTreetype((messageEvent.getId()+1));
                         break;
                     case Activity_add_tree.ResultCode.REQUEST_CODE_OWNER:
                         mViewHolder.owner.setText(array[messageEvent.getId()]);

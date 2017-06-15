@@ -29,7 +29,7 @@ import butterknife.ButterKnife;
  * Created by Administrator on 2017/4/21 0021.
  */
 
-public class Activity_pic_vp extends Activity_base {
+public class Activity_pic_vp extends Activity_base implements View.OnClickListener {
     @BindView(R.id.vp)
     ViewPager vp;
     ArrayList<String> picList;
@@ -61,11 +61,20 @@ public class Activity_pic_vp extends Activity_base {
 
     private void initialView() {
         picList = getIntent().getStringArrayListExtra("picList");
+        if (picList == null || picList.size() == 0) {
+            finish();
+        }
+
         currentItem = getIntent().getIntExtra("current", 0);
         adapter = new ViewPagerAdapter(this);
         adapter.setSource(picList);
         vp.setAdapter(adapter);
         vp.setCurrentItem(currentItem);
+    }
+
+    @Override
+    public void onClick(View v) {
+        finish();
     }
 
     private class ViewPagerAdapter extends PagerAdapter {
@@ -87,7 +96,11 @@ public class Activity_pic_vp extends Activity_base {
                     ) {
                 View view = inflater.inflate(R.layout.image_item, null);
                 ImageView iv = ((ImageView) view.findViewById(R.id.image_item1));
-                Picasso.with(context).load(Uri.parse(uri)).into(iv);
+                iv.setOnClickListener(Activity_pic_vp.this);
+                Picasso.with(context).load(Uri.parse(uri))
+                        .placeholder(R.drawable.image_viewholder)
+                        .error(R.drawable.error_img)
+                        .into(iv);
                 mViewList.add(view);
                 Log.i(TAG, "setSource: " + uri);
             }

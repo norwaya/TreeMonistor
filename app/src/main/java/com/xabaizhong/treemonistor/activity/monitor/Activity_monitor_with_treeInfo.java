@@ -101,14 +101,14 @@ public class Activity_monitor_with_treeInfo extends Activity_base {
                     result = WebserviceHelper.GetWebService(
                             "CheckUp", "QueryTreeIDList_ImportantTree", map);
                 } catch (Exception ex) {
-                    e.onError(ex);
+                    ex.printStackTrace();
                 }
                 if (result == null) {
                     e.onError(new RuntimeException("返回为空"));
                 } else {
                     e.onNext(result);
+                    e.onComplete();
                 }
-                e.onComplete();
             }
         }).observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -129,6 +129,7 @@ public class Activity_monitor_with_treeInfo extends Activity_base {
                     @Override
                     public void onError(Throwable e) {
                         e.printStackTrace();
+                        dialog.dismiss();
                     }
 
                     @Override

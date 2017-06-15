@@ -1,15 +1,14 @@
 package com.xabaizhong.treemonistor.activity;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
 import com.xabaizhong.treemonistor.R;
 import com.xabaizhong.treemonistor.base.Activity_base;
 import com.xabaizhong.treemonistor.base.App;
@@ -18,12 +17,7 @@ import com.xabaizhong.treemonistor.entity.AreaCode;
 import com.xabaizhong.treemonistor.entity.AreaCodeDao;
 import com.xabaizhong.treemonistor.myview.C_info_gather_item1;
 import com.xabaizhong.treemonistor.service.WebserviceHelper;
-import com.xabaizhong.treemonistor.service.model.User;
-import com.xabaizhong.treemonistor.service.response.LoginResultMessage;
-import com.xabaizhong.treemonistor.utils.FileUtil;
 
-import java.io.Serializable;
-import java.net.ConnectException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -77,7 +71,7 @@ public class Activity_userInfo extends Activity_base {
                 String result = null;
                 try {
                     result = WebserviceHelper.GetWebService(
-                            "Login", "UserDetInfo", requestMap());
+                            "Login", "userDetailInfo ", requestMap());
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -98,11 +92,10 @@ public class Activity_userInfo extends Activity_base {
 
                     @Override
                     public void onNext(String value) {
-                        LoginResultMessage loginResultMessage = new Gson().fromJson(value, LoginResultMessage.class);
+                        ResultMessage loginResultMessage = new Gson().fromJson(value, ResultMessage.class);
                         Log.i(TAG, "onNext: " + value);
-                        if (loginResultMessage.getError_code() == 0) {
-                            User result = loginResultMessage.getResult();
-                            initInfo(result);
+                        if (loginResultMessage.getErrorCode() == 0) {
+                            initInfo(loginResultMessage.getResult());
                         } else {
                             addView("错误信息", "获取用户信息失败");
                         }
@@ -113,6 +106,7 @@ public class Activity_userInfo extends Activity_base {
                         mDisposable = null;
                         e.printStackTrace();
                     }
+
                     @Override
                     public void onComplete() {
                         mDisposable = null;
@@ -130,10 +124,14 @@ public class Activity_userInfo extends Activity_base {
         return "";
     }
 
-    private void initInfo(User result) {
-        addView("地理位置", getAreaName(result.getAreaID()));
+    private void initInfo(ResultMessage.ResultBean result) {
         addView("账号", result.getUserID());
+        addView("地理位置", getAreaName(result.getAreaID()));
+        addView("地理编号", result.getAreaID());
         addView("姓名", result.getRealName());
+        addView("性别", result.getUsersex() == 0 ? "男" : "女");
+        addView("手机", result.getUserTel());
+        addView("邮箱", result.getUserMail());
     }
 
     private void addView(String left, String mid) {
@@ -157,10 +155,155 @@ public class Activity_userInfo extends Activity_base {
 
     private Map<String, Object> requestMap() {
         Map<String, Object> map = new HashMap<>();
-        String userid = sharedPreferences.getString(UserSharedField.USERID, "null");
+        String userid = sharedPreferences.getString(UserSharedField.USERID, "");
         map.put("UserID", userid);
         map.put("Type", 1);
         return map;
     }
 
+    static class ResultMessage {
+
+
+        /**
+         * message : 登陆成功
+         * error_code : 0
+         * result : {"UserID":"610102001","RealName":"李丛峰","UserTel":"12345678910","AreaID":"610102","AreaName":"陕西省,西安市,新城区","UserMail":"123456789@qq.com","Usersex":0,"Explain":"(NULL)","PicStr":"~/Image/UserDetInfo/T003"}
+         */
+
+        @SerializedName("message")
+        private String message;
+        @SerializedName("error_code")
+        private int errorCode;
+        @SerializedName("result")
+        private ResultBean result;
+
+        public String getMessage() {
+            return message;
+        }
+
+        public void setMessage(String message) {
+            this.message = message;
+        }
+
+        public int getErrorCode() {
+            return errorCode;
+        }
+
+        public void setErrorCode(int errorCode) {
+            this.errorCode = errorCode;
+        }
+
+        public ResultBean getResult() {
+            return result;
+        }
+
+        public void setResult(ResultBean result) {
+            this.result = result;
+        }
+
+        public static class ResultBean {
+            /**
+             * UserID : 610102001
+             * RealName : 李丛峰
+             * UserTel : 12345678910
+             * AreaID : 610102
+             * AreaName : 陕西省,西安市,新城区
+             * UserMail : 123456789@qq.com
+             * Usersex : 0
+             * Explain : (NULL)
+             * PicStr : ~/Image/UserDetInfo/T003
+             */
+
+            @SerializedName("UserID")
+            private String UserID;
+            @SerializedName("RealName")
+            private String RealName;
+            @SerializedName("UserTel")
+            private String UserTel;
+            @SerializedName("AreaID")
+            private String AreaID;
+            @SerializedName("AreaName")
+            private String AreaName;
+            @SerializedName("UserMail")
+            private String UserMail;
+            @SerializedName("Usersex")
+            private int Usersex;
+            @SerializedName("Explain")
+            private String Explain;
+            @SerializedName("PicStr")
+            private String PicStr;
+
+            public String getUserID() {
+                return UserID;
+            }
+
+            public void setUserID(String UserID) {
+                this.UserID = UserID;
+            }
+
+            public String getRealName() {
+                return RealName;
+            }
+
+            public void setRealName(String RealName) {
+                this.RealName = RealName;
+            }
+
+            public String getUserTel() {
+                return UserTel;
+            }
+
+            public void setUserTel(String UserTel) {
+                this.UserTel = UserTel;
+            }
+
+            public String getAreaID() {
+                return AreaID;
+            }
+
+            public void setAreaID(String AreaID) {
+                this.AreaID = AreaID;
+            }
+
+            public String getAreaName() {
+                return AreaName;
+            }
+
+            public void setAreaName(String AreaName) {
+                this.AreaName = AreaName;
+            }
+
+            public String getUserMail() {
+                return UserMail;
+            }
+
+            public void setUserMail(String UserMail) {
+                this.UserMail = UserMail;
+            }
+
+            public int getUsersex() {
+                return Usersex;
+            }
+
+            public void setUsersex(int Usersex) {
+                this.Usersex = Usersex;
+            }
+
+            public String getExplain() {
+                return Explain;
+            }
+
+            public void setExplain(String Explain) {
+                this.Explain = Explain;
+            }
+
+            public String getPicStr() {
+                return PicStr;
+            }
+
+            public void setPicStr(String PicStr) {
+                this.PicStr = PicStr;
+            }
+        }
+    }
 }

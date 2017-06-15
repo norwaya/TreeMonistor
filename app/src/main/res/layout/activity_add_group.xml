@@ -58,7 +58,7 @@
                     style="@style/custom_edit_text_style"
                     app:left_text="地区信息"
                     app:mid_font_color="@color/wx_green"
-                    app:mid_text_hint="省市县"
+                    app:mid_text_hint="省市县 不联网的情况可以不填"
                     app:mid_type="read"/>
 
                 <com.xabaizhong.treemonistor.myview.C_info_gather_item1

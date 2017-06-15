@@ -152,7 +152,6 @@ public class Activity_welcome extends Activity_base {
 
             @Override
             public void onComplete() {
-//                if (login_suc()) {
                 work();
             }
         };
@@ -163,7 +162,7 @@ public class Activity_welcome extends Activity_base {
 
 //                        getApplicationContext().getFilesDir().listFiles();
                         e.onNext(SECOND);
-                        for (int i = SECOND; i > 0; i--) {
+                        for (int i = SECOND; i > 0 && cancelable; i--) {
                             Thread.sleep(1000);
                             e.onNext(i - 1);
                         }
@@ -192,15 +191,10 @@ public class Activity_welcome extends Activity_base {
 
 
     boolean flag = false;
-
+    boolean cancelable = true;
     @OnClick(R.id.activity_welcome_btn)
     public void onClick() {
-       /* if(flag){
-            if(disposable != null){
-                disposable.dispose();
-                work();
-            }
-        }*/
+        cancelable = false;
     }
 
     @Override

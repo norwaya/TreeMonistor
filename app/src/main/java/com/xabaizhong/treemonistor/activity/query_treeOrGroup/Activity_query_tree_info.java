@@ -102,14 +102,14 @@ public class Activity_query_tree_info extends Activity_base implements C_info_ga
                     result = WebserviceHelper.GetWebService(
                             "DataQuerySys", "QueryTreeInfoMethod1", getParams());
                 } catch (Exception ex) {
-                    e.onError(ex);
+                    ex.printStackTrace();
                 }
                 if (result == null) {
                     e.onError(new RuntimeException("返回为空"));
                 } else {
                     e.onNext(result);
+                    e.onComplete();
                 }
-                e.onComplete();
             }
         }).observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -126,7 +126,6 @@ public class Activity_query_tree_info extends Activity_base implements C_info_ga
                             layout.addView(getTitle(titleArray[listBean.getGroupIndex()]));
                             for (Bean.ListBean.ItemsBean item : listBean.getItems()) {
                                 layout.addView(getView(item.getClassical(), item.getNum() + "", listBean.getGroupIndex() + "" + item.getIndex()));
-
                             }
                         }
                     }

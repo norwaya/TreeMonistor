@@ -10,7 +10,6 @@ import org.ksoap2.SoapEnvelope;
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
-import org.ksoap2.transport.AndroidHttpTransport;
 import org.ksoap2.transport.HttpTransportSE;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -24,7 +23,7 @@ public class WebserviceHelper {
     static String remote = "http://117.34.105.28:8055/";
     static String TAG = "GetWebService";
 
-    public static boolean switch_ip = false;
+    public static boolean switch_ip = true;
 
     public static String getIp() {
         return switch_ip ? remote : local;

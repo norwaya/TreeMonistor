@@ -70,33 +70,33 @@ public class TreeGroupOp {
     }
 
 
-    public void op() {
-
-        RetrofitUtil.instance().create(ApiService.class).urlAndJson("pro01/upload.do", json)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(new Observer<ResultMessage>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onNext(ResultMessage value) {
-                        Log.d(TAG, "onNext: " + value.getMessage());
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.e(TAG, "onError: ", e);
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        Log.d(TAG, "onComplete: ");
-                    }
-                });
-    }
+//    public void op() {
+//
+//        RetrofitUtil.instance().create(ApiService.class).urlAndJson("pro01/upload.do", json)
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribeOn(Schedulers.io())
+//                .subscribe(new Observer<ResultMessage>() {
+//                    @Override
+//                    public void onSubscribe(Disposable d) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onNext(ResultMessage value) {
+//                        Log.d(TAG, "onNext: " + value.getMessage());
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//                        Log.e(TAG, "onError: ", e);
+//                    }
+//
+//                    @Override
+//                    public void onComplete() {
+//                        Log.d(TAG, "onComplete: ");
+//                    }
+//                });
+//    }
 
 
 }

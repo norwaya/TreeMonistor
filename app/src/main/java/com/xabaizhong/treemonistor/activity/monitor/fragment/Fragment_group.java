@@ -433,9 +433,9 @@ public class Fragment_group extends Fragment_base implements Imonitor {
         if (mViewHolder.researchDate.getText().equals("")) {
             return "选择调查日期";
         }
-        if (mViewHolder.region.getText().equals("")) {
-            return "请选择地理信息";
-        }
+//        if (mViewHolder.region.getText().equals("")) {
+//            return "请选择地理信息";
+//        }
         if (!mViewHolder.evevation.getText().matches("^\\d+[^\\d]+\\d+$")) {
             return "海拔格式错误";
         }

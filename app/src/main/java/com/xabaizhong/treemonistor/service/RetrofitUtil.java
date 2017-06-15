@@ -13,50 +13,46 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 /**
  * Created by admin on 2017/3/1.
  */
 
 public class RetrofitUtil {
-    private static Retrofit retrofit;
-        private final static String url = "http://v.juhe.cn/";
-//        private final static String url = "http://192.168.0.118:8055/";
-
-//    private final static String url = "http://baizhong.applinzi.com/";
-
-    public static Retrofit instance() {
-        if (retrofit == null)
-            synchronized (RetrofitUtil.class) {
-                if (retrofit == null)
-                    retrofit = getRetrofit();
-            }
-        return retrofit;
-    }
-
-    /**
-     * "http://117.34.115.230:8080/spring/"
-     *
-     * @return
-     */
-    private static Retrofit getRetrofit() {
-       /* Strategy strategy = new AnnotationStrategy();
-        Serializer serializer = new Persister(strategy);*/
-
-        Gson gson = new GsonBuilder().setLenient().create();/////
-        Retrofit.Builder builder = new Retrofit.Builder().baseUrl(url)
-                .client(client().build())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                /*.addConverterFactory(SimpleXmlConverterFactory.create(serializer))*/
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .addConverterFactory(ScalarsConverterFactory.create());
-
-        return builder.build();
-    }
+//    private static Retrofit retrofit;
+//        private final static String url = "http://v.juhe.cn/";
+////        private final static String url = "http://192.168.0.118:8055/";
+//
+////    private final static String url = "http://baizhong.applinzi.com/";
+//
+//    public static Retrofit instance() {
+//        if (retrofit == null)
+//            synchronized (RetrofitUtil.class) {
+//                if (retrofit == null)
+//                    retrofit = getRetrofit();
+//            }
+//        return retrofit;
+//    }
+//
+//    /**
+//     * "http://117.34.115.230:8080/spring/"
+//     *
+//     * @return
+//     */
+//    private static Retrofit getRetrofit() {
+//       /* Strategy strategy = new AnnotationStrategy();
+//        Serializer serializer = new Persister(strategy);*/
+//
+//        Gson gson = new GsonBuilder().setLenient().create();/////
+//        Retrofit.Builder builder = new Retrofit.Builder().baseUrl(url)
+//                .client(client().build())
+//                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+//                /*.addConverterFactory(SimpleXmlConverterFactory.create(serializer))*/
+//                .addConverterFactory(GsonConverterFactory.create(gson))
+//                .addConverterFactory(ScalarsConverterFactory.create());
+//
+//        return builder.build();
+//    }
 
     private static OkHttpClient.Builder client() {
         return new OkHttpClient.Builder()

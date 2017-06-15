@@ -223,6 +223,12 @@ public class Activity_add_tree extends Activity_base {
         longitude.setText(tree.getOrdinate());
         latitude.setText(tree.getAbscissa());
         elevation.setText(tree.getEvevation() + "");
+        if (tree.getRegion() != null) {
+            region.setText(tree.getRegion());
+        }
+        if (tree.getSmallName() != null) {
+            detailAddress.setText(tree.getSmallName());
+        }
         town.setText(tree.getTown());
         village.setText(tree.getVillage());
         initialTreeSpeciesInfo();
@@ -245,7 +251,7 @@ public class Activity_add_tree extends Activity_base {
         special.setText(getResources().getStringArray(R.array.special)[specialIndex]);
 
         int gsbzIndex = tree.getTreetype();
-        gsbz.setText(getResources().getStringArray(R.array.gsbz)[gsbzIndex]);
+        gsbz.setText(getResources().getStringArray(R.array.gsbz)[gsbzIndex - 1]);
 
         int ownIndex = Integer.parseInt(tree.getOwner()) - 1;
         owner.setText(getResources().getStringArray(R.array.owner)[ownIndex]);
@@ -471,7 +477,7 @@ public class Activity_add_tree extends Activity_base {
                 fillTree();
             } catch (Exception e) {
 
-                Log.i(TAG, "onClick: +error+++"+e.getMessage());
+                Log.i(TAG, "onClick: +error+++" + e.getMessage());
             }
             checkLevel();
             saveDao();
@@ -620,8 +626,16 @@ public class Activity_add_tree extends Activity_base {
     private void checkLevel() {
 
         int treeAge = (int) tree.getRealAge();
+        if (treeAge >= 1000) {
+            tree.setTreeLevel("1");
+            if (tree.getTreetype() == 2) {
+                tree.setTreetype(3);
+            }
+            return;
+        }
 
-        if (tree.getTreetype() == 0) {
+
+        if (tree.getTreetype() == 1) {
             switch (treeAge / 100) {
                 case 0:
                 case 1:
@@ -640,15 +654,14 @@ public class Activity_add_tree extends Activity_base {
                     tree.setTreeLevel("2");
                     break;
                 default:
-                    tree.setTreeLevel("1");
+                    tree.setTreeLevel("4");
                     break;
             }
 
         } else {
             tree.setTreeLevel("2");
-            if (treeAge / 100 > 10) {
-                tree.setTreeLevel("1");
-                tree.setTreetype(2);
+            if (tree.getTreetype() == 2) {
+                tree.setTreetype(3);
             }
         }
 
@@ -675,7 +688,7 @@ public class Activity_add_tree extends Activity_base {
         treeTypeInfo.setTreeId(id);
         treeTypeInfo.setIvst(tch.getText());
 
-
+        tree.setSmallName(detailAddress.getText());
         tree.setTown(town.getText());
         tree.setVillage(village.getText());
         tree.setAbscissa(latitude.getText());
@@ -917,7 +930,7 @@ public class Activity_add_tree extends Activity_base {
                         break;
                     case REQUEST_CODE_GSBZ:
                         gsbz.setText(array[messageEvent.getId()]);
-                        tree.setTreetype((messageEvent.getId()));
+                        tree.setTreetype((messageEvent.getId() + 1));
                         break;
                     case REQUEST_CODE_OWNER:
                         owner.setText(array[messageEvent.getId()]);

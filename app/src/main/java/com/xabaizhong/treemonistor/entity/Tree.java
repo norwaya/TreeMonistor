@@ -171,7 +171,7 @@ public class Tree {
     private int treearea = 0;
     @Expose
     @SerializedName("treetype")
-    private int treetype = 0;
+    private int treetype = 1;
     @Expose
     private String town = "";
     @Expose
