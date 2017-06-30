@@ -21,7 +21,7 @@ import okhttp3.RequestBody;
 /**
  * Created by admin on 2017/3/16.
  */
-
+@Deprecated
 public class TreeGroupOp {
     String TAG = "OP";
     private static TreeGroupOp treeGroupOp = null;

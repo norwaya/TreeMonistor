@@ -58,7 +58,9 @@ import io.reactivex.schedulers.Schedulers;
 import static com.xabaizhong.treemonistor.contant.Contant.KV.FIRST_INIT;
 import static com.xabaizhong.treemonistor.contant.Contant.KV.NOTICE_PUSH;
 
-
+/**
+ * 欢迎页
+ */
 public class Activity_welcome extends Activity_base {
     private static final int REQEUST_CODE_WRITER = 0x101;
     @BindView(R.id.activity_welcome_iv)

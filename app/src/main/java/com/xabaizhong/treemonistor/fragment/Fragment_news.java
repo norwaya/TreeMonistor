@@ -51,9 +51,8 @@ import io.reactivex.schedulers.Schedulers;
 import static android.support.v7.widget.RecyclerView.VERTICAL;
 
 /**
- * Created by admin on 2017/2/24.
+ * 新闻页
  */
-
 public class Fragment_news extends Fragment_base {
     String TAG = "fragment-news";
 

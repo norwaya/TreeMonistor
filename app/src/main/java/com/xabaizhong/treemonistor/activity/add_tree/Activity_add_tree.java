@@ -80,9 +80,8 @@ import static com.xabaizhong.treemonistor.activity.add_tree.Activity_add_tree.Re
 import static com.xabaizhong.treemonistor.activity.add_tree.Activity_add_tree.ResultCode.REQUEST_IMAGE;
 
 /**
- * Created by admin on 2017/2/28.
+ *  添加古树 视图页
  */
-
 public class Activity_add_tree extends Activity_base {
     ArrayList<String> mList;
 
@@ -303,7 +302,7 @@ public class Activity_add_tree extends Activity_base {
         specDesc.setText(tree.getSpecDesc());
         specStatDesc.setText(tree.getSpecStatDesc());
     }
-
+    // data  -> view 将树种数据 填充到 视图里面
     private void initialTreeSpeciesInfo() {
         List<TreeSpecial> sList = treeSepcialDao.queryBuilder().where(TreeSpecialDao.Properties.TreeSpeId.eq(tree.getTreespeid())).build().list();
         if (sList.size() > 0) {
@@ -317,7 +316,7 @@ public class Activity_add_tree extends Activity_base {
         layoutPb.setVisibility(View.INVISIBLE);
         initCallBack();
     }
-
+    // 回调函数 初始化
     private void initCallBack() {
         //中文名
         cname.setCallback_mid(new C_info_gather_item1.Mid_CallBack() {
@@ -457,7 +456,7 @@ public class Activity_add_tree extends Activity_base {
 
     }
 
-
+    // 跳转  选择图片 页面
     private void selectPic() {
         MultiImageSelector.create(getApplicationContext())
                 .showCamera(true) // show camera or not. true by default
@@ -467,7 +466,7 @@ public class Activity_add_tree extends Activity_base {
                 .origin(mList) // original select data set, used width #.multi()
                 .start(Activity_add_tree.this, REQUEST_IMAGE);
     }
-
+    // 处理 点击事件
     @OnClick(R.id.btn)
     public void onClick() {
 
@@ -492,6 +491,7 @@ public class Activity_add_tree extends Activity_base {
         }
     }
 
+    // 开启新的 页面
     private void restartActivity() {
 
         startActivity(new Intent(this, Activity_add_tree.class));
@@ -499,7 +499,7 @@ public class Activity_add_tree extends Activity_base {
     }
 
     /**
-     * save bean to database
+     * save bean to database 保存 数据 到数据库
      */
     private void saveDao() {
         treeDao.save(tree);
@@ -523,7 +523,7 @@ public class Activity_add_tree extends Activity_base {
     TreeTypeInfoDao treeTypeInfoDao;
     TreeSpecialDao treeSepcialDao;
     DaoSession daoSession;
-
+    //
     private void initDaoSession() {
         daoSession = ((App) getApplication()).getDaoSession();
         picDao = daoSession.getTreePicDao();
@@ -531,7 +531,7 @@ public class Activity_add_tree extends Activity_base {
         treeTypeInfoDao = daoSession.getTreeTypeInfoDao();
         treeSepcialDao = daoSession.getTreeSpecialDao();
     }
-
+//  检查用户 输入
     String check() {
         if (!treeId.getText().matches("\\d{11}")) {
             return "古树编号为 11 位";
@@ -622,7 +622,7 @@ public class Activity_add_tree extends Activity_base {
         }
         return null;
     }
-
+    // 检查 等级
     private void checkLevel() {
 
         int treeAge = (int) tree.getRealAge();
@@ -667,7 +667,7 @@ public class Activity_add_tree extends Activity_base {
 
     }
 
-
+    @Deprecated
     private Map<String, Object> getParms() {
         Map<String, Object> map = new HashMap<>();
         String user_id = sharedPreferences.getString(UserSharedField.USERID, "");
@@ -678,7 +678,7 @@ public class Activity_add_tree extends Activity_base {
     }
 
     String json;
-
+    // data -> beans
     private void fillTree() {
         treeTypeInfo.setTypeId(0);
         treeTypeInfo.setAreaId(areaId());
@@ -719,11 +719,11 @@ public class Activity_add_tree extends Activity_base {
         tree.setUserID(userId());
 
     }
-
+    // 获取 userid
     private String userId() {
         return sharedPreferences.getString(UserSharedField.USERID, "");
     }
-
+        // 获取 areaid
     private String areaId() {
         return sharedPreferences.getString(UserSharedField.AREAID, "");
     }
@@ -801,7 +801,7 @@ public class Activity_add_tree extends Activity_base {
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
-
+    // 常量 接口
     public static interface ResultCode {
         int REQUEST_CODE_CNAME = 0x103;
 
@@ -834,7 +834,7 @@ public class Activity_add_tree extends Activity_base {
 
 
     String[] array;
-
+    // 展示 dialog 供 用户选择；
     public void showRadioDialog(int Request) {
         switch (Request) {
             case REQUEST_CODE_GROWTH:
@@ -903,7 +903,7 @@ public class Activity_add_tree extends Activity_base {
 
 
     Disposable disposable;
-
+    // 注册rxbus
     private void register() {
 
         disposable = RxBus.getDefault().toObservable(MessageEvent.class).subscribe(new Consumer<MessageEvent>() {

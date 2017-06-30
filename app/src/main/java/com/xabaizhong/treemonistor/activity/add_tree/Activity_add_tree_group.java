@@ -64,9 +64,8 @@ import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 
 
 /**
- * Created by admin on 2017/2/28.
+ * 添加古树群 视图页
  */
-
 public class Activity_add_tree_group extends Activity_base {
     private static final int REQUEST_IMAGE = 0x100;
     ArrayList<String> list;
@@ -374,7 +373,7 @@ public class Activity_add_tree_group extends Activity_base {
         if (mainTreeName.getText().equals("")) {
             return "请填写主要树种";
         }
-        if(!checkTreeMap()){
+        if (!checkTreeMap()) {
             return "树种-数量 至少填一项";
         }
         if (szjx.getText().equals("")) {

@@ -24,9 +24,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by admin on 2017/3/17.
+ * 虫害  list  页面；
  */
-
 public class Activity_base_pest extends Activity_base {
     @BindView(R.id.lv)
     ListView lv;

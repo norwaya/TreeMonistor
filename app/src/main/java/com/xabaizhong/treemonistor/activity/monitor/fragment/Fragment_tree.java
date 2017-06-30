@@ -88,9 +88,8 @@ import static com.xabaizhong.treemonistor.activity.monitor.fragment.Fragment_tre
 import static com.xabaizhong.treemonistor.activity.monitor.fragment.Fragment_tree.ResultCode.REQUEST_IMAGE;
 
 /**
- * Created by Administrator on 2017/6/7 0007.
+ * 管理 当前id  古树信息，修改，和序列化
  */
-
 public class Fragment_tree extends Fragment_base implements Imonitor, C_info_gather_item1.Mid_CallBack {
     String mTreeId;
     ViewHolder mViewHolder;

@@ -5,9 +5,8 @@ import com.xabaizhong.treemonistor.entity.AreaCode;
 import java.util.List;
 
 /**
- * Created by admin on 2017/3/14.
+ *  json 帮助类    地理编码 中文名 映射
  */
-
 public class AreaCodeHelper {
 
     private List<RECORDSBean> RECORDS;

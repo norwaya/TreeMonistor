@@ -29,9 +29,8 @@ import butterknife.OnClick;
 import static android.support.v7.widget.RecyclerView.VERTICAL;
 
 /**
- * Created by norwaya on 17-4-17.
+ * 专家鉴定  树病鉴定
  */
-
 public class Activity_expert_weak extends Activity_base implements CommonRecyclerViewAdapter.CallBack<Activity_expert_weak.ViewHolder, Tree_weak_part> {
     @BindView(R.id.rv)
     RecyclerView rv;
@@ -46,7 +45,7 @@ public class Activity_expert_weak extends Activity_base implements CommonRecycle
     }
 
     List<Tree_weak_part> mList;
-
+    //  databse  -> views
     private void fillData() {
 
         DaoSession daoSession = ((App) getApplication()).getDaoSession();
@@ -56,7 +55,7 @@ public class Activity_expert_weak extends Activity_base implements CommonRecycle
     }
 
     Activity_expert_weak_adapter adapter;
-
+    // 初始化 adapters
     private void initialView() {
 
         //initial adapter;

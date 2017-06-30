@@ -33,9 +33,8 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 /**
- * Created by Administrator on 2017/4/6 0006.
+ *用户详情
  */
-
 public class Activity_userInfo extends Activity_base {
     @BindView(R.id.layout)
     LinearLayout layout;

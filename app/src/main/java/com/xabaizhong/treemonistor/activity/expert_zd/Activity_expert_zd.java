@@ -32,9 +32,8 @@ import butterknife.ButterKnife;
 import static android.support.v7.widget.RecyclerView.VERTICAL;
 
 /**
- * Created by Administrator on 2017/4/24 0024.
+ *  专家诊断 结果 上报
  */
-
 public class Activity_expert_zd extends Activity_base implements XRecyclerView.LoadingListener, CommonRecyclerViewAdapter.CallBack<Activity_expert_zd.ViewHolder, Expert_obtain_list.CheckinfolistBean> {
     @BindView(R.id.xRecyclerView)
     XRecyclerView xRecyclerView;
@@ -85,7 +84,7 @@ public class Activity_expert_zd extends Activity_base implements XRecyclerView.L
 
     AsyncTaskRequest asyncTaskRequest;
     List<Expert_obtain_list.CheckinfolistBean> mList;
-
+    // 刷新 views  获取 后台的数据（鉴定结果）  显示到当前的listview中；
     private void refreshView() {
         /*<UserID>string</UserID>
       <CheckID>int</CheckID>

@@ -48,7 +48,9 @@ import static com.xabaizhong.treemonistor.activity.Activity_main.ReceiveConstant
 import static com.xabaizhong.treemonistor.activity.Activity_main.ReceiveConstant.RECEIVER_INTENT_UNBIND_SERVICE;
 import static com.xabaizhong.treemonistor.activity.Activity_main.ReceiveConstant.SERVICE_ACTION;
 import static com.xabaizhong.treemonistor.contant.Contant.KV.NOTICE_PUSH;
-
+/**
+ *主页面
+ */
 public class Activity_main extends Activity_base implements MyRadio.OnRadioCheckedListenter {
     final static int FRAGMENT_SIZE = 4;
     @BindView(R.id.tab_news)
@@ -88,7 +90,7 @@ public class Activity_main extends Activity_base implements MyRadio.OnRadioCheck
         super.onResume();
         Log.i(TAG, "onResume: ");
     }
-
+    // 根据版本号，适配 statusbar
     private void initStatusBar() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(getResources().getColor(R.color.wx_green));
@@ -148,7 +150,7 @@ public class Activity_main extends Activity_base implements MyRadio.OnRadioCheck
     }
 
     NoticeBroadCast noticeBroadCast;
-
+    // 定义 broadcastreceiver ，来实现消息的推送；
     private void initReceiver() {
         noticeBroadCast = new NoticeBroadCast();
         IntentFilter intneFilter = new IntentFilter();
@@ -162,7 +164,7 @@ public class Activity_main extends Activity_base implements MyRadio.OnRadioCheck
             sendBroadcast(i);
         }
     }
-
+    // 捕捉 用户的点击，可以替换fragmnet ，实现views 的切换；
     public void showFragment(int id) {
         FragmentManager fm = getSupportFragmentManager();
         Log.d(TAG, "showFragment: ");

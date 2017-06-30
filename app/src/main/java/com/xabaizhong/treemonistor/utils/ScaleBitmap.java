@@ -21,6 +21,12 @@ import java.io.PrintWriter;
  * Created by admin on 2016/6/7.
  */
 public class ScaleBitmap {
+    /**
+     *
+     * @param path  需要压缩的图片的路径
+     * @param toFile 存储的文件名
+     * @return 返回压缩的bitmap
+     */
     public static Bitmap getBitmap(String path, String toFile) {
         File file = new File(path);
         if (file.exists()) {
@@ -56,6 +62,11 @@ public class ScaleBitmap {
         return null;
     }
 
+    /**
+     *
+     * @param image  需要存储的bitmap  的对象
+     * @param toFile 文件名
+     */
     private static void compressImageAndWriteToFile(Bitmap image, String toFile) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         image.compress(Bitmap.CompressFormat.JPEG, 100, baos);//质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
@@ -88,6 +99,11 @@ public class ScaleBitmap {
 
     }
 
+    /**
+     *   压缩 bitmap  对象
+     * @param image
+     * @return
+     */
     private static Bitmap compressImage(Bitmap image) {
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();

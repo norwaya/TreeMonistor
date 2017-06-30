@@ -29,9 +29,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * Created by Administrator on 2017/4/24 0024.
+ * 过时
  */
-
+@Deprecated
 public class Activity_monitor_query_dateList extends Activity_base implements CommonRecyclerViewAdapter.CallBack<Activity_monitor_query_dateList.ViewHolder, String> {
 
     String treeId;

@@ -6,9 +6,8 @@ import com.xabaizhong.treemonistor.entity.TreeSpecial;
 import java.util.List;
 
 /**
- * Created by admin on 2017/3/13.
+ *  树种 帮助类
  */
-
 public class TreeSpecialHelper {
 
 

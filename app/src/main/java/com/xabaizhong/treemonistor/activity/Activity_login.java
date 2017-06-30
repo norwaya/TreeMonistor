@@ -49,9 +49,8 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 /**
- * Created by admin on 2017/3/3.
+ * 登录页面
  */
-
 public class Activity_login extends Activity_base implements View.OnFocusChangeListener {
 
     /*@BindView(R.id.area)
@@ -85,14 +84,10 @@ public class Activity_login extends Activity_base implements View.OnFocusChangeL
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
-        initObserver();
         initView();
     }
 
 
-    private void initObserver() {
-
-    }
 
     private void initView() {
         String areaId = sharedPreferences.getString(UserSharedField.USERID, "-1");
@@ -208,6 +203,10 @@ public class Activity_login extends Activity_base implements View.OnFocusChangeL
         }
     }
 
+    /**
+     *  初始化 图标，以及 实现监听接口；
+     * @param invisible
+     */
     private void initEye(boolean invisible) {
         if (invisible) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -227,6 +226,9 @@ public class Activity_login extends Activity_base implements View.OnFocusChangeL
     AsyncTaskRequest asyncTaskRequest = null;
     Dialog dialog;
 
+    /**
+     * 登录操作 发送登录参数到服务器
+     */
     private void attemptLogin() {
         dialog = ProgressDialogUtil.getInstance(this).initial("login...", new ProgressDialogUtil.CallBackListener() {
             @Override
@@ -275,6 +277,7 @@ public class Activity_login extends Activity_base implements View.OnFocusChangeL
 
     }
 
+
     @Override
     public void onBackPressed() {
         Log.i(TAG, "onBackPressed: pressed");
@@ -283,12 +286,16 @@ public class Activity_login extends Activity_base implements View.OnFocusChangeL
             Log.i(TAG, "onBackPressed: cancel dialog");
             dialog = null;
         } else {
-
             super.onBackPressed();
         }
 
 
     }
+
+    /**
+     * 取消dialog
+     * @param dialog
+     */
     private void cancelDialog(Dialog dialog){
         if (dialog != null) {
             dialog.dismiss();
@@ -297,6 +304,7 @@ public class Activity_login extends Activity_base implements View.OnFocusChangeL
         }
     }
     /**
+     * 验证用户名密码
      * @return true if username and pwd is ok
      */
     private boolean verification() {
@@ -314,41 +322,11 @@ public class Activity_login extends Activity_base implements View.OnFocusChangeL
         return map;
     }
 
-   /* AsyncTask asyncTask;
 
-    private void login() {
-        asyncTask = new AsyncTask<Void, Void, String>() {
-            @Override
-            protected String doInBackground(Void... params) {
-                try {
-                    return WebserviceHelper.GetWebService(
-                            "Login", "login", getLoginInfo());
-                } catch (ConnectException e) {
-                    e.printStackTrace();
-                    return "-1";
-                }
-            }
-
-            @Override
-            protected void onPostExecute(String s) {
-                pb.setVisibility(View.INVISIBLE);
-                if (s == null || "-1".equals(s)) {
-                    Log.i(TAG, "onPostExecute: " + s);
-                } else {
-                    Log.i(TAG, "onPostExecute: " + s);
-                    LoginResultMessage loginResult = new Gson().fromJson(s, LoginResultMessage.class);
-                    Log.i(TAG, "onPostExecute: " + loginResult.getMessage());
-                    if (loginResult.getError_code() == 0) {
-                        writerUserToFile(loginResult.getResult());
-                        finish();
-                    }
-
-                }
-            }
-        }.execute();
-    }
-*/
-
+    /**
+     * 登录成功 之后，把user 写进共享文件
+     * @param user
+     */
     private void writerUserToFile(User user) {
         Log.i(TAG, "writerUserToFile: " + user.toString());
 

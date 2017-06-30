@@ -20,6 +20,9 @@ import com.baidu.location.Poi;
 import java.lang.ref.WeakReference;
 import java.util.List;
 
+/**
+ * 单例  定位服务只有一个实例
+ */
 public class LocService {
     private static  LocService locService;
 

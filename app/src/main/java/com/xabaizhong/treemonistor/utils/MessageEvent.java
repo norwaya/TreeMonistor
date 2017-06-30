@@ -4,6 +4,9 @@ package com.xabaizhong.treemonistor.utils;
  * Created by admin on 2017/3/6.
  */
 
+/**
+ *  rxbus 用到的类，传递 消息
+ */
 public class MessageEvent {
     private int code;
     private int id;

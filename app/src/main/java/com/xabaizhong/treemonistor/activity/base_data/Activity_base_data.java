@@ -28,9 +28,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by admin on 2017/3/14.
+ * 基础库 list 页面；
  */
-
 public class Activity_base_data extends Activity_base implements AdapterView.OnItemClickListener {
     @BindView(R.id.lv)
     ListView lv;

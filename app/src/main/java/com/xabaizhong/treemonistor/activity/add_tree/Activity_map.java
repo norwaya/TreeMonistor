@@ -49,9 +49,8 @@ import butterknife.OnClick;
 import static com.baidu.mapapi.map.MyLocationConfiguration.LocationMode.FOLLOWING;
 
 /**
- * Created by admin on 2017/3/7.
+ * 地图定位，返回LocationBox（包含基础的定位信息） 类
  */
-
 public class Activity_map extends Activity_base {
     @BindView(R.id.bmapView)
     MapView bmapView;
@@ -115,7 +114,7 @@ public class Activity_map extends Activity_base {
 
 
     private static final int BAIDU_READ_PHONE_STATE = 100;
-
+    // 申请权限 api
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void requestPermission() {
         if (checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {

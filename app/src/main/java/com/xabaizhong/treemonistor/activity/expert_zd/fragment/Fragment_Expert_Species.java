@@ -43,7 +43,7 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 /**
- * Created by Administrator on 2017/4/24 0024.
+ * 树种 待鉴定信息 查看
  */
 public class Fragment_Expert_Species extends Fragment_base implements C_info_gather_item1.Mid_CallBack {
 

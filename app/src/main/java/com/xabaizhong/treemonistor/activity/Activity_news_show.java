@@ -17,9 +17,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by admin on 2017/3/7.
+ *  新闻详情页
  */
-
 public class Activity_news_show extends Activity {
     String url;
     String title;

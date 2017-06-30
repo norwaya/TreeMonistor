@@ -5,7 +5,7 @@ import android.os.Environment;
 /**
  * Created by admin on 2017/3/16.
  */
-
+@Deprecated
 public class ContantClass {
 
 }

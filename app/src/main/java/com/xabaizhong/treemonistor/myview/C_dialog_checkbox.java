@@ -16,9 +16,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by admin on 2017/3/14.
+ *  dialog  内置 checkbox
  */
-
 public class C_dialog_checkbox implements DialogInterface.OnClickListener {
 
 

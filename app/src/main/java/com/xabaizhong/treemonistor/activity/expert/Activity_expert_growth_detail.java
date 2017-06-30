@@ -14,9 +14,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by norwaya on 17-4-15.
+ *  专家鉴定 生长势鉴定
  */
-
 public class Activity_expert_growth_detail extends Activity_base {
     int type;
     @BindView(R.id.c1)
@@ -38,7 +37,7 @@ public class Activity_expert_growth_detail extends Activity_base {
             initialView();
         }
     }
-
+    // 初始化 view
     private void initialView() {
         GrowthInfo.GrowthBean bean = GrowthInfo.list.get(type);
         c1.setText(bean.getName());
@@ -48,7 +47,7 @@ public class Activity_expert_growth_detail extends Activity_base {
         c4.setText(bean.getTrunk());
 
     }
-
+    // 初始化 生长势 字符 资源；
     public static class GrowthInfo {
         public static List<GrowthBean> list = new ArrayList<>();
 
@@ -59,7 +58,7 @@ public class Activity_expert_growth_detail extends Activity_base {
             list.add(new GrowthBean("濒危株", "正常叶片量占叶片总量小于50%。", "枝杈枯死较多。", "树干多为坏死，干枯或成凹洞。"));
             list.add(new GrowthBean("死亡株", "无正常叶片。", "枝条枯死，无新梢和萌条。", "树干坏死，损伤，腐朽现象严重，无活树皮。"));
         }
-
+         // 生长势 鉴定 bean
         public static class GrowthBean {
             private String name;
             private String leaf;

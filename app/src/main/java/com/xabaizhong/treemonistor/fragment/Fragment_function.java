@@ -32,11 +32,9 @@ import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
 /**
- * Created by admin on 2017/2/24.
+ * 功能页
  */
-
 public class Fragment_function extends Fragment_base implements Fragment_function_adapter.OnItemClickListener {
     String TAG = "fragment-function";
     @BindView(R.id.lv)

@@ -37,9 +37,7 @@ import com.xabaizhong.treemonistor.R;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
-/**
- * A login screen that offers login via email/password.
- */
+@Deprecated
 public class Activity_login2 extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
     /**

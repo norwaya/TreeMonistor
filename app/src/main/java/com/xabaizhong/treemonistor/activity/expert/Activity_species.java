@@ -56,9 +56,8 @@ import io.reactivex.schedulers.Schedulers;
 import me.nereo.multi_image_selector.MultiImageSelector;
 
 /**
- * Created by norwaya on 17-4-15.
+ *  树种鉴定
  */
-
 public class Activity_species extends Activity_base implements C_info_gather_item1.Mid_CallBack {
     @BindView(R.id.submit)
     Button submit;
@@ -92,7 +91,7 @@ public class Activity_species extends Activity_base implements C_info_gather_ite
 
     Disposable disposable;
     Params params;
-
+    // 初始化 rxbus
     private void initialSource() {
         pb.setOnClickListener(null);
         params = new Params();
@@ -128,7 +127,7 @@ public class Activity_species extends Activity_base implements C_info_gather_ite
             }
         });
     }
-
+    // 初始化 views
     private void initialView() {
         leaf.setCallback_mid(this);
         leafColor.setCallback_mid(this);
@@ -139,9 +138,12 @@ public class Activity_species extends Activity_base implements C_info_gather_ite
         btnImage.setCallback_mid(this);
     }
 
-    boolean flag = true;
+    boolean flag = true;// 是否 上传图片
     AsyncTaskRequest asyncTaskRequest;
 
+    /**
+     * 点击事件 的处理
+     */
     @OnClick(R.id.submit)
     public void onViewClicked() {
         final DialogInterface dialog = ProgressDialogUtil.getInstance(this).initial(null, new ProgressDialogUtil.CallBackListener() {

@@ -29,6 +29,9 @@ import butterknife.ButterKnife;
  * Created by Administrator on 2017/4/21 0021.
  */
 
+/**
+ *  图片 查看
+ */
 public class Activity_pic_vp extends Activity_base implements View.OnClickListener {
     @BindView(R.id.vp)
     ViewPager vp;

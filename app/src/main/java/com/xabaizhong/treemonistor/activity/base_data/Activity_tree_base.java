@@ -81,9 +81,8 @@ import butterknife.ButterKnife;
 import static android.support.v7.widget.RecyclerView.VERTICAL;
 
 /**
- * Created by admin on 2017/3/13.
+ * 树种 基本信息 查看页 ，类似于 树种查询页；
  */
-
 public class Activity_tree_base extends Activity_base {
 
     @BindView(R.id.sv)

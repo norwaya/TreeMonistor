@@ -6,9 +6,8 @@ import com.xabaizhong.treemonistor.entity.Pest;
 import java.util.List;
 
 /**
- * Created by admin on 2017/3/17.
+ *  虫害 基本表  帮助类
  */
-
 public class PestHelper {
 
 

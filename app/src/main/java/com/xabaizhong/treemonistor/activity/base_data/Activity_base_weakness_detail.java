@@ -31,9 +31,8 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 /**
- * Created by admin on 2017/3/17.
+ * 树病 详情页面；
  */
-
 public class Activity_base_weakness_detail extends Activity_base {
 
     long id;

@@ -50,7 +50,9 @@ import io.reactivex.schedulers.Schedulers;
 
 import static android.widget.LinearLayout.VERTICAL;
 
-
+/**
+ * 古树群 信息 列表
+ */
 public class Activity_query_tree_info_list extends Activity_base implements CommonRecyclerViewAdapter.CallBack<Activity_query_tree_info_list.ViewHolder, QueryTreeInfoList.ListBean>, XRecyclerView.LoadingListener, AdapterView.OnItemClickListener {
 
     Intent getIntent;

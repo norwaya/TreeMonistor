@@ -44,9 +44,8 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 /**
- * Created by admin on 2017/2/28.
+ * 古树详细信息
  */
-
 public class Activity_tree_detailInfo extends Activity_base {
     String treeId;
     String date;

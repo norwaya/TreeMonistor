@@ -35,9 +35,8 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 /**
- * Created by admin on 2017/3/17.
+ * 树种信息详情页
  */
-
 public class Activity_tree_base_detail extends Activity_base {
 
     @BindView(R.id.cname)

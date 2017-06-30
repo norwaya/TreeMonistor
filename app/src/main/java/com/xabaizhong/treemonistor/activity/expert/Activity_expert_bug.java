@@ -58,9 +58,8 @@ import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 
 
 /**
- * Created by norwaya on 17-4-17.
+ * 专家鉴定   虫害鉴定
  */
-
 public class Activity_expert_bug extends Activity_base implements C_info_gather_item1.Mid_CallBack {
     @BindView(R.id.submit)
     Button submit;
@@ -87,7 +86,7 @@ public class Activity_expert_bug extends Activity_base implements C_info_gather_
     Param_code params = null;
     private static final int SPECIES_CODE = 671;
     Bean bean;
-
+    // 初始化 基础资源
     private void initDis() {
         params = new Param_code();
         bean = new Bean();
@@ -118,7 +117,7 @@ public class Activity_expert_bug extends Activity_base implements C_info_gather_
     private void initData() {
 
     }
-
+    // 设置回调事件
     private void initView() {
         bugSeason.setCallback_mid(this);
         bugPart.setCallback_mid(this);
@@ -146,7 +145,7 @@ public class Activity_expert_bug extends Activity_base implements C_info_gather_
             showToast("填写完整信息");
         }
     }
-
+    // 上传 信息 含图片
     private void uploadWithPics() {
         final DialogInterface dialog = ProgressDialogUtil.getInstance(this).initial(null, new ProgressDialogUtil.CallBackListener() {
             @Override
@@ -223,6 +222,7 @@ public class Activity_expert_bug extends Activity_base implements C_info_gather_
 //      <Type>int</Type>
 //      <areaId>string</areaId>
 //      <JsonStr>string</JsonStr>
+    // 封装 参数
     private Map<String, Object> getUploadParams() {
         Map<String, Object> map = new HashMap<>();
         map.put("UserID", sharedPreferences.getString(UserSharedField.USERID, ""));
@@ -233,7 +233,7 @@ public class Activity_expert_bug extends Activity_base implements C_info_gather_
         return map;
     }
 
-
+    // 初始化 dialog
     private void initialDialog(String value, List<String> list) {
         View view = LayoutInflater.from(this).inflate(R.layout.listview, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

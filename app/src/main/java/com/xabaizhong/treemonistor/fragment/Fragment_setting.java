@@ -38,9 +38,8 @@ import static com.xabaizhong.treemonistor.activity.Activity_main.ReceiveConstant
 import static com.xabaizhong.treemonistor.contant.Contant.KV.NOTICE_PUSH;
 
 /**
- * Created by admin on 2017/2/24.
+ * 设置页
  */
-
 public class Fragment_setting extends Fragment_base {
 
 

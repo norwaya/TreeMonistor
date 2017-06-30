@@ -8,9 +8,8 @@ import android.util.Log;
 import android.view.KeyEvent;
 
 /**
- * Created by Administrator on 2017/6/6 0006.
+ *  dialog  自定义
  */
-
 public class ProgressDialogUtil {
 
     public static ProgressDialogUtil getInstance(Context context) {

@@ -67,6 +67,10 @@ import terranovaproductions.newcomicreader.FloatingActionMenu;
  * Created by admin on 2017/2/28.
  */
 
+/**
+ * 增加古树 或者古树群的 管理类；
+ * 拓展了 上下文点击事件；
+ */
 public class Activity_add_manage extends Activity_base {
 
     final static int LOAD_NUM = 20;
@@ -82,7 +86,7 @@ public class Activity_add_manage extends Activity_base {
         ButterKnife.bind(this);
         initDaoSession();
         initView();
-        registerForContextMenu(lv);
+        registerForContextMenu(lv);// 注册上下文点击事件
     }
 
 
@@ -97,11 +101,12 @@ public class Activity_add_manage extends Activity_base {
     String[] contentArray;
     Activity_add_manager_adapter adapter;
 
+    //初始化 适配器
     private void initAdapter() {
         adapter = new Activity_add_manager_adapter(getApplicationContext());
     }
 
-
+    // 初始化 界面
     private void initView() {
         initialFabMenu();
         initAdapter();
@@ -113,6 +118,7 @@ public class Activity_add_manage extends Activity_base {
 
     }
 
+    // 初始化 floatingactionbutton
     private void initialFabMenu() {
         fabFather.setIsCircle(false);
         fabFather.setmItemGap(20);
@@ -150,6 +156,7 @@ public class Activity_add_manage extends Activity_base {
         });
     }
 
+    // 初始化 header  view
     private void initHeaderView(View view) {
         TextView tv1 = ((TextView) view.findViewById(R.id.tv1));
         TextView tv2 = ((TextView) view.findViewById(R.id.tv2));
@@ -169,6 +176,7 @@ public class Activity_add_manage extends Activity_base {
         mType = type;
     }
 
+    // 查询数据库
     private void test() {
         try {
             mList = treeTypeInfoDao.queryBuilder().where(TreeTypeInfoDao.Properties.TypeId.eq(mType)).build().list();
@@ -178,11 +186,6 @@ public class Activity_add_manage extends Activity_base {
                 } else {
                     mMenu.setGroupVisible(R.id.choose_and_upload, true);
                 }
-            /*for (TreeTypeInfo type : mList
-                    ) {
-                Log.i(TAG, "test: " + type.getTreeId());
-
-            }*/
             adapter.setSource(mList);
             Log.i(TAG, "test:++ " + mType);
         } catch (Exception e) {
@@ -196,6 +199,7 @@ public class Activity_add_manage extends Activity_base {
     TreePicDao picDao;
     TreeGroupPicDao treeGroupPicDao;
 
+    // 初始 daosession
     private void initDaoSession() {
         DaoSession daoSession = ((App) getApplication()).getDaoSession();
         treeTypeInfoDao = daoSession.getTreeTypeInfoDao();
@@ -248,7 +252,7 @@ public class Activity_add_manage extends Activity_base {
     }
 
     ProgressDialog progressDialog;
-
+    // 展示 进度条
     private void showProgressDialog() {
         progressDialog = new ProgressDialog(this);
         progressDialog.setCanceledOnTouchOutside(false);

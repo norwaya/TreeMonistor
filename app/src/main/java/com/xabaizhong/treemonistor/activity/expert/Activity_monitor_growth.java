@@ -29,19 +29,15 @@ import io.reactivex.functions.Consumer;
 import static com.xabaizhong.treemonistor.activity.monitor.fragment.Fragment_tree.ResultCode.REQUEST_CODE_GROWTH;
 
 /**
- * Created by norwaya on 17-4-15.
+ * 生长势 鉴定
  */
-
 public class Activity_monitor_growth extends Activity_base {
-
-
     @BindView(R.id.c1)
     C_info_gather_item1 c1;
     @BindView(R.id.c2)
     C_info_gather_item1 c2;
     @BindView(R.id.c3)
     C_info_gather_item1 c3;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -126,11 +122,6 @@ public class Activity_monitor_growth extends Activity_base {
                         c3.setText(array[messageEvent.getId()]);
                         growthIndexs.c3 = messageEvent.getId();
                         break;
-//                    case Activity_add_tree.ResultCode.REQUEST_CODE_STATUS:
-////                        mViewHolder.status.setText(array[messageEvent.getId()]);
-////
-////                        tree.setTreeStatus((messageEvent.getId() + 1) + "");
-//                        break;
                 }
             }
         });

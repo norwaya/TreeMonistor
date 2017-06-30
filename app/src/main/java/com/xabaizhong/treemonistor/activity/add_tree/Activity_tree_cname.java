@@ -38,9 +38,8 @@ import butterknife.ButterKnife;
 import static android.support.v7.widget.RecyclerView.VERTICAL;
 
 /**
- * Created by admin on 2017/3/13.
+ * 根据 用户输入 搜索 到 树种名
  */
-
 public class Activity_tree_cname extends Activity_base implements View.OnClickListener {
 
     @BindView(R.id.sv)
@@ -60,13 +59,13 @@ public class Activity_tree_cname extends Activity_base implements View.OnClickLi
     }
 
     TreeSpecialDao dao;
-
+    // 初始  daosession
     private void init() {
         dao = ((App) getApplicationContext()).getDaoSession().getTreeSpecialDao();
     }
 
     Activity_tree_cname_adapter adapter;
-
+    // 显示 home icon
     private void initView() {
 
         setSupportActionBar(toolbar);
@@ -93,7 +92,7 @@ public class Activity_tree_cname extends Activity_base implements View.OnClickLi
 
     public static final int REQUEST_CODE_CNAME_RESULT = 155;
 
-
+    // 初始化 adapter  和 recyclerview
     private void initRecyclerView() {
         adapter = new Activity_tree_cname_adapter(this, R.layout.activity_tree_cname_item);
         adapter.setCallBack(new CommonRecyclerViewAdapter.CallBack<ViewHolder, TreeSpecial>() {
@@ -105,6 +104,7 @@ public class Activity_tree_cname extends Activity_base implements View.OnClickLi
 
             @Override
             public void onItemClickListener(View view, int position) {
+                // 处理 点击事件，获取用户点击的古树 树种，返回给 原 activity
                 Intent i = new Intent();
                 i.putExtra("special", list.get(position));
                 setResult(REQUEST_CODE_CNAME_RESULT, i);
@@ -117,7 +117,7 @@ public class Activity_tree_cname extends Activity_base implements View.OnClickLi
     }
 
     int width;
-
+    // 初始化 searchview
     private void initSearchView() {
         width = sv.getLeft();
         setSupportActionBar(toolbar);
@@ -162,7 +162,7 @@ public class Activity_tree_cname extends Activity_base implements View.OnClickLi
         return list;
     }
 
-
+    // view holder
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView cname;
         TextView alias;

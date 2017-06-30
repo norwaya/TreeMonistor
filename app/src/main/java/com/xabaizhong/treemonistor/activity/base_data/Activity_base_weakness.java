@@ -28,9 +28,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by admin on 2017/3/17.
+ * 树病 基础库 索引页面
  */
-
 public class Activity_base_weakness extends Activity_base {
     @BindView(R.id.lv)
     ListView lv;

@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by admin on 2017/3/7.
  */
-
+@Deprecated
 public class Response_news {
 
     /**

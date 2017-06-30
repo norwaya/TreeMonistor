@@ -41,9 +41,8 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 /**
- * Created by admin on 2017/2/28.
+ * 重点古树【群】 加载，修改 上报。
  */
-
 public class Activity_monitor_with_treeInfo extends Activity_base {
     @BindView(R.id.spinner_tree_list)
     Spinner spinnerTreeList;
@@ -213,7 +212,7 @@ public class Activity_monitor_with_treeInfo extends Activity_base {
 
 
     Disposable upLoadDisposable;
-
+    // 网络请求 ，解析之后 ，加载 对应的fragment 中去
     private void request() {
         /*<tem:UserID>?</tem:UserID>
          <tem:TreeType>?</tem:TreeType>
@@ -283,8 +282,7 @@ public class Activity_monitor_with_treeInfo extends Activity_base {
                 });
 
     }
-
-
+    //bean
     private static class ResultM {
 
         /**

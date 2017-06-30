@@ -14,7 +14,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 
 /**
- * Created by yungcs on 2016/1/7.
+ * 重写listview  解决 NestedScrollView 内置 listview  不滑动的情况
  */
 public class NestedListView extends ListView implements View.OnTouchListener,
         AbsListView.OnScrollListener {

@@ -29,9 +29,8 @@ import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
 
 /**
- * Created by Administrator on 2017/4/24 0024.
+ * 查看诊断 详细信息
  */
-
 public class Activity_expert_zd_detail extends Activity_base {
     @BindView(R.id.fragment_replace)
     FrameLayout fragmentReplace;

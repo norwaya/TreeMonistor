@@ -7,6 +7,9 @@ import android.widget.EditText;
  * Created by Administrator on 2017/4/6 0006.
  */
 
+/**
+ * 输入验证 类
+ */
 public class InputVerification {
     /**
      *

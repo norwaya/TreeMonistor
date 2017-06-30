@@ -50,9 +50,8 @@ import me.nereo.multi_image_selector.MultiImageSelector;
 import static com.xabaizhong.treemonistor.activity.monitor.Activity_monitor.PicList;
 
 /**
- * Created by admin on 2017/2/28.
+ *  弃用
  */
-
 public class Activity_monitor extends Activity_base {
 
 

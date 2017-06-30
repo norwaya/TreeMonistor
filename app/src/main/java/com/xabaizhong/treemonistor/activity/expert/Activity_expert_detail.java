@@ -43,9 +43,8 @@ import io.reactivex.schedulers.Schedulers;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
 /**
- * Created by Administrator on 2017/5/18 0018.
+ * 专家鉴定  详情页
  */
-
 public class Activity_expert_detail extends Activity_base implements C_info_gather_item1.Mid_CallBack {
 
     String tid;
@@ -139,7 +138,7 @@ public class Activity_expert_detail extends Activity_base implements C_info_gath
                 break;
         }
     }
-
+    // 初始化 字符资源
     private void treeBug(String value) {
         Bug bug = new Gson().fromJson(value, Bug.class);
         List<String> season = new ArrayList<>();
@@ -187,6 +186,7 @@ public class Activity_expert_detail extends Activity_base implements C_info_gath
         cv.setText(mid);
         return view;
     }
+
     private View getListenerView(String left, String mid) {
         if (inflater == null) {
             inflater = LayoutInflater.from(this);
@@ -257,7 +257,7 @@ public class Activity_expert_detail extends Activity_base implements C_info_gath
         startActivity(intent);
     }
 
-
+    // 初始化 树种字符串资源
     private void treeSpecies(String value) {
         String[] leafArray = new String[]{"其他", "椭圆状", "心形", "掌形", "扇形", "菱形", "披针形", "卵形", "圆形", "针形", "鳞形", "匙形", "三角形"};
         String[] leafColorArray = new String[]{"其他", "绿色", "红色", "黄色", "蓝色"};
@@ -305,6 +305,8 @@ public class Activity_expert_detail extends Activity_base implements C_info_gath
         checkCallPermissionAndDial();
     }
 
+
+    // 一些 beans  用于 解析 json
     static class ResultMessage<T> {
 
         /**

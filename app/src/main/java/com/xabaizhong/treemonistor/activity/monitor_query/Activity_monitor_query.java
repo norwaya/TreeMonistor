@@ -29,9 +29,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by Administrator on 2017/4/24 0024.
+ *  重点古树 查询；
  */
-
 public class Activity_monitor_query extends Activity_base implements XRecyclerView.LoadingListener, CommonRecyclerViewAdapter.CallBack<Activity_monitor_query.ViewHolder, Activity_monitor_query.ImportTree.ResultBean> {
     @BindView(R.id.xRecyclerView)
     XRecyclerView xRecyclerView;
@@ -44,7 +43,7 @@ public class Activity_monitor_query extends Activity_base implements XRecyclerVi
         initialView();
 
     }
-
+    // 初始化 adapter  recyclerView
     private void initialView() {
         initAdapter();
         initRecyclerView();
@@ -67,7 +66,7 @@ public class Activity_monitor_query extends Activity_base implements XRecyclerVi
 
     List<ImportTree.ResultBean> list;
     AsyncTaskRequest ayncTaskRequest;
-
+    // 请求数据，通过json  解析 ，加载到views 中
     private void refreshView() {
       /* UserID	String	用户名
       AreaID	String	区域ID*/

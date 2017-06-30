@@ -16,9 +16,8 @@ import java.util.Date;
 import java.util.Set;
 
 /**
- * Created by admin on 2017/2/28.
+ *  封装base  activity
  */
-
 public class Activity_base extends AppCompatActivity {
     protected String TAG;
     public SharedPreferences sharedPreferences;

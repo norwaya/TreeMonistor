@@ -36,7 +36,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
-
+/**
+ *重点古树 数据 列表
+ */
 public class Activity_monitor_query_date_pics extends Activity_base implements CommonRecyclerViewAdapter.CallBack<Activity_monitor_query_date_pics.ViewHolder, Activity_monitor_query_date_pics.ListItem> {
     @BindView(R.id.rv0)
     RecyclerView rv0;
@@ -57,7 +59,7 @@ public class Activity_monitor_query_date_pics extends Activity_base implements C
     }
 
     Activity_monitor_query_dateList_pics_adapter adapter0;
-
+    // 初始化adapter  recyclerview  然后请求数据，解析， 填充到 recyclerview 中；
     private void initialView() {
         initialAdapter();
         initialRecyclerView();

@@ -10,7 +10,7 @@ import com.baidu.location.LocationClientOption.LocationMode;
 /**
  * 
  * @author baidu
- *
+ *	百度定位服务 client  的 初始化
  */
 public class LocationService {
 	private LocationClient client = null;

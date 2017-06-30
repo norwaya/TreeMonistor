@@ -14,9 +14,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by Administrator on 2017/4/21 0021.
+ *  封装的AsyncTaskRequest ，回调接口 只需要 穿进去 callback 方法即可；
  */
-
 public class AsyncTaskRequest {
 
     private String interfaceName;
@@ -37,6 +36,10 @@ public class AsyncTaskRequest {
         return create();
     }
 
+    /**
+     * 把webservice  请求 使用 AsyncTaskRequest 封装起来
+     * @return
+     */
     public AsyncTaskRequest create() {
         if (callBack == null) {
             throw new RuntimeException("callBack interface is not implemented");

@@ -35,6 +35,9 @@ import io.reactivex.schedulers.Schedulers;
  * Created by admin on 2017/3/17.
  */
 
+/**
+ * 虫病 详情页
+ */
 public class Activity_base_pest_detail extends Activity_base {
     long id;
     @BindView(R.id.cname)

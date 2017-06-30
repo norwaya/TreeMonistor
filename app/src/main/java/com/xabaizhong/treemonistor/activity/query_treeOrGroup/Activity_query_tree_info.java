@@ -42,9 +42,8 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 /**
- * Created by Administrator on 2017/4/11 0011.
+ * 古树群 统计查询
  */
-
 public class Activity_query_tree_info extends Activity_base implements C_info_gather_item1.Mid_CallBack {
 
     //    @BindView(R.id.lv)

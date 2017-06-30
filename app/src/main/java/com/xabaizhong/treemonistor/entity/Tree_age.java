@@ -12,18 +12,6 @@ import org.greenrobot.greendao.annotation.Generated;
         @Index(value = "id DESC", unique = true)
 })
 public class Tree_age {
-   /* @SerializedName("TreeSpeID")
-    private String TreeSpeID;
-    @SerializedName("TreeBJ")
-    private int TreeBJ;
-    @SerializedName("TreeAge")
-    private int TreeAge;
-    @SerializedName("TreeAgeNum")
-    private int TreeAgeNum;
-    @SerializedName("CHName")
-    private String CHName;*/
-
-    // age = treeAgeNum + bj*treeAge
 
     @Id
     private Long id;

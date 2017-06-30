@@ -14,9 +14,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by Administrator on 2017/4/25 0025.
+ *
  */
-
+@Deprecated
 public class Activity_image_noAction extends Activity_base {
     @BindView(R.id.zoom_image_view)
     MyZoomImageView zoomImageView;

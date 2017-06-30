@@ -27,9 +27,9 @@ import butterknife.ButterKnife;
 import static android.support.v7.widget.RecyclerView.VERTICAL;
 
 /**
- * Created by norwaya on 17-4-17.
+ *  专家鉴定  未用到
  */
-
+@Deprecated
 public class Activity_expert_weak_upload_info extends Activity_base {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

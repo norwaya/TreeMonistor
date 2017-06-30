@@ -11,7 +11,7 @@ import java.util.List;
 
 @Root(name = "tem:login", strict = false)
 */
-
+@Deprecated
 public class AskStr{
 
 

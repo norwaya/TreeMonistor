@@ -1,9 +1,8 @@
 package com.xabaizhong.treemonistor.contant;
 
 /**
- * Created by admin on 2017/3/23.
+ *  登录成功的时候需要 序列化的一些参数
  */
-
 public interface UserSharedField {
 //    String USERNAME = "username";
     String USERID = "userid";

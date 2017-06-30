@@ -15,9 +15,8 @@ import com.xabaizhong.treemonistor.service.LocationService;
 import org.greenrobot.greendao.database.Database;
 
 /**
- * Created by admin on 2017/3/4.
+ * application 实例
  */
-
 public class App extends Application {
 
     public static final boolean ENCRYPTED = false;

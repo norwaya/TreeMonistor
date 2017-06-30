@@ -27,9 +27,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by Administrator on 2017/4/26 0026.
+ * 专家鉴定  树龄鉴定
  */
-
 public class Activity_expert_age extends Activity_base {
     @BindView(R.id.spinner)
     Spinner spinner;
@@ -101,7 +100,7 @@ public class Activity_expert_age extends Activity_base {
             }
         });
     }
-
+    // 计算树龄
     private void compute(String s) {
 
         float a = Float.parseFloat(s);
@@ -118,7 +117,7 @@ public class Activity_expert_age extends Activity_base {
             age.setText(String.valueOf(endAge));
         }
     }
-
+    // 树龄 计算表查询
     private Tree_age query(String name, int bj) {
         Log.i(TAG, "query: " + name + "\t" + bj);
         Tree_ageDao tree_ageDao = ((App) getApplication()).getDaoSession().getTree_ageDao();

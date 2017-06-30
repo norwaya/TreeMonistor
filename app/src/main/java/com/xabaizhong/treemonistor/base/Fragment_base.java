@@ -21,9 +21,8 @@ import java.util.Locale;
 import static android.content.Context.MODE_PRIVATE;
 
 /**
- * Created by admin on 2017/3/3.
+ * fragment  基类
  */
-
 public class Fragment_base extends android.support.v4.app.Fragment {
     protected String TAG;
     protected SharedPreferences sharedPreferences;

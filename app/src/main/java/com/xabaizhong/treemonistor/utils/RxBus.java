@@ -8,6 +8,9 @@ import io.reactivex.subjects.Subject;
  * Created by admin on 2017/2/28.
  */
 
+/**
+ * 自己封装的rxbus
+ */
 public class RxBus {
 
     private static volatile RxBus mDefaultInstance;

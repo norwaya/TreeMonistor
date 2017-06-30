@@ -17,7 +17,7 @@ import okhttp3.RequestBody;
 /**
  * Created by admin on 2017/2/28.
  */
-
+@Deprecated
 public interface ApiService {
 //    @POST
 //    Observable<ResultMessage<User>> login(@Url String url, @Query("user") String name, @Query("pwd") String pwd);

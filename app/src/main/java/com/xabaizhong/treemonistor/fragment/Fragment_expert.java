@@ -53,9 +53,8 @@ import io.reactivex.schedulers.Schedulers;
 import terranovaproductions.newcomicreader.FloatingActionMenu;
 
 /**
- * Created by admin on 2017/2/24.
+ *  鉴定 页面 fragment
  */
-
 public class Fragment_expert extends Fragment_base implements Fragment_expert_adapter.OnClickListener {
     String TAG = "fragment-expert";
     @BindView(R.id.lv)

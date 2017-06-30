@@ -5,9 +5,8 @@ import com.xabaizhong.treemonistor.entity.Weakness;
 import java.util.List;
 
 /**
- * Created by admin on 2017/3/17.
+ * 树病
  */
-
 public class WeaknessHelper {
 
     private List<RECORDSBean> RECORDS;

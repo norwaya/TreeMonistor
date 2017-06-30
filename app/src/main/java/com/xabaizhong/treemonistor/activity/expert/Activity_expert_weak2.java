@@ -53,7 +53,9 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import me.nereo.multi_image_selector.MultiImageSelector;
 
-
+/**
+ * 专家鉴定 树病鉴定
+ */
 public class Activity_expert_weak2 extends Activity_base implements CommonRecyclerViewAdapter.CallBack<Activity_expert_weak.ViewHolder, Weakness> {
     @BindView(R.id.rv)
     RecyclerView rv;

@@ -17,7 +17,7 @@ import okhttp3.Request;
 /**
  * Created by admin on 2017/3/1.
  */
-
+@Deprecated
 public class RetrofitUtil {
 //    private static Retrofit retrofit;
 //        private final static String url = "http://v.juhe.cn/";
